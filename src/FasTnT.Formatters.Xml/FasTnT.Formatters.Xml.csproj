@@ -1,0 +1,54 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Old\**" />
+    <EmbeddedResource Remove="Old\**" />
+    <None Remove="Old\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Validation\XSDs\BasicTypes.xsd" />
+    <None Remove="Validation\XSDs\BusinessScope.xsd" />
+    <None Remove="Validation\XSDs\DocumentIdentification.xsd" />
+    <None Remove="Validation\XSDs\EPCglobal-epcis-1_2.xsd" />
+    <None Remove="Validation\XSDs\EPCglobal-epcis-masterdata-1_2.xsd" />
+    <None Remove="Validation\XSDs\EPCglobal-epcis-query-1_2.xsd" />
+    <None Remove="Validation\XSDs\EPCglobal.xsd" />
+    <None Remove="Validation\XSDs\Manifest.xsd" />
+    <None Remove="Validation\XSDs\Partner.xsd" />
+    <None Remove="Validation\XSDs\StandardBusinessDocumentHeader.xsd" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Validation\XSDs\BasicTypes.xsd" />
+    <EmbeddedResource Include="Validation\XSDs\BusinessScope.xsd" />
+    <EmbeddedResource Include="Validation\XSDs\DocumentIdentification.xsd" />
+    <EmbeddedResource Include="Validation\XSDs\EPCglobal-epcis-1_2.xsd" />
+    <EmbeddedResource Include="Validation\XSDs\EPCglobal-epcis-masterdata-1_2.xsd" />
+    <EmbeddedResource Include="Validation\XSDs\EPCglobal-epcis-query-1_2.xsd" />
+    <EmbeddedResource Include="Validation\XSDs\EPCglobal.xsd" />
+    <EmbeddedResource Include="Validation\XSDs\Manifest.xsd" />
+    <EmbeddedResource Include="Validation\XSDs\Partner.xsd" />
+    <EmbeddedResource Include="Validation\XSDs\StandardBusinessDocumentHeader.xsd" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="morelinq" Version="3.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\FasTnT.Formatters\FasTnT.Formatters.csproj" />
+    <ProjectReference Include="..\FasTnT.Model\FasTnT.Model.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="System.Xml.XDocument">
+      <HintPath>..\..\..\..\..\..\..\Program Files\dotnet\sdk\NuGetFallbackFolder\microsoft.netcore.app\2.0.0\ref\netcoreapp2.0\System.Xml.XDocument.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+</Project>
