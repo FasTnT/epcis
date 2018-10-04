@@ -1,4 +1,5 @@
 **This project is under development, and this README is everything but ready. I'll try to update is as soon as possible..**
+[![Build Status](https://travis-ci.com/louisaxel-ambroise/fastnt.svg?branch=master)](https://travis-ci.com/louisaxel-ambroise/fastnt)
 
 # FasTnT
 
