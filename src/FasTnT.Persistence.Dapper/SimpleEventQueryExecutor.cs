@@ -49,7 +49,7 @@ namespace FasTnT.Persistence.Dapper
         public void Apply(MatchEpcParameter param) => _query.Where($"EXISTS(SELECT epc.event_id FROM epcis.epc epc WHERE epc.epc = ANY({_parameters.Add(param.Values)}) AND epc.type = {_parameters.Add(param.Type)} AND epc.event_id = event.id)");
         public void Apply(EventIdParameter param) => _query.Where($"event.custom_id = ANY({_parameters.Add(param.Values)})"); // TODO: add 'custom_id' field in the DB.
         public void Apply(IlmdParameter param) => throw new NotImplementedException();
-        public void Apply(ExtensionFieldParameter param) => _query.Where($"EXISTS(SELECT cf.event_id FROM epcis.custom_field cf WHERE cf.event_id = event.id AND cf.namespace = {_parameters.Add(param.Namespace)} AND cf.name = {_parameters.Add(param.Name)} AND cf.text_value = ANY({_parameters.Add(param.Values)}) AND cf.parent_id IS NULL)"); // TODO: not null
+        public void Apply(ExtensionFieldParameter param) => _query.Where($"EXISTS(SELECT cf.event_id FROM epcis.custom_field cf WHERE cf.event_id = event.id AND cf.type = 1 AND cf.namespace = {_parameters.Add(param.Namespace)} AND cf.name = {_parameters.Add(param.Name)} AND cf.text_value = ANY({_parameters.Add(param.Values)}) AND cf.parent_id IS {(param.IsInner ? "" : "NOT")} NULL)");
         public void Apply(SourceDestinationParameter param) => _query.Where($"EXISTS(SELECT sd.event_id FROM epcis.source_destination sd WHERE sd.direction = AND sd.type = {_parameters.Add(param.Type)} AND st.source_dest_id = ANY({_parameters.Add(param.Values)}) AND sd.event_id = event.id)");
         public void Apply(OrderByParameter param) => _orderProperty = GetOrderFieldName(param.Value);
         public void Apply(OrderDirectionParameter param) => _orderDirection = param.Direction;
