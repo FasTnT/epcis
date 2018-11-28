@@ -38,6 +38,11 @@ namespace FasTnT.Formatters.Xml.Requests
         {
             foreach(var node in root.Elements())
             {
+                if (node.Name.NamespaceName != XNamespace.None && node.Name.NamespaceName != XNamespace.Xmlns && node.Name.NamespaceName != EpcisNamespaces.Capture)
+                {
+                    epcisEvent.CustomFields.Add(ParseCustomField(node, epcisEvent, FieldType.EventExtension));
+                    continue;
+                }
                 switch (node.Name.LocalName)
                 {
                     case "eventTime":
@@ -116,11 +121,6 @@ namespace FasTnT.Formatters.Xml.Requests
 
         internal static CustomField ParseCustomField(XElement element, EpcisEvent epcisEvent, FieldType type)
         {
-            if (element.Name.Namespace == XNamespace.None || element.Name.Namespace == XNamespace.Xmlns || element.Name.NamespaceName == EpcisNamespaces.Capture)
-            {
-                throw new Exception($"Element '{element.Name.LocalName}' with namespace '{element.Name.NamespaceName}' not expected here.");
-            }
-
             var field = new CustomField
             {
                 Id = _customCounter++,
@@ -142,7 +142,7 @@ namespace FasTnT.Formatters.Xml.Requests
                 }
             }
 
-            foreach (var attribute in element.Attributes().Where(x => x.Name.Namespace != XNamespace.None && x.Name.Namespace != XNamespace.Xmlns && x.Name.NamespaceName != EpcisNamespaces.Capture))
+            foreach (var attribute in element.Attributes())
             {
                 var attributeField = new CustomField
                 {
