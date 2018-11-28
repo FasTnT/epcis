@@ -1,2 +1,3 @@
 language: csharp
 solution: FasTnT.sln
+dotnet: 2.1
