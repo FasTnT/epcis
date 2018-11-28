@@ -38,8 +38,8 @@ namespace FasTnT.Formatters.Xml.Requests.Queries
                 // TODO: finish these parameters
                 else if (Regex.IsMatch(name, "^(EQ|GT|GE|LT|LE)_INNER_ILMD_")) yield return new IlmdParameter { Name = name, Values = values };
                 else if (Regex.IsMatch(name, "^(EQ|GT|GE|LT|LE)_ILMD_")) yield return new IlmdParameter { Name = name, Values = values };
-                else if (Regex.IsMatch(name, "^(EQ|GT|GE|LT|LE)_INNER_")) yield return new ExtensionFieldParameter { Name = name, Values = values };
-                else if (Regex.IsMatch(name, "^(EQ|GT|GE|LT|LE)_")) yield return new ExtensionFieldParameter { Name = name, Values = values };
+                else if (Regex.IsMatch(name, "^(EQ|GT|GE|LT|LE)_INNER_")) yield return new ExtensionFieldParameter { Name = name, IsInner = true, Values = values };
+                else if (Regex.IsMatch(name, "^(EQ|GT|GE|LT|LE)_")) yield return new ExtensionFieldParameter { Name = name, IsInner = false, Values = values };
                 // End TODO
                 else if (Equals(name, "EQ_eventID")) yield return new EventIdParameter { Name = name, Values = values };
                 else if (Equals(name, "EXISTS_errorDeclaration")) yield return new ErrorDeclarationParameter { Name = name, Values = values };
