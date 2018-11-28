@@ -2,5 +2,6 @@
 {
     public class IlmdParameter : SimpleEventQueryParameter
     {
+        public bool IsInner { get; set; }
     }
 }

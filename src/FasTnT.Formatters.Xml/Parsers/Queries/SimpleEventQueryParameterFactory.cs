@@ -36,8 +36,8 @@ namespace FasTnT.Formatters.Xml.Requests.Queries
                 else if (Regex.IsMatch(name, "^MATCH_")) yield return new MatchEpcParameter { Name = name, Values = values };
                 else if (Regex.IsMatch(name, "^(EQ|GT|GE|LT|LE)_quantity$")) yield return new QuantityParameter { Name = name, Values = values };
                 // TODO: finish these parameters
-                else if (Regex.IsMatch(name, "^(EQ|GT|GE|LT|LE)_INNER_ILMD_")) yield return new IlmdParameter { Name = name, Values = values };
-                else if (Regex.IsMatch(name, "^(EQ|GT|GE|LT|LE)_ILMD_")) yield return new IlmdParameter { Name = name, Values = values };
+                else if (Regex.IsMatch(name, "^(EQ|GT|GE|LT|LE)_INNER_ILMD_")) yield return new IlmdParameter { Name = name, IsInner = true, Values = values };
+                else if (Regex.IsMatch(name, "^(EQ|GT|GE|LT|LE)_ILMD_")) yield return new IlmdParameter { Name = name, IsInner = false, Values = values };
                 else if (Regex.IsMatch(name, "^(EQ|GT|GE|LT|LE)_INNER_")) yield return new ExtensionFieldParameter { Name = name, IsInner = true, Values = values };
                 else if (Regex.IsMatch(name, "^(EQ|GT|GE|LT|LE)_")) yield return new ExtensionFieldParameter { Name = name, IsInner = false, Values = values };
                 // End TODO
