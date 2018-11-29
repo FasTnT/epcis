@@ -61,7 +61,7 @@ namespace FasTnT.Persistence.Dapper {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to H4sIAAAAAAAA/81aW3ObOBR+rn+FJtOd2DuOJ0nbmZ1m+kCwnLJxwOWSbJ4YDLLDFANBkDT76/cgMAYMGNt0J3lw6+jo6Og737lIytkZ0hQsI4X/ju+4Hi9jTsXpNyRMkCipCP8jKKqCIkoCerUWUbnrKa6SGMWfevjmk16/h+DHthBdGY5juyETFrXpdMhGXGNFkPlkBIYZkgC9GMGb7S77X84HiJem03gZf6mbRmg43nJ0YpGFETnhSUkLL4mKKnOCqKKT2a2eLX+CZrJwx8mP6BY/or5tDXqD3oOgfkd9SRgr6BuacFMFD1psyfB9xwY7bM9l+jc7iyL4+B27MgNihMTSPReF9orQ0Fj56NUOn7woZL9B/3ouKU1yDBrqoLV5UiK7MmynwszLL1+a7Uxm+walr15g6U8GfapQc3F++Wmv/WYKqeGEVfBdXOylz6Y6KLBfCJp7nkMMtzSe0USv56cfkAUJAvCCY7jLyFhW+fVih18rSVom1DZXt6dN [rest of string was truncated]&quot;;.
+        ///   Looks up a localized string similar to H4sIAAAAAAAA/81abXObOBD+XP8KTaY3sW8cT5K2MzfN9APBcsrFAZeX5PKJkUF2mGIgvCTN/fpbBMaAAWOb3iQf3DparVbPPrtarXJ2hjQFy0jhv+M7rsfLmFNx+g0JEyRKKsL/CIqqoCigfnC1FlG56ymukhjFn3r45tFev4fgxzJRsCK2bTkhExa16XTIRhyyosh4Ij4xQuqjF+K/Wc6y/+V8gHhpOo2X8Za6QUJiu8vRiUkXJLLDk5IWXhIVVeYEUUUns1s9W/4EzWThjpMf0S1+RH3LHPQGvQdB/Y76kjBW0Dc04aYKHrTYEvE82wI7LNdh+jc7iyL4+B27MnxKQmrqroNCa0WDkKw89GqFT24Ust+gf12HlibZJAh10No8KZFdEcuuMPPyy5dmO5PZHgmCV9c39ScSPFWouTi//LTXfjOFAbHDKvguLvbSZwU6KLBeKJq7rk2JUxrPaKLX89Pz6YL6PnjBJs4yIssqv17s8GslScuE2ubq9rTJ [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string CreateDatabaseZipped {
             get {
@@ -70,7 +70,7 @@ namespace FasTnT.Persistence.Dapper {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to SELECT request.record_time as capture_time, event.id, event_type as type, event.record_time as event_time, action, read_point, event_timezone_offset, disposition, business_location, business_step, transformation_id FROM epcis.event JOIN epcis.request on request.id = event.request_id /**where**/ /**orderby**/ LIMIT @limit.
+        ///   Looks up a localized string similar to SELECT request.record_time as capture_time, event.id, event_type as type, event.record_time as event_time, action, read_point, event_timezone_offset, disposition, business_location, business_step, transformation_id, event_id FROM epcis.event JOIN epcis.request on request.id = event.request_id /**where**/ /**orderby**/ LIMIT @limit.
         /// </summary>
         internal static string EventQuery {
             get {
@@ -118,7 +118,7 @@ namespace FasTnT.Persistence.Dapper {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to INSERT INTO epcis.event(id, request_id, record_time, action, event_type, event_timezone_offset, business_location, business_step, disposition, read_point, transformation_id) VALUES(@Id, @RequestId, @EventTime, @Action, @Type, @EventTimeZoneOffset, @BusinessLocation, @BusinessStep, @Disposition, @ReadPoint, @TransformationId);.
+        ///   Looks up a localized string similar to INSERT INTO epcis.event(id, request_id, record_time, action, event_type, event_timezone_offset, business_location, business_step, disposition, read_point, transformation_id, event_id) VALUES(@Id, @RequestId, @EventTime, @Action, @Type, @EventTimeZoneOffset, @BusinessLocation, @BusinessStep, @Disposition, @ReadPoint, @TransformationId, @EventId);.
         /// </summary>
         internal static string StoreEvent {
             get {
