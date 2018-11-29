@@ -3,6 +3,7 @@ using FasTnT.Model.Queries;
 using FasTnT.Model.Queries.Implementations.PredefinedQueries;
 using FasTnT.Formatters.Xml.Requests.Queries;
 using System.Xml.Linq;
+using System.Linq;
 
 namespace FasTnT.Formatters.Xml.Requests
 {
@@ -16,7 +17,7 @@ namespace FasTnT.Formatters.Xml.Requests
             {
                 return new SimpleEventQuery
                 {
-                    Parameters = SimpleEventQueryParameterFactory.ParseParameters(element.Element("params")?.Elements())
+                    Parameters = SimpleEventQueryParameterFactory.ParseParameters(element.Element("params")?.Elements()).ToArray()
                 };
             }
 

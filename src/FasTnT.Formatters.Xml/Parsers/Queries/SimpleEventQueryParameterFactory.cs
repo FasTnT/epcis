@@ -12,7 +12,7 @@ namespace FasTnT.Formatters.Xml.Requests.Queries
     {
         internal static IEnumerable<SimpleEventQueryParameter> ParseParameters(IEnumerable<XElement> elements)
         {
-            foreach(var element in elements)
+            foreach(var element in elements ?? new XElement[0])
             {
                 var name = element.Element("name")?.Value?.Trim();
                 var values = element.Element("value").HasElements ? element.Element("value").Elements().Select(x => x.Value) : new[] { element.Element("value").Value };
@@ -21,6 +21,7 @@ namespace FasTnT.Formatters.Xml.Requests.Queries
                 else if (Equals(name, "eventType")) yield return new EventTypeParameter { Name = name, Values = values };
                 else if (Regex.IsMatch(name, "^(GE|LT)_eventTime$")) yield return new EventTimeParameter { Name = name, Values = values };
                 else if (Regex.IsMatch(name, "^(GE|LT)_recordTime$")) yield return new RecordTimeParameter { Name = name, Values = values };
+                else if (Equals(name, "EQ_eventID")) yield return new EventIdParameter { Name = name, Values = values };
                 else if (Equals(name, "EQ_action")) yield return new ActionParameter { Name = name, Values = values };
                 else if (Equals(name, "EQ_bizStep")) yield return new BizStepParameter { Name = name, Values = values };
                 else if (Equals(name, "EQ_disposition")) yield return new DispositionParameter { Name = name, Values = values };
@@ -35,13 +36,6 @@ namespace FasTnT.Formatters.Xml.Requests.Queries
                 else if (Regex.IsMatch(name, "^MATCH_anyEPC")) yield return new MatchAnyEpcParameter { Name = name, Values = values };
                 else if (Regex.IsMatch(name, "^MATCH_")) yield return new MatchEpcParameter { Name = name, Values = values };
                 else if (Regex.IsMatch(name, "^(EQ|GT|GE|LT|LE)_quantity$")) yield return new QuantityParameter { Name = name, Values = values };
-                // TODO: finish these parameters
-                else if (Regex.IsMatch(name, "^(EQ|GT|GE|LT|LE)_INNER_ILMD_")) yield return new IlmdParameter { Name = name, Values = values };
-                else if (Regex.IsMatch(name, "^(EQ|GT|GE|LT|LE)_ILMD_")) yield return new IlmdParameter { Name = name, Values = values };
-                else if (Regex.IsMatch(name, "^(EQ|GT|GE|LT|LE)_INNER_")) yield return new ExtensionFieldParameter { Name = name, IsInner = true, Values = values };
-                else if (Regex.IsMatch(name, "^(EQ|GT|GE|LT|LE)_")) yield return new ExtensionFieldParameter { Name = name, IsInner = false, Values = values };
-                // End TODO
-                else if (Equals(name, "EQ_eventID")) yield return new EventIdParameter { Name = name, Values = values };
                 else if (Equals(name, "EXISTS_errorDeclaration")) yield return new ErrorDeclarationParameter { Name = name, Values = values };
                 else if (Equals(name, "orderBy")) yield return new OrderByParameter { Name = name, Values = values };
                 else if (Equals(name, "orderDirection")) yield return new OrderDirectionParameter { Name = name, Values = values };
@@ -50,6 +44,11 @@ namespace FasTnT.Formatters.Xml.Requests.Queries
                 else if (Equals(name, "EQ_correctiveEventID")) throw new EpcisException(ExceptionType.ImplementationException, $"Parameter '{name}' is not implemented yet");
                 else if (Equals(name, "eventCountLimit")) yield return new EventCountLimitParameter { Name = name, Values = values };
                 else if (Equals(name, "maxEventCount")) yield return new MaxEventCountParameter { Name = name, Values = values };
+                // TODO: finish these parameters
+                else if (Regex.IsMatch(name, "^(EQ|GT|GE|LT|LE)_INNER_ILMD_")) yield return new IlmdParameter { Name = name, Values = values };
+                else if (Regex.IsMatch(name, "^(EQ|GT|GE|LT|LE)_ILMD_")) yield return new IlmdParameter { Name = name, Values = values };
+                else if (Regex.IsMatch(name, "^(EQ|GT|GE|LT|LE)_INNER_")) yield return new ExtensionFieldParameter { Name = name, IsInner = true, Values = values };
+                else if (Regex.IsMatch(name, "^(EQ|GT|GE|LT|LE)_")) yield return new ExtensionFieldParameter { Name = name, IsInner = false, Values = values };
 
                 else throw new EpcisException(ExceptionType.QueryParameterException, $"Query parameter with name '{name}' not expected.");
             }
