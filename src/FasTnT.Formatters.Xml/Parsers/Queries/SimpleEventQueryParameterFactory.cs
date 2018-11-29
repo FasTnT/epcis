@@ -30,9 +30,9 @@ namespace FasTnT.Formatters.Xml.Requests.Queries
                 else if (Equals(name, "WD_readPoint")) throw new NotImplementedException($"Parameter '{name}' is not implemented yet");
                 else if (Equals(name, "EQ_bizLocation")) yield return new BizLocationParameter { Name = name, Values = values };
                 else if (Equals(name, "WD_bizLocation")) throw new NotImplementedException($"Parameter '{name}' is not implemented yet");
-                else if (Regex.IsMatch(name, "^EQ_bizTransaction_")) throw new EpcisException(ExceptionType.ImplementationException, $"Parameter '{name}' is not implemented yet");
-                else if (Regex.IsMatch(name, "^EQ_source_")) throw new EpcisException(ExceptionType.ImplementationException, $"Parameter '{name}' is not implemented yet");
-                else if (Regex.IsMatch(name, "^EQ_destination_")) throw new EpcisException(ExceptionType.ImplementationException, $"Parameter '{name}' is not implemented yet");
+                else if (Regex.IsMatch(name, "^EQ_bizTransaction_")) yield return new BizTransactionParameter { Name = name, Values = values };
+                else if (Regex.IsMatch(name, "^EQ_source_")) yield return new SourceDestinationParameter { Name = name, Values = values, Direction = SourceDestinationType.Source };
+                else if (Regex.IsMatch(name, "^EQ_destination_")) yield return new SourceDestinationParameter { Name = name, Values = values, Direction = SourceDestinationType.Destination };
                 else if (Equals(name, "EQ_transformationID")) yield return new TransformationParameter { Name = name, Values = values };
                 else if (Regex.IsMatch(name, "^MATCH_anyEPC")) yield return new MatchAnyEpcParameter { Name = name, Values = values };
                 else if (Regex.IsMatch(name, "^MATCH_")) yield return new MatchEpcParameter { Name = name, Values = values };
