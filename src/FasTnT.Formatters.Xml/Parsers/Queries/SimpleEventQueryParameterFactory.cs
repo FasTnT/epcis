@@ -15,7 +15,7 @@ namespace FasTnT.Formatters.Xml.Requests.Queries
             foreach(var element in elements)
             {
                 var name = element.Element("name")?.Value?.Trim();
-                var values = element.Element("value").HasElements ? element.Element("value").Elements().Select(x => x.Value) : new[] { element.Element("value").Value };
+                var values = element.Element("value")?.HasElements ?? false ? element.Element("value").Elements().Select(x => x.Value) : new[] { element.Element("value")?.Value };
 
                 if (string.IsNullOrEmpty(name)) throw new ArgumentException($"Query parameter element does not contain name element");
                 else if (Equals(name, "eventType")) yield return new EventTypeParameter { Name = name, Values = values };
@@ -38,6 +38,8 @@ namespace FasTnT.Formatters.Xml.Requests.Queries
                 // TODO: finish these parameters
                 else if (Regex.IsMatch(name, "^(EQ|GT|GE|LT|LE)_INNER_ILMD_")) yield return new IlmdParameter { Name = name, IsInner = true, Values = values };
                 else if (Regex.IsMatch(name, "^(EQ|GT|GE|LT|LE)_ILMD_")) yield return new IlmdParameter { Name = name, IsInner = false, Values = values };
+                else if (Regex.IsMatch(name, "^EXISTS_INNER_ILMD_")) yield return new ExistsIlmdParameter { Name = name, IsInner = true, Values = values };
+                else if (Regex.IsMatch(name, "^EXISTS_ILMD_")) yield return new ExistsIlmdParameter { Name = name, IsInner = false, Values = values };
                 else if (Regex.IsMatch(name, "^(EQ|GT|GE|LT|LE)_INNER_")) yield return new ExtensionFieldParameter { Name = name, IsInner = true, Values = values };
                 else if (Regex.IsMatch(name, "^(EQ|GT|GE|LT|LE)_")) yield return new ExtensionFieldParameter { Name = name, IsInner = false, Values = values };
                 // End TODO
