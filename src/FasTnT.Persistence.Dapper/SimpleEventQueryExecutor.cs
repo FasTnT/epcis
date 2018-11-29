@@ -43,18 +43,26 @@ namespace FasTnT.Persistence.Dapper
         public void Apply(ReadPointParameter param) => _query.Where($"read_point = ANY({_parameters.Add(param.Values)})");
         public void Apply(BizLocationParameter param) => _query.Where($"business_location = ANY({_parameters.Add(param.Values)})");
         public void Apply(TransformationParameter param) => _query.Where($"transformation_id = ANY({_parameters.Add(param.Values)})");
-        public void Apply(BizTransactionParameter param) => _query.Where($"EXISTS(SELECT id FROM epcis.business_transaction WHERE type = ANY({_parameters.Add(param.Values)}) AND event_id = event.id)");
-        public void Apply(QuantityParameter param) => _query.Where($"EXISTS(SELECT epc.event_id FROM epcis.epc epc WHERE epc.type = {EpcType.Quantity} AND epc.event_id = event.id AND epc.quantity = {_parameters.Add(param.DecimalValue)})");
+        public void Apply(BizTransactionParameter param) => _query.Where($"EXISTS(SELECT bt.event_id FROM epcis.business_transaction bt WHERE bt.transaction_type = {_parameters.Add(param.TransactionType)} AND bt.transaction_id = ANY({_parameters.Add(param.Values)}) AND bt.event_id = event.id)");
+        public void Apply(QuantityParameter param) => _query.Where($"EXISTS(SELECT epc.event_id FROM epcis.epc epc WHERE epc.type = {EpcType.Quantity} AND epc.event_id = event.id AND epc.quantity = {_parameters.Add(param.NumericValue)})");
         public void Apply(MatchAnyEpcParameter param) => _query.Where($"EXISTS(SELECT epc.event_id FROM epcis.epc epc WHERE epc.epc = ANY({_parameters.Add(param.Values)}) AND epc.event_id = event.id)");
         public void Apply(MatchEpcParameter param) => _query.Where($"EXISTS(SELECT epc.event_id FROM epcis.epc epc WHERE epc.epc = ANY({_parameters.Add(param.Values)}) AND epc.type = {_parameters.Add(param.Type)} AND epc.event_id = event.id)");
         public void Apply(EventIdParameter param) => _query.Where($"event.event_id = ANY({_parameters.Add(param.Values)})");
-        public void Apply(IlmdParameter param) => throw new NotImplementedException();
-        public void Apply(ExtensionFieldParameter param) => _query.Where($"EXISTS(SELECT cf.event_id FROM epcis.custom_field cf WHERE cf.event_id = event.id AND cf.type = 1 AND cf.namespace = {_parameters.Add(param.Namespace)} AND cf.name = {_parameters.Add(param.Name)} AND cf.text_value = ANY({_parameters.Add(param.Values)}) AND cf.parent_id IS {(param.IsInner ? "" : "NOT")} NULL)");
-        public void Apply(SourceDestinationParameter param) => _query.Where($"EXISTS(SELECT sd.event_id FROM epcis.source_destination sd WHERE sd.direction = AND sd.type = {_parameters.Add(param.Type)} AND st.source_dest_id = ANY({_parameters.Add(param.Values)}) AND sd.event_id = event.id)");
+        public void Apply(SourceDestinationParameter param) => _query.Where($"EXISTS(SELECT sd.event_id FROM epcis.source_destination sd WHERE sd.direction = {_parameters.Add(param.Direction)} AND sd.type = {_parameters.Add(param.Type)} AND sd.source_dest_id = ANY({_parameters.Add(param.Values)}) AND sd.event_id = event.id)");
         public void Apply(OrderByParameter param) => _orderProperty = GetOrderFieldName(param.Value);
         public void Apply(OrderDirectionParameter param) => _orderDirection = param.Direction;
         public void Apply(EventCountLimitParameter param) => SetLimit(param.Limit);
         public void Apply(MaxEventCountParameter param) => SetLimit(param.Limit + 1);
+        public void Apply(ExistsCustomFieldParameter param) => _query.Where($"EXISTS(SELECT cf.event_id FROM epcis.custom_field cf WHERE cf.event_id = event.id AND cf.type = {param.FieldType.Id} AND cf.namespace = {_parameters.Add(param.Namespace)} AND cf.name = {_parameters.Add(param.Property)} AND cf.parent_id IS {(param.IsInner ? "NOT" : "")} NULL)");
+        public void Apply(CustomFieldParameter param)
+        {
+            if (param.ValueType == ParameterValueType.Date)
+                _query.Where($"EXISTS(SELECT cf.event_id FROM epcis.custom_field cf WHERE cf.event_id = event.id AND cf.type = {param.FieldType.Id} AND cf.namespace = {_parameters.Add(param.Namespace)} AND cf.name = {_parameters.Add(param.Property)} AND cf.date_value {param.Comparator.ToSql()} {_parameters.Add(param.DateValue)} AND cf.parent_id IS {(param.IsInner ? "NOT" : "")} NULL)");
+            else if (param.ValueType == ParameterValueType.Numeric)
+                _query.Where($"EXISTS(SELECT cf.event_id FROM epcis.custom_field cf WHERE cf.event_id = event.id AND cf.type = {param.FieldType.Id} AND cf.namespace = {_parameters.Add(param.Namespace)} AND cf.name = {_parameters.Add(param.Property)} AND cf.numeric_value {param.Comparator.ToSql()} {_parameters.Add(param.NumericValue)} AND cf.parent_id IS {(param.IsInner ? "NOT" : "")} NULL)");
+            else
+                _query.Where($"EXISTS(SELECT cf.event_id FROM epcis.custom_field cf WHERE cf.event_id = event.id AND cf.type = {param.FieldType.Id} AND cf.namespace = {_parameters.Add(param.Namespace)} AND cf.name = {_parameters.Add(param.Property)} AND cf.text_value = ANY({_parameters.Add(param.Values)}) AND cf.parent_id IS {(param.IsInner ? "NOT" : "")} NULL)");
+        }
         // TODO: other parameters: ErrorDeclarationParameter
 
         public void Apply(SimpleEventQueryParameter param) => throw new EpcisException(ExceptionType.ImplementationException, $"Parameter '{param.GetType().Name}' is not implemented yet.");
