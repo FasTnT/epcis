@@ -1,4 +1,5 @@
-﻿using FasTnT.Model.Exceptions;
+﻿using FasTnT.Domain;
+using FasTnT.Model.Exceptions;
 using FasTnT.Model.Queries.PredefinedQueries.Parameters;
 using System;
 using System.Collections.Generic;
@@ -44,13 +45,15 @@ namespace FasTnT.Formatters.Xml.Requests.Queries
                 else if (Equals(name, "EQ_correctiveEventID")) throw new EpcisException(ExceptionType.ImplementationException, $"Parameter '{name}' is not implemented yet");
                 else if (Equals(name, "eventCountLimit")) yield return new EventCountLimitParameter { Name = name, Values = values };
                 else if (Equals(name, "maxEventCount")) yield return new MaxEventCountParameter { Name = name, Values = values };
-                // TODO: finish these parameters
-                else if (Regex.IsMatch(name, "^(EQ|GT|GE|LT|LE)_INNER_ILMD_")) yield return new IlmdParameter { Name = name, IsInner = true, Values = values };
-                else if (Regex.IsMatch(name, "^(EQ|GT|GE|LT|LE)_ILMD_")) yield return new IlmdParameter { Name = name, IsInner = false, Values = values };
-                else if (Regex.IsMatch(name, "^EXISTS_INNER_ILMD_")) yield return new ExistsIlmdParameter { Name = name, IsInner = true, Values = values };
-                else if (Regex.IsMatch(name, "^EXISTS_ILMD_")) yield return new ExistsIlmdParameter { Name = name, IsInner = false, Values = values };
-                else if (Regex.IsMatch(name, "^(EQ|GT|GE|LT|LE)_INNER_")) yield return new ExtensionFieldParameter { Name = name, IsInner = true, Values = values };
-                else if (Regex.IsMatch(name, "^(EQ|GT|GE|LT|LE)_")) yield return new ExtensionFieldParameter { Name = name, IsInner = false, Values = values };
+                else if (Regex.IsMatch(name, "^(EQ|GT|GE|LT|LE)_INNER_ILMD_")) yield return new CustomFieldParameter { Name = name, IsInner = true, Values = values, FieldType = FieldType.Ilmd };
+                else if (Regex.IsMatch(name, "^(EQ|GT|GE|LT|LE)_ILMD_")) yield return new CustomFieldParameter { Name = name, IsInner = false, Values = values, FieldType = FieldType.Ilmd };
+                else if (Regex.IsMatch(name, "^EXISTS_INNER_ILMD_")) yield return new ExistsCustomFieldParameter { Name = name, IsInner = true, Values = values, FieldType = FieldType.Ilmd };
+                else if (Regex.IsMatch(name, "^EXISTS_ILMD_")) yield return new ExistsCustomFieldParameter { Name = name, IsInner = false, Values = values, FieldType = FieldType.Ilmd };
+                else if (Regex.IsMatch(name, "^(EQ|GT|GE|LT|LE)_INNER_")) yield return new CustomFieldParameter { Name = name, IsInner = true, Values = values, FieldType = FieldType.EventExtension };
+                else if (Regex.IsMatch(name, "^(EQ|GT|GE|LT|LE)_")) yield return new CustomFieldParameter { Name = name, IsInner = false, Values = values, FieldType = FieldType.EventExtension };
+                else if (Regex.IsMatch(name, "^EXISTS_INNER_")) yield return new ExistsCustomFieldParameter { Name = name, IsInner = true, Values = values, FieldType = FieldType.EventExtension };
+                else if (Regex.IsMatch(name, "^EXISTS_")) yield return new ExistsCustomFieldParameter { Name = name, IsInner = false, Values = values, FieldType = FieldType.EventExtension };
+                // TODO: missing ATTR parameters (LAA)
 
                 else throw new EpcisException(ExceptionType.QueryParameterException, $"Query parameter with name '{name}' not expected.");
             }
