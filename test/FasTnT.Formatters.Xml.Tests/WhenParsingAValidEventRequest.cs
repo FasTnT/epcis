@@ -12,19 +12,19 @@ namespace FasTnT.Formatters.Xml.Tests
     public class WhenParsingAValidEventRequest : BaseUnitTest
     {
         public IRequestFormatter RequestParser { get; set; }
+        public Stream InputFile { get; set; }
         public Request ParsedFile { get; set; }
         public EpcisEventDocument ParsedEvents => ParsedFile as EpcisEventDocument;
 
         public override void Arrange()
         {
             RequestParser = new XmlRequestFormatter();
+            InputFile = File.OpenRead("files/requests/xml/valid_event_1.xml");
         }
 
         public override void Act()
         {
-            var input = File.OpenRead("files/requests/xml/valid_event_1.xml");
-
-            ParsedFile = RequestParser.Read(input) as EpcisEventDocument;
+            ParsedFile = RequestParser.Read(InputFile) as EpcisEventDocument;
         }
 
         [Assert]
