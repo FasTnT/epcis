@@ -1,3 +1,6 @@
 language: csharp
 solution: FasTnT.sln
 dotnet: 2.1
+
+script:
+- dotnet test test/FasTnT.Formatters.Xml.Tests/FasTnT.Formatters.Xml.Tests.csproj
