@@ -2,17 +2,16 @@
 <epcis:EPCISDocument xmlns:epcis="urn:epcglobal:epcis:xsd:1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" creationDate="2017-09-19T12:57:12Z" schemaVersion="1.2">
   <EPCISBody>
     <EventList>
-      <AggregationEvent>
+      <ObjectEvent>
         <eventTime>2018-06-14T12:51:17Z</eventTime>
         <eventTimeZoneOffset>+01:00</eventTimeZoneOffset>
-        <parentID>urn:epc:id:sscc:4001356.5900000817</parentID>
-        <childEPCs>
+        <epcList>
           <epc>urn:epc:id:sscc:4001356.5900000818</epc>
           <epc>urn:epc:id:sscc:4001356.5900000819</epc>
           <epc>urn:epc:id:sscc:4001356.5900000820</epc>
-        </childEPCs>
+        </epcList>
         <action>ADD</action>
-        <bizStep>urn:fastnt:demo:bizstep:demo:packing</bizStep>
+        <bizStep>urn:epcglobal:bizstep:packing</bizStep>
         <disposition>urn:epcglobal:cbv:disp:loading</disposition>
         <readPoint>
           <id>urn:fastnt:demo:readpoint:0037000.00729.210,432</id>
@@ -20,7 +19,7 @@
         <bizLocation>
           <id>urn:fastnt:demo:bizloc:0037000.00729.210</id>
         </bizLocation>
-      </AggregationEvent>
+      </ObjectEvent>
     </EventList>
   </EPCISBody>
 </epcis:EPCISDocument>
