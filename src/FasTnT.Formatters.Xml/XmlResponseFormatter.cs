@@ -102,9 +102,9 @@ namespace FasTnT.Formatters.Xml
             return formatted;
         }
 
-        public static XDocument WithAttributes(string name, string nameSpace = "") => new XDocument(new XElement(XName.Get(name, nameSpace), Attributes()));
-        public static XAttribute[] Attributes() => new[] { new XAttribute("creationDate", DateTime.UtcNow), new XAttribute("schemaVersion", "1.2"), new XAttribute(XNamespace.Xmlns + "epcisq", EpcisNamespaces.Query) };
-        public static XDocument WithoutAttributes(string name, string nameSpace = "") => new XDocument(new XElement(XName.Get(name, nameSpace)));
+        private static XDocument WithAttributes(string name, string nameSpace = "") => new XDocument(new XElement(XName.Get(name, nameSpace), Attributes()));
+        private static XAttribute[] Attributes() => new[] { new XAttribute("creationDate", DateTime.UtcNow), new XAttribute("schemaVersion", "1.2"), new XAttribute(XNamespace.Xmlns + "epcisq", EpcisNamespaces.Query) };
+        private static XDocument WithoutAttributes(string name, string nameSpace = "") => new XDocument(new XElement(XName.Get(name, nameSpace)));
         public string ToContentTypeString() => "application/xml";
     }
 }
