@@ -13,8 +13,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\FasTnT.Tests.Common\FasTnT.Tests.Common.csproj" />
     <ProjectReference Include="..\..\src\FasTnT.Formatters.Xml\FasTnT.Formatters.Xml.csproj" />
+    <ProjectReference Include="..\FasTnT.Tests.Common\FasTnT.Tests.Common.csproj" />
   </ItemGroup>
 
   <ItemGroup>
