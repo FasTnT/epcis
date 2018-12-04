@@ -43,6 +43,6 @@ The default username/password for the API services is `APIUser`/`ApiP@ssw0rd`.
 
 # License
 
-This project is licensed under the Apache 2.0 license - see the LICENSE.md file for details
+This project is licensed under the Apache 2.0 license - see the LICENSE file for details
 
-_Last update: november 2018_
+_Last update: december 2018_
