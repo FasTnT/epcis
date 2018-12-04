@@ -42,5 +42,17 @@ namespace FasTnT.Formatters.Xml.Tests
             Assert.IsNotNull(Result.Root.Attributes().Where(x => x.Name == "creationDate").FirstOrDefault());
             Assert.IsNotNull(Result.Root.Attributes().Where(x => x.Name == "schemaVersion").FirstOrDefault());
         }
+
+        [Assert]
+        public void TheXMLDocumentShouldContainAnEPCISBodyElement()
+        {
+            Assert.IsNotNull(Result.Root.Element("EPCISBody"));
+        }
+
+        [Assert]
+        public void TheXMLDocumentShouldContainAGetVendorVersionResultElement()
+        {
+            Assert.AreEqual("0.5", Result.Root.Element("EPCISBody").Element("GetVendorVersionResult").Value);
+        }
     }
 }
