@@ -6,6 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using FasTnT.Persistence.Dapper;
 using FasTnT.Domain;
 using FasTnT.Host.Middleware;
+using FasTnT.Host.Infrastructure.Attributes;
 
 namespace FasTnT.Host
 {
@@ -35,6 +36,8 @@ namespace FasTnT.Host
 
             app.UseExceptionHandlingMiddleware()
                .UseMvc();
+
+            DevelopmentOnlyAttribute.Configuration = () => env;
         }
     }
 }

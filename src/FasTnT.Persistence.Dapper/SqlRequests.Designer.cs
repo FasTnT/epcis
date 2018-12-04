@@ -70,6 +70,15 @@ namespace FasTnT.Persistence.Dapper {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to H4sIAAAAAAAA/3MJ8g9QCHb2cPV1VPB0U3CN8AwOCVYoLk0qTi7KLCjJzM8rVnB2DHZ2dHG15nLBqjg5qYyQktSC5EyC5iSWpmSWEFJUWpxahDAJAMH0bwy+AAAA.
+        /// </summary>
+        internal static string DropDatabaseZipped {
+            get {
+                return ResourceManager.GetString("DropDatabaseZipped", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to SELECT request.record_time as capture_time, event.id, event_type as type, event.record_time as event_time, action, read_point, event_timezone_offset, disposition, business_location, business_step, transformation_id, event_id FROM epcis.event JOIN epcis.request on request.id = event.request_id /**where**/ /**orderby**/ LIMIT @limit.
         /// </summary>
         internal static string EventQuery {
