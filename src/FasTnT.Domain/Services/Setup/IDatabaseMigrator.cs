@@ -5,5 +5,6 @@ namespace FasTnT.Domain.Services.Setup
     public interface IDatabaseMigrator
     {
         Task Migrate();
+        Task Rollback();
     }
 }

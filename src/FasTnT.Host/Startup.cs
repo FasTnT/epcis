@@ -6,6 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using FasTnT.Persistence.Dapper;
 using FasTnT.Domain;
 using FasTnT.Host.Middleware;
+using FasTnT.Host.Infrastructure.Attributes;
 
 namespace FasTnT.Host
 {
@@ -24,6 +25,8 @@ namespace FasTnT.Host
                 opt.OutputFormatters.Insert(0, new EpcisResponseOutputFormatter());
                 opt.ModelBinderProviders.Insert(0, new EpcisInputBinderProvider());
             });
+
+            services.AddSingleton<DevelopmentOnlyFilter>();
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
