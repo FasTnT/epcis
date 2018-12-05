@@ -25,6 +25,8 @@ namespace FasTnT.Host
                 opt.OutputFormatters.Insert(0, new EpcisResponseOutputFormatter());
                 opt.ModelBinderProviders.Insert(0, new EpcisInputBinderProvider());
             });
+
+            services.AddSingleton<DevelopmentOnlyFilter>();
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
@@ -36,8 +38,6 @@ namespace FasTnT.Host
 
             app.UseExceptionHandlingMiddleware()
                .UseMvc();
-
-            DevelopmentOnlyAttribute.Configuration = () => env;
         }
     }
 }
