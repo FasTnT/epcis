@@ -61,7 +61,7 @@ namespace FasTnT.Persistence.Dapper {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to H4sIAAAAAAAA/81abXObOBD+XP8KTaY3sW8cT5K2MzfN9APBcsrFAZeX5PKJkUF2mGIgvCTN/fpbBMaAAWOb3iQf3DparVbPPrtarXJ2hjQFy0jhv+M7rsfLmFNx+g0JEyRKKsL/CIqqoCigfnC1FlG56ymukhjFn3r45tFev4fgxzJRsCK2bTkhExa16XTIRhyyosh4Ij4xQuqjF+K/Wc6y/+V8gHhpOo2X8Za6QUJiu8vRiUkXJLLDk5IWXhIVVeYEUUUns1s9W/4EzWThjpMf0S1+RH3LHPQGvQdB/Y76kjBW0Dc04aYKHrTYEvE82wI7LNdh+jc7iyL4+B27MnxKQmrqroNCa0WDkKw89GqFT24Ust+gf12HlibZJAh10No8KZFdEcuuMPPyy5dmO5PZHgmCV9c39ScSPFWouTi//LTXfjOFAbHDKvguLvbSZwU6KLBeKJq7rk2JUxrPaKLX89Pz6YL6PnjBJs4yIssqv17s8GslScuE2ubq9rTJ [rest of string was truncated]&quot;;.
+        ///   Looks up a localized string similar to H4sIAAAAAAAA/81a31OjSBB+Nn/FlLVXJlfRUne36mqtfUAycTkjZPmh5xNFYBKpJYAM6Hp//TUDIUCAkATLy0M0mZ6m5+uve3qmc3qKNAXLSOF/4Duux8uYU3H6CQljJEoqwv8IiqqgiJKAXq1EVO56gqskzuJ3PXzzSa/fQ/CyLUSXhuPYbsiERW0yGbIR11gSZD4ZgWGGJEAvRvBmu4v+1/MB4qXJJH6Mv9BNIzQcb3F2bJG5ETnhcUkLL4mKKnOCqKLj6a2ePf4YTWXhjpMf0S1+RH3bGvQGvQdB/YH6kjBS0Hc05iYKHrRYkuH7jg122J7L9K9XFkXw9h6rMgNihMTSPReF9pLQ0Fj66NUOn7woZN+gfz2XlCY5Bg110No8KZFdGrZTYebl16/NdiazfYPSVy+w9CeDPlWouTi//LzTejOF1HDCKvguLnbSZ1MdFNgvBM08zyGGWxrPaKLX89MPyJwEAXjBMdxFZCyq/Hqxxa+VJC0TapOrm9PG [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string CreateDatabaseZipped {
             get {
@@ -123,6 +123,24 @@ namespace FasTnT.Persistence.Dapper {
         internal static string StoreEpcs {
             get {
                 return ResourceManager.GetString("StoreEpcs", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to INSERT INTO epcis.error_declaration(event_id, declaration_time, reason) VALUES(@EventId, @DeclarationTime, @Reason);.
+        /// </summary>
+        internal static string StoreErrorDeclaration {
+            get {
+                return ResourceManager.GetString("StoreErrorDeclaration", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to INSERT INTO epcis.error_declaration_eventid(event_id, corrective_eventid) VALUES(@EventId, @CorrectiveId);.
+        /// </summary>
+        internal static string StoreErrorDeclarationIds {
+            get {
+                return ResourceManager.GetString("StoreErrorDeclarationIds", resourceCulture);
             }
         }
         
