@@ -61,7 +61,7 @@ namespace FasTnT.Persistence.Dapper {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to H4sIAAAAAAAA/81a31OjSBB+Nn/FlLVXJlfRUne36mqtfUAycTkjZPmh5xNFYBKpJYAM6Hp//TUDIUCAkATLy0M0mZ6m5+uve3qmc3qKNAXLSOF/4Duux8uYU3H6CQljJEoqwv8IiqqgiJKAXq1EVO56gqskzuJ3PXzzSa/fQ/CyLUSXhuPYbsiERW0yGbIR11gSZD4ZgWGGJEAvRvBmu4v+1/MB4qXJJH6Mv9BNIzQcb3F2bJG5ETnhcUkLL4mKKnOCqKLj6a2ePf4YTWXhjpMf0S1+RH3bGvQGvQdB/YH6kjBS0Hc05iYKHrRYkuH7jg122J7L9K9XFkXw9h6rMgNihMTSPReF9pLQ0Fj66NUOn7woZN+gfz2XlCY5Bg110No8KZFdGrZTYebl16/NdiazfYPSVy+w9CeDPlWouTi//LzTejOF1HDCKvguLnbSZ1MdFNgvBM08zyGGWxrPaKLX89MPyJwEAXjBMdxFZCyq/Hqxxa+VJC0TapOrm9PG [rest of string was truncated]&quot;;.
+        ///   Looks up a localized string similar to H4sIAAAAAAAA/81aW2+bShB+jn/FKupR7CM3StJWOmrVB4LXKScOuFzS5glhWDuoGAiXpDm//gzLxYAXjG2qNg+O7Z0dZr/5ZnZ2x2/fIk3BMlL4L/iOG/Ay5lScfULCFImSivB3QVEVFIckCD/lIip3PcMsifPkVY9efTIYDhD82RYK14bj2G5EhUVtNhvTEddYE2Q+GoFhRiRAz0bwarur4YeLEeKl2Sx5jL/STSMyHG91fmqRpRE70WlNCy+Jiipzgqii0/mtXjz+FM1l4Y6TH9AtfkBD2xoNRoNvgvoFDSVhoqDPaMrNFDzqsCTD9x0b7LA9l+rfrCyO4eVXrMoMiBERS/dcFNlrEkbG2kcvdvToxRH9Bv3nuaQ2yTHCSAet7ZNS2bVhOwwzrz58aLczne0bYfjiBZb+aISPDDWXF1fv9lpvoTA0nIgF3+XlXvrsUAcF9jNBC89ziOHWxgua6M389AOyJEEAXnAMdxUbK5ZfL3f4lUnSOqG2ubo9 [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string CreateDatabaseZipped {
             get {
@@ -88,10 +88,28 @@ namespace FasTnT.Persistence.Dapper {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to SELECT id, namespace FROM epcis.namespace WHERE namespace = @Namespace;.
+        /// </summary>
+        internal static string NamespaceByNameQuery {
+            get {
+                return ResourceManager.GetString("NamespaceByNameQuery", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to INSERT INTO epcis.namespace (namespace) VALUES (@Namespace); SELECT LASTVAL();.
+        /// </summary>
+        internal static string NamespaceCreate {
+            get {
+                return ResourceManager.GetString("NamespaceCreate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to SELECT event_id, epc as id, type, is_quantity, quantity, unit_of_measure FROM epcis.epc WHERE event_id = ANY(@EventIds);
-        ///SELECT event_id, field_id as id, parent_id, namespace, name, type, text_value, numeric_value, date_value FROM epcis.custom_field WHERE event_id = ANY(@EventIds);
+        ///SELECT event_id, field_id as id, parent_id, namespace.namespace, name, type, text_value, numeric_value, date_value FROM epcis.custom_field JOIN epcis.namespace on custom_field.namespace_id = namespace.id WHERE event_id = ANY(@EventIds);
         ///SELECT event_id, transaction_type as type, transaction_id as id FROM epcis.business_transaction WHERE event_id = ANY(@EventIds);
-        ///SELECT event_id, type, source_dest_id as id, direction FROM epcis.source_destination WHERE event_ [rest of string was truncated]&quot;;.
+        ///SELECT event_id, type, [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string RelatedQuery {
             get {
@@ -109,7 +127,7 @@ namespace FasTnT.Persistence.Dapper {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to INSERT INTO epcis.custom_field(event_id, field_id, parent_id, namespace, name, type, text_value, numeric_value, date_value) VALUES (@EventId, @Id, @ParentId, @Namespace, @Name, @Type, @TextValue, @NumericValue, @DateValue);.
+        ///   Looks up a localized string similar to INSERT INTO epcis.custom_field(event_id, field_id, parent_id, namespace_id, name, type, text_value, numeric_value, date_value) VALUES (@EventId, @Id, @ParentId, @NamespaceId, @Name, @Type, @TextValue, @NumericValue, @DateValue);.
         /// </summary>
         internal static string StoreCustomField {
             get {

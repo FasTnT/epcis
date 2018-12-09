@@ -47,8 +47,36 @@ namespace FasTnT.Persistence.Dapper
 
         private async static Task StoreCustomFields(EpcisEventDocument request, IUnitOfWork unitOfWork)
         {
-            request.EventList.ForEach(x => x.CustomFields.ForEach(f => f.EventId = x.Id));
-            await unitOfWork.Execute(SqlRequests.StoreCustomField, request.EventList.SelectMany(x => x.CustomFields));
+            var namespaceStore = new NamespaceStore(unitOfWork);
+            var customFieldsList = new List<CustomFieldDTO>();
+            foreach (var x in request.EventList)
+            {
+                foreach (var f in x.CustomFields)
+                {
+                    f.EventId = x.Id;
+                    var dto = new CustomFieldDTO
+                    {
+                        EventId = f.EventId,
+                        Id = f.Id,
+                        Type = f.Type,
+                        Name = f.Name,
+                        Namespace = f.Namespace,
+                        TextValue = f.TextValue,
+                        NumericValue = f.NumericValue,
+                        DateValue = f.DateValue,
+                        ParentId = f.ParentId,
+                    };
+                    var namespaceDTO = await namespaceStore.FindByName(dto.Namespace);
+                    if (namespaceDTO == null)
+                    {
+                        namespaceDTO = await namespaceStore.Create(dto.Namespace);
+                    }
+
+                    dto.NamespaceId = namespaceDTO.Id;
+                    customFieldsList.Add(dto);
+                }
+            }
+            await unitOfWork.Execute(SqlRequests.StoreCustomField, customFieldsList);
         }
 
         private async static Task StoreSourceDestinations(EpcisEventDocument request, IUnitOfWork unitOfWork)
@@ -73,5 +101,18 @@ namespace FasTnT.Persistence.Dapper
             await unitOfWork.Execute(SqlRequests.StoreErrorDeclaration, eventsWithErrorDeclaration.Select(x => x.ErrorDeclaration));
             await unitOfWork.Execute(SqlRequests.StoreErrorDeclarationIds, eventsWithErrorDeclaration.SelectMany(x => x.ErrorDeclaration.CorrectiveEventIds));
         }
+    }
+    internal class CustomFieldDTO
+    {
+        public Guid EventId { get; set; }
+        public int Id { get; set; }
+        public FieldType Type { get; set; }
+        public string Name { get; set; }
+        public int NamespaceId { get; set; }
+        public string Namespace { get; set; }
+        public string TextValue { get; set; }
+        public double? NumericValue { get; set; }
+        public DateTime? DateValue { get; set; }
+        public int? ParentId { get; set; }
     }
 }

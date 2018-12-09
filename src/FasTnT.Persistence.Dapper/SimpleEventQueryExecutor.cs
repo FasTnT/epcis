@@ -53,15 +53,15 @@ namespace FasTnT.Persistence.Dapper
         public void Apply(OrderDirectionParameter param) => _orderDirection = param.Direction;
         public void Apply(EventCountLimitParameter param) => SetLimit(param.Limit);
         public void Apply(MaxEventCountParameter param) => SetLimit(param.Limit + 1);
-        public void Apply(ExistsCustomFieldParameter param) => _query.Where($"EXISTS(SELECT cf.event_id FROM epcis.custom_field cf WHERE cf.event_id = event.id AND cf.type = {param.FieldType.Id} AND cf.namespace = {_parameters.Add(param.Namespace)} AND cf.name = {_parameters.Add(param.Property)} AND cf.parent_id IS {(param.IsInner ? "NOT" : "")} NULL)");
+        public void Apply(ExistsCustomFieldParameter param) => _query.Where($"EXISTS(SELECT cf.event_id FROM epcis.custom_field cf JOIN epcis.namespace ns ON cf.namespace_id=ns.id WHERE cf.event_id = event.id AND cf.type = {param.FieldType.Id} AND ns.namespace = {_parameters.Add(param.Namespace)} AND cf.name = {_parameters.Add(param.Property)} AND cf.parent_id IS {(param.IsInner ? "NOT" : "")} NULL)");
         public void Apply(CustomFieldParameter param)
         {
             if (param.ValueType == ParameterValueType.Date)
-                _query.Where($"EXISTS(SELECT cf.event_id FROM epcis.custom_field cf WHERE cf.event_id = event.id AND cf.type = {param.FieldType.Id} AND cf.namespace = {_parameters.Add(param.Namespace)} AND cf.name = {_parameters.Add(param.Property)} AND cf.date_value {param.Comparator.ToSql()} {_parameters.Add(param.DateValue)} AND cf.parent_id IS {(param.IsInner ? "NOT" : "")} NULL)");
+                _query.Where($"EXISTS(SELECT cf.event_id FROM epcis.custom_field cf JOIN epcis.namespace ns ON cf.namespace_id=ns.id WHERE cf.event_id = event.id AND cf.type = {param.FieldType.Id} AND ns.namespace = {_parameters.Add(param.Namespace)} AND cf.name = {_parameters.Add(param.Property)} AND cf.date_value {param.Comparator.ToSql()} {_parameters.Add(param.DateValue)} AND cf.parent_id IS {(param.IsInner ? "NOT" : "")} NULL)");
             else if (param.ValueType == ParameterValueType.Numeric)
-                _query.Where($"EXISTS(SELECT cf.event_id FROM epcis.custom_field cf WHERE cf.event_id = event.id AND cf.type = {param.FieldType.Id} AND cf.namespace = {_parameters.Add(param.Namespace)} AND cf.name = {_parameters.Add(param.Property)} AND cf.numeric_value {param.Comparator.ToSql()} {_parameters.Add(param.NumericValue)} AND cf.parent_id IS {(param.IsInner ? "NOT" : "")} NULL)");
+                _query.Where($"EXISTS(SELECT cf.event_id FROM epcis.custom_field cf JOIN epcis.namespace ns ON cf.namespace_id=ns.id WHERE cf.event_id = event.id AND cf.type = {param.FieldType.Id} AND ns.namespace = {_parameters.Add(param.Namespace)} AND cf.name = {_parameters.Add(param.Property)} AND cf.numeric_value {param.Comparator.ToSql()} {_parameters.Add(param.NumericValue)} AND cf.parent_id IS {(param.IsInner ? "NOT" : "")} NULL)");
             else
-                _query.Where($"EXISTS(SELECT cf.event_id FROM epcis.custom_field cf WHERE cf.event_id = event.id AND cf.type = {param.FieldType.Id} AND cf.namespace = {_parameters.Add(param.Namespace)} AND cf.name = {_parameters.Add(param.Property)} AND cf.text_value = ANY({_parameters.Add(param.Values)}) AND cf.parent_id IS {(param.IsInner ? "NOT" : "")} NULL)");
+                _query.Where($"EXISTS(SELECT cf.event_id FROM epcis.custom_field cf JOIN epcis.namespace ns ON cf.namespace_id=ns.id WHERE cf.event_id = event.id AND cf.type = {param.FieldType.Id} AND ns.namespace = {_parameters.Add(param.Namespace)} AND cf.name = {_parameters.Add(param.Property)} AND cf.text_value = ANY({_parameters.Add(param.Values)}) AND cf.parent_id IS {(param.IsInner ? "NOT" : "")} NULL)");
         }
         // TODO: other parameters: ErrorDeclarationParameter
 
