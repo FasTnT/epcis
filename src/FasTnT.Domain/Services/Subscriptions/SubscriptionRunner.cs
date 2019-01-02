@@ -19,7 +19,7 @@ namespace FasTnT.Domain.Services.Subscriptions
 
         public async Task Run(Subscription subscription)
         {
-            var query = new SimpleEventQuery { /*Parameters = subscription.Parameters*/ };
+            var query = new SimpleEventQuery { Parameters = subscription.Params };
             var result = await _dispatcher.Dispatch(query);
 
             await _resultSender.Send(subscription.Destination, result);

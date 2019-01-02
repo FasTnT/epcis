@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using FasTnT.Model.Queries;
 using FasTnT.Model.Responses;
 using FasTnT.Domain.Services.Handlers;
+using FasTnT.Model.Subscriptions;
 
 namespace FasTnT.Domain.Services.Dispatch
 {
@@ -33,6 +34,14 @@ namespace FasTnT.Domain.Services.Dispatch
             var handler = _serviceProvider.GetService(handlerType);
 
             return await DispatchInternal(handler, query);
+        }
+
+        public async Task<IEpcisResponse> Dispatch(SubscriptionRequest request)
+        {
+            var handlerType = _handlers.SingleOrDefault(x => x.GetInterfaces().SingleOrDefault(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(ISubscriptionHandler<>))?.GetGenericArguments()[0] == request.GetType());
+            var handler = _serviceProvider.GetService(handlerType);
+
+            return await DispatchInternal(handler, request);
         }
 
         private static async Task<IEpcisResponse> DispatchInternal(object handler, params object[] parameters) =>

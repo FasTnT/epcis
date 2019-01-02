@@ -14,7 +14,8 @@ namespace FasTnT.Domain
         {
             var handlers = Assembly.GetAssembly(typeof(Dispatcher)).ExportedTypes.Where(x =>
                 x.GetInterfaces().Any(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IHandler<>)) ||
-                x.GetInterfaces().Any(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IQueryHandler<>))).ToArray();
+                x.GetInterfaces().Any(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IQueryHandler<>)) ||
+                x.GetInterfaces().Any(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(ISubscriptionHandler<>))).ToArray();
 
             handlers.ForEach(x => services.AddScoped(x));
             services.AddScoped(typeof(IDispatcher), typeof(Dispatcher));

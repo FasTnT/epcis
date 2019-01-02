@@ -28,6 +28,7 @@ namespace FasTnT.Persistence.Dapper
             services.AddScoped(typeof(IDbConnection), ctx => new NpgsqlConnection(connectionString));
             services.AddScoped(typeof(IUnitOfWork), typeof(DapperUnitOfWork));
             services.AddScoped(typeof(IEventStore), typeof(EventStore));
+            services.AddScoped(typeof(ISubscriptionManager), typeof(SubscriptionManager));
             services.AddScoped(typeof(ISimpleEventQueryExecutor), typeof(SimpleEventQueryExecutor));
             services.AddScoped(typeof(IDatabaseMigrator), typeof(PgSqlDatabaseMigrator));
         }
