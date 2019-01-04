@@ -7,6 +7,7 @@ using FasTnT.Persistence.Dapper;
 using FasTnT.Domain;
 using FasTnT.Host.Middleware;
 using FasTnT.Host.Infrastructure.Attributes;
+using FasTnT.Host.BackgroundTasks;
 
 namespace FasTnT.Host
 {
@@ -27,6 +28,7 @@ namespace FasTnT.Host
             });
 
             services.AddSingleton<DevelopmentOnlyFilter>();
+            services.AddSingleton<Microsoft.Extensions.Hosting.IHostedService, SubscriptionService>();
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
@@ -35,6 +37,9 @@ namespace FasTnT.Host
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            // TODO: get from configuration?
+            SubscriptionService.DelayTimeoutInMs = 5000;
 
             app.UseExceptionHandlingMiddleware()
                .UseMvc();
