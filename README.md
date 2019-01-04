@@ -9,7 +9,7 @@ FasTnT is a simple, lightweight GS1 EPCIS 1.2 repository written in C# using .NE
 
 Prerequisites: 
 - PostGreSQL 9.5 or higher
-- .NET Core 2.1 SDK
+- .NET Core 2.2 SDK
 
 Steps:
 1. Download the source code, and create a new user/database in PostGreSQL for FasTnT;
