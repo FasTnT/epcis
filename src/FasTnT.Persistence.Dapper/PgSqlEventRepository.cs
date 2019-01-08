@@ -6,8 +6,8 @@ using Dapper;
 using FasTnT.Domain;
 using FasTnT.Model.Exceptions;
 using FasTnT.Domain.Services.Handlers.PredefinedQueries;
-using static Dapper.SqlBuilder;
 using FasTnT.Model.Queries.Enums;
+using static Dapper.SqlBuilder;
 
 // Review by LAA: remove magic strings
 namespace FasTnT.Persistence.Dapper
@@ -115,18 +115,21 @@ namespace FasTnT.Persistence.Dapper
             => throw new NotImplementedException();
 
         public void WhereExistsIlmd(bool inner, string ilmdNamespace, string ilmdName)
-            => throw new NotImplementedException();
+            => _query = _query.Where($"EXISTS(SELECT cf.event_id FROM epcis.custom_field cf WHERE cf.event_id = event.id AND cf.type = {FieldType.Ilmd.Id} AND cf.namespace = {_parameters.Add(ilmdNamespace)} AND cf.name = {_parameters.Add(ilmdName)} AND cf.parent_id IS {(inner ? "NOT" : "")} NULL");
 
         public void WhereMatchesCustomField<T>(bool inner, string fieldNamespace, string fieldName, string comparator, T values)
             => throw new NotImplementedException();
 
         public void WhereExistsCustomField(bool inner, string fieldNamespace, string fieldName)
-            => throw new NotImplementedException();
+            => _query = _query.Where($"EXISTS(SELECT cf.event_id FROM epcis.custom_field cf WHERE cf.event_id = event.id AND cf.type = {FieldType.EventExtension.Id} AND cf.namespace = {_parameters.Add(fieldNamespace)} AND cf.name = {_parameters.Add(fieldName)} AND cf.parent_id IS {(inner ? "NOT" : "")} NULL");
 
         public void WhereCaptureTimeMatches(FilterOperator filterOperator, DateTime dateTime)
             => _query = _query.Where($"event.record_time {filterOperator.ToSql()} {_parameters.Add(dateTime)}");
 
         public void WhereRecordTimeMatches(FilterOperator filterOperator, DateTime dateTime)
             => _query = _query.Where($"request.record_time {filterOperator.ToSql()} {_parameters.Add(dateTime)}");
+
+        public void WhereEventTypeIn(string[] values)
+            => _query = _query.Where($"event.event_type = ANY({_parameters.Add(values)})");
     }
 }

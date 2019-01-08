@@ -22,6 +22,7 @@ namespace FasTnT.Domain.Services.Handlers.PredefinedQueries
         void WhereTransformationIdIn(params string[] transformationIds);
         void WhereEpcMatches(string[] values, EpcType epcType = null);
         void WhereExistsErrorDeclaration();
+        void WhereEventTypeIn(string[] values);
         void WhereErrorReasonIn(params string[] errorReasons);
         void WhereCorrectiveEventIdIn(params string[] correctiveEventIds);
         void WhereMatchesIlmd<T>(bool inner, string ilmdNamespace, string ilmdName, string comparator, T values);
