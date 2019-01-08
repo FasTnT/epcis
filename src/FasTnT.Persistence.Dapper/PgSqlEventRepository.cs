@@ -91,7 +91,7 @@ namespace FasTnT.Persistence.Dapper
             => throw new NotImplementedException();
 
         public void WhereSourceValueIn(string sourceName, params string[] sourceValues)
-            => throw new NotImplementedException();
+            => _query = _query.Where($"EXISTS(SELECT sd.event_id FROM epcis.source_destination sd WHERE sd.direction = {SourceDestinationType.Source.Id} AND sd.type = {_parameters.Add(sourceName)} AND sd.source_dest_id = ANY({_parameters.Add(sourceValues)}) AND sd.event_id = event.id)");
 
         public void WhereDestinationValueIn(string destName, params string[] destValues)
             => throw new NotImplementedException();
@@ -115,13 +115,13 @@ namespace FasTnT.Persistence.Dapper
             => throw new NotImplementedException();
 
         public void WhereExistsIlmd(bool inner, string ilmdNamespace, string ilmdName)
-            => _query = _query.Where($"EXISTS(SELECT cf.event_id FROM epcis.custom_field cf WHERE cf.event_id = event.id AND cf.type = {FieldType.Ilmd.Id} AND cf.namespace = {_parameters.Add(ilmdNamespace)} AND cf.name = {_parameters.Add(ilmdName)} AND cf.parent_id IS {(inner ? "NOT" : "")} NULL");
+            => _query = _query.Where($"EXISTS(SELECT cf.event_id FROM epcis.custom_field cf WHERE cf.event_id = event.id AND cf.type = {FieldType.Ilmd.Id} AND cf.namespace = {_parameters.Add(ilmdNamespace)} AND cf.name = {_parameters.Add(ilmdName)} AND cf.parent_id IS {(inner ? "NOT" : "")} NULL)");
 
         public void WhereMatchesCustomField<T>(bool inner, string fieldNamespace, string fieldName, string comparator, T values)
             => throw new NotImplementedException();
 
         public void WhereExistsCustomField(bool inner, string fieldNamespace, string fieldName)
-            => _query = _query.Where($"EXISTS(SELECT cf.event_id FROM epcis.custom_field cf WHERE cf.event_id = event.id AND cf.type = {FieldType.EventExtension.Id} AND cf.namespace = {_parameters.Add(fieldNamespace)} AND cf.name = {_parameters.Add(fieldName)} AND cf.parent_id IS {(inner ? "NOT" : "")} NULL");
+            => _query = _query.Where($"EXISTS(SELECT cf.event_id FROM epcis.custom_field cf WHERE cf.event_id = event.id AND cf.type = {FieldType.EventExtension.Id} AND cf.namespace = {_parameters.Add(fieldNamespace)} AND cf.name = {_parameters.Add(fieldName)} AND cf.parent_id IS {(inner ? "NOT" : "")} NULL)");
 
         public void WhereCaptureTimeMatches(FilterOperator filterOperator, DateTime dateTime)
             => _query = _query.Where($"event.record_time {filterOperator.ToSql()} {_parameters.Add(dateTime)}");
@@ -131,5 +131,8 @@ namespace FasTnT.Persistence.Dapper
 
         public void WhereEventTypeIn(string[] values)
             => _query = _query.Where($"event.event_type = ANY({_parameters.Add(values)})");
+
+        public void WhereEpcQuantityMatches(FilterOperator filterOperator, double value)
+            => _query = _query.Where($"EXISTS(SELECT epc.event_id FROM epcis.epc epc WHERE epc.type = {EpcType.Quantity} AND epc.quantity {filterOperator.ToSql()} {_parameters.Add(value)} AND epc.event_id = event.id)");
     }
 }

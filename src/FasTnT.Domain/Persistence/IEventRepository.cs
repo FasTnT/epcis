@@ -31,6 +31,7 @@ namespace FasTnT.Domain.Services.Handlers.PredefinedQueries
         void WhereExistsCustomField(bool inner, string fieldNamespace, string fieldName);
         void WhereCaptureTimeMatches(FilterOperator filterOperator, DateTime dateTime);
         void WhereRecordTimeMatches(FilterOperator filterOperator, DateTime dateTime);
+        void WhereEpcQuantityMatches(FilterOperator filterOperator, double value);
 
         Task<IEnumerable<EpcisEvent>> ToList();
     }
