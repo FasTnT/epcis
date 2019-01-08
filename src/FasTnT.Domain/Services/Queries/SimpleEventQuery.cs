@@ -1,5 +1,6 @@
 ﻿using FasTnT.Domain;
 using FasTnT.Domain.Services.Handlers.PredefinedQueries;
+using FasTnT.Model.Exceptions;
 using FasTnT.Model.Extensions;
 using FasTnT.Model.Queries.Enums;
 using FasTnT.Model.Utils;
@@ -18,7 +19,10 @@ namespace FasTnT.Model.Queries.Implementations
 
         public void ValidateParameters(IEnumerable<QueryParameter> parameters, bool subscription = false)
         {
-            // TODO: raise exception if some parameter name/values are not valid.
+            if(parameters.Any(x => x.Name == "maxEventCount") && parameters.Any(x => x.Name == "eventCountLimit"))
+            {
+                throw new EpcisException(ExceptionType.QueryParameterException, "maxEventCount and eventCountLimit parameters are mutually exclusive.");
+            }
         }
 
         public async Task<IEnumerable<EpcisEvent>> Execute(IEnumerable<QueryParameter> parameters, IEventRepository repository)
@@ -27,8 +31,8 @@ namespace FasTnT.Model.Queries.Implementations
             {
                 if (Equals(parameter.Name, "eventType")) repository.WhereEventTypeIn(parameter.Values);
                 else if (Equals(parameter.Name, "EQ_action")) repository.WhereActionIn(parameter.Values.Select(Enumeration.GetByDisplayName<EventAction>).ToArray());
-                else if (Equals(parameter.Name, "eventCountLimit")) repository.SetEventLimit(parameter.GetValue<int>());
-                else if (Equals(parameter.Name, "maxEventCount")) repository.SetMaxEventCount(parameter.GetValue<int>());
+                else if (Equals(parameter.Name, "eventCountLimit")) repository.SetLimit(parameter.GetValue<int>());
+                else if (Equals(parameter.Name, "maxEventCount")) repository.SetLimit(parameter.GetValue<int>() + 1);
                 else if (Equals(parameter.Name, "EQ_bizLocation")) repository.WhereBusinessLocationIn(parameter.Values);
                 else if (Equals(parameter.Name, "EQ_bizStep")) repository.WhereBusinessStepIn(parameter.Values);
                 else if (Equals(parameter.Name, "EQ_disposition")) repository.WhereDispositionIn(parameter.Values);
@@ -58,7 +62,15 @@ namespace FasTnT.Model.Queries.Implementations
                 else throw new NotImplementedException($"Query parameter unexpected or not implemented: '{parameter.Name}'");
             }
 
-            return await repository.ToList();
+            var results = await repository.ToList();
+
+            // Check for the maxEventCount parameter
+            if(parameters.Any(x => x.Name == "maxEventCount") && results.Count() == parameters.Last(x => x.Name == "maxEventCount").GetValue<int>() + 1)
+            {
+                throw new EpcisException(ExceptionType.QueryTooLargeException, "Too many results returned by the request");
+            }
+
+            return results;
         }
 
         private void ApplyQuantityParameter(QueryParameter parameter, IEventRepository repository)

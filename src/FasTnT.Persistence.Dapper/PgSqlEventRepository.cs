@@ -1,12 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
+using System.Collections.Generic;
 using System.Threading.Tasks;
-using Dapper;
 using FasTnT.Domain;
-using FasTnT.Model.Exceptions;
 using FasTnT.Domain.Services.Handlers.PredefinedQueries;
 using FasTnT.Model.Queries.Enums;
+using Dapper;
 using static Dapper.SqlBuilder;
 
 // Review by LAA: remove magic strings
@@ -53,18 +52,9 @@ namespace FasTnT.Persistence.Dapper
             return events;
         }
 
-        public void SetEventLimit(int eventLimit)
-        {
-            if (_limit > 0) throw new EpcisException(ExceptionType.QueryParameterException, "MaxEventCount and EventCountLimit are mutually exclusive");
-            _limit = eventLimit;
-        }
+        public void SetLimit(int eventLimit)
+            => _limit = eventLimit;
 
-
-        public void SetMaxEventCount(int maxEventCount)
-        {
-            if (_limit > 0) throw new EpcisException(ExceptionType.QueryParameterException, "MaxEventCount and EventCountLimit are mutually exclusive");
-            _limit = maxEventCount + 1;
-        }
 
         public void WhereRequestIdIn(params Guid[] requestIds)
             => _query = _query.Where($"request.id = ANY({_parameters.Add(requestIds)})");

@@ -7,8 +7,7 @@ namespace FasTnT.Domain.Services.Handlers.PredefinedQueries
 {
     public interface IEventRepository
     {
-        void SetMaxEventCount(int maxEventCount);
-        void SetEventLimit(int eventLimit);
+        void SetLimit(int eventLimit);
         void WhereRequestIdIn(params Guid[] requestIds);
         void WhereEventIdIn(params string[] eventIds);
         void WhereActionIn(params EventAction[] actions);
