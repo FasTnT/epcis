@@ -61,7 +61,7 @@ namespace FasTnT.Formatters.Xml
         private XDocument Write(GetSubscriptionIds query) => Query(XName.Get("GetSubscriptionIDs", EpcisNamespaces.Query));
         private XDocument Write(GetStandardVersion query) => Query(XName.Get("GetStandardVersion", EpcisNamespaces.Query));
         private XDocument Write(GetVendorVersion query) => Query(XName.Get("GetVendorVersion", EpcisNamespaces.Query));
-        private XDocument Write(PredefinedQuery query) => throw new NotImplementedException();
+        private XDocument Write(Poll query) => throw new NotImplementedException();
 
         private XDocument Query(XName queryName) => new XDocument(XName.Get("EPCISQueryDocument", EpcisNamespaces.Query), new XElement("EPCISBody", new XElement(queryName)));
     }
