@@ -8,7 +8,6 @@ using FasTnT.Model.Queries.Enums;
 using Dapper;
 using static Dapper.SqlBuilder;
 
-// Review by LAA: remove magic strings
 namespace FasTnT.Persistence.Dapper
 {
     public class PgSqlEventRepository : IEventRepository
@@ -55,7 +54,6 @@ namespace FasTnT.Persistence.Dapper
         public void SetLimit(int eventLimit)
             => _limit = eventLimit;
 
-
         public void WhereRequestIdIn(params Guid[] requestIds)
             => _query = _query.Where($"request.id = ANY({_parameters.Add(requestIds)})");
 
@@ -78,7 +76,7 @@ namespace FasTnT.Persistence.Dapper
             => _query = _query.Where($"event.read_point = ANY({_parameters.Add(readPoints)})");
 
         public void WhereBusinessTransactionValueIn(string txName, params string[] txValues)
-            => throw new NotImplementedException();
+            => _query = _query.Where($"EXISTS(SELECT bt.event_id FROM epcis.business_transaction bt WHERE bt.transaction_type = {_parameters.Add(txName)} AND bt.transaction_id = ANY({_parameters.Add(txValues)}))");
 
         public void WhereSourceValueIn(string sourceName, params string[] sourceValues)
             => _query = _query.Where($"EXISTS(SELECT sd.event_id FROM epcis.source_destination sd WHERE sd.direction = {SourceDestinationType.Source.Id} AND sd.type = {_parameters.Add(sourceName)} AND sd.source_dest_id = ANY({_parameters.Add(sourceValues)}) AND sd.event_id = event.id)");
@@ -90,22 +88,22 @@ namespace FasTnT.Persistence.Dapper
             => _query = _query.Where($"event.transformation_id = ANY({_parameters.Add(transformationIds)})");
 
         public void WhereEpcMatches(string[] values, EpcType epcType = null)
-            => throw new NotImplementedException();
+            => _query = _query.Where($"EXISTS(SELECT epc.event_id FROM epcis.epc epc WHERE epc.event_id = event.id AND epc.epc = ANY({_parameters.Add(values)}) {((epcType != null) ? $"AND epc.type = {epcType.Id}" : "")})");
 
         public void WhereExistsErrorDeclaration()
-            => throw new NotImplementedException();
+            => _query = _query.Where($"EXISTS(SELECT ed.event_id FROM epcis.event_declaration ed WHERE ed.event_id = event.id)");
 
         public void WhereErrorReasonIn(params string[] errorReasons)
-            => throw new NotImplementedException();
+            => _query = _query.Where($"EXISTS(SELECT ed.event_id FROM epcis.event_declaration ed WHERE ed.reason = ANY({_parameters.Add(errorReasons)}) AND ed.event_id = event.id)");
 
         public void WhereCorrectiveEventIdIn(params string[] correctiveEventIds)
-            => throw new NotImplementedException();
-
-        public void WhereMatchesIlmd<T>(bool inner, string ilmdNamespace, string ilmdName, string comparator, T values)
-            => throw new NotImplementedException();
+            => _query = _query.Where($"EXISTS(SELECT edi.event_id FROM epcis.event_declaration_eventid edi WHERE edi.corrective_eventid = ANY({_parameters.Add(correctiveEventIds)}) AND edi.event_id = event.id)");
 
         public void WhereExistsIlmd(bool inner, string ilmdNamespace, string ilmdName)
             => _query = _query.Where($"EXISTS(SELECT cf.event_id FROM epcis.custom_field cf WHERE cf.event_id = event.id AND cf.type = {FieldType.Ilmd.Id} AND cf.namespace = {_parameters.Add(ilmdNamespace)} AND cf.name = {_parameters.Add(ilmdName)} AND cf.parent_id IS {(inner ? "NOT" : "")} NULL)");
+
+        public void WhereMatchesIlmd<T>(bool inner, string ilmdNamespace, string ilmdName, string comparator, T values)
+            => throw new NotImplementedException();
 
         public void WhereMatchesCustomField<T>(bool inner, string fieldNamespace, string fieldName, string comparator, T values)
             => throw new NotImplementedException();
