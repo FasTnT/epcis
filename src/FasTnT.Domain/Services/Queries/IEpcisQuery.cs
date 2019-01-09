@@ -1,5 +1,4 @@
-﻿using FasTnT.Domain;
-using FasTnT.Domain.Services.Handlers.PredefinedQueries;
+﻿using FasTnT.Domain.Services.Handlers.PredefinedQueries;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 

@@ -1,4 +1,5 @@
-﻿using FasTnT.Domain;
+﻿using FasTnT.Model;
+using FasTnT.Model.Events.Enums;
 using FasTnT.Model.Utils;
 using System;
 using System.Collections.Generic;

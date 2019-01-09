@@ -1,4 +1,4 @@
-﻿using FasTnT.Domain;
+﻿using FasTnT.Model;
 using FasTnT.Model.Queries;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using System;

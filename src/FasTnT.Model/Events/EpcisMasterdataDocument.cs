@@ -1,4 +1,4 @@
-﻿namespace FasTnT.Domain
+﻿namespace FasTnT.Model
 {
     public class EpcisMasterdataDocument : Request
     {

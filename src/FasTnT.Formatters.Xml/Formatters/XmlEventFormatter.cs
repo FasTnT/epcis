@@ -1,4 +1,5 @@
-﻿using FasTnT.Domain;
+﻿using FasTnT.Model;
+using FasTnT.Model.Events.Enums;
 using FasTnT.Model.MasterDatas;
 using FasTnT.Model.Responses;
 using System;

@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using FasTnT.Model;
+using System.Threading.Tasks;
 
 namespace FasTnT.Domain.Persistence
 {

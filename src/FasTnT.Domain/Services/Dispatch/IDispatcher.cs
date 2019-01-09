@@ -1,4 +1,5 @@
-﻿using FasTnT.Model.Queries;
+﻿using FasTnT.Model;
+using FasTnT.Model.Queries;
 using FasTnT.Model.Responses;
 using System.Threading.Tasks;
 

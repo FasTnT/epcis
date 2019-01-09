@@ -1,6 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using FasTnT.Model;
+using FasTnT.Model.Events.Enums;
 using FasTnT.Model.Queries.Enums;
 
 namespace FasTnT.Domain.Services.Handlers.PredefinedQueries
@@ -8,29 +9,18 @@ namespace FasTnT.Domain.Services.Handlers.PredefinedQueries
     public interface IEventRepository
     {
         void SetLimit(int eventLimit);
-        void WhereRequestIdIn(params Guid[] requestIds);
-        void WhereEventIdIn(params string[] eventIds);
-        void WhereActionIn(params EventAction[] actions);
-        void WhereBusinessStepIn(params string[] businessSteps);
-        void WhereDispositionIn(params string[] dispositions);
-        void WhereReadPointIn(params string[] readPoints);
-        void WhereBusinessTransactionValueIn(string txName, params string[] txValues);
-        void WhereBusinessLocationIn(params string[] businessLocations);
-        void WhereSourceValueIn(string sourceName, params string[] sourceValues);
-        void WhereDestinationValueIn(string destName, params string[] destValues);
-        void WhereTransformationIdIn(params string[] transformationIds);
+        void WhereSimpleFieldIn(EpcisField field, object[] values);
+        void WhereSimpleFieldMatches(EpcisField field, FilterComparator filterOperator, object value);
+        void WhereBusinessTransactionValueIn(string txName, string[] txValues);
+        void WhereSourceDestinationValueIn(string sourceName, SourceDestinationType type, string[] sourceValues);
         void WhereEpcMatches(string[] values, EpcType epcType = null);
         void WhereExistsErrorDeclaration();
-        void WhereEventTypeIn(string[] values);
-        void WhereErrorReasonIn(params string[] errorReasons);
-        void WhereCorrectiveEventIdIn(params string[] correctiveEventIds);
-        void WhereMatchesIlmd<T>(bool inner, string ilmdNamespace, string ilmdName, string comparator, T values);
-        void WhereExistsIlmd(bool inner, string ilmdNamespace, string ilmdName);
-        void WhereMatchesCustomField<T>(bool inner, string fieldNamespace, string fieldName, string comparator, T values);
-        void WhereExistsCustomField(bool inner, string fieldNamespace, string fieldName);
-        void WhereCaptureTimeMatches(FilterOperator filterOperator, DateTime dateTime);
-        void WhereRecordTimeMatches(FilterOperator filterOperator, DateTime dateTime);
-        void WhereEpcQuantityMatches(FilterOperator filterOperator, double value);
+        void WhereErrorReasonIn(string[] errorReasons);
+        void WhereCorrectiveEventIdIn(string[] correctiveEventIds);
+        void WhereCustomFieldMatches(bool inner, FieldType fieldType, string fieldNamespace, string fieldName, string[] values);
+        void WhereCustomFieldMatches(bool inner, FieldType fieldType, string fieldNamespace, string fieldName, FilterComparator comparator, object value);
+        void WhereCustomFieldExists(bool inner, FieldType fieldType, string fieldNamespace, string fieldName);
+        void WhereEpcQuantityMatches(FilterComparator filterOperator, double value);
 
         Task<IEnumerable<EpcisEvent>> ToList();
     }

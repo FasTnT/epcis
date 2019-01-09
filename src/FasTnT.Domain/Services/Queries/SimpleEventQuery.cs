@@ -1,5 +1,5 @@
-﻿using FasTnT.Domain;
-using FasTnT.Domain.Services.Handlers.PredefinedQueries;
+﻿using FasTnT.Domain.Services.Handlers.PredefinedQueries;
+using FasTnT.Model.Events.Enums;
 using FasTnT.Model.Exceptions;
 using FasTnT.Model.Extensions;
 using FasTnT.Model.Queries.Enums;
@@ -29,15 +29,15 @@ namespace FasTnT.Model.Queries.Implementations
         {
             foreach(var parameter in parameters)
             {
-                if (Equals(parameter.Name, "eventType")) repository.WhereEventTypeIn(parameter.Values);
-                else if (Equals(parameter.Name, "EQ_action")) repository.WhereActionIn(parameter.Values.Select(Enumeration.GetByDisplayName<EventAction>).ToArray());
+                if (Equals(parameter.Name, "eventType")) repository.WhereSimpleFieldIn(EpcisField.EventType, parameter.Values.Select(Enumeration.GetByDisplayName<EventType>).ToArray());
+                else if (Equals(parameter.Name, "EQ_action")) repository.WhereSimpleFieldIn(EpcisField.Action, parameter.Values.Select(Enumeration.GetByDisplayName<EventAction>).ToArray());
                 else if (Equals(parameter.Name, "eventCountLimit")) repository.SetLimit(parameter.GetValue<int>());
                 else if (Equals(parameter.Name, "maxEventCount")) repository.SetLimit(parameter.GetValue<int>() + 1);
-                else if (Equals(parameter.Name, "EQ_bizLocation")) repository.WhereBusinessLocationIn(parameter.Values);
-                else if (Equals(parameter.Name, "EQ_bizStep")) repository.WhereBusinessStepIn(parameter.Values);
-                else if (Equals(parameter.Name, "EQ_disposition")) repository.WhereDispositionIn(parameter.Values);
-                else if (Equals(parameter.Name, "EQ_eventID")) repository.WhereEventIdIn(parameter.Values);
-                else if (Equals(parameter.Name, "EQ_transformationID")) repository.WhereTransformationIdIn(parameter.Values);
+                else if (Equals(parameter.Name, "EQ_bizLocation")) repository.WhereSimpleFieldIn(EpcisField.BusinessLocation, parameter.Values);
+                else if (Equals(parameter.Name, "EQ_bizStep")) repository.WhereSimpleFieldIn(EpcisField.BusinessStep, parameter.Values);
+                else if (Equals(parameter.Name, "EQ_disposition")) repository.WhereSimpleFieldIn(EpcisField.Disposition, parameter.Values);
+                else if (Equals(parameter.Name, "EQ_eventID")) repository.WhereSimpleFieldIn(EpcisField.EventId, parameter.Values);
+                else if (Equals(parameter.Name, "EQ_transformationID")) repository.WhereSimpleFieldIn(EpcisField.TransformationId, parameter.Values);
                 else if (Equals(parameter.Name, "EXISTS_errorDeclaration")) repository.WhereExistsErrorDeclaration();
                 else if (Equals(parameter.Name, "EQ_errorReason")) repository.WhereErrorReasonIn(parameter.Values);
                 else if (Equals(parameter.Name, "EQ_correctiveEventID")) repository.WhereCorrectiveEventIdIn(parameter.Values);
@@ -46,19 +46,20 @@ namespace FasTnT.Model.Queries.Implementations
                 // Regex-based parameters
                 else if (Regex.IsMatch(parameter.Name, "^EQ_(source|destination)_")) ApplySourceDestinationParameter(parameter, repository);
                 else if (Regex.IsMatch(parameter.Name, "^EQ_bizTransaction_")) ApplyBusinessTransactionParameter(parameter, repository);
-                else if (Regex.IsMatch(parameter.Name, "^(GE|LT)_eventTime")) ApplyEventTimeParameter(parameter, repository);
-                else if (Regex.IsMatch(parameter.Name, "^(GE|LT)_recordTime")) ApplyRecordTimeParameter(parameter, repository);
+                else if (Regex.IsMatch(parameter.Name, "^(GE|LT)_eventTime")) ApplyTimeParameter(EpcisField.CaptureTime, parameter, repository);
+                else if (Regex.IsMatch(parameter.Name, "^(GE|LT)_recordTime")) ApplyTimeParameter(EpcisField.RecordTime, parameter, repository);
                 else if (Regex.IsMatch(parameter.Name, "^MATCH_")) ApplyEpcMatchParameter(parameter, repository);
                 else if (Regex.IsMatch(parameter.Name, "^(EQ|GT|LT|GE|LE)_quantity$")) ApplyQuantityParameter(parameter, repository);
-                else if (Regex.IsMatch(parameter.Name, "^(EQ|GT|LT|GE|LE)_INNER_ILMD_")) ApplyIlmdParameter(parameter, true, repository);
-                else if (Regex.IsMatch(parameter.Name, "^(EQ|GT|LT|GE|LE)_ILMD_")) ApplyIlmdParameter(parameter, false, repository);
-                else if (Regex.IsMatch(parameter.Name, "^EXISTS_INNER_ILMD_0")) ApplyExistIlmdParameter(parameter, true, repository);
-                else if (Regex.IsMatch(parameter.Name, "^EXISTS_ILMD_")) ApplyExistIlmdParameter(parameter, false, repository);
-                else if (Regex.IsMatch(parameter.Name, "^(EQ|GT|LT|GE|LE)_INNER_")) ApplyCustomFieldParameter(parameter, true, repository);
-                else if (Regex.IsMatch(parameter.Name, "^(EQ|GT|LT|GE|LE)_")) ApplyCustomFieldParameter(parameter, false, repository);
-                else if (Regex.IsMatch(parameter.Name, "^EXISTS_INNER")) ApplyExistCustomFieldParameter(parameter, true, repository);
-                else if (Regex.IsMatch(parameter.Name, "^EXISTS_")) ApplyExistCustomFieldParameter(parameter, false, repository);
+                else if (Regex.IsMatch(parameter.Name, "^(EQ|GT|LT|GE|LE)_INNER_ILMD_")) ApplyCustomFieldParameter(parameter, true, FieldType.Ilmd, repository);
+                else if (Regex.IsMatch(parameter.Name, "^(EQ|GT|LT|GE|LE)_ILMD_")) ApplyCustomFieldParameter(parameter, false, FieldType.Ilmd, repository);
+                else if (Regex.IsMatch(parameter.Name, "^EXISTS_INNER_ILMD_")) ApplyExistCustomFieldParameter(parameter, true, FieldType.Ilmd, repository);
+                else if (Regex.IsMatch(parameter.Name, "^EXISTS_ILMD_")) ApplyExistCustomFieldParameter(parameter, false, FieldType.Ilmd, repository);
+                else if (Regex.IsMatch(parameter.Name, "^(EQ|GT|LT|GE|LE)_INNER_")) ApplyCustomFieldParameter(parameter, true, FieldType.EventExtension, repository);
+                else if (Regex.IsMatch(parameter.Name, "^(EQ|GT|LT|GE|LE)_")) ApplyCustomFieldParameter(parameter, false, FieldType.EventExtension, repository);
+                else if (Regex.IsMatch(parameter.Name, "^EXISTS_INNER")) ApplyExistCustomFieldParameter(parameter, true, FieldType.EventExtension, repository);
+                else if (Regex.IsMatch(parameter.Name, "^EXISTS_")) ApplyExistCustomFieldParameter(parameter, false, FieldType.EventExtension, repository);
 
+                //TODO: add missing parameters: ATTR-based, WD_*
                 else throw new NotImplementedException($"Query parameter unexpected or not implemented: '{parameter.Name}'");
             }
 
@@ -75,7 +76,9 @@ namespace FasTnT.Model.Queries.Implementations
 
         private void ApplyQuantityParameter(QueryParameter parameter, IEventRepository repository)
         {
-            var filterOperator = Enumeration.GetByDisplayName<FilterOperator>(parameter.Name.Substring(0, 2));
+            if (parameter.Values.Length > 1) throw new EpcisException(ExceptionType.QueryParameterException, "QuantityParameter must have only one value");
+
+            var filterOperator = Enumeration.GetByDisplayName<FilterComparator>(parameter.Name.Substring(0, 2));
             repository.WhereEpcQuantityMatches(filterOperator, parameter.GetValue<double>());
         }
 
@@ -88,45 +91,42 @@ namespace FasTnT.Model.Queries.Implementations
         private void ApplySourceDestinationParameter(QueryParameter parameter, IEventRepository repository)
         {
             var name = parameter.Name.Split('_', 3)[2];
+            var type = parameter.Name.StartsWith("EQ_source") ? SourceDestinationType.Source : SourceDestinationType.Destination;
 
-            if (parameter.Name.StartsWith("EQ_source_")) repository.WhereSourceValueIn(name, parameter.Values);
-            else repository.WhereDestinationValueIn(name, parameter.Values);
+            repository.WhereSourceDestinationValueIn(name, type, parameter.Values);
         }
 
-        private void ApplyExistCustomFieldParameter(QueryParameter parameter, bool inner, IEventRepository repository)
+        private void ApplyExistCustomFieldParameter(QueryParameter parameter, bool inner, FieldType fieldType, IEventRepository repository)
         {
             var parts = parameter.Name.Split('_', 4);
-            repository.WhereExistsIlmd(inner, parts[2], parts[3]);
+            repository.WhereCustomFieldExists(inner, fieldType, parts[2], parts[3]);
         }
 
-        private void ApplyCustomFieldParameter(QueryParameter parameter, bool inner, IEventRepository repository)
-        {
-            throw new NotImplementedException();
-        }
-
-        private void ApplyExistIlmdParameter(QueryParameter parameter, bool inner, IEventRepository repository)
+        private void ApplyCustomFieldParameter(QueryParameter parameter, bool inner, FieldType fieldType, IEventRepository repository)
         {
             var parts = parameter.Name.Split('_', 4);
-            repository.WhereExistsIlmd(inner, parts[2], parts[3]);
+
+            if (parameter.Values.Length > 1)
+            {
+                if (!parameter.Name.StartsWith("EQ_")) throw new EpcisException(ExceptionType.QueryParameterException, "Custom Field parameter must be 'EQ' if multiple values are present.");
+
+                repository.WhereCustomFieldMatches(inner, fieldType, parts[2], parts[3], parameter.Values);
+            }
+            else
+            {
+                var valueType = "";
+                var filterOperator = Enumeration.GetByDisplayName<FilterComparator>(parameter.Name.Substring(0, 2));
+                repository.WhereCustomFieldMatches(inner, fieldType, parts[2], parts[3], filterOperator, parameter.GetValue<double>());
+            }
         }
 
-        private void ApplyIlmdParameter(QueryParameter parameter, bool inner, IEventRepository repository)
+        private void ApplyTimeParameter(EpcisField field, QueryParameter parameter, IEventRepository repository)
         {
-            throw new NotImplementedException();
+            var filterOperator = Enumeration.GetByDisplayName<FilterComparator>(parameter.Name.Substring(0, 2));
+            repository.WhereSimpleFieldMatches(field, filterOperator, parameter.GetValue<DateTime>());
         }
 
-        private void ApplyEventTimeParameter(QueryParameter parameter, IEventRepository repository)
-        {
-            var filterOperator = Enumeration.GetByDisplayName<FilterOperator>(parameter.Name.Substring(0, 2));
-            repository.WhereCaptureTimeMatches(filterOperator, parameter.GetValue<DateTime>());
-        }
-
-        private void ApplyRecordTimeParameter(QueryParameter parameter, IEventRepository repository)
-        {
-            var filterOperator = Enumeration.GetByDisplayName<FilterOperator>(parameter.Name.Substring(0, 2));
-            repository.WhereRecordTimeMatches(filterOperator, parameter.GetValue<DateTime>());
-        }
-
+        //TODO: fix epcType parsing: does not comply with EPCIS 1.2 specification
         private void ApplyEpcMatchParameter(QueryParameter parameter, IEventRepository repository)
         {
             var epcType = Enumeration.GetByDisplayName<EpcType>(parameter.Name.Substring(6));
