@@ -34,7 +34,7 @@ namespace FasTnT.Persistence.Dapper
             if (field.Equals(EpcisField.Disposition)) return "event.disposition";
             if (field.Equals(EpcisField.EventId)) return "event.id";
             if (field.Equals(EpcisField.RecordTime)) return "request.record_time";
-            if (field.Equals(EpcisField.EventType)) return "event.type";
+            if (field.Equals(EpcisField.EventType)) return "event.event_type";
             if (field.Equals(EpcisField.ReadPoint)) return "event.read_point";
             if (field.Equals(EpcisField.RequestId)) return "request.id";
             if (field.Equals(EpcisField.TransformationId)) return "event.transformation_id";
