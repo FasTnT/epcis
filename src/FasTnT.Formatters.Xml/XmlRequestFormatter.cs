@@ -7,7 +7,7 @@ using System.Xml.Linq;
 using System.Xml.XPath;
 using FasTnT.Formatters.Xml.Requests;
 using FasTnT.Formatters.Xml.Responses;
-using FasTnT.Model;
+using FasTnT.Formatters.Xml.Validation;
 
 namespace FasTnT.Formatters.Xml
 {
@@ -15,7 +15,7 @@ namespace FasTnT.Formatters.Xml
     {
         public Request Read(Stream input)
         {
-            var document = XDocument.Load(input);
+            var document = XmlDocumentParser.Instance.Load(input);
 
             if (document.Root.Name == XName.Get("EPCISDocument", EpcisNamespaces.Capture))
             {
