@@ -9,12 +9,12 @@ using MoreLinq;
 
 namespace FasTnT.Formatters.Xml.Validation
 {
-    public class XmlHttpRequestValidator : IRequestValidator
+    public class XmlDocumentParser
     {
-        public static XmlHttpRequestValidator Instance { get; } = new XmlHttpRequestValidator();
+        public static XmlDocumentParser Instance { get; } = new XmlDocumentParser();
         private readonly XmlSchemaSet _schema;
 
-        private XmlHttpRequestValidator()
+        private XmlDocumentParser()
         {
             _schema = new XmlSchemaSet();
 
@@ -27,11 +27,12 @@ namespace FasTnT.Formatters.Xml.Validation
             _schema.Compile();
         }
 
-        public void Validate(Stream input)
+        public XDocument Load(Stream input)
         {
-            var document = XDocument.Load(new StreamReader(input));
-
+            var document = XDocument.Load(input);
             document.Validate(_schema, (e, t) => { if (t.Exception != null) throw t.Exception; });
+
+            return document;
         }
     }
 }
