@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Xml.Linq;
 using FasTnT.Formatters.Xml.Requests;
+using FasTnT.Formatters.Xml.Validation;
 using FasTnT.Model.Queries;
 
 namespace FasTnT.Formatters.Xml
@@ -12,7 +13,7 @@ namespace FasTnT.Formatters.Xml
     {
         public EpcisQuery Read(Stream input)
         {
-            var document = XDocument.Load(input);
+            var document = XmlDocumentParser.Instance.Load(input);
 
             if (document.Root.Name.LocalName == "EPCISQueryDocument")
             {
