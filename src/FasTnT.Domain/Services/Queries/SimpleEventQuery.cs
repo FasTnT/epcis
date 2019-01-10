@@ -30,20 +30,21 @@ namespace FasTnT.Model.Queries.Implementations
             foreach(var parameter in parameters)
             {
                 if (Equals(parameter.Name, "eventType")) repository.WhereSimpleFieldIn(EpcisField.EventType, parameter.Values.Select(Enumeration.GetByDisplayName<EventType>).ToArray());
-                else if (Equals(parameter.Name, "EQ_action")) repository.WhereSimpleFieldIn(EpcisField.Action, parameter.Values.Select(Enumeration.GetByDisplayName<EventAction>).ToArray());
                 else if (Equals(parameter.Name, "eventCountLimit")) repository.SetLimit(parameter.GetValue<int>());
                 else if (Equals(parameter.Name, "maxEventCount")) repository.SetLimit(parameter.GetValue<int>() + 1);
+                else if (Equals(parameter.Name, "EQ_action")) repository.WhereSimpleFieldIn(EpcisField.Action, parameter.Values.Select(Enumeration.GetByDisplayName<EventAction>).ToArray());
                 else if (Equals(parameter.Name, "EQ_bizLocation")) repository.WhereSimpleFieldIn(EpcisField.BusinessLocation, parameter.Values);
                 else if (Equals(parameter.Name, "EQ_bizStep")) repository.WhereSimpleFieldIn(EpcisField.BusinessStep, parameter.Values);
                 else if (Equals(parameter.Name, "EQ_disposition")) repository.WhereSimpleFieldIn(EpcisField.Disposition, parameter.Values);
                 else if (Equals(parameter.Name, "EQ_eventID")) repository.WhereSimpleFieldIn(EpcisField.EventId, parameter.Values);
                 else if (Equals(parameter.Name, "EQ_transformationID")) repository.WhereSimpleFieldIn(EpcisField.TransformationId, parameter.Values);
+                else if (Equals(parameter.Name, "EQ_readPoint")) repository.WhereSimpleFieldIn(EpcisField.ReadPoint, parameter.Values);
                 else if (Equals(parameter.Name, "EXISTS_errorDeclaration")) repository.WhereExistsErrorDeclaration();
                 else if (Equals(parameter.Name, "EQ_errorReason")) repository.WhereErrorReasonIn(parameter.Values);
                 else if (Equals(parameter.Name, "EQ_correctiveEventID")) repository.WhereCorrectiveEventIdIn(parameter.Values);
                 else if (Equals(parameter.Name, "MATCH_anyEPC")) repository.WhereEpcMatches(parameter.Values);
 
-                // Regex-based parameters
+                // Family of parameters (regex name)
                 else if (Regex.IsMatch(parameter.Name, "^EQ_(source|destination)_")) ApplySourceDestinationParameter(parameter, repository);
                 else if (Regex.IsMatch(parameter.Name, "^EQ_bizTransaction_")) ApplyBusinessTransactionParameter(parameter, repository);
                 else if (Regex.IsMatch(parameter.Name, "^(GE|LT)_eventTime")) ApplyTimeParameter(EpcisField.CaptureTime, parameter, repository);
@@ -109,14 +110,12 @@ namespace FasTnT.Model.Queries.Implementations
             if (parameter.Values.Length > 1)
             {
                 if (!parameter.Name.StartsWith("EQ_")) throw new EpcisException(ExceptionType.QueryParameterException, "Custom Field parameter must be 'EQ' if multiple values are present.");
-
                 repository.WhereCustomFieldMatches(inner, fieldType, parts[2], parts[3], parameter.Values);
             }
             else
             {
-                var valueType = "";
                 var filterOperator = Enumeration.GetByDisplayName<FilterComparator>(parameter.Name.Substring(0, 2));
-                repository.WhereCustomFieldMatches(inner, fieldType, parts[2], parts[3], filterOperator, parameter.GetValue<double>());
+                repository.WhereCustomFieldMatches(inner, fieldType, parts[2], parts[3], filterOperator, parameter.GetSingleValue());
             }
         }
 

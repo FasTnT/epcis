@@ -17,10 +17,10 @@ namespace FasTnT.Persistence.Dapper
         public static string ToSql(this FilterComparator filterOperator)
         {
             if (filterOperator.Equals(FilterComparator.Equal)) return Equal;
-            if (filterOperator.Equals(FilterComparator.GreaterOrEqual)) return Equal;
-            if (filterOperator.Equals(FilterComparator.GreaterThan)) return Equal;
-            if (filterOperator.Equals(FilterComparator.LessOrEqual)) return Equal;
-            if (filterOperator.Equals(FilterComparator.LessThan)) return Equal;
+            if (filterOperator.Equals(FilterComparator.GreaterOrEqual)) return GreaterThanOrEqual;
+            if (filterOperator.Equals(FilterComparator.GreaterThan)) return GreaterThan;
+            if (filterOperator.Equals(FilterComparator.LessOrEqual)) return LessThanOrEqual;
+            if (filterOperator.Equals(FilterComparator.LessThan)) return LessThan;
 
             throw new Exception($"Unknown filterOperator: '{filterOperator?.DisplayName}'");
         }

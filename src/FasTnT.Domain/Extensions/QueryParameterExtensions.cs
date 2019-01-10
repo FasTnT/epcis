@@ -1,6 +1,5 @@
 ﻿using FasTnT.Model.Queries;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace FasTnT.Model.Extensions
@@ -30,22 +29,13 @@ namespace FasTnT.Model.Extensions
             throw new Exception($"Unknow value type: '{typeof(T).Name}'");
         }
 
-        public static IEnumerable<T> GetValues<T>(this QueryParameter parameter)
+        public static object GetSingleValue(this QueryParameter parameter)
         {
-            if (typeof(T) == typeof(DateTime))
-            {
-                return parameter.Values.Select(DateTime.Parse).Cast<T>();
-            }
-            if (typeof(T) == typeof(int))
-            {
-                return parameter.Values.Select(int.Parse).Cast<T>();
-            }
-            if (typeof(T) == typeof(double))
-            {
-                return parameter.Values.Select(double.Parse).Cast<T>();
-            }
+            var singleParameter = parameter.Values.Single();
 
-            throw new Exception($"Unknow value type: '{typeof(T).Name}'");
+            if (DateTime.TryParse(singleParameter, out DateTime dateParsed)) return dateParsed;
+            if (double.TryParse(singleParameter, out double numericParsed)) return numericParsed;
+            else return singleParameter;
         }
     }
 }
