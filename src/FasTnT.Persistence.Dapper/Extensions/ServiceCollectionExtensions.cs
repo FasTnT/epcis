@@ -18,6 +18,7 @@ namespace FasTnT.Persistence.Dapper
             SqlMapper.AddTypeHandler(TimezoneOffsetHandler.Default);
             SqlMapper.AddTypeHandler(ArrayOfEnumerationHandler<EventType>.Default);
             SqlMapper.AddTypeHandler(ArrayOfEnumerationHandler<EventAction>.Default);
+            SqlMapper.AddTypeHandler(ArrayOfEnumerationHandler<EpcType>.Default);
             SqlMapper.AddTypeHandler(EnumerationHandler<EventType>.Default);
             SqlMapper.AddTypeHandler(EnumerationHandler<EventAction>.Default);
             SqlMapper.AddTypeHandler(EnumerationHandler<FieldType>.Default);

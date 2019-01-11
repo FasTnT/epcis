@@ -45,7 +45,6 @@ namespace FasTnT.Model.Queries.Implementations
                 else if (Equals(parameter.Name, "EXISTS_errorDeclaration")) repository.WhereExistsErrorDeclaration();
                 else if (Equals(parameter.Name, "EQ_errorReason")) repository.WhereErrorReasonIn(parameter.Values);
                 else if (Equals(parameter.Name, "EQ_correctiveEventID")) repository.WhereCorrectiveEventIdIn(parameter.Values);
-                else if (Equals(parameter.Name, "MATCH_anyEPC")) repository.WhereEpcMatches(parameter.Values);
 
                 else if (Equals(parameter.Name, "orderBy")) _orderField = Enumeration.GetByDisplayName<EpcisField>(parameter.Values.Single());
                 else if (Equals(parameter.Name, "orderDirection")) _orderDirection = Enumeration.GetByDisplayName<OrderDirection>(parameter.Values.Single());
@@ -136,8 +135,7 @@ namespace FasTnT.Model.Queries.Implementations
         //TODO: fix epcType parsing: does not comply with EPCIS 1.2 specification
         private void ApplyEpcMatchParameter(QueryParameter parameter, IEventRepository repository)
         {
-            var epcType = Enumeration.GetByDisplayName<EpcType>(parameter.Name.Substring(6));
-            repository.WhereEpcMatches(parameter.Values, epcType);
+            repository.WhereEpcMatches(parameter.Values, parameter.GetMatchEpcTypes());
         }
     }
 }

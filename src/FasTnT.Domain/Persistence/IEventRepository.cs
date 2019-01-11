@@ -14,7 +14,7 @@ namespace FasTnT.Domain.Services.Handlers.PredefinedQueries
         void WhereSimpleFieldMatches(EpcisField field, FilterComparator filterOperator, object value);
         void WhereBusinessTransactionValueIn(string txName, string[] txValues);
         void WhereSourceDestinationValueIn(string sourceName, SourceDestinationType type, string[] sourceValues);
-        void WhereEpcMatches(string[] values, EpcType epcType = null);
+        void WhereEpcMatches(string[] values, EpcType[] epcTypes);
         void WhereExistsErrorDeclaration();
         void WhereErrorReasonIn(string[] errorReasons);
         void WhereCorrectiveEventIdIn(string[] correctiveEventIds);

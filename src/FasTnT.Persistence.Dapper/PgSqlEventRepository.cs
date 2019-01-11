@@ -62,8 +62,8 @@ namespace FasTnT.Persistence.Dapper
         public void WhereSourceDestinationValueIn(string sourceName, SourceDestinationType type, string[] sourceValues)
             => _query = _query.Where($"EXISTS(SELECT sd.event_id FROM epcis.source_destination sd WHERE sd.direction = {type.Id} AND sd.type = {_parameters.Add(sourceName)} AND sd.source_dest_id = ANY({_parameters.Add(sourceValues)}) AND sd.event_id = event.id)");
 
-        public void WhereEpcMatches(string[] values, EpcType epcType = null)
-            => _query = _query.Where($"EXISTS(SELECT epc.event_id FROM epcis.epc epc WHERE epc.event_id = event.id AND epc.epc = ANY({_parameters.Add(values)}) {((epcType != null) ? $"AND epc.type = {epcType.Id}" : "")})");
+        public void WhereEpcMatches(string[] values, EpcType[] epcTypes)
+            => _query = _query.Where($"EXISTS(SELECT epc.event_id FROM epcis.epc epc WHERE epc.event_id = event.id AND epc.epc = ANY({_parameters.Add(values)}) AND epc.type = ANY({_parameters.Add(epcTypes)}))");
 
         public void WhereExistsErrorDeclaration()
             => _query = _query.Where($"EXISTS(SELECT ed.event_id FROM epcis.event_declaration ed WHERE ed.event_id = event.id)");
