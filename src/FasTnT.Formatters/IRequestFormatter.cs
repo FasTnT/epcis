@@ -1,4 +1,4 @@
-﻿using FasTnT.Domain;
+﻿using FasTnT.Model;
 
 namespace FasTnT.Formatters
 {

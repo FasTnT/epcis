@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Globalization;
 
-namespace FasTnT.Domain
+namespace FasTnT.Model
 {
     public class TimeZoneOffset
     {

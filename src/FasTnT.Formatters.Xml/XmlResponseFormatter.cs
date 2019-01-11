@@ -2,8 +2,8 @@
 using System.IO;
 using System.Linq;
 using System.Xml.Linq;
-using FasTnT.Domain;
 using FasTnT.Formatters.Xml.Responses;
+using FasTnT.Model;
 using FasTnT.Model.MasterDatas;
 using FasTnT.Model.Queries;
 using FasTnT.Model.Responses;
@@ -103,7 +103,7 @@ namespace FasTnT.Formatters.Xml
         }
 
         public static XDocument WithAttributes(string name, string nameSpace = "") => new XDocument(new XElement(XName.Get(name, nameSpace), Attributes()));
-        public static XAttribute[] Attributes() => new[] { new XAttribute("creationDate", DateTime.UtcNow), new XAttribute("schemaVersion", "1.2"), new XAttribute(XNamespace.Xmlns + "epcisq", EpcisNamespaces.Query) };
+        public static XAttribute[] Attributes() => new[] { new XAttribute("creationDate", DateTime.UtcNow), new XAttribute("schemaVersion", "1"), new XAttribute(XNamespace.Xmlns + "epcisq", EpcisNamespaces.Query) };
         public static XDocument WithoutAttributes(string name, string nameSpace = "") => new XDocument(new XElement(XName.Get(name, nameSpace)));
         public string ToContentTypeString() => "application/xml";
     }

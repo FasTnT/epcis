@@ -4,9 +4,9 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using FasTnT.Persistence.Dapper;
-using FasTnT.Domain;
 using FasTnT.Host.Middleware;
 using FasTnT.Host.Infrastructure.Attributes;
+using FasTnT.Domain.Extensions;
 
 namespace FasTnT.Host
 {
