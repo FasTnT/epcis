@@ -1,12 +1,13 @@
 ﻿using FasTnT.Domain.Services.Dispatch;
 using FasTnT.Domain.Services.Handlers;
+using FasTnT.Model.Queries.Implementations;
 using Microsoft.Extensions.DependencyInjection;
 using MoreLinq;
 using System;
 using System.Linq;
 using System.Reflection;
 
-namespace FasTnT.Domain
+namespace FasTnT.Domain.Extensions
 {
     public static class ServiceCollectionExtensions
     {
@@ -17,9 +18,12 @@ namespace FasTnT.Domain
                 x.GetInterfaces().Any(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IQueryHandler<>)) ||
                 x.GetInterfaces().Any(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(ISubscriptionHandler<>))).ToArray();
 
+            var queries = Assembly.GetAssembly(typeof(Dispatcher)).ExportedTypes.Where(x => x.GetInterfaces().Any(i => i == typeof(IEpcisQuery))).Select(x => Activator.CreateInstance(x)).Cast<IEpcisQuery>().ToArray();
+
             handlers.ForEach(x => services.AddScoped(x));
             services.AddScoped(typeof(IDispatcher), typeof(Dispatcher));
             services.AddSingleton(typeof(Type[]), handlers);
+            services.AddSingleton(typeof(IEpcisQuery[]), queries);
         }
     }
 }

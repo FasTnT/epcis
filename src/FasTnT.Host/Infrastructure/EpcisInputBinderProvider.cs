@@ -1,4 +1,4 @@
-﻿using FasTnT.Domain;
+﻿using FasTnT.Model;
 using FasTnT.Model.Queries;
 using FasTnT.Model.Subscriptions;
 using Microsoft.AspNetCore.Mvc.ModelBinding;

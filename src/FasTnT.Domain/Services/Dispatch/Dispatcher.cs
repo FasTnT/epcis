@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using FasTnT.Model.Queries;
 using FasTnT.Model.Responses;
 using FasTnT.Domain.Services.Handlers;
+using FasTnT.Model;
 using FasTnT.Model.Subscriptions;
 
 namespace FasTnT.Domain.Services.Dispatch

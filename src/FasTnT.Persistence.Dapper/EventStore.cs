@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using FasTnT.Domain;
 using FasTnT.Domain.Persistence;
+using FasTnT.Model;
 using MoreLinq;
-using StoreAction = System.Func<FasTnT.Domain.EpcisEventDocument, FasTnT.Persistence.Dapper.IUnitOfWork, System.Threading.Tasks.Task>;
+using StoreAction = System.Func<FasTnT.Model.EpcisEventDocument, FasTnT.Persistence.Dapper.IUnitOfWork, System.Threading.Tasks.Task>;
 
 namespace FasTnT.Persistence.Dapper
 {

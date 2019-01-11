@@ -1,6 +1,7 @@
 ﻿using FasTnT.Model.Responses;
 using FasTnT.Domain.Persistence;
 using System.Threading.Tasks;
+using FasTnT.Model;
 
 namespace FasTnT.Domain.Services.Handlers
 {

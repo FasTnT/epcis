@@ -1,6 +1,6 @@
 ﻿using FasTnT.Model.Utils;
 
-namespace FasTnT.Domain
+namespace FasTnT.Model.Events.Enums
 {
     public class EpcType : Enumeration
     {

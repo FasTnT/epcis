@@ -1,11 +1,11 @@
 ﻿using FasTnT.Model.Utils;
 
-namespace FasTnT.Model.Queries.PredefinedQueries.Parameters.Enums
+namespace FasTnT.Model.Events.Enums
 {
     public class OrderDirection : Enumeration
     {
-        public static OrderDirection Asc = new OrderDirection(0, "ASC");
-        public static OrderDirection Desc = new OrderDirection(1, "DESC");
+        public static OrderDirection Ascending = new OrderDirection(0, "ASC");
+        public static OrderDirection Descending = new OrderDirection(1, "DESC");
 
         public OrderDirection()
         {

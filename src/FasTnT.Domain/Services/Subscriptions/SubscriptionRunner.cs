@@ -1,5 +1,4 @@
 ﻿using FasTnT.Domain.Services.Dispatch;
-using FasTnT.Model.Queries.Implementations.PredefinedQueries;
 using FasTnT.Model.Responses;
 using FasTnT.Model.Subscriptions;
 using System.Threading.Tasks;
@@ -19,10 +18,8 @@ namespace FasTnT.Domain.Services.Subscriptions
 
         public async Task Run(Subscription subscription)
         {
-            var query = new SimpleEventQuery { Parameters = subscription.Params };
-            var result = await _dispatcher.Dispatch(query);
-
-            await _resultSender.Send(subscription.Destination, result);
+            // TODO: perform query
+            await _resultSender.Send(subscription.Destination, default(IEpcisResponse));
         }
     }
 

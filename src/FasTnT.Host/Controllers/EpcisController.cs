@@ -1,9 +1,9 @@
-﻿using FasTnT.Domain;
-using FasTnT.Model.Queries;
+﻿using FasTnT.Model.Queries;
 using FasTnT.Model.Responses;
 using FasTnT.Domain.Services.Dispatch;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
+using FasTnT.Model;
 
 namespace FasTnT.Host.Controllers
 {

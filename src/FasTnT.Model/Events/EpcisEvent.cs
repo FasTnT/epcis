@@ -1,8 +1,9 @@
-﻿using FasTnT.Model.Responses;
+﻿using FasTnT.Model.Events.Enums;
+using FasTnT.Model.Responses;
 using System;
 using System.Collections.Generic;
 
-namespace FasTnT.Domain
+namespace FasTnT.Model
 {
     public class EpcisEvent : IEntity
     {
