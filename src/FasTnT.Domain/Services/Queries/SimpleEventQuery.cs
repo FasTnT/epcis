@@ -17,6 +17,9 @@ namespace FasTnT.Model.Queries.Implementations
         public string Name => "SimpleEventQuery";
         public bool AllowSubscription => true;
 
+        private EpcisField _orderField = EpcisField.CaptureTime;
+        private OrderDirection _orderDirection = OrderDirection.Descending;
+
         public void ValidateParameters(IEnumerable<QueryParameter> parameters, bool subscription = false)
         {
             if(parameters.Any(x => x.Name == "maxEventCount") && parameters.Any(x => x.Name == "eventCountLimit"))
@@ -44,6 +47,9 @@ namespace FasTnT.Model.Queries.Implementations
                 else if (Equals(parameter.Name, "EQ_correctiveEventID")) repository.WhereCorrectiveEventIdIn(parameter.Values);
                 else if (Equals(parameter.Name, "MATCH_anyEPC")) repository.WhereEpcMatches(parameter.Values);
 
+                else if (Equals(parameter.Name, "orderBy")) _orderField = Enumeration.GetByDisplayName<EpcisField>(parameter.Values.Single());
+                else if (Equals(parameter.Name, "orderDirection")) _orderDirection = Enumeration.GetByDisplayName<OrderDirection>(parameter.Values.Single());
+
                 // Family of parameters (regex name)
                 else if (Regex.IsMatch(parameter.Name, "^EQ_(source|destination)_")) ApplySourceDestinationParameter(parameter, repository);
                 else if (Regex.IsMatch(parameter.Name, "^EQ_bizTransaction_")) ApplyBusinessTransactionParameter(parameter, repository);
@@ -64,6 +70,8 @@ namespace FasTnT.Model.Queries.Implementations
                 else throw new NotImplementedException($"Query parameter unexpected or not implemented: '{parameter.Name}'");
             }
 
+            // Set order by filter
+            repository.OrderBy(_orderField, _orderDirection);
             var results = await repository.ToList();
 
             // Check for the maxEventCount parameter

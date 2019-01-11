@@ -82,5 +82,7 @@ namespace FasTnT.Persistence.Dapper
         
         public void WhereEpcQuantityMatches(FilterComparator filterOperator, double value)
             => _query = _query.Where($"EXISTS(SELECT epc.event_id FROM epcis.epc epc WHERE epc.type = {EpcType.Quantity} AND epc.quantity {filterOperator.ToSql()} {_parameters.Add(value)} AND epc.event_id = event.id)");
+
+        public void OrderBy(EpcisField field, OrderDirection direction) => _query.OrderBy($"{field.ToPgSql()} {direction.ToPgSql()}");
     }
 }

@@ -25,6 +25,14 @@ namespace FasTnT.Persistence.Dapper
             throw new Exception($"Unknown filterOperator: '{filterOperator?.DisplayName}'");
         }
 
+        public static string ToPgSql(this OrderDirection direction)
+        {
+            if (direction.Equals(OrderDirection.Ascending)) return Ascending;
+            if (direction.Equals(OrderDirection.Descending)) return Descending;
+
+            throw new Exception($"Unknown simple EPCIS event field: '{direction.DisplayName}'");
+        }
+
         public static string ToPgSql(this EpcisField field)
         {
             if (field.Equals(EpcisField.Action)) return "event.action";

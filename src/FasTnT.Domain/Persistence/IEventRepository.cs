@@ -9,6 +9,7 @@ namespace FasTnT.Domain.Services.Handlers.PredefinedQueries
     public interface IEventRepository
     {
         void SetLimit(int eventLimit);
+        void OrderBy(EpcisField field, OrderDirection direction);
         void WhereSimpleFieldIn(EpcisField field, object[] values);
         void WhereSimpleFieldMatches(EpcisField field, FilterComparator filterOperator, object value);
         void WhereBusinessTransactionValueIn(string txName, string[] txValues);
