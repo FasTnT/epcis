@@ -26,7 +26,6 @@ namespace FasTnT.Host.BackgroundTasks
                 using (var scope = _services.CreateScope())
                 {
                     // TODO: run subscription task.
-                    Console.WriteLine("Running subscription service");
                 }
 
                 await Task.Delay(TimeSpan.FromMilliseconds(DelayTimeoutInMs));
