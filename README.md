@@ -3,7 +3,7 @@
 
 # FasTnT
 
-FasTnT is a simple, lightweight GS1 EPCIS 1.2 repository written in C# using .NET Core 2.1, backed with PostGreSQL database.
+FasTnT is a simple, lightweight GS1 EPCIS 1.2 repository written in C# using .NET Core 2.2, backed with PostGreSQL database.
 
 ## Setup
 
@@ -40,9 +40,12 @@ The default username/password for the API services is `APIUser`/`ApiP@ssw0rd`.
   - GetVendorVersion
   - GetStandardVersion
   - Poll SimpleEventQuery _(still a few parameters missing)_
+- Subscriptions:
+  - Get all subscription names
+  - Subscribe to an EPCIS request 
 
 # License
 
 This project is licensed under the Apache 2.0 license - see the LICENSE file for details
 
-_Last update: december 2018_
+_Last update: january 2019_

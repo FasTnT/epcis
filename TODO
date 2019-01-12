@@ -1,7 +1,5 @@
 For v1.0:
 
-- Validate XML documents against XSD whenever possible to have better error messages
 - Finish parameters for SimpleEventQuery query (except WD_* that needs CBV)
-- Implement subscriptions
 
 (ETD: end of 02/19)
