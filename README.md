@@ -1,4 +1,5 @@
 **This project is under development, and this README isn't finished. I'll try to update is as soon as possible..**
+
 [![Build Status](https://travis-ci.com/louisaxel-ambroise/fastnt.svg?branch=master)](https://travis-ci.com/louisaxel-ambroise/fastnt)
 
 # FasTnT
@@ -30,8 +31,6 @@ Steps:
 - Database migration: `/Services/1.2/Migrate`
 
 The file `documents\EPCIS_Samples.postman_collection.json` contains examples of HTTP requests that you can perform on FasTnT (import and run it in [PostMan](https://www.getpostman.com/))
-
-The default username/password for the API services is `APIUser`/`ApiP@ssw0rd`.
 
 ## Implemented Features
 
