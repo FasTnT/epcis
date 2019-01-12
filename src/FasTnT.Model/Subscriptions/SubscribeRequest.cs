@@ -6,15 +6,11 @@ namespace FasTnT.Model.Subscriptions
 {
     public class Subscription : SubscriptionRequest
     {
+        public Guid Id { get; set; }
         public string QueryName { get; set; }
-        public IList<QueryParameter> Params { get; set; }
         public string Destination { get; set; }
-        public SubscriptionControls Controls { get; set; }
         public string SubscriptionId { get; set; }
-
-        public IEnumerable<string> Select(Func<object, object> p)
-        {
-            throw new NotImplementedException();
-        }
+        public SubscriptionControls Controls { get; set; }
+        public IEnumerable<QueryParameter> Params { get; set; }
     }
 }

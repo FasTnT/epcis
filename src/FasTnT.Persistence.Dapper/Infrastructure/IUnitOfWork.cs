@@ -10,7 +10,7 @@ namespace FasTnT.Persistence.Dapper
         void Commit();
 
         Task Execute(string command, object parameters);
-        Task<IEnumerable<T>> Query<T>(string command, object parameters);
-        Task<GridReader> FetchMany(string command, object parameters);
+        Task<IEnumerable<T>> Query<T>(string command, object parameters = null);
+        Task<GridReader> FetchMany(string command, object parameters = null);
     }
 }

@@ -2,6 +2,7 @@
 using System.IO;
 using System.Linq;
 using System.Xml.Linq;
+using FasTnT.Formatters.Xml.Validation;
 using FasTnT.Model.Subscriptions;
 
 namespace FasTnT.Formatters.Xml
@@ -10,7 +11,7 @@ namespace FasTnT.Formatters.Xml
     {
         public SubscriptionRequest Read(Stream input)
         {
-            var document = XDocument.Load(input);
+            var document = XmlDocumentParser.Instance.Load(input);
 
             if (document.Root.Name.LocalName == "EPCISQueryDocument")
             {

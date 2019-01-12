@@ -127,6 +127,9 @@
   <data name="EventQuery" xml:space="preserve">
     <value>SELECT request.record_time as capture_time, event.id, event_type as type, event.record_time as event_time, action, read_point, event_timezone_offset, disposition, business_location, business_step, transformation_id, event_id FROM epcis.event JOIN epcis.request on request.id = event.request_id /**where**/ /**orderby**/ LIMIT @limit</value>
   </data>
+  <data name="ListSubscriptionIds" xml:space="preserve">
+    <value>SELECT s.subscription_name AS subscription_id, s.query_name, s.active FROM subscriptions.subscription s WHERE s.query_name = @QueryName;</value>
+  </data>
   <data name="RelatedQuery" xml:space="preserve">
     <value>SELECT event_id, epc as id, type, is_quantity, quantity, unit_of_measure FROM epcis.epc WHERE event_id = ANY(@EventIds);
 SELECT event_id, field_id as id, parent_id, namespace, name, type, text_value, numeric_value, date_value FROM epcis.custom_field WHERE event_id = ANY(@EventIds);

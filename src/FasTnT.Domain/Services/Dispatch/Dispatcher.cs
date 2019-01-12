@@ -24,28 +24,33 @@ namespace FasTnT.Domain.Services.Dispatch
         public async Task<IEpcisResponse> Dispatch(Request document)
         {
             var handlerType = _handlers.SingleOrDefault(x => x.GetInterfaces().SingleOrDefault(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IHandler<>))?.GetGenericArguments()[0] == document.GetType());
-            var handler = _serviceProvider.GetService(handlerType);
 
-            return await DispatchInternal(handler, document);
+            return await DispatchInternal(handlerType, document);
         }
 
         public async Task<IEpcisResponse> Dispatch(EpcisQuery query)
         {
             var handlerType = _handlers.SingleOrDefault(x => x.GetInterfaces().SingleOrDefault(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IQueryHandler<>))?.GetGenericArguments()[0] == query.GetType());
-            var handler = _serviceProvider.GetService(handlerType);
 
-            return await DispatchInternal(handler, query);
+            return await DispatchInternal(handlerType, query);
         }
 
         public async Task<IEpcisResponse> Dispatch(SubscriptionRequest request)
         {
             var handlerType = _handlers.SingleOrDefault(x => x.GetInterfaces().SingleOrDefault(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(ISubscriptionHandler<>))?.GetGenericArguments()[0] == request.GetType());
-            var handler = _serviceProvider.GetService(handlerType);
 
-            return await DispatchInternal(handler, request);
+            return await DispatchInternal(handlerType, request);
         }
 
-        private static async Task<IEpcisResponse> DispatchInternal(object handler, params object[] parameters) =>
-            await (handler.GetType().GetTypeInfo().GetDeclaredMethod("Handle").Invoke(handler, parameters) as Task<IEpcisResponse>);
+        private async Task<IEpcisResponse> DispatchInternal(Type handlerType, params object[] parameters)
+        {
+            if(handlerType == null)
+            {
+                throw new NotImplementedException();
+            }
+
+            var handler = _serviceProvider.GetService(handlerType);
+            return await (handler.GetType().GetTypeInfo().GetDeclaredMethod("Handle").Invoke(handler, parameters) as Task<IEpcisResponse>);
+        }
     }
 }

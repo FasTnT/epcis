@@ -1,7 +1,6 @@
 ﻿using FasTnT.Domain.Persistence;
 using FasTnT.Model.Queries;
 using FasTnT.Model.Responses;
-using System;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -18,7 +17,7 @@ namespace FasTnT.Domain.Services.Handlers
 
         public async Task<IEpcisResponse> Handle(GetSubscriptionIds query)
         {
-            var subscriptions = await _subscriptionManager.ListAll();
+            var subscriptions = await _subscriptionManager.ListForQuery(query.QueryName);
 
             return new GetSubscriptionIdsResult
             {
