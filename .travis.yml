@@ -4,3 +4,5 @@ sudo: required
 dist: xenial
 solution: FasTnT.sln
 dotnet: 2.2
+script:
+ - dotnet restore
