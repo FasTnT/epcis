@@ -4,7 +4,6 @@ using FasTnT.Model.Queries;
 using FasTnT.Model.Queries.Implementations;
 using FasTnT.Model.Responses;
 using FasTnT.Model.Subscriptions;
-using System;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -21,11 +20,11 @@ namespace FasTnT.Domain.Services.Handlers
             _subscriptionManager = subscriptionManager;
         }
 
-        public async Task<IEpcisResponse> Handle(Subscription subscribe)
+        public async Task<IEpcisResponse> Handle(Subscription request)
         {
-            EnsureQueryAllowsSubscription(subscribe);
-            // TODO: validate subscription request.
-            await _subscriptionManager.Store(subscribe);
+            EnsureQueryAllowsSubscription(request);
+
+            await _subscriptionManager.Store(request);
 
             return new SubscribeResponse();
         }

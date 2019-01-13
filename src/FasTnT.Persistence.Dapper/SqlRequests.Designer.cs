@@ -61,7 +61,7 @@ namespace FasTnT.Persistence.Dapper {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to H4sIAAAAAAAA/81a33ObOBB+jv8KTaY3sW+cTJK2Mzft9IEQOeXigMuP5PLEEJAdphiIBGlzf/0tAmPAgLFNp+cHElur1erbT7sridNTZGhYRZr4Fd8JA1HFgo6zb0iaIFnREf5H0nQNxYxQ9nklogtXU1wncZY8zegtJIPhAMHHdRBbWp7n+hEXlo3pdMxbfGtJkP1sUcuOCEWvFn1z/cXw4/kIicp0mgwTLkzbiiwvWJwdO2RuxV50XNEiKrKmq4Ik6+h4dmvmwx+jmSrdCeojusWPaOg6o8Fo8CDpX9FQka419AVNhKmGRx2mZIWh54IdbuBz/euZxTE8fsWsbEqsiDhm4KPIXRIWWcsQ/XCj5yCO+C/o38AnlU6exSITtLZ3SmWXluvVmHn58WO7nWnv0GLsR0Ad89lizzVqLs4v3+8031whs7yoDr6Li530ucwEBe4rQU9B4BHLr7TnNDGb+RlSMieUghc8y1/E1qLOrxdb/FpL0iqhNrm62W1y [rest of string was truncated]&quot;;.
+        ///   Looks up a localized string similar to H4sIAAAAAAAA/81abU/jOBD+TH+FhfZEeyoI2D3ptGg/pMFlc4Skmxc4PkUhcSHaNAm2wx7362/y0jbvZNusOD4UGo/H4+eZ8YwnHB8jvBAlHeniV3wjjEQNCwbOvyFpjhTVQPhvSTd0RCLHYxdrEUOYybhJ4oSS55gwPhqPEPx4Lopj+EjEFFOWp+lTN3TiFQm4xb0VQckH4/YqQj88/hTGPH2C/g0DUplHiRNSt/8sdInngikb6VAyMj4yDfHo82dO/uFTFIQ/xpNJpjpmhFq5tdkTFj8wh3oR98IgGXGebGo7nFD0YtNXL3gcn53/OUGiKssJItGj5djc9sPHk0OXLO3Y54eZIlFVdEMTJMVAh4trKwfoEC006UbQ7tE1vkdjz52MJqM7yfiKxqp0qaMvaC7IOp70gJy8pFi+RmSLOlvZvu8FvIJgYANG9Z2c/9G9kYoWj1kuiYANmxMXPYShT+ygjvrS9hlpxGBr8dAwdPpdDr3VNvpz3pXNAiDB [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string CreateDatabaseZipped {
             get {
@@ -79,7 +79,7 @@ namespace FasTnT.Persistence.Dapper {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to H4sIAAAAAAAA/3MJ8g9QCHb2cPV1VPB0U3CN8AwOCVYoLk0qTi7KLCjJzM8rVnB2DHZ2dHG15nLBqjg5qYyQktSC5EyC5iSWpmSWEFJUWpxahDAJAMH0bwy+AAAA.
+        ///   Looks up a localized string similar to H4sIAAAAAAAA/3MJ8g9QCHb2cPV1VPB0U3CN8AwOCVYoLk0qTi7KLCjJzM8rVnB2DHZ2dHG15nLBqjg5qYyQktSC5EyC5iSWpmSWEFJUWpxahG6SW6ifc4invx8uD+iVFqQklqTGowhaAwD9IG4I+gAAAA==.
         /// </summary>
         internal static string DropDatabaseZipped {
             get {
@@ -102,6 +102,15 @@ namespace FasTnT.Persistence.Dapper {
         internal static string ListSubscriptionIds {
             get {
                 return ResourceManager.GetString("ListSubscriptionIds", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to SELECT s.id, s.subscription_id, s.query_name, s.active FROM subscriptions.subscription s;.
+        /// </summary>
+        internal static string ListSubscriptions {
+            get {
+                return ResourceManager.GetString("ListSubscriptions", resourceCulture);
             }
         }
         
