@@ -10,7 +10,7 @@ namespace FasTnT.Host
         public static IWebHost BuildWebHost(string[] args) => 
             WebHost.CreateDefaultBuilder(args)
             .UseShutdownTimeout(TimeSpan.FromSeconds(10))
-            .UseKestrel()
+            .UseKestrel(c => c.AddServerHeader = false)
             .UseStartup<Startup>()
             .Build();
     }
