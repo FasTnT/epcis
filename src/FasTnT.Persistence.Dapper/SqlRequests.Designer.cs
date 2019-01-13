@@ -61,7 +61,7 @@ namespace FasTnT.Persistence.Dapper {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to H4sIAAAAAAAA/81abU/jOBD+TH+FhfZEeyoI2D3ptGg/pMFlc4Skmxc4PkUhcSHaNAm2wx7362/y0jbvZNusOD4UGo/H4+eZ8YwnHB8jvBAlHeniV3wjjEQNCwbOvyFpjhTVQPhvSTd0RCLHYxdrEUOYybhJ4oSS55gwPhqPEPx4Lopj+EjEFFOWp+lTN3TiFQm4xb0VQckH4/YqQj88/hTGPH2C/g0DUplHiRNSt/8sdInngikb6VAyMj4yDfHo82dO/uFTFIQ/xpNJpjpmhFq5tdkTFj8wh3oR98IgGXGebGo7nFD0YtNXL3gcn53/OUGiKssJItGj5djc9sPHk0OXLO3Y54eZIlFVdEMTJMVAh4trKwfoEC006UbQ7tE1vkdjz52MJqM7yfiKxqp0qaMvaC7IOp70gJy8pFi+RmSLOlvZvu8FvIJgYANG9Z2c/9G9kYoWj1kuiYANmxMXPYShT+ygjvrS9hlpxGBr8dAwdPpdDr3VNvpz3pXNAiDB [rest of string was truncated]&quot;;.
+        ///   Looks up a localized string similar to H4sIAAAAAAAA/81aXU/jOBR9pr/CQrOiXRUEzKy0GjQPIXVLlpB08gHLUxQaF6JJkxAnzLK/fm8ct803oc2I5aHQ+Pr6+pxz7WuH42OE56KkI128wjfCQNSwYGD+DUlTpKgGwn9LuqEjEi5cerE2MYRLGddZnETkOSE0HgwHCH5cByUJfKRmiinLY/bUCRbJivixFbsrgtIPGturEP1046cgidkT9G/gk1K/iCyCyOneC03wVDBlgzWlLcMj0xCPvn6NyT/xGPnBz+FolLlOKIksHm32hCYPdBG5YewGftqyeLIjexGTCL3Y0avrPw7Pzv8cIVGV5RSR8NFa2LHtBY8nhw5Z2okXH2aORFXRDU2QFAMdzq8tDtAhmmvSjaDdo2t8j4auMxqMBneScYWGqjTR0Tc0FWQdjzpATl4Ylq8h2aJOV7bnuX5cQtC3AaPqTM7/aJ9IyYtLLYeEwIYdEwc9BIFHbL+K+tL2KKnFYBtx3zC06o5DbzW1vk9dWS8A [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string CreateDatabaseZipped {
             get {
@@ -97,7 +97,7 @@ namespace FasTnT.Persistence.Dapper {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to SELECT s.id, s.subscription_name AS subscription_id, s.query_name, s.active FROM subscriptions.subscription s WHERE s.query_name = @QueryName;.
+        ///   Looks up a localized string similar to SELECT s.id, s.subscription_id, s.query_name, s.active FROM subscriptions.subscription s WHERE s.query_name = @QueryName;.
         /// </summary>
         internal static string ListSubscriptionIds {
             get {
@@ -195,6 +195,33 @@ namespace FasTnT.Persistence.Dapper {
         internal static string StoreSourceDestination {
             get {
                 return ResourceManager.GetString("StoreSourceDestination", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to INSERT INTO subscriptions.subscription(id, subscription_id, trigger, initial_record_time, report_if_empty, destination_url, query_name,  active, schedule_seconds, schedule_minutes, schedule_hours, schedule_month, schedule_day_of_month, schedule_day_of_week) VALUES(@Id, @SubscriptionId, @Trigger, @InitialRecordTime, @ReportIfEmpty, @Destination, @QueryName, @Active, @Second, @Minute, @Hour, @Month, @DayOfMonth, @DayOfWeek);.
+        /// </summary>
+        internal static string StoreSubscription {
+            get {
+                return ResourceManager.GetString("StoreSubscription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to INSERT INTO subscriptions.parameter(id, subscription_id, name) VALUES(@Id, @SubscriptionId, @Name);.
+        /// </summary>
+        internal static string StoreSubscriptionParameter {
+            get {
+                return ResourceManager.GetString("StoreSubscriptionParameter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to INSERT INTO subscriptions.parameter_value(id, parameter_id, value) VALUES(@Id, @ParameterId, @Value);.
+        /// </summary>
+        internal static string StoreSubscriptionParameterValue {
+            get {
+                return ResourceManager.GetString("StoreSubscriptionParameterValue", resourceCulture);
             }
         }
     }

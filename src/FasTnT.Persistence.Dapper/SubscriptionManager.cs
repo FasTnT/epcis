@@ -1,6 +1,7 @@
 ﻿using FasTnT.Domain.Persistence;
 using FasTnT.Model.Queries;
 using FasTnT.Model.Subscriptions;
+using MoreLinq;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -26,7 +27,7 @@ namespace FasTnT.Persistence.Dapper
 
                 foreach (var subscription in subscriptions)
                 {
-                    subscription.Params = queryParameters;
+                    subscription.Parameters = queryParameters;
                 }
             }
 
@@ -34,7 +35,60 @@ namespace FasTnT.Persistence.Dapper
         }
 
         public async Task<IEnumerable<Subscription>> ListForQuery(string queryName) => await _unitOfWork.Query<Subscription>(SqlRequests.ListSubscriptionIds, new { QueryName = queryName });
-        public Task Store(Subscription subscription) => throw new NotImplementedException();
         public async Task Delete(Guid id) => await _unitOfWork.Execute(SqlRequests.DeleteSubscription, new { Id = id });
+
+        public async Task Store(Subscription subscription)
+        {
+            var parameters = new List<object>();
+            var parameterValues = new List<object>();
+
+            subscription.Parameters.ForEach(parameter =>
+            {
+                var id = Guid.NewGuid();
+
+                parameters.Add(new
+                {
+                    Id = id,
+                    SubscriptionId = subscription.Id,
+                    parameter.Name
+                });
+
+                parameter.Values.ForEach(value =>
+                    parameterValues.Add(new
+                    {
+                        Id = Guid.NewGuid(),
+                        ParameterId = id,
+                        Value = value
+                    }));
+            });
+
+            using (new CommitOnDisposeScope(_unitOfWork))
+            {
+                await _unitOfWork.Execute(SqlRequests.StoreSubscription, GetPgSqlSubscription(subscription));
+                await _unitOfWork.Execute(SqlRequests.StoreSubscriptionParameter, parameters);
+                await _unitOfWork.Execute(SqlRequests.StoreSubscriptionParameterValue, parameterValues);
+            }
+        }
+
+        private object GetPgSqlSubscription(Subscription subscription)
+        {
+            return new
+            {
+                subscription.Id,
+                subscription.SubscriptionId,
+                subscription.QueryName,
+                subscription.ReportIfEmpty,
+                subscription.Trigger,
+                subscription.InitialRecordTime,
+                subscription.Destination,
+                subscription.Active,
+                subscription.Schedule.Second,
+                subscription.Schedule.Minute,
+                subscription.Schedule.Hour,
+                subscription.Schedule.Month,
+                subscription.Schedule.DayOfMonth,
+                subscription.Schedule.DayOfWeek
+            };
+        }
     }
 }

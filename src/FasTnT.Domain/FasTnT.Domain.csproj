@@ -22,6 +22,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\FasTnT.Formatters\FasTnT.Formatters.csproj" />
     <ProjectReference Include="..\FasTnT.Model\FasTnT.Model.csproj" />
   </ItemGroup>
 
