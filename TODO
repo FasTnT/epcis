@@ -3,5 +3,6 @@ For v1.0:
 - Validate XML documents against XSD whenever possible to have better error messages
 - Finish parameters for SimpleEventQuery query (except WD_* that needs CBV)
 - Implement subscriptions
+- Make UoW lifecycle management in the domain, not persistence..
 
 (ETD: end of 02/19)
