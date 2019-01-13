@@ -2,6 +2,6 @@
 {
     public class UnsubscribeRequest : SubscriptionRequest
     {
-        public string Name { get; set; }
+        public string SubscriptionId { get; set; }
     }
 }

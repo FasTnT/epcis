@@ -70,6 +70,15 @@ namespace FasTnT.Persistence.Dapper {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to DELETE from subscriptions.subscription WHERE id = @Id;.
+        /// </summary>
+        internal static string DeleteSubscription {
+            get {
+                return ResourceManager.GetString("DeleteSubscription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to H4sIAAAAAAAA/3MJ8g9QCHb2cPV1VPB0U3CN8AwOCVYoLk0qTi7KLCjJzM8rVnB2DHZ2dHG15nLBqjg5qYyQktSC5EyC5iSWpmSWEFJUWpxahDAJAMH0bwy+AAAA.
         /// </summary>
         internal static string DropDatabaseZipped {
@@ -88,7 +97,7 @@ namespace FasTnT.Persistence.Dapper {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to SELECT s.subscription_name AS subscription_id, s.query_name, s.active FROM subscriptions.subscription s WHERE s.query_name = @QueryName;.
+        ///   Looks up a localized string similar to SELECT s.id, s.subscription_name AS subscription_id, s.query_name, s.active FROM subscriptions.subscription s WHERE s.query_name = @QueryName;.
         /// </summary>
         internal static string ListSubscriptionIds {
             get {

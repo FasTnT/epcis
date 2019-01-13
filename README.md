@@ -25,6 +25,7 @@ Steps:
 
 - Event capture: `/Services/1.2/Capture` 
 - Queries : `/Services/1.2/Query`
+- Subscriptions : `/Services/1.2/Subscription`
 
 ### Others endpoints:
 
@@ -42,6 +43,7 @@ The file `documents\EPCIS_Samples.postman_collection.json` contains examples of 
 - Subscriptions:
   - Get all subscription names
   - Subscribe to an EPCIS request 
+  - Unsubscribe from EPCIS repository
 
 # License
 

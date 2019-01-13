@@ -8,13 +8,20 @@ namespace FasTnT.Formatters.Xml
         public static SubscriptionRequest ParseSubscription(XElement element)
         {
             // TODO: parse subscription request
-            return new Subscription();
+            return new Subscription
+            {
+                SubscriptionId = element.Element("subscriptionID").Value,
+                QueryName = element.Element("queryName").Value,
+                Destination = element.Element("dest").Value
+            };
         }
 
         public static SubscriptionRequest ParseUnsubscription(XElement element)
         {
-            // TODO: parse unsubscription request
-            return new UnsubscribeRequest();
+            return new UnsubscribeRequest
+            {
+                SubscriptionId = element.Element("subscriptionID").Value
+            };
         }
     }
 }

@@ -8,18 +8,18 @@ using System.Threading.Tasks;
 
 namespace FasTnT.Persistence.Dapper
 {
-    public class SubscriptionManager : ISubscriptionManager
+    public class PgSqlSubscriptionManager : ISubscriptionManager
     {
         private readonly IUnitOfWork _unitOfWork;
 
-        public SubscriptionManager(IUnitOfWork unitOfWork)
+        public PgSqlSubscriptionManager(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
         }
 
         public async Task<IEnumerable<Subscription>> GetAll(bool withDetails = false)
         {
-            var subscriptions = await _unitOfWork.Query<Subscription>(SqlRequests.ListSubscriptionIds, new { QueryName = "" });
+            var subscriptions = await _unitOfWork.Query<Subscription>(SqlRequests.ListSubscriptionIds, new { QueryName = "SimpleEventQuery" });
 
             if (withDetails)
             {
@@ -36,13 +36,8 @@ namespace FasTnT.Persistence.Dapper
             return subscriptions;
         }
 
-        public async Task<IEnumerable<Subscription>> ListForQuery(string queryName)
-        {
-            var subscriptions = await _unitOfWork.Query<Subscription>(SqlRequests.ListSubscriptionIds, new { QueryName = queryName });
-
-            return subscriptions;
-        }
-
+        public async Task<IEnumerable<Subscription>> ListForQuery(string queryName) => await _unitOfWork.Query<Subscription>(SqlRequests.ListSubscriptionIds, new { QueryName = queryName });
         public Task Store(Subscription subscription) => throw new NotImplementedException();
+        public async Task Delete(Guid id) => await _unitOfWork.Execute(SqlRequests.DeleteSubscription, new { Id = id });
     }
 }
