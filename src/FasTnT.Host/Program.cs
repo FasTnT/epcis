@@ -8,7 +8,7 @@ namespace FasTnT.Host
         public static void Main(string[] args) => BuildWebHost(args).Run();
         public static IWebHost BuildWebHost(string[] args) => 
             WebHost.CreateDefaultBuilder(args)
-            .UseKestrel()
+            .UseKestrel(c => c.AddServerHeader = false)
             .UseStartup<Startup>()
             .Build();
     }
