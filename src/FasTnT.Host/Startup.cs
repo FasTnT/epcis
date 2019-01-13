@@ -8,6 +8,8 @@ using FasTnT.Host.Middleware;
 using FasTnT.Host.Infrastructure.Attributes;
 using FasTnT.Host.BackgroundTasks;
 using FasTnT.Domain.Extensions;
+using FasTnT.Formatters;
+using FasTnT.Formatters.Xml;
 
 namespace FasTnT.Host
 {
@@ -21,6 +23,7 @@ namespace FasTnT.Host
         {
             services.AddEpcisDomain();
             services.AddEpcisPersistence(Configuration.GetConnectionString("FasTnT.Database"));
+            services.AddScoped(typeof(IResponseFormatter), typeof(XmlResponseFormatter)); // Use XML as default formatter for subscriptions.
             services.AddMvc(opt =>
             {
                 opt.OutputFormatters.Insert(0, new EpcisResponseOutputFormatter());

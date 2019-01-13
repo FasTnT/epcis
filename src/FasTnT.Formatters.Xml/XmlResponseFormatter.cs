@@ -34,7 +34,7 @@ namespace FasTnT.Formatters.Xml
                     new XElement(XName.Get("QueryResults", EpcisNamespaces.Query),
                         new XElement("queryName", response.QueryName),
                         !string.IsNullOrEmpty(response.SubscriptionId) ? new XElement("subscriptionID", response.SubscriptionId) : null,
-                        new XElement("resultBody", new XElement(resultName, response.Entities.Select(XmlEventFormatter.Format)))
+                        new XElement("resultsBody", new XElement(resultName, response.Entities.Select(XmlEventFormatter.Format)))
                     )
                 )
             );

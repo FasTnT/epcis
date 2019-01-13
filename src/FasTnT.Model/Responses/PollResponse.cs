@@ -6,6 +6,6 @@ namespace FasTnT.Model.Responses
     {
         public string QueryName { get; set; }
         public string SubscriptionId { get; set; }
-        public IEnumerable<IEntity> Entities { get; set; }
+        public IEnumerable<IEntity> Entities { get; set; } = new List<IEntity>();
     }
 }

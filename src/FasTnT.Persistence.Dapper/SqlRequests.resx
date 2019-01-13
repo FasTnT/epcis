@@ -118,23 +118,14 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="CreateDatabaseZipped" xml:space="preserve">
-    <value>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</value>
+    <value>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</value>
     <comment>GZIP script of the SQL database schema and tables. (try http://www.txtwizard.net/compression for decompression)</comment>
-  </data>
-  <data name="DeleteSubscription" xml:space="preserve">
-    <value>DELETE from subscriptions.subscription WHERE id = @Id;</value>
   </data>
   <data name="DropDatabaseZipped" xml:space="preserve">
     <value>H4sIAAAAAAAA/3MJ8g9QCHb2cPV1VPB0U3CN8AwOCVYoLk0qTi7KLCjJzM8rVnB2DHZ2dHG15nLBqjg5qYyQktSC5EyC5iSWpmSWEFJUWpxahG6SW6ifc4invx8uD+iVFqQklqTGowhaAwD9IG4I+gAAAA==</value>
   </data>
   <data name="EventQuery" xml:space="preserve">
     <value>SELECT request.record_time as capture_time, event.id, event_type as type, event.record_time as event_time, action, read_point, event_timezone_offset, disposition, business_location, business_step, transformation_id, event_id FROM epcis.event JOIN epcis.request on request.id = event.request_id /**where**/ /**orderby**/ LIMIT @limit</value>
-  </data>
-  <data name="ListSubscriptionIds" xml:space="preserve">
-    <value>SELECT s.id, s.subscription_id, s.query_name, s.active FROM subscriptions.subscription s WHERE s.query_name = @QueryName;</value>
-  </data>
-  <data name="ListSubscriptions" xml:space="preserve">
-    <value>SELECT s.id, s.subscription_id, s.query_name, s.active FROM subscriptions.subscription s;</value>
   </data>
   <data name="RelatedQuery" xml:space="preserve">
     <value>SELECT event_id, epc as id, type, is_quantity, quantity, unit_of_measure FROM epcis.epc WHERE event_id = ANY(@EventIds);
@@ -166,13 +157,28 @@ SELECT event_id, type, source_dest_id as id, direction FROM epcis.source_destina
   <data name="StoreSourceDestination" xml:space="preserve">
     <value>INSERT INTO epcis.source_destination(event_id, type, source_dest_id, direction) VALUES (@EventId, @Type, @Id, @Direction);</value>
   </data>
-  <data name="StoreSubscription" xml:space="preserve">
-    <value>INSERT INTO subscriptions.subscription(id, subscription_id, trigger, initial_record_time, report_if_empty, destination_url, query_name,  active, schedule_seconds, schedule_minutes, schedule_hours, schedule_month, schedule_day_of_month, schedule_day_of_week) VALUES(@Id, @SubscriptionId, @Trigger, @InitialRecordTime, @ReportIfEmpty, @Destination, @QueryName, @Active, @Second, @Minute, @Hour, @Month, @DayOfMonth, @DayOfWeek);</value>
+  <data name="SubscriptionStore" xml:space="preserve">
+    <value>INSERT INTO subscriptions.subscription(id, subscription_id, trigger, initial_record_time, report_if_empty, destination, query_name,  active, schedule_seconds, schedule_minutes, schedule_hours, schedule_month, schedule_day_of_month, schedule_day_of_week) VALUES(@Id, @SubscriptionId, @Trigger, @InitialRecordTime, @ReportIfEmpty, @Destination, @QueryName, @Active, @Second, @Minute, @Hour, @Month, @DayOfMonth, @DayOfWeek);</value>
   </data>
-  <data name="StoreSubscriptionParameter" xml:space="preserve">
+  <data name="SubscriptionAcknowledgePendingRequests" xml:space="preserve">
+    <value>DELETE FROM subscriptions.pendingrequest WHERE subscription_id = @SubscriptionId AND request_id = ANY(@RequestId);</value>
+  </data>
+  <data name="SubscriptionDelete" xml:space="preserve">
+    <value>DELETE from subscriptions.subscription WHERE id = @Id;</value>
+  </data>
+  <data name="SubscriptionListIds" xml:space="preserve">
+    <value>SELECT s.id, s.subscription_id, s.query_name, s.active FROM subscriptions.subscription s WHERE s.query_name = @QueryName;</value>
+  </data>
+  <data name="SubscriptionListPendingRequestIds" xml:space="preserve">
+    <value>SELECT request_id FROM subscriptions.pendingrequest WHERE subscription_id = @SubscriptionId;</value>
+  </data>
+  <data name="SubscriptionsList" xml:space="preserve">
+    <value>SELECT s.id, s.destination, s.subscription_id, s.query_name, s.active FROM subscriptions.subscription s;</value>
+  </data>
+  <data name="SubscriptionStoreParameter" xml:space="preserve">
     <value>INSERT INTO subscriptions.parameter(id, subscription_id, name) VALUES(@Id, @SubscriptionId, @Name);</value>
   </data>
-  <data name="StoreSubscriptionParameterValue" xml:space="preserve">
+  <data name="SubscriptionStoreParameterValue" xml:space="preserve">
     <value>INSERT INTO subscriptions.parameter_value(id, parameter_id, value) VALUES(@Id, @ParameterId, @Value);</value>
   </data>
 </root>

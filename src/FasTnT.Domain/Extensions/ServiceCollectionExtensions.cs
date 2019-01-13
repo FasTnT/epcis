@@ -1,5 +1,6 @@
 ﻿using FasTnT.Domain.Services.Dispatch;
 using FasTnT.Domain.Services.Handlers;
+using FasTnT.Domain.Services.Subscriptions;
 using FasTnT.Model.Queries.Implementations;
 using Microsoft.Extensions.DependencyInjection;
 using MoreLinq;
@@ -22,6 +23,8 @@ namespace FasTnT.Domain.Extensions
 
             handlers.ForEach(x => services.AddScoped(x));
             services.AddScoped(typeof(IDispatcher), typeof(Dispatcher));
+            services.AddScoped(typeof(ISubscriptionResultSender), typeof(HttpSubscriptionResultSender));
+            services.AddScoped(typeof(SubscriptionRunner));
             services.AddSingleton(typeof(Type[]), handlers);
             services.AddSingleton(typeof(IEpcisQuery[]), queries);
         }

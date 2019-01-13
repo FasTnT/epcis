@@ -30,7 +30,9 @@ namespace FasTnT.Model.Queries.Implementations
 
         public async Task<IEnumerable<EpcisEvent>> Execute(IEnumerable<QueryParameter> parameters, IEventRepository repository)
         {
-            foreach(var parameter in parameters)
+            parameters = parameters ?? new QueryParameter[0];
+
+            foreach (var parameter in parameters)
             {
                 if (Equals(parameter.Name, "eventType")) repository.WhereSimpleFieldIn(EpcisField.EventType, parameter.Values.Select(Enumeration.GetByDisplayName<EventType>).ToArray());
                 else if (Equals(parameter.Name, "eventCountLimit")) repository.SetLimit(parameter.GetValue<int>());

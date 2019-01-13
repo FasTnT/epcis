@@ -19,7 +19,7 @@ namespace FasTnT.Persistence.Dapper
 
         public async Task<IEnumerable<Subscription>> GetAll(bool withDetails = false)
         {
-            var subscriptions = await _unitOfWork.Query<Subscription>(SqlRequests.ListSubscriptions);
+            var subscriptions = await _unitOfWork.Query<Subscription>(SqlRequests.SubscriptionsList);
 
             if (withDetails)
             {
@@ -34,8 +34,17 @@ namespace FasTnT.Persistence.Dapper
             return subscriptions;
         }
 
-        public async Task<IEnumerable<Subscription>> ListForQuery(string queryName) => await _unitOfWork.Query<Subscription>(SqlRequests.ListSubscriptionIds, new { QueryName = queryName });
-        public async Task Delete(Guid id) => await _unitOfWork.Execute(SqlRequests.DeleteSubscription, new { Id = id });
+        public async Task<IEnumerable<Subscription>> ListForQuery(string queryName) 
+            => await _unitOfWork.Query<Subscription>(SqlRequests.SubscriptionListIds, new { QueryName = queryName });
+
+        public async Task Delete(Guid id)
+            => await _unitOfWork.Execute(SqlRequests.SubscriptionDelete, new { Id = id });
+
+        public async Task<IEnumerable<Guid>> GetPendingRequestIds(Guid subscriptionId) 
+            => await _unitOfWork.Query<Guid>(SqlRequests.SubscriptionListPendingRequestIds, new { SubscriptionId = subscriptionId });
+
+        public async Task AcknowledgePendingRequests(Guid subscriptionId, IEnumerable<Guid> requestIds) 
+            => await _unitOfWork.Execute(SqlRequests.SubscriptionAcknowledgePendingRequests, new { SubscriptionId = subscriptionId, RequestId = requestIds });
 
         public async Task Store(Subscription subscription)
         {
@@ -64,9 +73,9 @@ namespace FasTnT.Persistence.Dapper
 
             using (new CommitOnDisposeScope(_unitOfWork))
             {
-                await _unitOfWork.Execute(SqlRequests.StoreSubscription, GetPgSqlSubscription(subscription));
-                await _unitOfWork.Execute(SqlRequests.StoreSubscriptionParameter, parameters);
-                await _unitOfWork.Execute(SqlRequests.StoreSubscriptionParameterValue, parameterValues);
+                await _unitOfWork.Execute(SqlRequests.SubscriptionStore, GetPgSqlSubscription(subscription));
+                await _unitOfWork.Execute(SqlRequests.SubscriptionStoreParameter, parameters);
+                await _unitOfWork.Execute(SqlRequests.SubscriptionStoreParameterValue, parameterValues);
             }
         }
 

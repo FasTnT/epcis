@@ -10,7 +10,7 @@ namespace FasTnT.Domain.Services.Handlers.PredefinedQueries
     {
         void SetLimit(int eventLimit);
         void OrderBy(EpcisField field, OrderDirection direction);
-        void WhereSimpleFieldIn(EpcisField field, object[] values);
+        void WhereSimpleFieldIn<T>(EpcisField field, T[] values);
         void WhereSimpleFieldMatches(EpcisField field, FilterComparator filterOperator, object value);
         void WhereBusinessTransactionValueIn(string txName, string[] txValues);
         void WhereSourceDestinationValueIn(string sourceName, SourceDestinationType type, string[] sourceValues);

@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using FasTnT.Domain.Persistence;
+using FasTnT.Domain.Services.Subscriptions;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
 using System.Threading;
@@ -25,7 +27,14 @@ namespace FasTnT.Host.BackgroundTasks
             {
                 using (var scope = _services.CreateScope())
                 {
-                    // TODO: run subscription task.
+                    var subscriptionManager = scope.ServiceProvider.GetService<ISubscriptionManager>();
+                    var subscriptionRunner = scope.ServiceProvider.GetService<SubscriptionRunner>();
+                    var subscriptions = await subscriptionManager.GetAll();
+
+                    foreach(var subscription in subscriptions)
+                    {
+                        await subscriptionRunner.Run(subscription);
+                    }
                 }
 
                 await Task.Delay(TimeSpan.FromMilliseconds(DelayTimeoutInMs));

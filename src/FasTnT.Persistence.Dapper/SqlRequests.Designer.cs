@@ -70,15 +70,6 @@ namespace FasTnT.Persistence.Dapper {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to DELETE from subscriptions.subscription WHERE id = @Id;.
-        /// </summary>
-        internal static string DeleteSubscription {
-            get {
-                return ResourceManager.GetString("DeleteSubscription", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to H4sIAAAAAAAA/3MJ8g9QCHb2cPV1VPB0U3CN8AwOCVYoLk0qTi7KLCjJzM8rVnB2DHZ2dHG15nLBqjg5qYyQktSC5EyC5iSWpmSWEFJUWpxahG6SW6ifc4invx8uD+iVFqQklqTGowhaAwD9IG4I+gAAAA==.
         /// </summary>
         internal static string DropDatabaseZipped {
@@ -93,24 +84,6 @@ namespace FasTnT.Persistence.Dapper {
         internal static string EventQuery {
             get {
                 return ResourceManager.GetString("EventQuery", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to SELECT s.id, s.subscription_id, s.query_name, s.active FROM subscriptions.subscription s WHERE s.query_name = @QueryName;.
-        /// </summary>
-        internal static string ListSubscriptionIds {
-            get {
-                return ResourceManager.GetString("ListSubscriptionIds", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to SELECT s.id, s.subscription_id, s.query_name, s.active FROM subscriptions.subscription s;.
-        /// </summary>
-        internal static string ListSubscriptions {
-            get {
-                return ResourceManager.GetString("ListSubscriptions", resourceCulture);
             }
         }
         
@@ -199,29 +172,74 @@ namespace FasTnT.Persistence.Dapper {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to INSERT INTO subscriptions.subscription(id, subscription_id, trigger, initial_record_time, report_if_empty, destination_url, query_name,  active, schedule_seconds, schedule_minutes, schedule_hours, schedule_month, schedule_day_of_month, schedule_day_of_week) VALUES(@Id, @SubscriptionId, @Trigger, @InitialRecordTime, @ReportIfEmpty, @Destination, @QueryName, @Active, @Second, @Minute, @Hour, @Month, @DayOfMonth, @DayOfWeek);.
+        ///   Looks up a localized string similar to DELETE FROM subscriptions.pendingrequest WHERE subscription_id = @SubscriptionId AND request_id = ANY(@RequestId);.
         /// </summary>
-        internal static string StoreSubscription {
+        internal static string SubscriptionAcknowledgePendingRequests {
             get {
-                return ResourceManager.GetString("StoreSubscription", resourceCulture);
+                return ResourceManager.GetString("SubscriptionAcknowledgePendingRequests", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to DELETE from subscriptions.subscription WHERE id = @Id;.
+        /// </summary>
+        internal static string SubscriptionDelete {
+            get {
+                return ResourceManager.GetString("SubscriptionDelete", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to SELECT s.id, s.subscription_id, s.query_name, s.active FROM subscriptions.subscription s WHERE s.query_name = @QueryName;.
+        /// </summary>
+        internal static string SubscriptionListIds {
+            get {
+                return ResourceManager.GetString("SubscriptionListIds", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to SELECT request_id FROM subscriptions.pendingrequest WHERE subscription_id = @SubscriptionId;.
+        /// </summary>
+        internal static string SubscriptionListPendingRequestIds {
+            get {
+                return ResourceManager.GetString("SubscriptionListPendingRequestIds", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to SELECT s.id, s.destination, s.subscription_id, s.query_name, s.active FROM subscriptions.subscription s;.
+        /// </summary>
+        internal static string SubscriptionsList {
+            get {
+                return ResourceManager.GetString("SubscriptionsList", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to INSERT INTO subscriptions.subscription(id, subscription_id, trigger, initial_record_time, report_if_empty, destination, query_name,  active, schedule_seconds, schedule_minutes, schedule_hours, schedule_month, schedule_day_of_month, schedule_day_of_week) VALUES(@Id, @SubscriptionId, @Trigger, @InitialRecordTime, @ReportIfEmpty, @Destination, @QueryName, @Active, @Second, @Minute, @Hour, @Month, @DayOfMonth, @DayOfWeek);.
+        /// </summary>
+        internal static string SubscriptionStore {
+            get {
+                return ResourceManager.GetString("SubscriptionStore", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to INSERT INTO subscriptions.parameter(id, subscription_id, name) VALUES(@Id, @SubscriptionId, @Name);.
         /// </summary>
-        internal static string StoreSubscriptionParameter {
+        internal static string SubscriptionStoreParameter {
             get {
-                return ResourceManager.GetString("StoreSubscriptionParameter", resourceCulture);
+                return ResourceManager.GetString("SubscriptionStoreParameter", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to INSERT INTO subscriptions.parameter_value(id, parameter_id, value) VALUES(@Id, @ParameterId, @Value);.
         /// </summary>
-        internal static string StoreSubscriptionParameterValue {
+        internal static string SubscriptionStoreParameterValue {
             get {
-                return ResourceManager.GetString("StoreSubscriptionParameterValue", resourceCulture);
+                return ResourceManager.GetString("SubscriptionStoreParameterValue", resourceCulture);
             }
         }
     }
