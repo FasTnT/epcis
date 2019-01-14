@@ -86,6 +86,14 @@ namespace FasTnT.Formatters.Xml
             return formatted;
         }
 
+        public XDocument Format(UnsubscribeResponse response)
+        {
+            var formatted = WithAttributes("EPCISQueryDocument", EpcisNamespaces.Query);
+            formatted.Root.Add(new XElement("EPCISBody", new XElement("UnsubscribeResult")));
+
+            return formatted;
+        }
+
         public XDocument Format(CaptureSucceedResponse response)
         {
             var formatted = WithoutAttributes("Result");

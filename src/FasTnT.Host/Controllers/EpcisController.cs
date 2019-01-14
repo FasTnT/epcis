@@ -17,7 +17,7 @@ namespace FasTnT.Host.Controllers
 
         [HttpPost(Name = "Capture Endpoint")]
         [Route("Capture")]
-        public async Task<IEpcisResponse> Capture([FromBody] Request document) => await _dispatcher.Dispatch(document);
+        public async Task Capture([FromBody] Request document) => await _dispatcher.Dispatch(document);
 
         [HttpPost(Name = "Query Endpoint")]
         [Route("Query")]

@@ -1,4 +1,5 @@
 ﻿using FasTnT.Domain.Services.Dispatch;
+using FasTnT.Model.Responses;
 using FasTnT.Model.Subscriptions;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
@@ -15,6 +16,6 @@ namespace FasTnT.Host.Controllers
 
         [HttpPost(Name = "Subscribe to EPCIS server")]
         [Route("Subscription")]
-        public async Task ManageSubscription(SubscriptionRequest request) => await _dispatcher.Dispatch(request);
+        public async Task<IEpcisResponse> ManageSubscription(SubscriptionRequest request) => await _dispatcher.Dispatch(request);
     }
 }
