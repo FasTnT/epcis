@@ -1,5 +1,6 @@
 For v1.0:
 
 - Finish parameters for SimpleEventQuery query (except WD_* that needs CBV)
+- Make UoW lifecycle management in the domain, not persistence..
 
 (ETD: end of 02/19)
