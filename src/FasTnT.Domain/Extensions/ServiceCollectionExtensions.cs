@@ -1,4 +1,5 @@
-﻿using FasTnT.Domain.Services.Dispatch;
+﻿using FasTnT.Domain.BackgroundTasks;
+using FasTnT.Domain.Services.Dispatch;
 using FasTnT.Domain.Services.Handlers;
 using FasTnT.Domain.Services.Subscriptions;
 using FasTnT.Model.Queries.Implementations;
@@ -27,6 +28,7 @@ namespace FasTnT.Domain.Extensions
             services.AddScoped(typeof(SubscriptionRunner));
             services.AddSingleton(typeof(Type[]), handlers);
             services.AddSingleton(typeof(IEpcisQuery[]), queries);
+            services.AddSingleton<ISubscriptionBackgroundService, SubscriptionBackgroundService>();
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using FasTnT.Domain.Persistence;
+﻿using FasTnT.Domain.BackgroundTasks;
+using FasTnT.Domain.Persistence;
 using FasTnT.Model.Exceptions;
 using FasTnT.Model.Queries;
 using FasTnT.Model.Queries.Implementations;
@@ -13,11 +14,13 @@ namespace FasTnT.Domain.Services.Handlers
     {
         private readonly IEpcisQuery[] _queries;
         private readonly ISubscriptionManager _subscriptionManager;
+        private readonly ISubscriptionBackgroundService _backgroundService;
 
-        public SubscribeHandler(IEpcisQuery[] queries, ISubscriptionManager subscriptionManager)
+        public SubscribeHandler(IEpcisQuery[] queries, ISubscriptionManager subscriptionManager, ISubscriptionBackgroundService backgroundService)
         {
             _queries = queries;
             _subscriptionManager = subscriptionManager;
+            _backgroundService = backgroundService;
         }
 
         public async Task<IEpcisResponse> Handle(Subscription request)
@@ -25,6 +28,7 @@ namespace FasTnT.Domain.Services.Handlers
             EnsureQueryAllowsSubscription(request);
 
             await _subscriptionManager.Store(request);
+            _backgroundService.Register(request);
 
             return new SubscribeResponse();
         }

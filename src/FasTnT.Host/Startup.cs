@@ -10,6 +10,7 @@ using FasTnT.Host.BackgroundTasks;
 using FasTnT.Domain.Extensions;
 using FasTnT.Formatters;
 using FasTnT.Formatters.Xml;
+using FasTnT.Domain.BackgroundTasks;
 
 namespace FasTnT.Host
 {
@@ -31,7 +32,7 @@ namespace FasTnT.Host
             });
 
             services.AddSingleton<DevelopmentOnlyFilter>();
-            services.AddSingleton<Microsoft.Extensions.Hosting.IHostedService, SubscriptionService>();
+            services.AddSingleton<Microsoft.Extensions.Hosting.IHostedService, BackgroundService>();
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
@@ -42,7 +43,7 @@ namespace FasTnT.Host
             }
 
             // TODO: get from configuration?
-            SubscriptionService.DelayTimeoutInMs = 5000;
+            SubscriptionBackgroundService.DelayTimeoutInMs = 5000;
 
             app.UseExceptionHandlingMiddleware()
                .UseMvc();

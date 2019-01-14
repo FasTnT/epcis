@@ -1,4 +1,5 @@
-﻿using FasTnT.Domain.Persistence;
+﻿using FasTnT.Domain.BackgroundTasks;
+using FasTnT.Domain.Persistence;
 using FasTnT.Model.Exceptions;
 using FasTnT.Model.Queries;
 using FasTnT.Model.Responses;
@@ -11,10 +12,12 @@ namespace FasTnT.Domain.Services.Handlers
     public class UnsubscribeHandler : ISubscriptionHandler<UnsubscribeRequest>
     {
         private readonly ISubscriptionManager _subscriptionManager;
+        private readonly ISubscriptionBackgroundService _backgroundService;
 
-        public UnsubscribeHandler(ISubscriptionManager subscriptionManager)
+        public UnsubscribeHandler(ISubscriptionManager subscriptionManager, ISubscriptionBackgroundService backgroundService)
         {
             _subscriptionManager = subscriptionManager;
+            _backgroundService = backgroundService;
         }
 
         public async Task<IEpcisResponse> Handle(UnsubscribeRequest query)
@@ -28,6 +31,7 @@ namespace FasTnT.Domain.Services.Handlers
             }
 
             await _subscriptionManager.Delete(subscription.Id);
+            _backgroundService.Remove(subscription);
 
             return new UnsubscribeResponse();
         }
