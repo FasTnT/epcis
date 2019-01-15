@@ -1,5 +1,6 @@
-﻿using FasTnT.Domain;
-using FasTnT.Formatters.Xml.Responses;
+﻿using FasTnT.Formatters.Xml.Responses;
+using FasTnT.Model;
+using FasTnT.Model.Events.Enums;
 using FasTnT.Tests.Common;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;

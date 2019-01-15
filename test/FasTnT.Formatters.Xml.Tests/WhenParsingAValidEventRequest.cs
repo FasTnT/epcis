@@ -1,4 +1,5 @@
-using FasTnT.Domain;
+using FasTnT.Model;
+using FasTnT.Model.Events.Enums;
 using FasTnT.Tests.Common;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
