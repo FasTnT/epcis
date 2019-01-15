@@ -1,5 +1,6 @@
-﻿using FasTnT.Domain;
-using FasTnT.Formatters.Xml.Requests;
+﻿using FasTnT.Formatters.Xml.Requests;
+using FasTnT.Model;
+using FasTnT.Model.Events.Enums;
 using FasTnT.Model.Utils;
 using System;
 using System.Collections.Generic;
@@ -105,7 +106,28 @@ namespace FasTnT.Formatters.Xml
             }
 
             var declarationTime = DateTime.Parse(element.Element("declarationTime").Value, CultureInfo.InvariantCulture);
-            return new ErrorDeclaration { DeclarationTime = declarationTime, Reason = element.Element("reason").Value };
+            var correctiveEventIds = new List<CorrectiveEventId>();
+            ParseCorrectiveEventIds(element, correctiveEventIds);
+
+            return new ErrorDeclaration { DeclarationTime = declarationTime, Reason = element.Element("reason").Value, CorrectiveEventIds = correctiveEventIds.ToArray() };
+        }
+
+
+
+        public static void ParseCorrectiveEventIds(this XElement element, IList<CorrectiveEventId> list)
+        {
+            var correctiveEventIdList = element.Element("correctiveEventIDs");
+
+            if (correctiveEventIdList != null)
+            {
+                foreach (var child in correctiveEventIdList.Elements("correctiveEventID"))
+                {
+                    list.Add(new CorrectiveEventId
+                    {
+                        CorrectiveId = child.Value
+                    });
+                }
+            }
         }
     }
 }

@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using FasTnT.Domain;
 using FasTnT.Domain.Persistence;
+using FasTnT.Model;
 using MoreLinq;
-using StoreAction = System.Func<FasTnT.Domain.EpcisEventDocument, FasTnT.Persistence.Dapper.IUnitOfWork, System.Threading.Tasks.Task>;
+using StoreAction = System.Func<FasTnT.Model.EpcisEventDocument, FasTnT.Persistence.Dapper.IUnitOfWork, System.Threading.Tasks.Task>;
 
 namespace FasTnT.Persistence.Dapper
 {
@@ -13,7 +13,7 @@ namespace FasTnT.Persistence.Dapper
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IEnumerable<StoreAction> _actions 
-            = new StoreAction[]{ StoreRequest, StoreEvents, StoreEpcs, StoreCustomFields, StoreSourceDestinations, StoreBusinessTransactions };
+            = new StoreAction[]{ StoreRequest, StoreEvents, StoreEpcs, StoreCustomFields, StoreSourceDestinations, StoreBusinessTransactions, StoreErrorDeclaration };
 
         public EventStore(IUnitOfWork unitOfWork) => _unitOfWork = unitOfWork;
 
@@ -61,6 +61,17 @@ namespace FasTnT.Persistence.Dapper
         {
             request.EventList.ForEach(x => x.BusinessTransactions.ForEach(t => t.EventId = x.Id));
             await unitOfWork.Execute(SqlRequests.StoreBusinessTransaction, request.EventList.SelectMany(x => x.BusinessTransactions));
+        }
+
+        private async static Task StoreErrorDeclaration(EpcisEventDocument request, IUnitOfWork unitOfWork)
+        {
+            var eventsWithErrorDeclaration = request.EventList.Where(x => x.ErrorDeclaration != null);
+
+            eventsWithErrorDeclaration.ForEach(x => x.ErrorDeclaration.EventId = x.Id);
+            eventsWithErrorDeclaration.ForEach(x => x.ErrorDeclaration.CorrectiveEventIds.ForEach(t => t.EventId = x.Id));
+
+            await unitOfWork.Execute(SqlRequests.StoreErrorDeclaration, eventsWithErrorDeclaration.Select(x => x.ErrorDeclaration));
+            await unitOfWork.Execute(SqlRequests.StoreErrorDeclarationIds, eventsWithErrorDeclaration.SelectMany(x => x.ErrorDeclaration.CorrectiveEventIds));
         }
     }
 }

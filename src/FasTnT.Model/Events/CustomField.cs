@@ -1,6 +1,7 @@
-﻿using System;
+﻿using FasTnT.Model.Events.Enums;
+using System;
 
-namespace FasTnT.Domain
+namespace FasTnT.Model
 {
     public class CustomField
     {

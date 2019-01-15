@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace FasTnT.Domain
+namespace FasTnT.Model
 {
     public class BusinessTransaction
     {

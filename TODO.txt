@@ -1,8 +1,0 @@
-For v1.0:
-
-- Validate XML documents against XSD whenever possible to have better error messages
-- Add HTTPS Basic auth and events limit
-- Finish parameters for SimpleEventQuery query
-- Add management of CBV data
-
-(ETD: end of 10/18)

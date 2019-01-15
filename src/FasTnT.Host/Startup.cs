@@ -4,8 +4,13 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using FasTnT.Persistence.Dapper;
-using FasTnT.Domain;
 using FasTnT.Host.Middleware;
+using FasTnT.Host.Infrastructure.Attributes;
+using FasTnT.Host.BackgroundTasks;
+using FasTnT.Domain.Extensions;
+using FasTnT.Formatters;
+using FasTnT.Formatters.Xml;
+using FasTnT.Domain.BackgroundTasks;
 
 namespace FasTnT.Host
 {
@@ -19,11 +24,15 @@ namespace FasTnT.Host
         {
             services.AddEpcisDomain();
             services.AddEpcisPersistence(Configuration.GetConnectionString("FasTnT.Database"));
+            services.AddScoped(typeof(IResponseFormatter), typeof(XmlResponseFormatter)); // Use XML as default formatter for subscriptions.
             services.AddMvc(opt =>
             {
                 opt.OutputFormatters.Insert(0, new EpcisResponseOutputFormatter());
                 opt.ModelBinderProviders.Insert(0, new EpcisInputBinderProvider());
             });
+
+            services.AddSingleton<DevelopmentOnlyFilter>();
+            services.AddSingleton<Microsoft.Extensions.Hosting.IHostedService, BackgroundService>();
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
@@ -32,6 +41,9 @@ namespace FasTnT.Host
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            // TODO: get from configuration?
+            SubscriptionBackgroundService.DelayTimeoutInMs = 5000;
 
             app.UseExceptionHandlingMiddleware()
                .UseMvc();

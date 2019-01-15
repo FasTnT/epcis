@@ -1,8 +1,8 @@
 ﻿using Dapper;
-using FasTnT.Domain;
 using FasTnT.Domain.Persistence;
 using FasTnT.Domain.Services.Handlers.PredefinedQueries;
 using FasTnT.Domain.Services.Setup;
+using FasTnT.Model.Events.Enums;
 using FasTnT.Persistence.Dapper.DapperConfiguration;
 using FasTnT.Persistence.Dapper.Setup;
 using Microsoft.Extensions.DependencyInjection;
@@ -18,6 +18,7 @@ namespace FasTnT.Persistence.Dapper
             SqlMapper.AddTypeHandler(TimezoneOffsetHandler.Default);
             SqlMapper.AddTypeHandler(ArrayOfEnumerationHandler<EventType>.Default);
             SqlMapper.AddTypeHandler(ArrayOfEnumerationHandler<EventAction>.Default);
+            SqlMapper.AddTypeHandler(ArrayOfEnumerationHandler<EpcType>.Default);
             SqlMapper.AddTypeHandler(EnumerationHandler<EventType>.Default);
             SqlMapper.AddTypeHandler(EnumerationHandler<EventAction>.Default);
             SqlMapper.AddTypeHandler(EnumerationHandler<FieldType>.Default);
@@ -28,7 +29,8 @@ namespace FasTnT.Persistence.Dapper
             services.AddScoped(typeof(IDbConnection), ctx => new NpgsqlConnection(connectionString));
             services.AddScoped(typeof(IUnitOfWork), typeof(DapperUnitOfWork));
             services.AddScoped(typeof(IEventStore), typeof(EventStore));
-            services.AddScoped(typeof(ISimpleEventQueryExecutor), typeof(SimpleEventQueryExecutor));
+            services.AddScoped(typeof(ISubscriptionManager), typeof(PgSqlSubscriptionManager));
+            services.AddScoped(typeof(IEventRepository), typeof(PgSqlEventRepository));
             services.AddScoped(typeof(IDatabaseMigrator), typeof(PgSqlDatabaseMigrator));
         }
     }

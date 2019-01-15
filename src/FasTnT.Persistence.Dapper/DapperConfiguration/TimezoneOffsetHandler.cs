@@ -1,5 +1,5 @@
 ﻿using Dapper;
-using FasTnT.Domain;
+using FasTnT.Model;
 using System.Data;
 
 namespace FasTnT.Persistence.Dapper.DapperConfiguration

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Xml.Linq;
 using FasTnT.Formatters.Xml.Requests;
+using FasTnT.Formatters.Xml.Validation;
 using FasTnT.Model.Queries;
 
 namespace FasTnT.Formatters.Xml
@@ -12,7 +13,7 @@ namespace FasTnT.Formatters.Xml
     {
         public EpcisQuery Read(Stream input)
         {
-            var document = XDocument.Load(input);
+            var document = XmlDocumentParser.Instance.Load(input);
 
             if (document.Root.Name.LocalName == "EPCISQueryDocument")
             {
@@ -26,7 +27,7 @@ namespace FasTnT.Formatters.Xml
                     }
                     if (element.Name == XName.Get("GetSubscriptionIDs", EpcisNamespaces.Query))
                     {
-                        return new GetSubscriptionIds();
+                        return new GetSubscriptionIds { QueryName = element.Element("queryName").Value };
                     }
                     if (element.Name == XName.Get("GetStandardVersion", EpcisNamespaces.Query))
                     {
@@ -61,7 +62,7 @@ namespace FasTnT.Formatters.Xml
         private XDocument Write(GetSubscriptionIds query) => Query(XName.Get("GetSubscriptionIDs", EpcisNamespaces.Query));
         private XDocument Write(GetStandardVersion query) => Query(XName.Get("GetStandardVersion", EpcisNamespaces.Query));
         private XDocument Write(GetVendorVersion query) => Query(XName.Get("GetVendorVersion", EpcisNamespaces.Query));
-        private XDocument Write(PredefinedQuery query) => throw new NotImplementedException();
+        private XDocument Write(Poll query) => throw new NotImplementedException();
 
         private XDocument Query(XName queryName) => new XDocument(XName.Get("EPCISQueryDocument", EpcisNamespaces.Query), new XElement("EPCISBody", new XElement(queryName)));
     }

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
+using System;
 
 namespace FasTnT.Host
 {
@@ -8,7 +9,8 @@ namespace FasTnT.Host
         public static void Main(string[] args) => BuildWebHost(args).Run();
         public static IWebHost BuildWebHost(string[] args) => 
             WebHost.CreateDefaultBuilder(args)
-            .UseKestrel()
+            .UseShutdownTimeout(TimeSpan.FromSeconds(10))
+            .UseKestrel(c => c.AddServerHeader = false)
             .UseStartup<Startup>()
             .Build();
     }
