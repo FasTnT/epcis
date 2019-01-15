@@ -4,6 +4,7 @@ using FasTnT.Model.Subscriptions;
 using MoreLinq;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace FasTnT.Persistence.Dapper
@@ -19,7 +20,25 @@ namespace FasTnT.Persistence.Dapper
 
         public async Task<IEnumerable<Subscription>> GetAll(bool withDetails = false)
         {
-            var subscriptions = await _unitOfWork.Query<Subscription>(SqlRequests.SubscriptionsList);
+            var subscriptions = (await _unitOfWork.Query<dynamic>(SqlRequests.SubscriptionsList)).Select(x => new Subscription
+            {
+                Id = x.id,
+                Active = x.active,
+                Destination = x.destination,
+                QueryName = x.query_name,
+                Trigger = x.trigger,
+                SubscriptionId = x.subscription_id,
+                ReportIfEmpty = x.report_if_empty,
+                Schedule = new QuerySchedule
+                {
+                    DayOfMonth = x.schedule_day_of_month,
+                    DayOfWeek = x.schedule_day_of_week,
+                    Hour = x.schedule_hours,
+                    Minute = x.schedule_minutes,
+                    Month = x.schedule_month,
+                    Second = x.schedule_seconds
+                }
+            });
 
             if (withDetails)
             {

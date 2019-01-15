@@ -173,7 +173,7 @@ SELECT event_id, type, source_dest_id as id, direction FROM epcis.source_destina
     <value>SELECT request_id FROM subscriptions.pendingrequest WHERE subscription_id = @SubscriptionId;</value>
   </data>
   <data name="SubscriptionsList" xml:space="preserve">
-    <value>SELECT s.id, s.destination, s.subscription_id, s.query_name, s.active, s.trigger FROM subscriptions.subscription s;</value>
+    <value>SELECT s.id, s.destination, s.subscription_id, s.query_name, s.active, s.trigger, s.report_if_empty, s.schedule_minutes, s.schedule_seconds, s.schedule_hours, s.schedule_month, s.schedule_day_of_month, s.schedule_day_of_week FROM subscriptions.subscription s;</value>
   </data>
   <data name="SubscriptionStoreParameter" xml:space="preserve">
     <value>INSERT INTO subscriptions.parameter(id, subscription_id, name) VALUES(@Id, @SubscriptionId, @Name);</value>

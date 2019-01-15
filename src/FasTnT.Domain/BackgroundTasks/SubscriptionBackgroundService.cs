@@ -38,7 +38,7 @@ namespace FasTnT.Domain.BackgroundTasks
                 try
                 {
                     // Get all subscriptions where the next execution time is reached
-                    var subscriptions = _scheduledExecutions.Where(x => x.Value <= DateTime.UtcNow);
+                    var subscriptions = _scheduledExecutions.Where(x => x.Value <= DateTime.UtcNow).ToArray();
                     subscriptions.ForEach(x => _scheduledExecutions.TryUpdate(x.Key, new SubscriptionSchedule(x.Key).GetNextOccurence(DateTime.UtcNow), x.Value));
 
                     triggeredSubscriptions.AddRange(subscriptions.Select(x => x.Key));
@@ -59,18 +59,17 @@ namespace FasTnT.Domain.BackgroundTasks
             }
         }
 
-        private Task Execute(IEnumerable<Subscription> subscriptions)
+        private async Task Execute(IEnumerable<Subscription> subscriptions)
         {
-            lock (_monitor)
+            using (var scope = _services.CreateScope())
             {
-                using (var scope = _services.CreateScope())
-                {
-                    var subscriptionRunner = scope.ServiceProvider.GetService<SubscriptionRunner>();
-                    subscriptions.ForEach(s => Task.WaitAll(subscriptionRunner.Run(s)));
-                }
-            };
+                var subscriptionRunner = scope.ServiceProvider.GetService<SubscriptionRunner>();
 
-            return Task.CompletedTask;
+                foreach(var subscription in subscriptions)
+                {
+                    await subscriptionRunner.Run(subscription);
+                }
+            }
         }
 
         //REVIEW: should this class be responsible to get all subscriptions at startup? (LAA)
