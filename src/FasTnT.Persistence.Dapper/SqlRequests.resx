@@ -181,4 +181,7 @@ SELECT event_id, type, source_dest_id as id, direction FROM epcis.source_destina
   <data name="SubscriptionStoreParameterValue" xml:space="preserve">
     <value>INSERT INTO subscriptions.parameter_value(id, parameter_id, value) VALUES(@Id, @ParameterId, @Value);</value>
   </data>
+  <data name="SubscriptionListParameters" xml:space="preserve">
+    <value>SELECT p.subscription_id, p.name, pv.value FROM subscriptions.parameter p INNER JOIN subscriptions.parameter_value pv ON pv.parameter_id = p.id;</value>
+  </data>
 </root>

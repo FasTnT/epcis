@@ -38,15 +38,26 @@ namespace FasTnT.Persistence.Dapper
                     Month = x.schedule_month,
                     Second = x.schedule_seconds
                 }
-            });
+            }).ToArray();
 
             if (withDetails)
             {
-                var queryParameters = default(IEnumerable<QueryParameter>);
+                //TODO: review to have more clear/concise code.. (LAA)
+                var @params = (await _unitOfWork.Query<dynamic>(SqlRequests.SubscriptionListParameters))
+                                .GroupBy(x => (Guid) x.subscription_id)
+                                .Select(x => new 
+                                {
+                                    SubscriptionId = x.Key,
+                                    Parameters = x.GroupBy(g => (string) g.name).Select(p => new QueryParameter
+                                    {
+                                        Name = p.Key,
+                                        Values = p.Select(v => (string) v.value).ToArray()
+                                    }).ToArray()
+                                }).ToArray();
 
                 foreach (var subscription in subscriptions)
                 {
-                    subscription.Parameters = queryParameters;
+                    subscription.Parameters = @params.SingleOrDefault(p => p.SubscriptionId == subscription.Id)?.Parameters;
                 }
             }
 
@@ -68,33 +79,21 @@ namespace FasTnT.Persistence.Dapper
         public async Task Store(Subscription subscription)
         {
             var parameters = new List<object>();
-            var parameterValues = new List<object>();
+            var values = new List<object>();
 
             subscription.Parameters.ForEach(parameter =>
             {
                 var id = Guid.NewGuid();
 
-                parameters.Add(new
-                {
-                    Id = id,
-                    SubscriptionId = subscription.Id,
-                    parameter.Name
-                });
-
-                parameter.Values.ForEach(value =>
-                    parameterValues.Add(new
-                    {
-                        Id = Guid.NewGuid(),
-                        ParameterId = id,
-                        Value = value
-                    }));
+                parameters.Add(new { Id = id, SubscriptionId = subscription.Id, parameter.Name });
+                parameter.Values.ForEach(value => values.Add(new { Id = Guid.NewGuid(), ParameterId = id, Value = value }));
             });
 
             using (new CommitOnDisposeScope(_unitOfWork))
             {
                 await _unitOfWork.Execute(SqlRequests.SubscriptionStore, GetPgSqlSubscription(subscription));
                 await _unitOfWork.Execute(SqlRequests.SubscriptionStoreParameter, parameters);
-                await _unitOfWork.Execute(SqlRequests.SubscriptionStoreParameterValue, parameterValues);
+                await _unitOfWork.Execute(SqlRequests.SubscriptionStoreParameterValue, values);
             }
         }
 

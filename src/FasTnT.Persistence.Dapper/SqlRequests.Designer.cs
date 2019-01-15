@@ -199,6 +199,15 @@ namespace FasTnT.Persistence.Dapper {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to SELECT p.subscription_id, p.name, pv.value FROM subscriptions.parameter p INNER JOIN subscriptions.parameter_value pv ON pv.parameter_id = p.id;.
+        /// </summary>
+        internal static string SubscriptionListParameters {
+            get {
+                return ResourceManager.GetString("SubscriptionListParameters", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to SELECT request_id FROM subscriptions.pendingrequest WHERE subscription_id = @SubscriptionId;.
         /// </summary>
         internal static string SubscriptionListPendingRequestIds {
