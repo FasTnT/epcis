@@ -11,6 +11,7 @@ namespace FasTnT.Persistence.Dapper
             _unitOfWork = unitOfWork;
             _unitOfWork.Begin();
         }
+
         public void Dispose() => _unitOfWork.Commit();
     }
 }

@@ -27,6 +27,15 @@ namespace FasTnT.Formatters.Xml
                     EventList = XmlEventsParser.ParseEvents(document.Root.XPathSelectElement("EPCISBody/EventList").Elements().ToArray())
                 };
             }
+            else if (document.Root.Name == XName.Get("EPCISQueryDocument", EpcisNamespaces.Query)) // Subscription result
+            {
+                return new EpcisEventDocument
+                {
+                    CreationDate = DateTime.Parse(document.Root.Attribute("creationDate").Value, CultureInfo.InvariantCulture),
+                    SchemaVersion = document.Root.Attribute("schemaVersion").Value,
+                    EventList = XmlEventsParser.ParseEvents(document.Root.Element("EPCISBody").Element(XName.Get("QueryResults", EpcisNamespaces.Query)).Element("resultsBody").Element("EventList").Elements().ToArray())
+                };
+            }
             // TODO: handle masterdata document.
             //else if (document.Root.Name == XName.Get("EPCISMasterDataDocument", EpcisNamespaces.Capture))
             //{

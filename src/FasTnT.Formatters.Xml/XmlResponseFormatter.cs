@@ -17,7 +17,10 @@ namespace FasTnT.Formatters.Xml
 
         public void Write(IEpcisResponse entity, Stream output)
         {
-            Format((dynamic)entity).Save(output, Options);
+            if (entity != default(IEpcisResponse))
+            {
+                Format((dynamic)entity).Save(output, Options);
+            }
         }
 
         public XDocument Format(PollResponse response)
@@ -34,7 +37,7 @@ namespace FasTnT.Formatters.Xml
                     new XElement(XName.Get("QueryResults", EpcisNamespaces.Query),
                         new XElement("queryName", response.QueryName),
                         !string.IsNullOrEmpty(response.SubscriptionId) ? new XElement("subscriptionID", response.SubscriptionId) : null,
-                        new XElement("resultBody", new XElement(resultName, response.Entities.Select(XmlEventFormatter.Format)))
+                        new XElement("resultsBody", new XElement(resultName, response.Entities.Select(XmlEventFormatter.Format)))
                     )
                 )
             );
@@ -72,7 +75,7 @@ namespace FasTnT.Formatters.Xml
         {
             var formatted = WithAttributes("EPCISQueryDocument", EpcisNamespaces.Query);
             formatted.Root.Add(
-                new XElement("EPCISBody", new XElement("GetSubscriptionIDsResult", response.SubscriptionIds.Select(x => new XElement("string", x))))
+                new XElement("EPCISBody", new XElement("GetSubscriptionIDsResult", response.SubscriptionIds?.Select(x => new XElement("string", x))))
             );
 
             return formatted;
@@ -82,6 +85,14 @@ namespace FasTnT.Formatters.Xml
         {
             var formatted = WithAttributes("EPCISQueryDocument", EpcisNamespaces.Query);
             formatted.Root.Add(new XElement("EPCISBody", new XElement("SubscribeResult")));
+
+            return formatted;
+        }
+
+        public XDocument Format(UnsubscribeResponse response)
+        {
+            var formatted = WithAttributes("EPCISQueryDocument", EpcisNamespaces.Query);
+            formatted.Root.Add(new XElement("EPCISBody", new XElement("UnsubscribeResult")));
 
             return formatted;
         }

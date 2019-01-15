@@ -27,7 +27,7 @@ namespace FasTnT.Formatters.Xml
                     }
                     if (element.Name == XName.Get("GetSubscriptionIDs", EpcisNamespaces.Query))
                     {
-                        return new GetSubscriptionIds();
+                        return new GetSubscriptionIds { QueryName = element.Element("queryName").Value };
                     }
                     if (element.Name == XName.Get("GetStandardVersion", EpcisNamespaces.Query))
                     {

@@ -4,13 +4,13 @@
 
 # FasTnT
 
-FasTnT is a simple, lightweight GS1 EPCIS 1.2 repository written in C# using .NET Core 2.1, backed with PostGreSQL database.
+FasTnT is a simple, lightweight GS1 EPCIS 1.2 repository written in C# using .NET Core 2.2, backed with PostGreSQL database.
 
 ## Setup
 
 Prerequisites: 
 - PostGreSQL 9.5 or higher
-- .NET Core 2.1 SDK
+- .NET Core 2.2 SDK
 
 Steps:
 1. Download the source code, and create a new user/database in PostGreSQL for FasTnT;
@@ -25,6 +25,7 @@ Steps:
 
 - Event capture: `/Services/1.2/Capture` 
 - Queries : `/Services/1.2/Query`
+- Subscriptions : `/Services/1.2/Subscription`
 
 ### Others endpoints:
 
@@ -38,10 +39,16 @@ The file `documents\EPCIS_Samples.postman_collection.json` contains examples of 
 - Queries:
   - GetVendorVersion
   - GetStandardVersion
+  - GetQueryNames
   - Poll SimpleEventQuery _(still a few parameters missing)_
+- Subscriptions:
+  - Get all subscription names
+  - Subscribe to an EPCIS request 
+  - Unsubscribe from EPCIS repository
+  - Trigger subscriptions that register to specific trigger name
 
 # License
 
 This project is licensed under the Apache 2.0 license - see the LICENSE file for details
 
-_Last update: december 2018_
+_Last update: january 2019_

@@ -53,7 +53,7 @@ namespace FasTnT.Persistence.Dapper
         }
 
         public void SetLimit(int eventLimit) => _limit = eventLimit;
-        public void WhereSimpleFieldIn(EpcisField field, params object[] values) => _query = _query.Where($"{field.ToPgSql()} = ANY({_parameters.Add(values)})");
+        public void WhereSimpleFieldIn<T>(EpcisField field, T[] values) => _query = _query.Where($"{field.ToPgSql()} = ANY({_parameters.Add(values)})");
         public void WhereSimpleFieldMatches(EpcisField field, FilterComparator filterOperator, object value) => _query = _query.Where($"{field.ToPgSql()} {filterOperator.ToSql()} {_parameters.Add(value)}");
 
         public void WhereBusinessTransactionValueIn(string txName, string[] txValues)
