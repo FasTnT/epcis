@@ -190,7 +190,7 @@ namespace FasTnT.Persistence.Dapper {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to SELECT s.id, s.subscription_id, s.query_name, s.active FROM subscriptions.subscription s WHERE s.query_name = @QueryName;.
+        ///   Looks up a localized string similar to SELECT s.id, s.subscription_id, s.query_name, s.active FROM subscriptions.subscription s.
         /// </summary>
         internal static string SubscriptionListIds {
             get {

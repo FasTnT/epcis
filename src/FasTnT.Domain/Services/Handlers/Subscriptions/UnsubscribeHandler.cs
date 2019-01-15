@@ -22,8 +22,7 @@ namespace FasTnT.Domain.Services.Handlers
 
         public async Task<IEpcisResponse> Handle(UnsubscribeRequest query)
         {
-            var subscriptions = await _subscriptionManager.GetAll();
-            var subscription = subscriptions.SingleOrDefault(x => x.SubscriptionId == query.SubscriptionId);
+            var subscription = await _subscriptionManager.GetById(query.SubscriptionId);
 
             if(subscription == null)
             {

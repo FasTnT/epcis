@@ -167,7 +167,7 @@ SELECT event_id, type, source_dest_id as id, direction FROM epcis.source_destina
     <value>DELETE from subscriptions.subscription WHERE id = @Id;</value>
   </data>
   <data name="SubscriptionListIds" xml:space="preserve">
-    <value>SELECT s.id, s.subscription_id, s.query_name, s.active FROM subscriptions.subscription s WHERE s.query_name = @QueryName;</value>
+    <value>SELECT s.id, s.subscription_id, s.query_name, s.active FROM subscriptions.subscription s</value>
   </data>
   <data name="SubscriptionListPendingRequestIds" xml:space="preserve">
     <value>SELECT request_id FROM subscriptions.pendingrequest WHERE subscription_id = @SubscriptionId;</value>

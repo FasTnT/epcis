@@ -5,6 +5,7 @@ using FasTnT.Model.Queries;
 using FasTnT.Model.Queries.Implementations;
 using FasTnT.Model.Responses;
 using FasTnT.Model.Subscriptions;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -26,11 +27,21 @@ namespace FasTnT.Domain.Services.Handlers
         public async Task<IEpcisResponse> Handle(Subscription request)
         {
             EnsureQueryAllowsSubscription(request);
+            await EnsureSubscriptionDoesNotExist(request);
 
             await _subscriptionManager.Store(request);
             _backgroundService.Register(request);
 
             return new SubscribeResponse();
+        }
+
+        private async Task EnsureSubscriptionDoesNotExist(Subscription request)
+        {
+            var subscription = await _subscriptionManager.GetById(request.SubscriptionId);
+            if (subscription != null)
+            {
+                throw new EpcisException(ExceptionType.SubscribeNotPermittedException, $"Subscription '{request.QueryName}' already exist.");
+            }
         }
 
         private void EnsureQueryAllowsSubscription(Subscription subscribe)

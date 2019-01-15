@@ -17,7 +17,7 @@ namespace FasTnT.Domain.Services.Handlers
 
         public async Task<IEpcisResponse> Handle(GetSubscriptionIds query)
         {
-            var subscriptions = await _subscriptionManager.ListForQuery(query.QueryName);
+            var subscriptions = (await _subscriptionManager.GetAll()).Where(s => s.QueryName == query.QueryName);
 
             return new GetSubscriptionIdsResult
             {

@@ -18,6 +18,11 @@ namespace FasTnT.Persistence.Dapper
             _unitOfWork = unitOfWork;
         }
 
+        public async Task<Subscription> GetById(string subscriptionId)
+        {
+            return (await _unitOfWork.Query<Subscription>($"{SqlRequests.SubscriptionListIds} WHERE s.subscription_id = @Id", new { Id = subscriptionId })).SingleOrDefault();
+        }
+
         public async Task<IEnumerable<Subscription>> GetAll(bool withDetails = false)
         {
             var subscriptions = (await _unitOfWork.Query<dynamic>(SqlRequests.SubscriptionsList)).Select(x => new Subscription
@@ -63,9 +68,6 @@ namespace FasTnT.Persistence.Dapper
 
             return subscriptions;
         }
-
-        public async Task<IEnumerable<Subscription>> ListForQuery(string queryName) 
-            => await _unitOfWork.Query<Subscription>(SqlRequests.SubscriptionListIds, new { QueryName = queryName });
 
         public async Task Delete(Guid id)
             => await _unitOfWork.Execute(SqlRequests.SubscriptionDelete, new { Id = id });
