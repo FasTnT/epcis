@@ -39,11 +39,13 @@ The file `documents\EPCIS_Samples.postman_collection.json` contains examples of 
 - Queries:
   - GetVendorVersion
   - GetStandardVersion
+  - GetQueryNames
   - Poll SimpleEventQuery _(still a few parameters missing)_
 - Subscriptions:
   - Get all subscription names
   - Subscribe to an EPCIS request 
   - Unsubscribe from EPCIS repository
+  - Trigger subscriptions that register to specific trigger name
 
 # License
 
