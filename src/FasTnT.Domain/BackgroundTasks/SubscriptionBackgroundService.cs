@@ -48,6 +48,10 @@ namespace FasTnT.Domain.BackgroundTasks
 
                     await Execute(triggeredSubscriptions);
                 }
+                catch(Exception e)
+                {
+                    Console.WriteLine($"BACKGROUND TASK ERROR: {e.Message}");
+                }
                 finally
                 {
                     WaitTillNextExecutionOrNotification();
@@ -55,13 +59,18 @@ namespace FasTnT.Domain.BackgroundTasks
             }
         }
 
-        private async Task Execute(IEnumerable<Subscription> subscriptions)
+        private Task Execute(IEnumerable<Subscription> subscriptions)
         {
-            using (var scope = _services.CreateScope())
+            lock (_monitor)
             {
-                var subscriptionRunner = scope.ServiceProvider.GetService<SubscriptionRunner>();
-                await Task.WhenAll(subscriptions.Select(s => subscriptionRunner.Run(s)));
-            }
+                using (var scope = _services.CreateScope())
+                {
+                    var subscriptionRunner = scope.ServiceProvider.GetService<SubscriptionRunner>();
+                    subscriptions.ForEach(s => Task.WaitAll(subscriptionRunner.Run(s)));
+                }
+            };
+
+            return Task.CompletedTask;
         }
 
         //REVIEW: should this class be responsible to get all subscriptions at startup? (LAA)
