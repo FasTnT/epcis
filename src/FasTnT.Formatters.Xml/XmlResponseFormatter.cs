@@ -17,7 +17,10 @@ namespace FasTnT.Formatters.Xml
 
         public void Write(IEpcisResponse entity, Stream output)
         {
-            Format((dynamic)entity).Save(output, Options);
+            if (entity != default(IEpcisResponse))
+            {
+                Format((dynamic)entity).Save(output, Options);
+            }
         }
 
         public XDocument Format(PollResponse response)
@@ -72,7 +75,7 @@ namespace FasTnT.Formatters.Xml
         {
             var formatted = WithAttributes("EPCISQueryDocument", EpcisNamespaces.Query);
             formatted.Root.Add(
-                new XElement("EPCISBody", new XElement("GetSubscriptionIDsResult", response.SubscriptionIds.Select(x => new XElement("string", x))))
+                new XElement("EPCISBody", new XElement("GetSubscriptionIDsResult", response.SubscriptionIds?.Select(x => new XElement("string", x))))
             );
 
             return formatted;

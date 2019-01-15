@@ -18,7 +18,9 @@ namespace FasTnT.Host.Binders
 
         public IModelBinder GetBinder(ModelBinderProviderContext context)
         {
-            return Mappings[context.Metadata.ModelType];
+            return Mappings.TryGetValue(context.Metadata.ModelType, out IModelBinder binder)
+                ? binder
+                : null;
         }
     }
 }

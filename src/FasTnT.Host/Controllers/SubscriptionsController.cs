@@ -17,5 +17,9 @@ namespace FasTnT.Host.Controllers
         [HttpPost(Name = "Subscribe to EPCIS server")]
         [Route("Subscription")]
         public async Task<IEpcisResponse> ManageSubscription(SubscriptionRequest request) => await _dispatcher.Dispatch(request);
+
+        [HttpGet(Name = "Trigger a subscription 'trigger' schedule")]
+        [Route("Subscription/Trigger/{name}")]
+        public async Task<IEpcisResponse> TriggerSubscription(string name) => await _dispatcher.Dispatch(new TriggerSubscriptionRequest { Trigger = name });
     }
 }

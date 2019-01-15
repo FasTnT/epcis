@@ -8,6 +8,7 @@ namespace FasTnT.Domain.BackgroundTasks
     {
         void Register(Subscription subscription);
         void Remove(Subscription subscription);
+        void Trigger(string triggerName);
         Task Run(CancellationToken cancellationToken);
     }
 }
