@@ -31,7 +31,7 @@ namespace FasTnT.Formatters.Xml
             var typeOfResponse = response.Entities.GetType().GenericTypeArguments[0];
 
             if (typeOfResponse == typeof(EpcisEvent)) resultName = "EventList";
-            if (typeOfResponse == typeof(MasterData)) resultName = "VocabularyList";
+            if (typeOfResponse == typeof(EpcisMasterData)) resultName = "VocabularyList";
 
             formatted.Root.Add(
                 new XElement("EPCISBody",
