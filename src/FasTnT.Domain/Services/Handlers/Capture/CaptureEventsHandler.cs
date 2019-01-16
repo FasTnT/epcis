@@ -17,7 +17,7 @@ namespace FasTnT.Domain.Services.Handlers.Capture
             {
                 await _unitOfWork.EventStore.Store(request);
 
-                return new CaptureSucceedResponse();
+                return default(IEpcisResponse);
             }
         }
     }
