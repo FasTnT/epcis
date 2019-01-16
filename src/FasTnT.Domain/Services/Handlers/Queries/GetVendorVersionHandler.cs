@@ -2,7 +2,7 @@
 using FasTnT.Model.Responses;
 using System.Threading.Tasks;
 
-namespace FasTnT.Domain.Services.Handlers
+namespace FasTnT.Domain.Services.Handlers.Queries
 {
     public class GetVendorVersionHandler : IQueryHandler<GetVendorVersion>
     {

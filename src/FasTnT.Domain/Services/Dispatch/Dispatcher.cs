@@ -7,6 +7,8 @@ using FasTnT.Model.Responses;
 using FasTnT.Domain.Services.Handlers;
 using FasTnT.Model;
 using FasTnT.Model.Subscriptions;
+using FasTnT.Domain.Services.Handlers.Queries;
+using FasTnT.Domain.Services.Handlers.Subscriptions;
 
 namespace FasTnT.Domain.Services.Dispatch
 {

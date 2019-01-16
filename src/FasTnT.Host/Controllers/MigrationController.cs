@@ -2,6 +2,8 @@
 using System.Threading.Tasks;
 using FasTnT.Domain.Services.Setup;
 using FasTnT.Host.Infrastructure.Attributes;
+using FasTnT.Domain.Persistence;
+using System;
 
 namespace FasTnT.Host.Controllers
 {
@@ -9,16 +11,24 @@ namespace FasTnT.Host.Controllers
     [Route("Services/1.2")]
     public class MigrationController : Controller
     {
-        private readonly IDatabaseMigrator _migrator;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public MigrationController(IDatabaseMigrator migrator) => _migrator = migrator;
+        public MigrationController(IUnitOfWork unitOfWork) => _unitOfWork = unitOfWork;
 
         [HttpPost(Name = "Create Database")]
         [Route("Migrate")]
-        public async Task Migrate() => await _migrator.Migrate();
+        public async Task Migrate() => await Commit(manager => manager.Migrate());
 
         [HttpPost(Name = "Drop Database")]
         [Route("Rollback")]
-        public async Task Rollback() => await _migrator.Rollback();
+        public async Task Rollback() => await Commit(manager => manager.Rollback());
+
+        private async Task Commit(Func<IDatabaseMigrator, Task> action)
+        {
+            using (new CommitOnDispose(_unitOfWork))
+            {
+                await action(_unitOfWork.DatabaseManager);
+            }
+        }
     }
 }

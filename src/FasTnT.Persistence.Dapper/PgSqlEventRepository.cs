@@ -2,25 +2,25 @@
 using System.Linq;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using FasTnT.Domain.Services.Handlers.PredefinedQueries;
 using FasTnT.Model;
 using FasTnT.Model.Queries.Enums;
 using FasTnT.Model.Events.Enums;
 using Dapper;
 using static Dapper.SqlBuilder;
+using FasTnT.Domain.Persistence;
 
 namespace FasTnT.Persistence.Dapper
 {
     public class PgSqlEventRepository : IEventRepository
     {
-        private readonly IUnitOfWork _unitOfWork;
+        private readonly DapperUnitOfWork _unitOfWork;
         private SqlBuilder _query;
         private Template _sqlTemplate;
         private QueryParameters _parameters;
 
         private int _limit = 0;
 
-        public PgSqlEventRepository(IUnitOfWork unitOfWork)
+        public PgSqlEventRepository(DapperUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
             _query = new SqlBuilder();

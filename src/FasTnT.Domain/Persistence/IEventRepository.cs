@@ -4,7 +4,7 @@ using FasTnT.Model;
 using FasTnT.Model.Events.Enums;
 using FasTnT.Model.Queries.Enums;
 
-namespace FasTnT.Domain.Services.Handlers.PredefinedQueries
+namespace FasTnT.Domain.Persistence
 {
     public interface IEventRepository
     {

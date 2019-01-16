@@ -1,4 +1,5 @@
-﻿using FasTnT.Domain.Services.Setup;
+﻿using FasTnT.Domain.Persistence;
+using FasTnT.Domain.Services.Setup;
 using System;
 using System.IO;
 using System.IO.Compression;
@@ -8,9 +9,9 @@ namespace FasTnT.Persistence.Dapper.Setup
 {
     public class PgSqlDatabaseMigrator : IDatabaseMigrator
     {
-        private readonly IUnitOfWork _unitOfWork;
+        private readonly DapperUnitOfWork _unitOfWork;
 
-        public PgSqlDatabaseMigrator(IUnitOfWork unitOfWork)
+        public PgSqlDatabaseMigrator(DapperUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
         }

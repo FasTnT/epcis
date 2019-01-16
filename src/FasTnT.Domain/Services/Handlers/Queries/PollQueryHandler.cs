@@ -4,20 +4,20 @@ using System.Threading.Tasks;
 using FasTnT.Model.Queries;
 using FasTnT.Model.Queries.Implementations;
 using System.Linq;
-using FasTnT.Domain.Services.Handlers.PredefinedQueries;
 using FasTnT.Model.Exceptions;
+using FasTnT.Domain.Persistence;
 
-namespace FasTnT.Domain.Services.Handlers
+namespace FasTnT.Domain.Services.Handlers.Queries
 {
     public class PollQueryHandler : IQueryHandler<Poll>
     {
         private readonly IEpcisQuery[] _queries;
-        private readonly IEventRepository _eventRepository;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public PollQueryHandler(IEpcisQuery[] queries, IEventRepository eventRepository)
+        public PollQueryHandler(IEpcisQuery[] queries, IUnitOfWork unitOfWork)
         {
             _queries = queries;
-            _eventRepository = eventRepository;
+            _unitOfWork = unitOfWork;
         }
 
         public async Task<IEpcisResponse> Handle(Poll query)
@@ -34,7 +34,7 @@ namespace FasTnT.Domain.Services.Handlers
                 {
                     knownHandler.ValidateParameters(query.Parameters);
 
-                    var results = await knownHandler.Execute(query.Parameters, _eventRepository);
+                    var results = await knownHandler.Execute(query.Parameters, _unitOfWork);
                     return new PollResponse { QueryName = query.QueryName, Entities = results };
                 }
                 catch(Exception ex)
