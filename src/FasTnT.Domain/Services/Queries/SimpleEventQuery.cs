@@ -3,6 +3,7 @@ using FasTnT.Model.Events.Enums;
 using FasTnT.Model.Exceptions;
 using FasTnT.Model.Extensions;
 using FasTnT.Model.Queries.Enums;
+using FasTnT.Model.Responses;
 using FasTnT.Model.Utils;
 using System;
 using System.Collections.Generic;
@@ -28,7 +29,7 @@ namespace FasTnT.Model.Queries.Implementations
             }
         }
 
-        public async Task<IEnumerable<EpcisEvent>> Execute(IEnumerable<QueryParameter> parameters, IUnitOfWork unitOfWork)
+        public async Task<IEnumerable<IEntity>> Execute(IEnumerable<QueryParameter> parameters, IUnitOfWork unitOfWork)
         {
             parameters = parameters ?? new QueryParameter[0];
 
@@ -77,9 +78,7 @@ namespace FasTnT.Model.Queries.Implementations
 
             // Check for the maxEventCount parameter
             if(parameters.Any(x => x.Name == "maxEventCount") && results.Count() == parameters.Last(x => x.Name == "maxEventCount").GetValue<int>() + 1)
-            {
                 throw new EpcisException(ExceptionType.QueryTooLargeException, "Too many results returned by the request");
-            }
 
             return results;
         }

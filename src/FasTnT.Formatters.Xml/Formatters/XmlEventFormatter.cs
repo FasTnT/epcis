@@ -287,9 +287,10 @@ namespace FasTnT.Formatters.Xml.Responses
             extension.Add(element);
         }
 
-        public XElement Format(EpcisMasterData masterData)
+        // TODO: handle better MasterData...
+        public static XElement Format(EpcisMasterData masterData)
         {
-            throw new NotImplementedException();
+            return new XElement("VocabularyElement", new XAttribute("id", masterData.Id));
         }
     }
 }

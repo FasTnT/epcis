@@ -106,6 +106,15 @@ namespace FasTnT.Persistence.Dapper {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to SELECT md.type, md.id FROM cbv.masterdata md /**where**/ ORDER BY md.last_update DESC LIMIT @limit.
+        /// </summary>
+        internal static string MasterDataQuery {
+            get {
+                return ResourceManager.GetString("MasterDataQuery", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to SELECT event_id, epc as id, type, is_quantity, quantity, unit_of_measure FROM epcis.epc WHERE event_id = ANY(@EventIds);
         ///SELECT event_id, field_id as id, parent_id, namespace, name, type, text_value, numeric_value, date_value FROM epcis.custom_field WHERE event_id = ANY(@EventIds);
         ///SELECT event_id, transaction_type as type, transaction_id as id FROM epcis.business_transaction WHERE event_id = ANY(@EventIds);
