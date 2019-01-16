@@ -42,7 +42,6 @@ The file `documents\EPCIS_Samples.postman_collection.json` contains examples of 
   - GetQueryNames
   - Poll 
     - SimpleEventQuery _(still a few parameters missing)_
-	- SimpleMasterDataQuery _(WIP)_
 - Subscriptions:
   - Get all subscription names
   - Subscribe to an EPCIS request 

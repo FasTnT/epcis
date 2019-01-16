@@ -6,6 +6,6 @@ namespace FasTnT.Domain.Services.Handlers.Queries
 {
     public class GetVendorVersionHandler : IQueryHandler<GetVendorVersion>
     {
-        public async Task<IEpcisResponse> Handle(GetVendorVersion query) => await Task.FromResult(new GetVendorVersionResponse { Version = "1.0" });
+        public async Task<IEpcisResponse> Handle(GetVendorVersion query) => await Task.FromResult(new GetVendorVersionResponse { Version = "0.1.0" });
     }
 }
