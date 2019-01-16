@@ -3,19 +3,22 @@ using FasTnT.Domain.Persistence;
 using System.Threading.Tasks;
 using FasTnT.Model;
 
-namespace FasTnT.Domain.Services.Handlers
+namespace FasTnT.Domain.Services.Handlers.Capture
 {
     public class CaptureEventsHandler : IHandler<EpcisEventDocument>
     {
-        private readonly IEventStore _eventStore;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public CaptureEventsHandler(IEventStore eventStore) => _eventStore = eventStore;
+        public CaptureEventsHandler(IUnitOfWork unitOfWork) => _unitOfWork = unitOfWork;
 
         public async Task<IEpcisResponse> Handle(EpcisEventDocument request)
         {
-            await _eventStore.Store(request);
+            using (new CommitOnDispose(_unitOfWork))
+            {
+                await _unitOfWork.EventStore.Store(request);
 
-            return new CaptureSucceedResponse();
+                return new CaptureSucceedResponse();
+            }
         }
     }
 }

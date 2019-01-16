@@ -77,8 +77,8 @@ namespace FasTnT.Domain.BackgroundTasks
         {
             using (var scope = _services.CreateScope())
             {
-                var subscriptionManager = scope.ServiceProvider.GetService<ISubscriptionManager>();
-                var subscriptions = await subscriptionManager.GetAll(true);
+                var unitOfWork = scope.ServiceProvider.GetService<IUnitOfWork>();
+                var subscriptions = await unitOfWork.SubscriptionManager.GetAll(true);
 
                 subscriptions.ForEach(Register);
             }

@@ -1,6 +1,8 @@
 ﻿using FasTnT.Domain.BackgroundTasks;
 using FasTnT.Domain.Services.Dispatch;
 using FasTnT.Domain.Services.Handlers;
+using FasTnT.Domain.Services.Handlers.Queries;
+using FasTnT.Domain.Services.Handlers.Subscriptions;
 using FasTnT.Domain.Services.Subscriptions;
 using FasTnT.Model.Queries.Implementations;
 using Microsoft.Extensions.DependencyInjection;

@@ -1,0 +1,16 @@
+﻿using FasTnT.Domain.Services.Setup;
+
+namespace FasTnT.Domain.Persistence
+{
+    public interface IUnitOfWork
+    {
+        IEventStore EventStore { get; }
+        IEventRepository EventManager { get; }
+        ISubscriptionManager SubscriptionManager { get; }
+        IDatabaseMigrator DatabaseManager { get; }
+
+        void BeginTransaction();
+        void Commit();
+        void Rollback();
+    }
+}

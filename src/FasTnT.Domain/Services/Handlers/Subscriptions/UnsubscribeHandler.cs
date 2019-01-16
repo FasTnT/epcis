@@ -4,35 +4,37 @@ using FasTnT.Model.Exceptions;
 using FasTnT.Model.Queries;
 using FasTnT.Model.Responses;
 using FasTnT.Model.Subscriptions;
-using System.Linq;
 using System.Threading.Tasks;
 
-namespace FasTnT.Domain.Services.Handlers
+namespace FasTnT.Domain.Services.Handlers.Subscriptions
 {
     public class UnsubscribeHandler : ISubscriptionHandler<UnsubscribeRequest>
     {
-        private readonly ISubscriptionManager _subscriptionManager;
+        private readonly IUnitOfWork _unitOfWork;
         private readonly ISubscriptionBackgroundService _backgroundService;
 
-        public UnsubscribeHandler(ISubscriptionManager subscriptionManager, ISubscriptionBackgroundService backgroundService)
+        public UnsubscribeHandler(IUnitOfWork unitOfWork, ISubscriptionBackgroundService backgroundService)
         {
-            _subscriptionManager = subscriptionManager;
+            _unitOfWork = unitOfWork;
             _backgroundService = backgroundService;
         }
 
         public async Task<IEpcisResponse> Handle(UnsubscribeRequest query)
         {
-            var subscription = await _subscriptionManager.GetById(query.SubscriptionId);
-
-            if(subscription == null)
+            using (new CommitOnDispose(_unitOfWork))
             {
-                throw new EpcisException(ExceptionType.NoSuchNameException, $"Subscription with ID '{query.SubscriptionId}' does not exist.");
+                var subscription = await _unitOfWork.SubscriptionManager.GetById(query.SubscriptionId);
+
+                if (subscription == null)
+                {
+                    throw new EpcisException(ExceptionType.NoSuchNameException, $"Subscription with ID '{query.SubscriptionId}' does not exist.");
+                }
+
+                await _unitOfWork.SubscriptionManager.Delete(subscription.Id);
+                _backgroundService.Remove(subscription);
+
+                return new UnsubscribeResponse();
             }
-
-            await _subscriptionManager.Delete(subscription.Id);
-            _backgroundService.Remove(subscription);
-
-            return new UnsubscribeResponse();
         }
     }
 }

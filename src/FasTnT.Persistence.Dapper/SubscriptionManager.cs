@@ -11,9 +11,9 @@ namespace FasTnT.Persistence.Dapper
 {
     public class PgSqlSubscriptionManager : ISubscriptionManager
     {
-        private readonly IUnitOfWork _unitOfWork;
+        private readonly DapperUnitOfWork _unitOfWork;
 
-        public PgSqlSubscriptionManager(IUnitOfWork unitOfWork)
+        public PgSqlSubscriptionManager(DapperUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
         }
@@ -91,12 +91,9 @@ namespace FasTnT.Persistence.Dapper
                 parameter.Values.ForEach(value => values.Add(new { Id = Guid.NewGuid(), ParameterId = id, Value = value }));
             });
 
-            using (new CommitOnDisposeScope(_unitOfWork))
-            {
-                await _unitOfWork.Execute(SqlRequests.SubscriptionStore, GetPgSqlSubscription(subscription));
-                await _unitOfWork.Execute(SqlRequests.SubscriptionStoreParameter, parameters);
-                await _unitOfWork.Execute(SqlRequests.SubscriptionStoreParameterValue, values);
-            }
+            await _unitOfWork.Execute(SqlRequests.SubscriptionStore, GetPgSqlSubscription(subscription));
+            await _unitOfWork.Execute(SqlRequests.SubscriptionStoreParameter, parameters);
+            await _unitOfWork.Execute(SqlRequests.SubscriptionStoreParameterValue, values);
         }
 
         private object GetPgSqlSubscription(Subscription subscription)
