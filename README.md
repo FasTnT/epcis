@@ -1,5 +1,3 @@
-**This project is under development, and this README isn't finished. I'll try to update is as soon as possible..**
-
 [![Build Status](https://travis-ci.com/louisaxel-ambroise/fastnt.svg?branch=master)](https://travis-ci.com/louisaxel-ambroise/fastnt)
 
 # FasTnT
@@ -23,7 +21,7 @@ Steps:
 
 ### EPCIS endpoints:
 
-- Event capture: `/Services/1.2/Capture` 
+- Capture: `/Services/1.2/Capture` 
 - Queries : `/Services/1.2/Query`
 - Subscriptions : `/Services/1.2/Subscription`
 
@@ -35,12 +33,16 @@ The file `documents\EPCIS_Samples.postman_collection.json` contains examples of 
 
 ## Implemented Features
 
-- Event capture
+- Capture
+  - Events
+  - Master Data (CBV)
 - Queries:
   - GetVendorVersion
   - GetStandardVersion
   - GetQueryNames
-  - Poll SimpleEventQuery _(still a few parameters missing)_
+  - Poll 
+    - SimpleEventQuery _(still a few parameters missing)_
+	- SimpleMasterDataQuery _(WIP)_
 - Subscriptions:
   - Get all subscription names
   - Subscribe to an EPCIS request 
