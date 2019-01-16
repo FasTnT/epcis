@@ -28,6 +28,7 @@ namespace FasTnT.Persistence.Dapper
         public IEventStore EventStore { get; }
         public IEventRepository EventManager { get; }
         public ISubscriptionManager SubscriptionManager { get; }
+        public IMasterDataManager MasterDataManager { get; }
         public IDatabaseMigrator DatabaseManager { get; }
 
         public void BeginTransaction()

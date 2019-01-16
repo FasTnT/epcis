@@ -7,6 +7,7 @@ namespace FasTnT.Domain.Persistence
         IEventStore EventStore { get; }
         IEventRepository EventManager { get; }
         ISubscriptionManager SubscriptionManager { get; }
+        IMasterDataManager MasterDataManager { get; }
         IDatabaseMigrator DatabaseManager { get; }
 
         void BeginTransaction();

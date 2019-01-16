@@ -287,7 +287,7 @@ namespace FasTnT.Formatters.Xml.Responses
             extension.Add(element);
         }
 
-        public XElement Format(MasterData masterData)
+        public XElement Format(EpcisMasterData masterData)
         {
             throw new NotImplementedException();
         }

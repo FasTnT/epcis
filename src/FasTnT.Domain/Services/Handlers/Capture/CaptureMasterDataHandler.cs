@@ -2,7 +2,6 @@
 using FasTnT.Domain.Persistence;
 using System.Threading.Tasks;
 using FasTnT.Model;
-using System;
 
 namespace FasTnT.Domain.Services.Handlers.Capture
 {
@@ -12,9 +11,17 @@ namespace FasTnT.Domain.Services.Handlers.Capture
 
         public CaptureMasterDataHandler(IUnitOfWork unitOfWork) => _unitOfWork = unitOfWork;
 
-        public Task<IEpcisResponse> Handle(EpcisMasterdataDocument request)
+        public async Task<IEpcisResponse> Handle(EpcisMasterdataDocument request)
         {
-            throw new NotImplementedException();
+            using (new CommitOnDispose(_unitOfWork))
+            {
+                foreach (var masterData in request.MasterDataList)
+                {
+                    await _unitOfWork.MasterDataManager.Store(masterData);
+                }
+
+                return default(IEpcisResponse);
+            }
         }
     }
 }
