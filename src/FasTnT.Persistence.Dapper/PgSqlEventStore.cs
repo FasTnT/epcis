@@ -9,12 +9,12 @@ using StoreAction = System.Func<FasTnT.Model.EpcisEventDocument, FasTnT.Persiste
 
 namespace FasTnT.Persistence.Dapper
 {
-    public class EventStore : IEventStore
+    public class PgSqlEventStore : IEventStore
     {
         private readonly DapperUnitOfWork _unitOfWork;
         private readonly IEnumerable<StoreAction> _actions = new StoreAction[]{ StoreRequest, StoreEvents, StoreEpcs, StoreCustomFields, StoreSourceDestinations, StoreBusinessTransactions, StoreErrorDeclaration };
 
-        public EventStore(DapperUnitOfWork unitOfWork) => _unitOfWork = unitOfWork;
+        public PgSqlEventStore(DapperUnitOfWork unitOfWork) => _unitOfWork = unitOfWork;
 
         public async Task Store(EpcisEventDocument request)
         {

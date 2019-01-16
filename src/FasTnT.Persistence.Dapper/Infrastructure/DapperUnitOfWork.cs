@@ -19,10 +19,11 @@ namespace FasTnT.Persistence.Dapper
         public DapperUnitOfWork(IDbConnection connection)
         {
             _connection = connection ?? throw new ArgumentNullException(nameof(connection));
-            EventStore = new EventStore(this);
+            EventStore = new PgSqlEventStore(this);
             EventManager = new PgSqlEventRepository(this);
             SubscriptionManager = new PgSqlSubscriptionManager(this);
             DatabaseManager = new PgSqlDatabaseMigrator(this);
+            MasterDataManager = new PgSqlMasterDataManager(this);
         }
 
         public IEventStore EventStore { get; }

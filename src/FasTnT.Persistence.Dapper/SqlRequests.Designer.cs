@@ -88,6 +88,24 @@ namespace FasTnT.Persistence.Dapper {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to INSERT INTO cbv.attribute(masterdata_id, masterdata_type, id, value) VALUES(@ParentId, @ParentType, @Id, @Value) ON CONFLICT ON CONSTRAINT pk_cbv_masterdata_attribute DO UPDATE SET value = @Value;.
+        /// </summary>
+        internal static string MasterDataAttributeInsert {
+            get {
+                return ResourceManager.GetString("MasterDataAttributeInsert", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to INSERT INTO cbv.masterdata(id, type, created_on, last_update) VALUES(@Id, @Type, NOW(), NOW()) ON CONFLICT ON CONSTRAINT pk_cbv_masterdata DO UPDATE SET last_update = NOW();.
+        /// </summary>
+        internal static string MasterDataInsert {
+            get {
+                return ResourceManager.GetString("MasterDataInsert", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to SELECT event_id, epc as id, type, is_quantity, quantity, unit_of_measure FROM epcis.epc WHERE event_id = ANY(@EventIds);
         ///SELECT event_id, field_id as id, parent_id, namespace, name, type, text_value, numeric_value, date_value FROM epcis.custom_field WHERE event_id = ANY(@EventIds);
         ///SELECT event_id, transaction_type as type, transaction_id as id FROM epcis.business_transaction WHERE event_id = ANY(@EventIds);

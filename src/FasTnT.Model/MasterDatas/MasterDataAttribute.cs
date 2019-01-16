@@ -1,14 +1,11 @@
-﻿using System;
-
-namespace FasTnT.Model.MasterDatas
+﻿namespace FasTnT.Model.MasterDatas
 {
     public class MasterDataAttribute
     {
-        public Guid Id { get; set; } = Guid.NewGuid();
-        public Guid MasterDataId { get; set; }
-        public Guid? ParentId { get; set; }
+        public string ParentId { get; set; }
+        public string ParentType { get; set; }
         public string NameSpace { get; set; }
-        public string Name { get; set; }
+        public string Id { get; set; }
         public string Value { get; set; }
     }
 }

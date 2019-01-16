@@ -38,7 +38,12 @@ namespace FasTnT.Formatters.Xml
             }
             else if (document.Root.Name == XName.Get("EPCISMasterDataDocument", EpcisNamespaces.MasterData))
             {
-                return new EpcisMasterdataDocument();
+                return new EpcisMasterdataDocument
+                {
+                    CreationDate = DateTime.Parse(document.Root.Attribute("creationDate").Value, CultureInfo.InvariantCulture),
+                    SchemaVersion = document.Root.Attribute("schemaVersion").Value,
+                    MasterDataList = XmlMasterDataParser.ParseMasterDatas(document.Root.Element("EPCISBody").Element("VocabularyList").Elements("Vocabulary"))
+                };
             }
 
             throw new Exception($"Document with root '{document.Root.Name.ToString()}' is not expected here.");

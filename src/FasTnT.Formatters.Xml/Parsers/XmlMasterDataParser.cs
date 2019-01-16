@@ -8,17 +8,13 @@ namespace FasTnT.Formatters.Xml.Requests
 {
     public static class XmlMasterDataParser
     {
-        internal static IList<EpcisMasterData> ParseMasterDatas(IEnumerable<XElement> elements)
+        public static IList<EpcisMasterData> ParseMasterDatas(IEnumerable<XElement> elements)
         {
             var parsedElements = new List<EpcisMasterData>();
 
             foreach(var element in elements)
             {
-                if (element.Name.LocalName == "Vocabulary")
-                {
-                    parsedElements.AddRange(ParseVocabularyElements(element.Attribute("type").Value, element.Element("VocabularyElementList").Elements("VocabularyElement")));
-                }
-                else throw new Exception($"Element not expected: '{element.Name}'");
+                parsedElements.AddRange(ParseVocabularyElements(element.Attribute("type").Value, element.Element("VocabularyElementList").Elements("VocabularyElement")));
             }
 
             return parsedElements;
@@ -26,14 +22,24 @@ namespace FasTnT.Formatters.Xml.Requests
 
         private static IEnumerable<EpcisMasterData> ParseVocabularyElements(string type, IEnumerable<XElement> elements)
         {
-            return elements.Select(x => new EpcisMasterData
+            return elements.Select(e => 
             {
-                Name = x.Attribute("id").Value,
-                Attributes = x.Elements("attribute").Select(a => new MasterDataAttribute
-                {
-                    Name = a.Attribute("id").Value,
-                    Value = a.Value
-                }).ToList()
+                var masterData = new EpcisMasterData { Id = e.Attribute("id").Value, Type = type };
+                masterData.Attributes = ParseAttributes(e.Elements("attribute"), masterData).ToList();
+
+                return masterData;
+            });
+        }
+
+        private static IEnumerable<MasterDataAttribute> ParseAttributes(IEnumerable<XElement> elements, EpcisMasterData masterData)
+        {
+            if (elements.Any(x => x.HasElements)) throw new NotImplementedException("Inner CBV properties is not implemented yet.");
+            return elements.Select(a => new MasterDataAttribute
+            {
+                ParentId = masterData.Id,
+                ParentType = masterData.Type,
+                Id = a.Attribute("id").Value,
+                Value = a.Value
             });
         }
     }
