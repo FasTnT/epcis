@@ -36,11 +36,10 @@ namespace FasTnT.Formatters.Xml
                     EventList = XmlEventsParser.ParseEvents(document.Root.Element("EPCISBody").Element(XName.Get("QueryResults", EpcisNamespaces.Query)).Element("resultsBody").Element("EventList").Elements().ToArray())
                 };
             }
-            // TODO: handle masterdata document.
-            //else if (document.Root.Name == XName.Get("EPCISMasterDataDocument", EpcisNamespaces.Capture))
-            //{
-            //    return new EpcisMasterdataDocument();
-            //}
+            else if (document.Root.Name == XName.Get("EPCISMasterDataDocument", EpcisNamespaces.MasterData))
+            {
+                return new EpcisMasterdataDocument();
+            }
 
             throw new Exception($"Document with root '{document.Root.Name.ToString()}' is not expected here.");
         }
