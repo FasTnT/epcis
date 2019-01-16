@@ -5,6 +5,7 @@ using System.Reflection;
 using System.Xml;
 using System.Xml.Linq;
 using System.Xml.Schema;
+using FasTnT.Model.Exceptions;
 using MoreLinq;
 
 namespace FasTnT.Formatters.Xml.Validation
@@ -30,7 +31,7 @@ namespace FasTnT.Formatters.Xml.Validation
         public XDocument Load(Stream input)
         {
             var document = XDocument.Load(input);
-            document.Validate(_schema, (e, t) => { if (t.Exception != null) throw t.Exception; });
+            document.Validate(_schema, (e, t) => { if (t.Exception != null) throw new EpcisException(ExceptionType.ValidationException, t.Exception.Message); });
 
             return document;
         }
