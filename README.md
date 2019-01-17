@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.com/louisaxel-ambroise/fastnt.svg?branch=master)](https://travis-ci.com/louisaxel-ambroise/fastnt)
+[![Build Status](https://travis-ci.com/FasTnT/epcis.svg?branch=master)](https://travis-ci.com/FasTnT/epcis)
 
 # FasTnT EPCIS
 
