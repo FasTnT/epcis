@@ -44,7 +44,7 @@ namespace FasTnT.Domain.BackgroundTasks
                     triggeredSubscriptions.AddRange(subscriptions.Select(x => x.Key));
 
                     // Get all subscriptions scheduled by a trigger
-                    while (_triggeredValues.TryDequeue(out string trigger)) triggeredSubscriptions.AddRange(_triggeredSubscriptions[trigger]);
+                    while (_triggeredValues.TryDequeue(out string trigger)) triggeredSubscriptions.AddRange(_triggeredSubscriptions.TryGetValue(trigger, out IList<Subscription> sub) ? sub : new Subscription[0]);
 
                     await Execute(triggeredSubscriptions);
                 }

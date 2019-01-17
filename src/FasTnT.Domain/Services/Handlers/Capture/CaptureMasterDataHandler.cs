@@ -1,17 +1,16 @@
-﻿using FasTnT.Model.Responses;
-using FasTnT.Domain.Persistence;
+﻿using FasTnT.Domain.Persistence;
 using System.Threading.Tasks;
 using FasTnT.Model;
 
 namespace FasTnT.Domain.Services.Handlers.Capture
 {
-    public class CaptureMasterDataHandler : IHandler<EpcisMasterdataDocument>
+    public class CaptureMasterDataHandler
     {
         private readonly IUnitOfWork _unitOfWork;
 
         public CaptureMasterDataHandler(IUnitOfWork unitOfWork) => _unitOfWork = unitOfWork;
 
-        public async Task<IEpcisResponse> Handle(EpcisMasterdataDocument request)
+        public async Task Handle(EpcisMasterdataDocument request)
         {
             using (new CommitOnDispose(_unitOfWork))
             {
@@ -19,8 +18,6 @@ namespace FasTnT.Domain.Services.Handlers.Capture
                 {
                     await _unitOfWork.MasterDataManager.Store(masterData);
                 }
-
-                return default(IEpcisResponse);
             }
         }
     }

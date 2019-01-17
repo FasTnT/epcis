@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace FasTnT.Domain.Services.Handlers.Subscriptions
 {
-    public class UnsubscribeHandler : ISubscriptionHandler<UnsubscribeRequest>
+    public class UnsubscribeHandler
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly ISubscriptionBackgroundService _backgroundService;

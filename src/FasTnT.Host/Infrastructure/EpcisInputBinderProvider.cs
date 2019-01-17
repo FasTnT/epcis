@@ -11,7 +11,8 @@ namespace FasTnT.Host.Binders
     {
         public IDictionary<Type, IModelBinder> Mappings = new Dictionary<Type, IModelBinder>
         {
-            { typeof(Request),    new EpcisRequestModelBinder() },
+            { typeof(EpcisEventDocument),    new EpcisRequestModelBinder() },
+            { typeof(EpcisMasterdataDocument),    new EpcisRequestModelBinder() },
             { typeof(EpcisQuery), new EpcisQueryModelBinder()   },
             { typeof(SubscriptionRequest), new EpcisSubscriptionModelBinder()   }
         };

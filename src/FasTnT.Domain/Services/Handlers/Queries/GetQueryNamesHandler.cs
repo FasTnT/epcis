@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 
 namespace FasTnT.Domain.Services.Handlers.Queries
 {
-    public class GetQueryNamesHandler : IQueryHandler<GetQueryNames>
+    public class GetQueryNamesHandler
     {
         private readonly IEpcisQuery[] _queries;
 
         public GetQueryNamesHandler(IEpcisQuery[] queries) => _queries = queries;
 
-        public async Task<IEpcisResponse> Handle(GetQueryNames query) => await Task.FromResult(new GetQueryNamesResponse { QueryNames = _queries.Select(x => x.Name) });
+        public Task<GetQueryNamesResponse> Handle(GetQueryNames query) => Task.Run(() => new GetQueryNamesResponse { QueryNames = _queries.Select(x => x.Name) });
     }
 }

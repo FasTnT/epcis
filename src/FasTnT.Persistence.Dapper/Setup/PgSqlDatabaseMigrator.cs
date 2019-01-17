@@ -1,5 +1,4 @@
-﻿using FasTnT.Domain.Persistence;
-using FasTnT.Domain.Services.Setup;
+﻿using FasTnT.Domain.Services.Setup;
 using System;
 using System.IO;
 using System.IO.Compression;

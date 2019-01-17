@@ -9,7 +9,7 @@ using FasTnT.Domain.Persistence;
 
 namespace FasTnT.Domain.Services.Handlers.Queries
 {
-    public class PollQueryHandler : IQueryHandler<Poll>
+    public class PollQueryHandler
     {
         private readonly IEpcisQuery[] _queries;
         private readonly IUnitOfWork _unitOfWork;
@@ -20,7 +20,7 @@ namespace FasTnT.Domain.Services.Handlers.Queries
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<IEpcisResponse> Handle(Poll query)
+        public async Task<PollResponse> Handle(Poll query)
         {
             var knownHandler = _queries.SingleOrDefault(x => x.Name == query.QueryName);
 

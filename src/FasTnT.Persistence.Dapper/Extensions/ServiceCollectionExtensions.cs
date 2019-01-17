@@ -1,9 +1,7 @@
 ﻿using Dapper;
 using FasTnT.Domain.Persistence;
-using FasTnT.Domain.Services.Setup;
 using FasTnT.Model.Events.Enums;
 using FasTnT.Persistence.Dapper.DapperConfiguration;
-using FasTnT.Persistence.Dapper.Setup;
 using Microsoft.Extensions.DependencyInjection;
 using Npgsql;
 using System.Data;

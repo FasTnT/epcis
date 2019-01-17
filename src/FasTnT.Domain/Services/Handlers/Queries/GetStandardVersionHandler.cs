@@ -4,8 +4,8 @@ using System.Threading.Tasks;
 
 namespace FasTnT.Domain.Services.Handlers.Queries
 {
-    public class GetStandardVersionHandler : IQueryHandler<GetStandardVersion>
+    public class GetStandardVersionHandler
     {
-        public async Task<IEpcisResponse> Handle(GetStandardVersion query) => await Task.FromResult(new GetStandardVersionResponse { Version = "1.2" });
+        public Task<GetStandardVersionResponse> Handle(GetStandardVersion query) => Task.Run(() => new GetStandardVersionResponse { Version = "1.2" });
     }
 }

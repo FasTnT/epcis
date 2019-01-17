@@ -1,16 +1,14 @@
 ﻿using FasTnT.Domain.BackgroundTasks;
 using FasTnT.Domain.Persistence;
 using FasTnT.Model.Exceptions;
-using FasTnT.Model.Queries;
 using FasTnT.Model.Queries.Implementations;
-using FasTnT.Model.Responses;
 using FasTnT.Model.Subscriptions;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace FasTnT.Domain.Services.Handlers.Subscriptions
 {
-    public class SubscribeHandler : ISubscriptionHandler<Subscription>
+    public class SubscribeHandler
     {
         private readonly IEpcisQuery[] _queries;
         private readonly IUnitOfWork _unitOfWork;
@@ -23,7 +21,7 @@ namespace FasTnT.Domain.Services.Handlers.Subscriptions
             _backgroundService = backgroundService;
         }
 
-        public async Task<IEpcisResponse> Handle(Subscription request)
+        public async Task Handle(Subscription request)
         {
             EnsureQueryAllowsSubscription(request);
 
@@ -32,8 +30,6 @@ namespace FasTnT.Domain.Services.Handlers.Subscriptions
                 await EnsureSubscriptionDoesNotExist(request);
                 await _unitOfWork.SubscriptionManager.Store(request);
                 _backgroundService.Register(request);
-
-                return new SubscribeResponse();
             }
         }
 

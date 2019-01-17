@@ -6,23 +6,17 @@ using System.Threading.Tasks;
 
 namespace FasTnT.Domain.Services.Handlers.Queries
 {
-    public class GetSubscriptionIdsHandler : IQueryHandler<GetSubscriptionIds>
+    public class GetSubscriptionIdsHandler
     {
         private readonly IUnitOfWork _unitOfWork;
 
-        public GetSubscriptionIdsHandler(IUnitOfWork unitOfWork)
-        {
-            _unitOfWork = unitOfWork;
-        }
+        public GetSubscriptionIdsHandler(IUnitOfWork unitOfWork) => _unitOfWork = unitOfWork;
 
-        public async Task<IEpcisResponse> Handle(GetSubscriptionIds query)
+        public async Task<GetSubscriptionIdsResult> Handle(GetSubscriptionIds query)
         {
             var subscriptions = (await _unitOfWork.SubscriptionManager.GetAll()).Where(s => s.QueryName == query.QueryName);
 
-            return new GetSubscriptionIdsResult
-            {
-                SubscriptionIds = subscriptions.Select(x => x.SubscriptionId).ToArray()
-            };
+            return new GetSubscriptionIdsResult { SubscriptionIds = subscriptions.Select(x => x.SubscriptionId).ToArray() };
         }
     }
 }
