@@ -14,17 +14,15 @@ namespace FasTnT.Persistence.Dapper
     public class PgSqlEventRepository : IEventRepository
     {
         private readonly DapperUnitOfWork _unitOfWork;
-        private SqlBuilder _query;
+        private SqlBuilder _query = new SqlBuilder();
+        private QueryParameters _parameters = new QueryParameters();
         private Template _sqlTemplate;
-        private QueryParameters _parameters;
 
         private int _limit = 0;
 
         public PgSqlEventRepository(DapperUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
-            _query = new SqlBuilder();
-            _parameters = new QueryParameters();
             _sqlTemplate = _query.AddTemplate(SqlRequests.EventQuery);
         }
 

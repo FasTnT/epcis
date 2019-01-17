@@ -1,158 +1,86 @@
 ﻿using FasTnT.Model;
 using FasTnT.Model.Events.Enums;
-using FasTnT.Model.MasterDatas;
-using FasTnT.Model.Responses;
-using System;
+using MoreLinq;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Xml.Linq;
+using FormatAction = System.Action<FasTnT.Model.EpcisEvent, System.Xml.Linq.XContainer>;
 
 namespace FasTnT.Formatters.Xml.Responses
 {
-    // TODO: remove duplicate code for all events (times, eventID, ..) (LAA)
-    public class XmlEventFormatter
-    {
+    public static class XmlEventFormatter
+    { 
         const string DateTimeFormat = "yyyy-MM-ddTHH:mm:ss.fffZ";
-
-        public static XElement Format(IEntity entity) => Format((dynamic)entity);
+        static Dictionary<EventType, FormatAction[]> eventBuilder = new Dictionary<EventType, FormatAction[]>
+        {
+            { EventType.Object, new FormatAction[]{ EpcList, Action, BizStep, Disposition, ReadPoint, BizLocation, BizTransaction, Ilmd, SourceDest, AddEventExtension } },
+            { EventType.Quantity, new FormatAction[]{ EpcList, Action, BizStep, Disposition, ReadPoint, BizLocation, BizTransaction, SourceDest, AddEventExtension } },
+            { EventType.Aggregation, new FormatAction[]{ ParentId, ChildEpcs, Action, BizStep, Disposition, ReadPoint, BizLocation, BizTransaction, SourceDest, AddEventExtension } },
+            { EventType.Transaction, new FormatAction[]{ EpcList, Action, BizStep, Disposition, ReadPoint, BizLocation, BizTransaction, SourceDest, AddEventExtension } },
+            { EventType.Transformation, new FormatAction[]{ EpcList, TransformationId, BizStep, Disposition, ReadPoint, BizLocation, BizTransaction, SourceDest, AddEventExtension } },
+        };
 
         public static XElement Format(EpcisEvent epcisEvent)
         {
-            if(epcisEvent.Type == EventType.Object) return FormatObjectEvent(epcisEvent);
-            else if (epcisEvent.Type == EventType.Quantity) return FormatQuantityEvent(epcisEvent);
-            else if (epcisEvent.Type == EventType.Aggregation) return FormatAggregationEvent(epcisEvent);
-            else if (epcisEvent.Type == EventType.Transaction) return FormatTransactionEvent(epcisEvent);
-            else if (epcisEvent.Type == EventType.Transformation) return FormatTransformationEvent(epcisEvent);
-
-            throw new Exception($"Unknown event type: '{epcisEvent.Type?.DisplayName}");
-        }
-
-        private static XElement FormatObjectEvent(EpcisEvent @event)
-        {
-            var element = new XElement("ObjectEvent");
-
-            element.Add(new XElement("eventTime", @event.EventTime.ToString(DateTimeFormat, CultureInfo.InvariantCulture)));
-            element.Add(new XElement("recordTime", @event.CaptureTime.ToString(DateTimeFormat)));
-            element.Add(new XElement("eventTimeZoneOffset", @event.EventTimeZoneOffset.Representation));
-            if (!string.IsNullOrEmpty(@event.EventId)) element.Add(new XElement("eventID", @event.EventId));
-
-            AddEpcList(@event, element);
-
-            element.Add(new XElement("action", @event.Action.ToString().ToUpper(CultureInfo.InvariantCulture)));
-
-            if (!string.IsNullOrEmpty(@event.BusinessStep)) element.Add(new XElement("bizStep", @event.BusinessStep));
-            if (!string.IsNullOrEmpty(@event.Disposition)) element.Add(new XElement("disposition", @event.Disposition));
-
-            AddReadPoint(@event, element);
-            AddBusinessLocation(@event, element);
-            AddBusinessTransactions(@event, element);
-            AddIlmd(@event, element);
-            AddSourceDest(@event, element);
-            AddCustomFields(@event, element, FieldType.EventExtension);
+            var element = CreateEvent(epcisEvent);
+            eventBuilder[epcisEvent.Type].ForEach(a => a(epcisEvent, element));
 
             return element;
         }
 
-        private static XElement FormatQuantityEvent(EpcisEvent @event)
+        private static XElement CreateEvent(EpcisEvent @event)
         {
-            var element = new XElement("QuantityEvent");
+            var element = new XElement(@event.Type.DisplayName);
 
             element.Add(new XElement("eventTime", @event.EventTime.ToString(DateTimeFormat, CultureInfo.InvariantCulture)));
             element.Add(new XElement("recordTime", @event.CaptureTime.ToString(DateTimeFormat)));
             element.Add(new XElement("eventTimeZoneOffset", @event.EventTimeZoneOffset.Representation));
             if (!string.IsNullOrEmpty(@event.EventId)) element.Add(new XElement("eventID", @event.EventId));
-
-            AddEpcList(@event, element);
-
-            element.Add(new XElement("action", @event.Action.ToString().ToUpper(CultureInfo.InvariantCulture)));
-
-            if (!string.IsNullOrEmpty(@event.BusinessStep)) element.Add(new XElement("bizStep", @event.BusinessStep));
-            if (!string.IsNullOrEmpty(@event.Disposition)) element.Add(new XElement("disposition", @event.Disposition));
-
-            AddReadPoint(@event, element);
-            AddBusinessLocation(@event, element);
-            AddBusinessTransactions(@event, element);
-            AddIlmd(@event, element);
-            AddSourceDest(@event, element);
-            AddCustomFields(@event, element, FieldType.EventExtension);
 
             return element;
         }
 
-        private static XElement FormatAggregationEvent(EpcisEvent @event)
+        public static void EpcList(EpcisEvent evt, XContainer element)
         {
-            var element = new XElement("AggregationEvent");
+            var epcList = new XElement("epcList");
+            var epcQuantity = new XElement("epcQuantity");
+            foreach (var epc in evt.Epcs.Where(x => x.Type == EpcType.List)) epcList.Add(new XElement("epc", epc.Id));
+            foreach (var epc in evt.Epcs.Where(x => x.Type == EpcType.Quantity))
+            {
+                var qtyElement = new XElement("quantityElement");
+                qtyElement.Add(new XElement("epcClass", epc.Id));
+                if (epc.Quantity.HasValue) qtyElement.Add(new XElement("quantity", epc.Quantity));
+                if (!string.IsNullOrEmpty(epc.UnitOfMeasure)) qtyElement.Add(new XElement("uom", epc.UnitOfMeasure));
 
-            element.Add(new XElement("eventTime", @event.EventTime.ToString(DateTimeFormat, CultureInfo.InvariantCulture)));
-            element.Add(new XElement("recordTime", @event.CaptureTime.ToString(DateTimeFormat)));
-            element.Add(new XElement("eventTimeZoneOffset", @event.EventTimeZoneOffset.Representation));
-            if (!string.IsNullOrEmpty(@event.EventId)) element.Add(new XElement("eventID", @event.EventId));
+                epcQuantity.Add(qtyElement);
+            }
 
-            AddParentId(@event, element);
-            AddChildEpcs(@event, element);
-
-            element.Add(new XElement("action", @event.Action.ToString().ToUpper(CultureInfo.InvariantCulture)));
-
-            if (!string.IsNullOrEmpty(@event.BusinessStep)) element.Add(new XElement("bizStep", @event.BusinessStep));
-            if (!string.IsNullOrEmpty(@event.Disposition)) element.Add(new XElement("disposition", @event.Disposition));
-
-            AddReadPoint(@event, element);
-            AddBusinessLocation(@event, element);
-            AddBusinessTransactions(@event, element);
-            AddSourceDest(@event, element);
-            AddCustomFields(@event, element, FieldType.EventExtension);
-
-            return element;
+            if (epcList.HasElements) element.Add(epcList);
+            if (epcQuantity.HasElements) AddInExtension(element, epcQuantity);
         }
 
-        private static XElement FormatTransactionEvent(EpcisEvent @event)
+        public static void Action(EpcisEvent evt, XContainer container)
         {
-            var element = new XElement("TransactionEvent");
-
-            element.Add(new XElement("eventTime", @event.EventTime.ToString(DateTimeFormat, CultureInfo.InvariantCulture)));
-            element.Add(new XElement("recordTime", @event.CaptureTime.ToString(DateTimeFormat)));
-            element.Add(new XElement("eventTimeZoneOffset", @event.EventTimeZoneOffset.Representation));
-            if (!string.IsNullOrEmpty(@event.EventId)) element.Add(new XElement("eventID", @event.EventId));
-
-            AddEpcList(@event, element);
-
-            element.Add(new XElement("action", @event.Action.ToString().ToUpper(CultureInfo.InvariantCulture)));
-
-            if (!string.IsNullOrEmpty(@event.BusinessStep)) element.Add(new XElement("bizStep", @event.BusinessStep));
-            if (!string.IsNullOrEmpty(@event.Disposition)) element.Add(new XElement("disposition", @event.Disposition));
-
-            AddReadPoint(@event, element);
-            AddBusinessLocation(@event, element);
-            AddBusinessTransactions(@event, element);
-            AddSourceDest(@event, element);
-            AddCustomFields(@event, element, FieldType.EventExtension);
-
-            return element;
+            container.Add(new XElement("action", evt.Action.ToString().ToUpper(CultureInfo.InvariantCulture)));
         }
 
-        private static XElement FormatTransformationEvent(EpcisEvent @event)
+        public static void BizStep(EpcisEvent evt, XContainer container)
         {
-            var element = new XElement("TransformationEvent");
-
-            element.Add(new XElement("eventTime", @event.EventTime.ToString(DateTimeFormat, CultureInfo.InvariantCulture)));
-            element.Add(new XElement("recordTime", @event.CaptureTime.ToString(DateTimeFormat)));
-            element.Add(new XElement("eventTimeZoneOffset", @event.EventTimeZoneOffset.Representation));
-            if (!string.IsNullOrEmpty(@event.EventId)) element.Add(new XElement("eventID", @event.EventId));
-
-            AddEpcList(@event, element);
-
-            if (!string.IsNullOrEmpty(@event.TransformationId)) element.Add(new XElement("transformationID", @event.BusinessStep));
-            if (!string.IsNullOrEmpty(@event.BusinessStep)) element.Add(new XElement("bizStep", @event.BusinessStep));
-            if (!string.IsNullOrEmpty(@event.Disposition)) element.Add(new XElement("disposition", @event.Disposition));
-
-            AddReadPoint(@event, element);
-            AddBusinessLocation(@event, element);
-            AddCustomFields(@event, element, FieldType.EventExtension);
-
-            return new XElement("extension", element);
+            if(!string.IsNullOrEmpty(evt.BusinessStep)) container.Add(new XElement("bizStep", evt.BusinessStep));
         }
 
-        private static void AddSourceDest(EpcisEvent @event, XElement element)
+        public static void Disposition(EpcisEvent evt, XContainer container)
+        {
+            if (!string.IsNullOrEmpty(evt.Disposition)) container.Add(new XElement("disposition", evt.Disposition));
+        }
+
+        public static void TransformationId(EpcisEvent evt, XContainer container)
+        {
+            if (!string.IsNullOrEmpty(evt.TransformationId)) container.Add(new XElement("transformationID", evt.TransformationId));
+        }
+
+        private static void SourceDest(EpcisEvent @event, XContainer element)
         {
             if (@event.SourceDestinationList == null || !@event.SourceDestinationList.Any()) return;
 
@@ -171,7 +99,7 @@ namespace FasTnT.Formatters.Xml.Responses
             if (destination.HasElements) AddInExtension(element, destination);
         }
 
-        private static void AddBusinessTransactions(EpcisEvent @event, XContainer element)
+        private static void BizTransaction(EpcisEvent @event, XContainer element)
         {
             if (@event.BusinessTransactions == null || !@event.BusinessTransactions.Any()) return;
 
@@ -183,22 +111,27 @@ namespace FasTnT.Formatters.Xml.Responses
             element.Add(transactions);
         }
 
-        private static void AddIlmd(EpcisEvent @event, XContainer element)
+        private static void Ilmd(EpcisEvent @event, XContainer element)
         {
             var ilmdElement = new XElement("ilmd");
 
-            AddCustomFields(@event, ilmdElement, FieldType.Ilmd);
+            CustomFields(@event, ilmdElement, FieldType.Ilmd);
 
             if (ilmdElement.HasAttributes || ilmdElement.HasElements) AddInExtension(element, ilmdElement);
         }
 
-        private static void AddCustomFields(EpcisEvent @event, XContainer element, FieldType type)
+        public static void AddEventExtension(EpcisEvent @event, XContainer element)
+        {
+            CustomFields(@event, element, FieldType.EventExtension);
+        }
+
+        private static void CustomFields(EpcisEvent @event, XContainer element, FieldType type)
         {
             foreach (var rootField in @event.CustomFields.Where(x => x.Type == type && x.ParentId == null))
             {
                 var xmlElement = new XElement(XName.Get(rootField.Name, rootField.Namespace), rootField.TextValue);
 
-                AddInnerCustomFields(@event, xmlElement, type, rootField.Id);
+                InnerCustomFields(@event, xmlElement, type, rootField.Id);
                 foreach (var attribute in @event.CustomFields.Where(x => x.Type == FieldType.Attribute && x.ParentId == rootField.Id))
                 {
                     xmlElement.Add(new XAttribute(XName.Get(attribute.Name, attribute.Namespace), attribute.TextValue));
@@ -208,13 +141,13 @@ namespace FasTnT.Formatters.Xml.Responses
             }
         }
 
-        private static void AddInnerCustomFields(EpcisEvent @event, XContainer element, FieldType type, int parentId)
+        private static void InnerCustomFields(EpcisEvent @event, XContainer element, FieldType type, int parentId)
         {
             foreach (var field in @event.CustomFields.Where(x => x.Type == type && x.ParentId == parentId))
             {
                 var xmlElement = new XElement(XName.Get(field.Name, field.Namespace), field.TextValue);
 
-                AddInnerCustomFields(@event, xmlElement, type, field.Id);
+                InnerCustomFields(@event, xmlElement, type, field.Id);
                 foreach (var attribute in @event.CustomFields.Where(x => x.Type == FieldType.Attribute && x.ParentId == field.Id))
                 {
                     xmlElement.Add(new XAttribute(XName.Get(attribute.Name, attribute.Namespace), attribute.TextValue));
@@ -224,38 +157,19 @@ namespace FasTnT.Formatters.Xml.Responses
             }
         }
 
-        private static void AddEpcList(EpcisEvent @event, XContainer element)
-        {
-            var epcList = new XElement("epcList");
-            var epcQuantity = new XElement("epcQuantity");
-            foreach (var epc in @event.Epcs.Where(x => x.Type == EpcType.List)) epcList.Add(new XElement("epc", epc.Id));
-            foreach (var epc in @event.Epcs.Where(x => x.Type == EpcType.Quantity))
-            {
-                var qtyElement = new XElement("quantityElement");
-                qtyElement.Add(new XElement("epcClass", epc.Id));
-                if (epc.Quantity.HasValue) qtyElement.Add(new XElement("quantity", epc.Quantity));
-                if (!string.IsNullOrEmpty(epc.UnitOfMeasure)) qtyElement.Add(new XElement("uom", epc.UnitOfMeasure));
-
-                epcQuantity.Add(qtyElement);
-            }
-
-            if (epcList.HasElements) element.Add(epcList);
-            if (epcQuantity.HasElements) AddInExtension(element, epcQuantity);
-        }
-
-        private static void AddParentId(EpcisEvent @event, XElement element)
+        private static void ParentId(EpcisEvent @event, XContainer element)
         {
             var parentId = @event.Epcs.SingleOrDefault(e => e.Type == EpcType.ParentId);
             if (parentId != null) element.Add(new XElement("parentID", parentId.Id));
         }
 
-        private static void AddChildEpcs(EpcisEvent @event, XElement element)
+        private static void ChildEpcs(EpcisEvent @event, XContainer element)
         {
             var childEpcs = @event.Epcs.Where(e => e.Type == EpcType.ChildEpc);
             if (childEpcs.Any()) element.Add(new XElement("childEPCs", childEpcs.Select(x => new XElement("epc", x.Id))));
         }
 
-        private static void AddReadPoint(EpcisEvent @event, XContainer element)
+        private static void ReadPoint(EpcisEvent @event, XContainer element)
         {
             if (string.IsNullOrEmpty(@event.ReadPoint)) return;
 
@@ -267,7 +181,7 @@ namespace FasTnT.Formatters.Xml.Responses
             element.Add(readPoint);
         }
 
-        private static void AddBusinessLocation(EpcisEvent @event, XContainer element)
+        private static void BizLocation(EpcisEvent @event, XContainer element)
         {
             if (string.IsNullOrEmpty(@event.BusinessLocation)) return;
 
@@ -285,11 +199,6 @@ namespace FasTnT.Formatters.Xml.Responses
             }
 
             extension.Add(element);
-        }
-
-        public XElement Format(EpcisMasterData masterData)
-        {
-            throw new NotImplementedException();
         }
     }
 }
