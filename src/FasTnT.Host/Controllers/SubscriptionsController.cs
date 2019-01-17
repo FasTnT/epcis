@@ -1,11 +1,13 @@
 ﻿using FasTnT.Domain.Services.Dispatch;
 using FasTnT.Model.Responses;
 using FasTnT.Model.Subscriptions;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
 namespace FasTnT.Host.Controllers
 {
+    [Authorize]
     [Route("Services/1.2")]
     [Produces("application/xml")]
     public class SubscriptionsController : Controller

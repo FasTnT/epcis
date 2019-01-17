@@ -11,6 +11,8 @@ using FasTnT.Domain.Extensions;
 using FasTnT.Formatters;
 using FasTnT.Formatters.Xml;
 using FasTnT.Domain.BackgroundTasks;
+using Microsoft.AspNetCore.Authentication;
+using FasTnT.Host.Authentication;
 
 namespace FasTnT.Host
 {
@@ -22,6 +24,7 @@ namespace FasTnT.Host
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddAuthentication("BasicAuthentication").AddScheme<AuthenticationSchemeOptions, BasicAuthenticationHandler>("BasicAuthentication", null);
             services.AddEpcisDomain();
             services.AddEpcisPersistence(Configuration.GetConnectionString("FasTnT.Database"));
             services.AddScoped(typeof(IResponseFormatter), typeof(XmlResponseFormatter)); // Use XML as default formatter for subscriptions.
@@ -46,6 +49,7 @@ namespace FasTnT.Host
             SubscriptionBackgroundService.DelayTimeoutInMs = 5000;
 
             app.UseExceptionHandlingMiddleware()
+               .UseAuthentication()
                .UseMvc();
         }
     }
