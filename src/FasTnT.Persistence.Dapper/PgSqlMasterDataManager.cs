@@ -29,7 +29,7 @@ namespace FasTnT.Persistence.Dapper
         }
 
         public void Limit(int limit) => _limit = limit;
-        public void WhereAnyAttributeNamed(string[] values) => _query = _query.Where($"EXISTS(SELECT attr.id FROM cbv.attribute attr WHERE attr.parent_id = md.id AND attr.parent_type = md.type AND attr.id = ANY({_parameters.Add(values)}))");
+        public void WhereAnyAttributeNamed(string[] values) => _query = _query.Where($"EXISTS(SELECT attr.id FROM cbv.attribute attr WHERE attr.masterdata_id = md.id AND attr.masterdata_type = md.type AND attr.id = ANY({_parameters.Add(values)}))");
         public void WhereIdIn(string[] values) => _query = _query.Where($"md.id = ANY({_parameters.Add(values)})");
         public void WhereTypeIn(string[] values) => _query = _query.Where($"md.type = ANY({_parameters.Add(values)})");
 

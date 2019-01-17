@@ -1,7 +1,5 @@
 ﻿using FasTnT.Model;
 using FasTnT.Model.Events.Enums;
-using FasTnT.Model.MasterDatas;
-using FasTnT.Model.Responses;
 using System;
 using System.Globalization;
 using System.Linq;
@@ -10,11 +8,9 @@ using System.Xml.Linq;
 namespace FasTnT.Formatters.Xml.Responses
 {
     // TODO: remove duplicate code for all events (times, eventID, ..) (LAA)
-    public class XmlEventFormatter
-    {
+    public static class XmlEventFormatter
+    { 
         const string DateTimeFormat = "yyyy-MM-ddTHH:mm:ss.fffZ";
-
-        public static XElement Format(IEntity entity) => Format((dynamic)entity);
 
         public static XElement Format(EpcisEvent epcisEvent)
         {
@@ -285,12 +281,6 @@ namespace FasTnT.Formatters.Xml.Responses
             }
 
             extension.Add(element);
-        }
-
-        // TODO: handle better MasterData...
-        public static XElement Format(EpcisMasterData masterData)
-        {
-            return new XElement("VocabularyElement", new XAttribute("id", masterData.Id));
         }
     }
 }
