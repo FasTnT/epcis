@@ -12,7 +12,7 @@ namespace FasTnT.Host
     {
         public bool CanWriteResult(OutputFormatterCanWriteContext context)
         {
-            return context.ObjectType == typeof(IEpcisResponse);
+            return context.ObjectType.GetInterfaces().Any(i => i == typeof(IEpcisResponse));
         }
 
         public Task WriteAsync(OutputFormatterWriteContext context)

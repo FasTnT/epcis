@@ -1,10 +1,7 @@
 ﻿using Dapper;
 using FasTnT.Domain.Persistence;
-using FasTnT.Domain.Services.Handlers.PredefinedQueries;
-using FasTnT.Domain.Services.Setup;
 using FasTnT.Model.Events.Enums;
 using FasTnT.Persistence.Dapper.DapperConfiguration;
-using FasTnT.Persistence.Dapper.Setup;
 using Microsoft.Extensions.DependencyInjection;
 using Npgsql;
 using System.Data;
@@ -28,10 +25,6 @@ namespace FasTnT.Persistence.Dapper
 
             services.AddScoped(typeof(IDbConnection), ctx => new NpgsqlConnection(connectionString));
             services.AddScoped(typeof(IUnitOfWork), typeof(DapperUnitOfWork));
-            services.AddScoped(typeof(IEventStore), typeof(EventStore));
-            services.AddScoped(typeof(ISubscriptionManager), typeof(PgSqlSubscriptionManager));
-            services.AddScoped(typeof(IEventRepository), typeof(PgSqlEventRepository));
-            services.AddScoped(typeof(IDatabaseMigrator), typeof(PgSqlDatabaseMigrator));
         }
     }
 }

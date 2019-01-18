@@ -44,7 +44,7 @@ namespace FasTnT.Domain.BackgroundTasks
                     triggeredSubscriptions.AddRange(subscriptions.Select(x => x.Key));
 
                     // Get all subscriptions scheduled by a trigger
-                    while (_triggeredValues.TryDequeue(out string trigger)) triggeredSubscriptions.AddRange(_triggeredSubscriptions[trigger]);
+                    while (_triggeredValues.TryDequeue(out string trigger)) triggeredSubscriptions.AddRange(_triggeredSubscriptions.TryGetValue(trigger, out IList<Subscription> sub) ? sub : new Subscription[0]);
 
                     await Execute(triggeredSubscriptions);
                 }
@@ -77,8 +77,8 @@ namespace FasTnT.Domain.BackgroundTasks
         {
             using (var scope = _services.CreateScope())
             {
-                var subscriptionManager = scope.ServiceProvider.GetService<ISubscriptionManager>();
-                var subscriptions = await subscriptionManager.GetAll(true);
+                var unitOfWork = scope.ServiceProvider.GetService<IUnitOfWork>();
+                var subscriptions = await unitOfWork.SubscriptionManager.GetAll(true);
 
                 subscriptions.ForEach(Register);
             }

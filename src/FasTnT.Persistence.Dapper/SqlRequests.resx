@@ -184,4 +184,13 @@ SELECT event_id, type, source_dest_id as id, direction FROM epcis.source_destina
   <data name="SubscriptionListParameters" xml:space="preserve">
     <value>SELECT p.subscription_id, p.name, pv.value FROM subscriptions.parameter p INNER JOIN subscriptions.parameter_value pv ON pv.parameter_id = p.id;</value>
   </data>
+  <data name="MasterDataAttributeInsert" xml:space="preserve">
+    <value>INSERT INTO cbv.attribute(masterdata_id, masterdata_type, id, value) VALUES(@ParentId, @ParentType, @Id, @Value) ON CONFLICT ON CONSTRAINT pk_cbv_masterdata_attribute DO UPDATE SET value = @Value;</value>
+  </data>
+  <data name="MasterDataInsert" xml:space="preserve">
+    <value>INSERT INTO cbv.masterdata(id, type, created_on, last_update) VALUES(@Id, @Type, NOW(), NOW()) ON CONFLICT ON CONSTRAINT pk_cbv_masterdata DO UPDATE SET last_update = NOW();</value>
+  </data>
+  <data name="MasterDataQuery" xml:space="preserve">
+    <value>SELECT md.type, md.id FROM cbv.masterdata md /**where**/ ORDER BY md.last_update DESC LIMIT @limit</value>
+  </data>
 </root>

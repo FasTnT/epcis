@@ -1,10 +1,8 @@
-**This project is under development, and this README isn't finished. I'll try to update is as soon as possible..**
+[![Build Status](https://travis-ci.com/FasTnT/epcis.svg?branch=master)](https://travis-ci.com/FasTnT/epcis)
 
-[![Build Status](https://travis-ci.com/louisaxel-ambroise/fastnt.svg?branch=master)](https://travis-ci.com/louisaxel-ambroise/fastnt)
+# FasTnT EPCIS
 
-# FasTnT
-
-FasTnT is a simple, lightweight GS1 EPCIS 1.2 repository written in C# using .NET Core 2.2, backed with PostGreSQL database.
+FasTnT EPCIS is a simple, lightweight GS1 EPCIS 1.2 repository written in C# using .NET Core 2.2, backed with PostGreSQL database.
 
 ## Setup
 
@@ -15,15 +13,15 @@ Prerequisites:
 Steps:
 1. Download the source code, and create a new user/database in PostGreSQL for FasTnT;
 2. Update the `FasTnT.Database` connection string in the project `FasTnT.Host` with your PostGreSQL connection string;
-3. Set `FasTnT.Host` project as startup project, and start the solution
-4. Make the following request to create the SQL schemas and tables: `curl -X POST http://localhost:54805/Services/1.2/Migrate` (the port number may change depending on your configuration)
+3. Start the repository with the command `$ dotnet run -p src\FasTnT.Host\FasTnT.Host.csproj`
+4. Create the SQL schemas and tables with the request: `curl -X POST http://localhost:54805/Services/1.2/Migrate`
 5. That's it! You have a properly working EPCIS 1.2 repository.
 
 ## Endpoints
 
 ### EPCIS endpoints:
 
-- Event capture: `/Services/1.2/Capture` 
+- Capture: `/Services/1.2/Capture` 
 - Queries : `/Services/1.2/Query`
 - Subscriptions : `/Services/1.2/Subscription`
 
@@ -35,12 +33,15 @@ The file `documents\EPCIS_Samples.postman_collection.json` contains examples of 
 
 ## Implemented Features
 
-- Event capture
+- Capture
+  - Events
+  - Master Data (CBV)
 - Queries:
   - GetVendorVersion
   - GetStandardVersion
   - GetQueryNames
-  - Poll SimpleEventQuery _(still a few parameters missing)_
+  - Poll 
+    - SimpleEventQuery _(still a few parameters missing)_
 - Subscriptions:
   - Get all subscription names
   - Subscribe to an EPCIS request 
@@ -50,5 +51,7 @@ The file `documents\EPCIS_Samples.postman_collection.json` contains examples of 
 # License
 
 This project is licensed under the Apache 2.0 license - see the LICENSE file for details
+
+Contact: fastnt@pm.me
 
 _Last update: january 2019_
