@@ -6,22 +6,22 @@ using FasTnT.Model.Subscriptions;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace FasTnT.Domain.Services.Handlers.Subscriptions
+namespace FasTnT.Domain.Services
 {
-    public class SubscribeHandler
+    public class SubscriptionService
     {
         private readonly IEpcisQuery[] _queries;
         private readonly IUnitOfWork _unitOfWork;
         private readonly ISubscriptionBackgroundService _backgroundService;
 
-        public SubscribeHandler(IEpcisQuery[] queries, IUnitOfWork unitOfWork, ISubscriptionBackgroundService backgroundService)
+        public SubscriptionService(IEpcisQuery[] queries, IUnitOfWork unitOfWork, ISubscriptionBackgroundService backgroundService)
         {
             _queries = queries;
             _unitOfWork = unitOfWork;
             _backgroundService = backgroundService;
         }
 
-        public async Task Handle(Subscription request)
+        public async Task Process(Subscription request)
         {
             EnsureQueryAllowsSubscription(request);
 
@@ -33,23 +33,36 @@ namespace FasTnT.Domain.Services.Handlers.Subscriptions
             }
         }
 
+        public async Task Process(UnsubscribeRequest query)
+        {
+            using (new CommitOnDispose(_unitOfWork))
+            {
+                var subscription = await _unitOfWork.SubscriptionManager.GetById(query.SubscriptionId);
+
+                if (subscription == null)
+                    throw new EpcisException(ExceptionType.NoSuchNameException, $"Subscription with ID '{query.SubscriptionId}' does not exist.");
+
+                await _unitOfWork.SubscriptionManager.Delete(subscription.Id);
+                _backgroundService.Remove(subscription);
+            }
+        }
+
+        public Task Process(TriggerSubscriptionRequest query) => Task.Run(() => _backgroundService.Trigger(query.Trigger));
+
         private async Task EnsureSubscriptionDoesNotExist(Subscription request)
         {
             var subscription = await _unitOfWork.SubscriptionManager.GetById(request.SubscriptionId);
+
             if (subscription != null)
-            {
                 throw new EpcisException(ExceptionType.SubscribeNotPermittedException, $"Subscription '{request.QueryName}' already exist.");
-            }
         }
 
         private void EnsureQueryAllowsSubscription(Subscription subscribe)
         {
             var query = _queries.SingleOrDefault(x => x.Name == subscribe.QueryName);
 
-            if(query == null || !query.AllowSubscription)
-            {
+            if (query == null || !query.AllowSubscription)
                 throw new EpcisException(ExceptionType.SubscribeNotPermittedException, $"Query '{subscribe.QueryName}' does not exist or doesn't allow subscription");
-            }
         }
     }
 }
