@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Dapper;
 using FasTnT.Domain.Persistence;
+using FasTnT.Model;
 using FasTnT.Model.MasterDatas;
 using static Dapper.SqlBuilder;
 
@@ -22,10 +23,13 @@ namespace FasTnT.Persistence.Dapper
             _sqlTemplate = _query.AddTemplate(SqlRequests.MasterDataQuery);
         }
 
-        public async Task Store(EpcisMasterData masterData)
+        public async Task Store(EpcisMasterdataDocument masterDataDocument)
         {
-            await _unitOfWork.Execute(SqlRequests.MasterDataInsert, masterData);
-            foreach (var attribute in masterData.Attributes) await _unitOfWork.Execute(SqlRequests.MasterDataAttributeInsert, attribute);
+            foreach (var masterData in masterDataDocument.MasterDataList)
+            {
+                await _unitOfWork.Execute(SqlRequests.MasterDataInsert, masterData);
+                foreach (var attribute in masterData.Attributes) await _unitOfWork.Execute(SqlRequests.MasterDataAttributeInsert, attribute);
+            }
         }
 
         public void Limit(int limit) => _limit = limit;

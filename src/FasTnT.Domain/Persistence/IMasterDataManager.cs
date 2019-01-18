@@ -1,4 +1,5 @@
-﻿using FasTnT.Model.MasterDatas;
+﻿using FasTnT.Model;
+using FasTnT.Model.MasterDatas;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -6,7 +7,7 @@ namespace FasTnT.Domain.Persistence
 {
     public interface IMasterDataManager
     {
-        Task Store(EpcisMasterData masterData);
+        Task Store(EpcisMasterdataDocument masterData);
 
         void WhereTypeIn(string[] values);
         void WhereIdIn(string[] values);

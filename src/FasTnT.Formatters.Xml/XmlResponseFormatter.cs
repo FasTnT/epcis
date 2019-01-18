@@ -5,7 +5,6 @@ using System.Xml.Linq;
 using FasTnT.Formatters.Xml.Responses;
 using FasTnT.Model;
 using FasTnT.Model.MasterDatas;
-using FasTnT.Model.Queries;
 using FasTnT.Model.Responses;
 
 namespace FasTnT.Formatters.Xml
@@ -78,22 +77,6 @@ namespace FasTnT.Formatters.Xml
             formatted.Root.Add(
                 new XElement("EPCISBody", new XElement(XName.Get("GetSubscriptionIDsResult", EpcisNamespaces.Query), response.SubscriptionIds?.Select(x => new XElement("string", x))))
             );
-
-            return formatted;
-        }
-
-        public XDocument Format(SubscribeResponse response)
-        {
-            var formatted = CreateResponse("EPCISQueryDocument");
-            formatted.Root.Add(new XElement("EPCISBody", new XElement(XName.Get("SubscribeResult", EpcisNamespaces.Query))));
-
-            return formatted;
-        }
-
-        public XDocument Format(UnsubscribeResponse response)
-        {
-            var formatted = CreateResponse("EPCISQueryDocument");
-            formatted.Root.Add(new XElement("EPCISBody", new XElement(XName.Get("UnsubscribeResult", EpcisNamespaces.Query))));
 
             return formatted;
         }
