@@ -5,25 +5,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Old\**" />
-    <EmbeddedResource Remove="Old\**" />
-    <None Remove="Old\**" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Remove="Validation\XSDs\BasicTypes.xsd" />
-    <None Remove="Validation\XSDs\BusinessScope.xsd" />
-    <None Remove="Validation\XSDs\DocumentIdentification.xsd" />
-    <None Remove="Validation\XSDs\EPCglobal-epcis-1_2.xsd" />
-    <None Remove="Validation\XSDs\EPCglobal-epcis-masterdata-1_2.xsd" />
-    <None Remove="Validation\XSDs\EPCglobal-epcis-query-1_2.xsd" />
-    <None Remove="Validation\XSDs\EPCglobal.xsd" />
-    <None Remove="Validation\XSDs\Manifest.xsd" />
-    <None Remove="Validation\XSDs\Partner.xsd" />
-    <None Remove="Validation\XSDs\StandardBusinessDocumentHeader.xsd" />
-  </ItemGroup>
-
-  <ItemGroup>
     <EmbeddedResource Include="Validation\XSDs\BasicTypes.xsd" />
     <EmbeddedResource Include="Validation\XSDs\BusinessScope.xsd" />
     <EmbeddedResource Include="Validation\XSDs\DocumentIdentification.xsd" />
