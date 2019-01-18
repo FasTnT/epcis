@@ -1,6 +1,4 @@
 ﻿using FasTnT.Domain.Services;
-using FasTnT.Model.Queries;
-using FasTnT.Model.Responses;
 using FasTnT.Model.Subscriptions;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
@@ -20,5 +18,8 @@ namespace FasTnT.Host.Controllers
 
         [HttpPost("Unsubscribe", Name = "Unsubscribe from EPCIS repository")]
         public async Task Unsubscribe(UnsubscribeRequest request) => await _service.Process(request);
+
+        [HttpGet("Trigger/{name}", Name = "Trigger subscriptions")]
+        public async Task Trigger(string name) => await _service.Process(new TriggerSubscriptionRequest { Trigger = name });
     }
 }
