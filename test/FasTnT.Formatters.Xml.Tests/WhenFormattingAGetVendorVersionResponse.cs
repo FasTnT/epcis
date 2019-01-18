@@ -19,10 +19,7 @@ namespace FasTnT.Formatters.Xml.Tests
             GetVendorVersionResponse = new GetVendorVersionResponse { Version = "0.5" };
         }
 
-        public override void Act()
-        {
-            Result = Formatter.Format(GetVendorVersionResponse);
-        }
+        public override void Act() => Result = Formatter.Format(GetVendorVersionResponse);
 
         [Assert]
         public void TheXMLDocumentShouldNotBeNull()
@@ -52,7 +49,7 @@ namespace FasTnT.Formatters.Xml.Tests
         [Assert]
         public void TheXMLDocumentShouldContainAGetVendorVersionResultElement()
         {
-            Assert.AreEqual("0.5", Result.Root.Element("EPCISBody").Element("GetVendorVersionResult").Value);
+            Assert.AreEqual("0.5", Result.Root.Element("EPCISBody").Element(XName.Get("GetVendorVersionResult", "urn:epcglobal:epcis-query:xsd:1")).Value);
         }
     }
 }
