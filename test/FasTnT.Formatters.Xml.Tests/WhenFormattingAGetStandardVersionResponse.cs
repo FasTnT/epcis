@@ -7,19 +7,19 @@ using System.Xml.Linq;
 namespace FasTnT.Formatters.Xml.Tests
 {
     [TestClass]
-    public class WhenFormattingAGetStandardVersionResponse : BaseUnitTest
+    public class WhenFormattingAGetVendorVersionResponse : BaseUnitTest
     {
         public XmlResponseFormatter Formatter { get; set; }
-        public GetStandardVersionResponse GetStandardVersion { get; set; }
+        public GetVendorVersionResponse GetVendorVersionResponse { get; set; }
         public XDocument Result { get; set; }
 
         public override void Arrange()
         {
             Formatter = new XmlResponseFormatter();
-            GetStandardVersion = new GetStandardVersionResponse { Version = "1.2" };
+            GetVendorVersionResponse = new GetVendorVersionResponse { Version = "0.5" };
         }
 
-        public override void Act() => Result = Formatter.Format(GetStandardVersion);
+        public override void Act() => Result = Formatter.Format(GetVendorVersionResponse);
 
         [Assert]
         public void TheXMLDocumentShouldNotBeNull()
@@ -49,7 +49,7 @@ namespace FasTnT.Formatters.Xml.Tests
         [Assert]
         public void TheXMLDocumentShouldContainAGetVendorVersionResultElement()
         {
-            Assert.AreEqual("1.2", Result.Root.Element("EPCISBody").Element(XName.Get("GetStandardVersionResult", "urn:epcglobal:epcis-query:xsd:1")).Value);
+            Assert.AreEqual("0.5", Result.Root.Element("EPCISBody").Element(XName.Get("GetVendorVersionResult", "urn:epcglobal:epcis-query:xsd:1")).Value);
         }
     }
 }
