@@ -34,7 +34,6 @@ namespace FasTnT.Host
                 opt.ModelBinderProviders.Insert(0, new EpcisInputBinderProvider());
             });
 
-            services.AddScoped<LimitFilter>();
             services.AddSingleton<DevelopmentOnlyFilter>();
             services.AddSingleton<Microsoft.Extensions.Hosting.IHostedService, BackgroundService>();
         }

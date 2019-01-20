@@ -61,7 +61,7 @@ namespace FasTnT.Persistence.Dapper {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to H4sIAAAAAAAA/81aXU/jOBR9pr/CQrOiXRUEzKy0GjQPIXVLlpB08gHLUxQaF6JJkxAnzLK/fm8ct803oc2I5aHQ+Pr6+pxz7WuH42OE56KkI128wjfCQNSwYGD+DUlTpKgGwn9LuqEjEi5cerE2MYRLGddZnETkOSE0HgwHCH5cByUJfKRmiinLY/bUCRbJivixFbsrgtIPGturEP1046cgidkT9G/gk1K/iCyCyOneC03wVDBlgzWlLcMj0xCPvn6NyT/xGPnBz+FolLlOKIksHm32hCYPdBG5YewGftqyeLIjexGTCL3Y0avrPw7Pzv8cIVGV5RSR8NFa2LHtBY8nhw5Z2okXH2aORFXRDU2QFAMdzq8tDtAhmmvSjaDdo2t8j4auMxqMBneScYWGqjTR0Tc0FWQdjzpATl4Ylq8h2aJOV7bnuX5cQtC3AaPqTM7/aJ9IyYtLLYeEwIYdEwc9BIFHbL+K+tL2KKnFYBtx3zC06o5DbzW1vk9dWS8A [rest of string was truncated]&quot;;.
+        ///   Looks up a localized string similar to H4sIAAAAAAAEAM1aW3ObRhR+rmf8H3Y87UjqyB5d7ChqJg8ILQqNDCoXp35iMKxsJggwF6fur+/hJgECgSU8qSeRLTh79uz3fWf37MLlJZJFLIhIpL/gW+r8jBYwJeHkK2IZxPESwn+zoiSiwCOu92lrI1GzJS4zuQo/z8+652cIfgwdBQF8hFacvFz248uhjaVuCNKeVFfVfOKiF9V9NazH7s2gl7X+xVE974ft6iWmw8FonDd2yaPhgQnRFdtCvrEhnq9uHPTD8J/swI+uoH9ti2xboTlmKHkpRbfCO92OLNGdP/7wyT9+H1n2j26vl0RN85woCRTLSehi9VUJB3GBVgJ7Swn36Cu+R11DL7ENniNTZTtomWP/kjHqphd652fw7xsrfUFdnp2L6DNiqKWIewD3+dnlJcIrmm3GEnE0o4alyOTKJc8BgFNHlG5rwYZYvhIh1wTQpKFLNCCtebO38BChmQScXPKCB09zDcc3bCu8VSKW0ccesLJchrg4 [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string CreateDatabaseZipped {
             get {
@@ -276,6 +276,15 @@ namespace FasTnT.Persistence.Dapper {
         internal static string SubscriptionStoreParameterValue {
             get {
                 return ResourceManager.GetString("SubscriptionStoreParameterValue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to SELECT id, username, password FROM users.user WHERE username = @Username;.
+        /// </summary>
+        internal static string UserLoadByName {
+            get {
+                return ResourceManager.GetString("UserLoadByName", resourceCulture);
             }
         }
     }
