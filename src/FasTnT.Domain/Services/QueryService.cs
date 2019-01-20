@@ -21,8 +21,8 @@ namespace FasTnT.Domain.Services
         }
 
         public Task<GetQueryNamesResponse> Process(GetQueryNames query) => Task.Run(() => new GetQueryNamesResponse { QueryNames = _queries.Select(x => x.Name) });
-        public Task<GetStandardVersionResponse> Process(GetStandardVersion query) => Task.Run(() => new GetStandardVersionResponse { Version = "1.2" });
-        public Task<GetVendorVersionResponse> Process(GetVendorVersion query) => Task.Run(() => new GetVendorVersionResponse { Version = "0.1.0" });
+        public Task<GetStandardVersionResponse> Process(GetStandardVersion query) => Task.Run(() => new GetStandardVersionResponse { Version = Constants.StandardVersion });
+        public Task<GetVendorVersionResponse> Process(GetVendorVersion query) => Task.Run(() => new GetVendorVersionResponse { Version = Constants.ProductVersion });
         public async Task<GetSubscriptionIdsResult> Process(GetSubscriptionIds query) => new GetSubscriptionIdsResult { SubscriptionIds = (await _unitOfWork.SubscriptionManager.GetAll()).Where(s => s.QueryName == query.QueryName).Select(x => x.SubscriptionId) };
 
         public async Task<PollResponse> Process(Poll query)

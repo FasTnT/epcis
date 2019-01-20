@@ -1,4 +1,5 @@
-﻿using FasTnT.Model.Queries;
+﻿using FasTnT.Domain;
+using FasTnT.Model.Queries;
 using FasTnT.Model.Responses;
 using FasTnT.UnitTest.Common;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -8,7 +9,7 @@ namespace FasTnT.UnitTest.Domain.QueryServiceTests
     [TestClass]
     public class WhenProcessingAGetVendorVersionRequest : BaseQueryServiceUnitTest
     {
-        const string ExpectedVersion = "0.1.0";
+        static string ExpectedVersion = Constants.ProductVersion;
 
         public GetVendorVersion Request { get; set; }
         public GetVendorVersionResponse Response { get; set; }
