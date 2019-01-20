@@ -6,3 +6,4 @@ solution: FasTnT.sln
 dotnet: 2.2
 script:
  - dotnet restore
+ - dotnet test test/FasTnT.UnitTest/FasTnT.UnitTest.csproj
