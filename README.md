@@ -14,12 +14,14 @@ Steps:
 1. Download the source code, and create a new user/database in PostGreSQL for FasTnT;
 2. Update the `FasTnT.Database` connection string in the project `FasTnT.Host` with your PostGreSQL connection string;
 3. Start the repository with the command `$ dotnet run -p src\FasTnT.Host\FasTnT.Host.csproj`
-4. Create the SQL schemas and tables with the request: `curl -X POST http://localhost:54805/Services/1.2/Migrate`
+4. Create the SQL schemas and tables: `curl -X POST http://localhost:54805/Services/1.2/Database/Migrate`
 5. That's it! You have a properly working EPCIS 1.2 repository.
 
-## Endpoints
+## HTTP Endpoints
 
 ### EPCIS endpoints:
+
+The API is secured using HTTP Basic authentication. The default username:password value is `admin:P@ssw0rd`
 
 - Capture: `/Services/1.2/Capture` 
 - Queries : `/Services/1.2/Query`
@@ -27,7 +29,9 @@ Steps:
 
 ### Others endpoints:
 
-- Database migration: `/Services/1.2/Migrate`
+- Database migration: `/Services/1.2/Database`
+
+The database migration endpoint is only available when the EPCIS server is in Development configuration.
 
 The file `documents\EPCIS_Samples.postman_collection.json` contains examples of HTTP requests that you can perform on FasTnT (import and run it in [PostMan](https://www.getpostman.com/))
 
@@ -40,10 +44,11 @@ The file `documents\EPCIS_Samples.postman_collection.json` contains examples of 
   - GetVendorVersion
   - GetStandardVersion
   - GetQueryNames
+  - GetSubsciptionIDs
   - Poll 
     - SimpleEventQuery _(still a few parameters missing)_
+    - SimpleMasterDataQuery _(still a few parameters missing)_
 - Subscriptions:
-  - Get all subscription names
   - Subscribe to an EPCIS request 
   - Unsubscribe from EPCIS repository
   - Trigger subscriptions that register to specific trigger name
