@@ -1,4 +1,5 @@
 ﻿using FasTnT.Domain.BackgroundTasks;
+using FasTnT.Domain.Persistence;
 using FasTnT.Domain.Services;
 using FasTnT.Domain.Services.Subscriptions;
 using FasTnT.Model.Queries.Implementations;
@@ -19,6 +20,7 @@ namespace FasTnT.Domain.Extensions
             services.AddScoped(typeof(CaptureService));
             services.AddScoped(typeof(QueryService));
             services.AddScoped(typeof(SubscriptionService));
+            services.AddScoped(typeof(UserService));
             services.AddScoped(typeof(ISubscriptionResultSender), typeof(HttpSubscriptionResultSender));
             services.AddScoped(typeof(SubscriptionRunner));
             services.AddSingleton<ISubscriptionBackgroundService, SubscriptionBackgroundService>();

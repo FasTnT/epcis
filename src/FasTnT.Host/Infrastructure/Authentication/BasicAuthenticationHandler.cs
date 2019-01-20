@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authentication;
+﻿using FasTnT.Domain.Persistence;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System;
@@ -8,12 +9,17 @@ using System.Text;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 
-namespace FasTnT.Host.Authentication
+namespace FasTnT.Host.Infrastructure.Authentication
 {
-    public class BasicAuthenticationHandler : AuthenticationHandler<AuthenticationSchemeOptions>
+    public class BasicAuthHandler : AuthenticationHandler<AuthenticationSchemeOptions>
     {
-        public BasicAuthenticationHandler(IOptionsMonitor<AuthenticationSchemeOptions> options, ILoggerFactory logger, UrlEncoder encoder, ISystemClock clock) : base(options, logger, encoder, clock)
+        const string Realm = "FasTnT";
+        private readonly UserService _userService;
+
+        public BasicAuthHandler(IOptionsMonitor<AuthenticationSchemeOptions> options, ILoggerFactory logger, UrlEncoder encoder, ISystemClock clock, UserService userService)
+            : base(options, logger, encoder, clock)
         {
+            _userService = userService;
         }
 
         protected override async Task<AuthenticateResult> HandleAuthenticateAsync()
@@ -22,7 +28,6 @@ namespace FasTnT.Host.Authentication
             {
                 if (!Request.Headers.ContainsKey("Authorization")) return AuthenticateResult.Fail("Missing Authorization Header");
 
-                var user = default(string);
                 try
                 {
                     var authHeader = AuthenticationHeaderValue.Parse(Request.Headers["Authorization"]);
@@ -31,19 +36,16 @@ namespace FasTnT.Host.Authentication
                     var username = credentials[0];
                     var password = credentials[1];
 
-                    if (username == "Admin" && password == "P@ssw0rd")
-                    {
-                        user = username;
-                    }
+                    _userService.Authenticate(username, password);
                 }
                 catch
                 {
-                    return AuthenticateResult.Fail("Invalid Authorization Header");
+                    return AuthenticateResult.Fail("Invalid Authorization Header", new AuthenticationProperties { });
                 }
 
-                if (user == null) return AuthenticateResult.Fail("Invalid Username or Password");
+                if (_userService.Current == null) return AuthenticateResult.Fail("Invalid Username or Password");
 
-                var claims = new[] { new Claim(ClaimTypes.NameIdentifier, user), new Claim(ClaimTypes.Name, user) };
+                var claims = new[] { new Claim(ClaimTypes.NameIdentifier, _userService.Current.UserName) };
                 var identity = new ClaimsIdentity(claims, Scheme.Name);
                 var principal = new ClaimsPrincipal(identity);
                 var ticket = new AuthenticationTicket(principal, Scheme.Name);
@@ -51,5 +53,11 @@ namespace FasTnT.Host.Authentication
                 return AuthenticateResult.Success(ticket);
             });
         }
+
+        protected override async Task HandleChallengeAsync(AuthenticationProperties properties)
+        {
+            Response.Headers["WWW-Authenticate"] = $"Basic realm=\"{Realm}\", charset=\"UTF-8\"";
+            await base.HandleChallengeAsync(properties);
+    }
     }
 }
