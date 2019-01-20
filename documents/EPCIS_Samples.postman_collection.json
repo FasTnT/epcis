@@ -130,7 +130,7 @@
 							"raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<epcisq:EPCISQueryDocument xmlns:epcisq=\"urn:epcglobal:epcis-query:xsd:1\" schemaVersion=\"1\" creationDate=\"2018-02-07T11:52:42.685Z\">\n  <EPCISBody>\n    <epcisq:GetSubscriptionIDs>\n    \t<queryName>SimpleEventQuery</queryName>\n    </epcisq:GetSubscriptionIDs>\n  </EPCISBody>\n</epcisq:EPCISQueryDocument>\n"
 						},
 						"url": {
-							"raw": "{{BaseUrl}}/Services/1.2/Query/",
+							"raw": "{{BaseUrl}}/Services/1.2/Query/GetSubscriptionIDs",
 							"host": [
 								"{{BaseUrl}}"
 							],
@@ -138,7 +138,7 @@
 								"Services",
 								"1.2",
 								"Query",
-								""
+								"GetSubscriptionIDs"
 							]
 						}
 					},
@@ -207,7 +207,7 @@
 							"raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<epcisq:EPCISQueryDocument xmlns:epcisq=\"urn:epcglobal:epcis-query:xsd:1\" schemaVersion=\"1\" creationDate=\"2018-02-07T11:52:42Z\">\r\n  <EPCISBody>\r\n    <epcisq:Subscribe>\r\n      <queryName>SimpleEventQuery</queryName>\r\n      <params>\r\n        <param>\r\n          <name>eventType</name>\r\n          <value>\r\n            <value>AggregationEvent</value>\r\n          </value>\r\n        </param>\r\n      </params>\r\n      <dest>https://fastnt-dev-api.azurewebsites.net/Services/1.2/Capture</dest>\r\n      <controls>\r\n      \t<schedule>\r\n          <second>0</second>\r\n        </schedule>\r\n        <reportIfEmpty>false</reportIfEmpty>\r\n      </controls>\r\n      <subscriptionID>AllObjectEvents</subscriptionID>\r\n    </epcisq:Subscribe>\r\n  </EPCISBody>\r\n</epcisq:EPCISQueryDocument>"
 						},
 						"url": {
-							"raw": "{{BaseUrl}}/Services/1.2/Subscription/",
+							"raw": "{{BaseUrl}}/Services/1.2/Subscription/Subscribe",
 							"host": [
 								"{{BaseUrl}}"
 							],
@@ -215,7 +215,7 @@
 								"Services",
 								"1.2",
 								"Subscription",
-								""
+								"Subscribe"
 							]
 						}
 					},
@@ -284,7 +284,7 @@
 							"raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<epcisq:EPCISQueryDocument xmlns:epcisq=\"urn:epcglobal:epcis-query:xsd:1\" schemaVersion=\"1\" creationDate=\"2018-02-07T11:52:42Z\">\r\n  <EPCISBody>\r\n    <epcisq:Unsubscribe>\r\n      <subscriptionID>AllObjectEvents</subscriptionID>\r\n    </epcisq:Unsubscribe>\r\n  </EPCISBody>\r\n</epcisq:EPCISQueryDocument>"
 						},
 						"url": {
-							"raw": "{{BaseUrl}}/Services/1.2/Subscription/",
+							"raw": "{{BaseUrl}}/Services/1.2/Subscription/Unsubscribe",
 							"host": [
 								"{{BaseUrl}}"
 							],
@@ -292,7 +292,7 @@
 								"Services",
 								"1.2",
 								"Subscription",
-								""
+								"Unsubscribe"
 							]
 						}
 					},
@@ -401,14 +401,15 @@
 											"raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<epcisq:EPCISQueryDocument xmlns:epcisq=\"urn:epcglobal:epcis-query:xsd:1\" schemaVersion=\"1\" creationDate=\"2018-02-07T11:52:42.685Z\">\r\n  <EPCISBody>\r\n    <epcisq:Poll>\r\n    \t<queryName>SimpleEventQuery</queryName>\r\n    \t<params>\r\n    \t\t<param>\r\n    \t\t\t<name>eventType</name>\r\n    \t\t\t<value>\r\n    \t\t\t\t<value>QuantityEvent</value>\r\n    \t\t\t\t<value>AggregationEvent</value>\r\n    \t\t\t</value>\r\n    \t\t</param>\r\n    \t</params>\r\n    </epcisq:Poll>\r\n  </EPCISBody>\r\n</epcisq:EPCISQueryDocument>\r\n"
 										},
 										"url": {
-											"raw": "{{BaseUrl}}/Services/1.2/Query",
+											"raw": "{{BaseUrl}}/Services/1.2/Query/Poll",
 											"host": [
 												"{{BaseUrl}}"
 											],
 											"path": [
 												"Services",
 												"1.2",
-												"Query"
+												"Query",
+												"Poll"
 											]
 										}
 									},
@@ -460,14 +461,15 @@
 											"raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<epcisq:EPCISQueryDocument xmlns:epcisq=\"urn:epcglobal:epcis-query:xsd:1\" schemaVersion=\"1\" creationDate=\"2018-02-07T11:52:42.685Z\">\r\n  <EPCISBody>\r\n    <epcisq:Poll>\r\n    \t<queryName>SimpleEventQuery</queryName>\r\n    \t<params>\r\n    \t\t<param>\r\n    \t\t\t<name>LT_eventTime</name>\r\n    \t\t\t<value>2018-04-01T10:21:10.521Z</value>\r\n    \t\t</param>\r\n    \t</params>\r\n    </epcisq:Poll>\r\n  </EPCISBody>\r\n</epcisq:EPCISQueryDocument>\r\n"
 										},
 										"url": {
-											"raw": "{{BaseUrl}}/Services/1.2/Query",
+											"raw": "{{BaseUrl}}/Services/1.2/Query/Poll",
 											"host": [
 												"{{BaseUrl}}"
 											],
 											"path": [
 												"Services",
 												"1.2",
-												"Query"
+												"Query",
+												"Poll"
 											]
 										}
 									},
@@ -489,14 +491,15 @@
 											"raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<epcisq:EPCISQueryDocument xmlns:epcisq=\"urn:epcglobal:epcis-query:xsd:1\" schemaVersion=\"1\" creationDate=\"2018-02-07T11:52:42.685Z\">\r\n  <EPCISBody>\r\n    <epcisq:Poll>\r\n    \t<queryName>SimpleEventQuery</queryName>\r\n    \t<params>\r\n    \t\t<param>\r\n    \t\t\t<name>GE_recordTime</name>\r\n    \t\t\t<value>2019-01-08T10:21:10.521Z</value>\r\n    \t\t</param>\r\n    \t</params>\r\n    </epcisq:Poll>\r\n  </EPCISBody>\r\n</epcisq:EPCISQueryDocument>\r\n"
 										},
 										"url": {
-											"raw": "{{BaseUrl}}/Services/1.2/Query",
+											"raw": "{{BaseUrl}}/Services/1.2/Query/Poll",
 											"host": [
 												"{{BaseUrl}}"
 											],
 											"path": [
 												"Services",
 												"1.2",
-												"Query"
+												"Query",
+												"Poll"
 											]
 										}
 									},
@@ -518,14 +521,15 @@
 											"raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<epcisq:EPCISQueryDocument xmlns:epcisq=\"urn:epcglobal:epcis-query:xsd:1\" schemaVersion=\"1\" creationDate=\"2018-02-07T11:52:42.685Z\">\r\n  <EPCISBody>\r\n    <epcisq:Poll>\r\n    \t<queryName>SimpleEventQuery</queryName>\r\n    \t<params>\r\n    \t\t<param>\r\n    \t\t\t<name>LT_recordTime</name>\r\n    \t\t\t<value>2019-01-08T10:21:10.521Z</value>\r\n    \t\t</param>\r\n    \t</params>\r\n    </epcisq:Poll>\r\n  </EPCISBody>\r\n</epcisq:EPCISQueryDocument>\r\n"
 										},
 										"url": {
-											"raw": "{{BaseUrl}}/Services/1.2/Query",
+											"raw": "{{BaseUrl}}/Services/1.2/Query/Poll",
 											"host": [
 												"{{BaseUrl}}"
 											],
 											"path": [
 												"Services",
 												"1.2",
-												"Query"
+												"Query",
+												"Poll"
 											]
 										}
 									},
@@ -547,14 +551,15 @@
 											"raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<epcisq:EPCISQueryDocument xmlns:epcisq=\"urn:epcglobal:epcis-query:xsd:1\" schemaVersion=\"1\" creationDate=\"2018-02-07T11:52:42.685Z\">\r\n  <EPCISBody>\r\n    <epcisq:Poll>\r\n    \t<queryName>SimpleEventQuery</queryName>\r\n    \t<params>\r\n    \t\t<param>\r\n    \t\t\t<name>EQ_action</name>\r\n    \t\t\t<value>\r\n    \t\t\t\t<value>ADD</value>\r\n    \t\t\t\t<value>DELETE</value>\r\n    \t\t\t</value>\r\n    \t\t</param>\r\n    \t</params>\r\n    </epcisq:Poll>\r\n  </EPCISBody>\r\n</epcisq:EPCISQueryDocument>\r\n"
 										},
 										"url": {
-											"raw": "{{BaseUrl}}/Services/1.2/Query",
+											"raw": "{{BaseUrl}}/Services/1.2/Query/Poll",
 											"host": [
 												"{{BaseUrl}}"
 											],
 											"path": [
 												"Services",
 												"1.2",
-												"Query"
+												"Query",
+												"Poll"
 											]
 										}
 									},
@@ -576,14 +581,15 @@
 											"raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<epcisq:EPCISQueryDocument xmlns:epcisq=\"urn:epcglobal:epcis-query:xsd:1\" schemaVersion=\"1\" creationDate=\"2018-02-07T11:52:42.685Z\">\r\n  <EPCISBody>\r\n    <epcisq:Poll>\r\n    \t<queryName>SimpleEventQuery</queryName>\r\n    \t<params>\r\n    \t\t<param>\r\n    \t\t\t<name>EQ_bizStep</name>\r\n    \t\t\t<value>\r\n    \t\t\t\t<value>urn:fastnt:demo:bizstep:demo:packing</value>\r\n    \t\t\t</value>\r\n    \t\t</param>\r\n    \t</params>\r\n    </epcisq:Poll>\r\n  </EPCISBody>\r\n</epcisq:EPCISQueryDocument>\r\n"
 										},
 										"url": {
-											"raw": "{{BaseUrl}}/Services/1.2/Query",
+											"raw": "{{BaseUrl}}/Services/1.2/Query/Poll",
 											"host": [
 												"{{BaseUrl}}"
 											],
 											"path": [
 												"Services",
 												"1.2",
-												"Query"
+												"Query",
+												"Poll"
 											]
 										}
 									},
@@ -605,14 +611,15 @@
 											"raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<epcisq:EPCISQueryDocument xmlns:epcisq=\"urn:epcglobal:epcis-query:xsd:1\" schemaVersion=\"1\" creationDate=\"2018-02-07T11:52:42.685Z\">\r\n  <EPCISBody>\r\n    <epcisq:Poll>\r\n    \t<queryName>SimpleEventQuery</queryName>\r\n    \t<params>\r\n    \t\t<param>\r\n    \t\t\t<name>EQ_disposition</name>\r\n    \t\t\t<value>\r\n    \t\t\t\t<value>urn:epcglobal:cbv:disp:loading</value>\r\n    \t\t\t</value>\r\n    \t\t</param>\r\n    \t</params>\r\n    </epcisq:Poll>\r\n  </EPCISBody>\r\n</epcisq:EPCISQueryDocument>\r\n"
 										},
 										"url": {
-											"raw": "{{BaseUrl}}/Services/1.2/Query",
+											"raw": "{{BaseUrl}}/Services/1.2/Query/Poll",
 											"host": [
 												"{{BaseUrl}}"
 											],
 											"path": [
 												"Services",
 												"1.2",
-												"Query"
+												"Query",
+												"Poll"
 											]
 										}
 									},
@@ -634,14 +641,15 @@
 											"raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<epcisq:EPCISQueryDocument xmlns:epcisq=\"urn:epcglobal:epcis-query:xsd:1\" schemaVersion=\"1\" creationDate=\"2018-02-07T11:52:42.685Z\">\r\n  <EPCISBody>\r\n    <epcisq:Poll>\r\n    \t<queryName>SimpleEventQuery</queryName>\r\n    \t<params>\r\n    \t\t<param>\r\n    \t\t\t<name>EQ_readPoint</name>\r\n    \t\t\t<value>\r\n    \t\t\t\t<value>urn:fastnt:demo:readpoint:0037000.00729.210,432</value>\r\n    \t\t\t</value>\r\n    \t\t</param>\r\n    \t</params>\r\n    </epcisq:Poll>\r\n  </EPCISBody>\r\n</epcisq:EPCISQueryDocument>\r\n"
 										},
 										"url": {
-											"raw": "{{BaseUrl}}/Services/1.2/Query",
+											"raw": "{{BaseUrl}}/Services/1.2/Query/Poll",
 											"host": [
 												"{{BaseUrl}}"
 											],
 											"path": [
 												"Services",
 												"1.2",
-												"Query"
+												"Query",
+												"Poll"
 											]
 										}
 									},
@@ -663,14 +671,15 @@
 											"raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<epcisq:EPCISQueryDocument xmlns:epcisq=\"urn:epcglobal:epcis-query:xsd:1\" schemaVersion=\"1\" creationDate=\"2018-02-07T11:52:42.685Z\">\r\n  <EPCISBody>\r\n    <epcisq:Poll>\r\n    \t<queryName>SimpleEventQuery</queryName>\r\n    \t<params>\r\n    \t\t<param>\r\n    \t\t\t<name>WD_readPoint</name>\r\n    \t\t\t<value>\r\n    \t\t\t\t<value>urn:fastnt:demo:readpoint:0037000.00729.210,432</value>\r\n    \t\t\t</value>\r\n    \t\t</param>\r\n    \t</params>\r\n    </epcisq:Poll>\r\n  </EPCISBody>\r\n</epcisq:EPCISQueryDocument>\r\n"
 										},
 										"url": {
-											"raw": "{{BaseUrl}}/Services/1.2/Query",
+											"raw": "{{BaseUrl}}/Services/1.2/Query/Poll",
 											"host": [
 												"{{BaseUrl}}"
 											],
 											"path": [
 												"Services",
 												"1.2",
-												"Query"
+												"Query",
+												"Poll"
 											]
 										},
 										"description": "Not implemented yet."
@@ -693,14 +702,15 @@
 											"raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<epcisq:EPCISQueryDocument xmlns:epcisq=\"urn:epcglobal:epcis-query:xsd:1\" schemaVersion=\"1\" creationDate=\"2018-02-07T11:52:42.685Z\">\r\n  <EPCISBody>\r\n    <epcisq:Poll>\r\n    \t<queryName>SimpleEventQuery</queryName>\r\n    \t<params>\r\n    \t\t<param>\r\n    \t\t\t<name>EQ_bizLocation</name>\r\n    \t\t\t<value>\r\n    \t\t\t\t<value>urn:fastnt:demo:bizlocation:001024:054</value>\r\n    \t\t\t</value>\r\n    \t\t</param>\r\n    \t</params>\r\n    </epcisq:Poll>\r\n  </EPCISBody>\r\n</epcisq:EPCISQueryDocument>\r\n"
 										},
 										"url": {
-											"raw": "{{BaseUrl}}/Services/1.2/Query",
+											"raw": "{{BaseUrl}}/Services/1.2/Query/Poll",
 											"host": [
 												"{{BaseUrl}}"
 											],
 											"path": [
 												"Services",
 												"1.2",
-												"Query"
+												"Query",
+												"Poll"
 											]
 										}
 									},
@@ -722,14 +732,15 @@
 											"raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<epcisq:EPCISQueryDocument xmlns:epcisq=\"urn:epcglobal:epcis-query:xsd:1\" schemaVersion=\"1\" creationDate=\"2018-02-07T11:52:42.685Z\">\r\n  <EPCISBody>\r\n    <epcisq:Poll>\r\n    \t<queryName>SimpleEventQuery</queryName>\r\n    \t<params>\r\n    \t\t<param>\r\n    \t\t\t<name>WD_bizLocation</name>\r\n    \t\t\t<value>\r\n    \t\t\t\t<value>urn:fastnt:demo:bizlocation:001024:054</value>\r\n    \t\t\t</value>\r\n    \t\t</param>\r\n    \t</params>\r\n    </epcisq:Poll>\r\n  </EPCISBody>\r\n</epcisq:EPCISQueryDocument>\r\n"
 										},
 										"url": {
-											"raw": "{{BaseUrl}}/Services/1.2/Query",
+											"raw": "{{BaseUrl}}/Services/1.2/Query/Poll",
 											"host": [
 												"{{BaseUrl}}"
 											],
 											"path": [
 												"Services",
 												"1.2",
-												"Query"
+												"Query",
+												"Poll"
 											]
 										}
 									},
@@ -751,14 +762,15 @@
 											"raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<epcisq:EPCISQueryDocument xmlns:epcisq=\"urn:epcglobal:epcis-query:xsd:1\" schemaVersion=\"1\" creationDate=\"2018-02-07T11:52:42.685Z\">\r\n  <EPCISBody>\r\n    <epcisq:Poll>\r\n    \t<queryName>SimpleEventQuery</queryName>\r\n    \t<params>\r\n    \t\t<param>\r\n    \t\t\t<name>EQ_transformationID</name>\r\n    \t\t\t<value>\r\n    \t\t\t\t<value>urn:fastnt:demo:transformation:00001</value>\r\n    \t\t\t</value>\r\n    \t\t</param>\r\n    \t</params>\r\n    </epcisq:Poll>\r\n  </EPCISBody>\r\n</epcisq:EPCISQueryDocument>\r\n"
 										},
 										"url": {
-											"raw": "{{BaseUrl}}/Services/1.2/Query",
+											"raw": "{{BaseUrl}}/Services/1.2/Query/Poll",
 											"host": [
 												"{{BaseUrl}}"
 											],
 											"path": [
 												"Services",
 												"1.2",
-												"Query"
+												"Query",
+												"Poll"
 											]
 										}
 									},
@@ -780,14 +792,15 @@
 											"raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<epcisq:EPCISQueryDocument xmlns:epcisq=\"urn:epcglobal:epcis-query:xsd:1\" schemaVersion=\"1\" creationDate=\"2018-02-07T11:52:42.685Z\">\r\n  <EPCISBody>\r\n    <epcisq:Poll>\r\n    \t<queryName>SimpleEventQuery</queryName>\r\n    \t<params>\r\n    \t\t<param>\r\n    \t\t\t<name>MATCH_anyEPC</name>\r\n    \t\t\t<value>\r\n    \t\t\t\t<value>urn:epc:id:sscc:4001356.5900000817</value>\r\n    \t\t\t</value>\r\n    \t\t</param>\r\n    \t</params>\r\n    </epcisq:Poll>\r\n  </EPCISBody>\r\n</epcisq:EPCISQueryDocument>\r\n"
 										},
 										"url": {
-											"raw": "{{BaseUrl}}/Services/1.2/Query",
+											"raw": "{{BaseUrl}}/Services/1.2/Query/Poll",
 											"host": [
 												"{{BaseUrl}}"
 											],
 											"path": [
 												"Services",
 												"1.2",
-												"Query"
+												"Query",
+												"Poll"
 											]
 										}
 									},
@@ -809,14 +822,15 @@
 											"raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<epcisq:EPCISQueryDocument xmlns:epcisq=\"urn:epcglobal:epcis-query:xsd:1\" schemaVersion=\"1\" creationDate=\"2018-02-07T11:52:42.685Z\">\r\n  <EPCISBody>\r\n    <epcisq:Poll>\r\n    \t<queryName>SimpleEventQuery</queryName>\r\n    \t<params>\r\n    \t\t<param>\r\n    \t\t\t<name>MATCH_parentID</name>\r\n    \t\t\t<value>\r\n    \t\t\t\t<value>urn:epc:id:sscc:4001356.5900000817</value>\r\n    \t\t\t</value>\r\n    \t\t</param>\r\n    \t</params>\r\n    </epcisq:Poll>\r\n  </EPCISBody>\r\n</epcisq:EPCISQueryDocument>\r\n"
 										},
 										"url": {
-											"raw": "{{BaseUrl}}/Services/1.2/Query",
+											"raw": "{{BaseUrl}}/Services/1.2/Query/Poll",
 											"host": [
 												"{{BaseUrl}}"
 											],
 											"path": [
 												"Services",
 												"1.2",
-												"Query"
+												"Query",
+												"Poll"
 											]
 										}
 									},
@@ -838,14 +852,15 @@
 											"raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<epcisq:EPCISQueryDocument xmlns:epcisq=\"urn:epcglobal:epcis-query:xsd:1\" schemaVersion=\"1\" creationDate=\"2018-02-07T11:52:42.685Z\">\r\n  <EPCISBody>\r\n    <epcisq:Poll>\r\n    \t<queryName>SimpleEventQuery</queryName>\r\n    \t<params>\r\n    \t\t<param>\r\n    \t\t\t<name>MATCH_epc</name>\r\n    \t\t\t<value>\r\n    \t\t\t\t<value>urn:epc:id:sscc:4001356.5900000818</value>\r\n    \t\t\t</value>\r\n    \t\t</param>\r\n    \t</params>\r\n    </epcisq:Poll>\r\n  </EPCISBody>\r\n</epcisq:EPCISQueryDocument>\r\n"
 										},
 										"url": {
-											"raw": "{{BaseUrl}}/Services/1.2/Query",
+											"raw": "{{BaseUrl}}/Services/1.2/Query/Poll",
 											"host": [
 												"{{BaseUrl}}"
 											],
 											"path": [
 												"Services",
 												"1.2",
-												"Query"
+												"Query",
+												"Poll"
 											]
 										}
 									},
@@ -1075,14 +1090,15 @@
 											"raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<epcisq:EPCISQueryDocument xmlns:epcisq=\"urn:epcglobal:epcis-query:xsd:1\" schemaVersion=\"1\" creationDate=\"2018-02-07T11:52:42.685Z\">\n  <EPCISBody>\n    <epcisq:Poll>\n    \t<queryName>SimpleMasterDataQuery</queryName>\n    \t<params>\n    \t\t<param>\n    \t\t\t<name>vocabularyName</name>\n    \t\t\t<value>urn:epcglobal:epcis:vtype:ReadPoint</value>\n    \t\t</param>\n    \t</params>\n    </epcisq:Poll>\n  </EPCISBody>\n</epcisq:EPCISQueryDocument>"
 										},
 										"url": {
-											"raw": "{{BaseUrl}}/Services/1.2/Query",
+											"raw": "{{BaseUrl}}/Services/1.2/Query/Poll",
 											"host": [
 												"{{BaseUrl}}"
 											],
 											"path": [
 												"Services",
 												"1.2",
-												"Query"
+												"Query",
+												"Poll"
 											]
 										}
 									},
@@ -1105,14 +1121,15 @@
 											"raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<epcisq:EPCISQueryDocument xmlns:epcisq=\"urn:epcglobal:epcis-query:xsd:1\" schemaVersion=\"1\" creationDate=\"2018-02-07T11:52:42.685Z\">\n  <EPCISBody>\n    <epcisq:Poll>\n    \t<queryName>SimpleMasterDataQuery</queryName>\n    \t<params>\n    \t\t<param>\n    \t\t\t<name>EQ_name</name>\n    \t\t\t<value>urn:epc:id:sgln:0614141.00300.3</value>\n    \t\t</param>\n    \t</params>\n    </epcisq:Poll>\n  </EPCISBody>\n</epcisq:EPCISQueryDocument>"
 										},
 										"url": {
-											"raw": "{{BaseUrl}}/Services/1.2/Query",
+											"raw": "{{BaseUrl}}/Services/1.2/Query/Poll",
 											"host": [
 												"{{BaseUrl}}"
 											],
 											"path": [
 												"Services",
 												"1.2",
-												"Query"
+												"Query",
+												"Poll"
 											]
 										}
 									},
@@ -1135,14 +1152,15 @@
 											"raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<epcisq:EPCISQueryDocument xmlns:epcisq=\"urn:epcglobal:epcis-query:xsd:1\" schemaVersion=\"1\" creationDate=\"2018-02-07T11:52:42.685Z\">\n  <EPCISBody>\n    <epcisq:Poll>\n    \t<queryName>SimpleMasterDataQuery</queryName>\n    \t<params>\n    \t\t<param>\n    \t\t\t<name>HASATTR</name>\n    \t\t\t<value>urn:epcglobal:cbv:mda:ssd</value>\n    \t\t</param>\n    \t</params>\n    </epcisq:Poll>\n  </EPCISBody>\n</epcisq:EPCISQueryDocument>"
 										},
 										"url": {
-											"raw": "{{BaseUrl}}/Services/1.2/Query",
+											"raw": "{{BaseUrl}}/Services/1.2/Query/Poll",
 											"host": [
 												"{{BaseUrl}}"
 											],
 											"path": [
 												"Services",
 												"1.2",
-												"Query"
+												"Query",
+												"Poll"
 											]
 										}
 									},
@@ -1165,14 +1183,15 @@
 											"raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<epcisq:EPCISQueryDocument xmlns:epcisq=\"urn:epcglobal:epcis-query:xsd:1\" schemaVersion=\"1\" creationDate=\"2018-02-07T11:52:42.685Z\">\n  <EPCISBody>\n    <epcisq:Poll>\n    \t<queryName>SimpleMasterDataQuery</queryName>\n    \t<params>\n    \t\t<param>\n    \t\t\t<name>maxElementCount</name>\n    \t\t\t<value>3</value>\n    \t\t</param>\n    \t</params>\n    </epcisq:Poll>\n  </EPCISBody>\n</epcisq:EPCISQueryDocument>"
 										},
 										"url": {
-											"raw": "{{BaseUrl}}/Services/1.2/Query",
+											"raw": "{{BaseUrl}}/Services/1.2/Query/Poll",
 											"host": [
 												"{{BaseUrl}}"
 											],
 											"path": [
 												"Services",
 												"1.2",
-												"Query"
+												"Query",
+												"Poll"
 											]
 										}
 									},
@@ -1196,14 +1215,15 @@
 									"raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<epcisq:EPCISQueryDocument xmlns:epcisq=\"urn:epcglobal:epcis-query:xsd:1\" schemaVersion=\"1\" creationDate=\"2018-02-07T11:52:42.685Z\">\n  <EPCISBody>\n    <epcisq:Poll>\n    \t<queryName>SimpleMasterDataQuery</queryName>\n    \t<params />\n    </epcisq:Poll>\n  </EPCISBody>\n</epcisq:EPCISQueryDocument>\n"
 								},
 								"url": {
-									"raw": "{{BaseUrl}}/Services/1.2/Query",
+									"raw": "{{BaseUrl}}/Services/1.2/Query/Poll",
 									"host": [
 										"{{BaseUrl}}"
 									],
 									"path": [
 										"Services",
 										"1.2",
-										"Query"
+										"Query",
+										"Poll"
 									]
 								}
 							},
@@ -1393,7 +1413,7 @@
 							"raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<epcisq:EPCISQueryDocument xmlns:epcisq=\"urn:epcglobal:epcis-query:xsd:1\" schemaVersion=\"1\" creationDate=\"2018-02-07T11:52:42.685Z\">\r\n  <EPCISBody>\r\n    <epcisq:GetQueryNames />\r\n  </EPCISBody>\r\n</epcisq:EPCISQueryDocument>\r\n"
 						},
 						"url": {
-							"raw": "{{BaseUrl}}/Services/1.2/Query/",
+							"raw": "{{BaseUrl}}/Services/1.2/Query/GetQueryNames",
 							"host": [
 								"{{BaseUrl}}"
 							],
@@ -1401,7 +1421,7 @@
 								"Services",
 								"1.2",
 								"Query",
-								""
+								"GetQueryNames"
 							]
 						}
 					},
@@ -1553,13 +1573,14 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "{{BaseUrl}}/Services/1.2/Rollback",
+							"raw": "{{BaseUrl}}/Services/1.2/Database/Rollback",
 							"host": [
 								"{{BaseUrl}}"
 							],
 							"path": [
 								"Services",
 								"1.2",
+								"Database",
 								"Rollback"
 							]
 						}
