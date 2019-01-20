@@ -2,9 +2,9 @@
 using FasTnT.Domain.Persistence;
 using FasTnT.Domain.Services;
 using FasTnT.Model.Queries.Implementations;
-using FasTnT.Tests.Common;
+using FasTnT.UnitTest.Common;
 
-namespace FasTnT.Domain.Tests.QueryServiceTests
+namespace FasTnT.UnitTest.Domain.QueryServiceTests
 {
     public abstract class BaseQueryServiceUnitTest : BaseUnitTest
     {

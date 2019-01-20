@@ -1,14 +1,14 @@
 ﻿using FasTnT.Formatters.Xml.Responses;
 using FasTnT.Model;
 using FasTnT.Model.Events.Enums;
-using FasTnT.Tests.Common;
+using FasTnT.UnitTest.Common;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Linq;
 
-namespace FasTnT.Formatters.Xml.Tests
+namespace FasTnT.UnitTest.XmlFormatter
 {
     [TestClass]
     public class WhenFormattingObjectEvent : BaseUnitTest

@@ -1,6 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace FasTnT.Tests.Common
+namespace FasTnT.UnitTest.Common
 {
     public class AssertAttribute : TestMethodAttribute
     {

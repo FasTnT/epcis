@@ -1,11 +1,11 @@
 ﻿using FakeItEasy;
 using FasTnT.Model.Queries;
 using FasTnT.Model.Responses;
-using FasTnT.Tests.Common;
+using FasTnT.UnitTest.Common;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Linq;
 
-namespace FasTnT.Domain.Tests.QueryServiceTests
+namespace FasTnT.UnitTest.Domain.QueryServiceTests
 {
     [TestClass]
     public class WhenProcessingAGetSubscriptionIDsRequest : BaseQueryServiceUnitTest

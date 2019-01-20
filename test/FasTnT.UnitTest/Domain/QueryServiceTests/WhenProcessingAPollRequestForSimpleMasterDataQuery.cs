@@ -1,13 +1,13 @@
 ﻿using FakeItEasy;
 using FasTnT.Model.Queries;
 using FasTnT.Model.Responses;
-using FasTnT.Tests.Common;
+using FasTnT.UnitTest.Common;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace FasTnT.Domain.Tests.QueryServiceTests
+namespace FasTnT.UnitTest.Domain.QueryServiceTests
 {
     [TestClass]
-    public class WhenProcessingAPollRequestForSimpleEventQuery : BaseQueryServiceUnitTest
+    public class WhenProcessingAPollRequestForSimpleMasterDataQuery : BaseQueryServiceUnitTest
     {
         public Poll Request { get; set; }
         public PollResponse Response { get; set; }
@@ -16,7 +16,7 @@ namespace FasTnT.Domain.Tests.QueryServiceTests
         {
             base.Arrange();
 
-            Request = new Poll { QueryName = "SimpleEventQuery", Parameters = new QueryParameter[0] };
+            Request = new Poll { QueryName = "SimpleMasterDataQuery", Parameters = new QueryParameter[0] };
         }
 
         public override void Act() => Response = QueryService.Process(Request).Result;
@@ -25,6 +25,6 @@ namespace FasTnT.Domain.Tests.QueryServiceTests
         public void TheResponseShouldNotBeNull() => Assert.IsNotNull(Response);
 
         [Assert]
-        public void ItShouldHaveCalledTheSubscriptionManagerGetAll() => A.CallTo(() => UnitOfWork.EventManager).MustHaveHappened();
+        public void ItShouldHaveCalledTheSubscriptionManagerGetAll() => A.CallTo(() => UnitOfWork.MasterDataManager).MustHaveHappened();
     }
 }

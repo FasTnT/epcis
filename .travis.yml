@@ -6,5 +6,4 @@ solution: FasTnT.sln
 dotnet: 2.2
 script:
  - dotnet restore
- - dotnet test test/FasTnT.Formatters.Xml.Tests/FasTnT.Formatters.Xml.Tests.csproj
- - dotnet test test/FasTnT.Domain.Tests/FasTnT.Domain.Tests.csproj
+ - dotnet test test/FasTnT.UnitTest/FasTnT.UnitTest.csproj

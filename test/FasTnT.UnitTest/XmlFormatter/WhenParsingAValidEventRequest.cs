@@ -1,13 +1,15 @@
+using FasTnT.Formatters;
+using FasTnT.Formatters.Xml;
 using FasTnT.Model;
 using FasTnT.Model.Events.Enums;
-using FasTnT.Tests.Common;
+using FasTnT.UnitTest.Common;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Globalization;
 using System.IO;
 using System.Linq;
 
-namespace FasTnT.Formatters.Xml.Tests
+namespace FasTnT.UnitTest.XmlFormatter
 {
     [TestClass]
     public class WhenParsingAValidEventRequest : BaseUnitTest
@@ -20,7 +22,7 @@ namespace FasTnT.Formatters.Xml.Tests
         public override void Arrange()
         {
             RequestParser = new XmlRequestFormatter();
-            InputFile = File.OpenRead("files/requests/xml/valid_event_1.xml");
+            InputFile = File.OpenRead("XmlFormatter/files/requests/xml/valid_event_1.xml");
         }
 
         public override void Act()
