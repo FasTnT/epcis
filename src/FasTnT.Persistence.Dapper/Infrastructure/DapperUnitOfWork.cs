@@ -24,6 +24,7 @@ namespace FasTnT.Persistence.Dapper
             SubscriptionManager = new PgSqlSubscriptionManager(this);
             DatabaseManager = new PgSqlDatabaseMigrator(this);
             MasterDataManager = new PgSqlMasterDataManager(this);
+            UserManager = new PgSqlUserManager(this);
         }
 
         public IEventStore EventStore { get; }
@@ -31,6 +32,8 @@ namespace FasTnT.Persistence.Dapper
         public ISubscriptionManager SubscriptionManager { get; }
         public IMasterDataManager MasterDataManager { get; }
         public IDatabaseMigrator DatabaseManager { get; }
+        public IUserManager UserManager { get; }
+
 
         public void BeginTransaction()
         {

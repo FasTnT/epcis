@@ -9,6 +9,7 @@ namespace FasTnT.Domain.Persistence
         ISubscriptionManager SubscriptionManager { get; }
         IMasterDataManager MasterDataManager { get; }
         IDatabaseMigrator DatabaseManager { get; }
+        IUserManager UserManager { get; }
 
         void BeginTransaction();
         void Commit();

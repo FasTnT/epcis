@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "1486d5a9-714f-45b3-a91c-1876aab87c32",
+		"_postman_id": "91ab93af-cfc8-4a1d-9d98-8a59dd530f27",
 		"name": "EPCIS Examples",
 		"description": "Collection containing sample requests to be made to an EPCIS repository _(FasTnT)_.\n\n",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
@@ -106,7 +106,7 @@
 								}
 							],
 							"cookie": [],
-							"body": null
+							"body": ""
 						}
 					]
 				}
@@ -885,15 +885,14 @@
 									"raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<epcisq:EPCISQueryDocument xmlns:epcisq=\"urn:epcglobal:epcis-query:xsd:1\" schemaVersion=\"1\" creationDate=\"2018-02-07T11:52:42.685Z\">\n  <EPCISBody>\n    <epcisq:Poll>\n    \t<queryName>SimpleEventQuery</queryName>\n    \t<params />\n    </epcisq:Poll>\n  </EPCISBody>\n</epcisq:EPCISQueryDocument>\n"
 								},
 								"url": {
-									"raw": "{{BaseUrl}}/Services/1.2/Query/Poll",
+									"raw": "{{BaseUrl}}/Services/1.2/Query",
 									"host": [
 										"{{BaseUrl}}"
 									],
 									"path": [
 										"Services",
 										"1.2",
-										"Query",
-										"Poll"
+										"Query"
 									]
 								}
 							},
@@ -1406,12 +1405,7 @@
 						"header": [
 							{
 								"key": "Content-Type",
-								"value": "application/xml"
-							},
-							{
-								"key": "Accept",
-								"value": "application/xml",
-								"type": "text"
+								"value": "text/xml"
 							}
 						],
 						"body": {
@@ -1487,8 +1481,11 @@
 			"name": "Database setup",
 			"item": [
 				{
-					"name": "Migrate Database  (development only)",
+					"name": "Migrate Database  (debug only)",
 					"request": {
+						"auth": {
+							"type": "noauth"
+						},
 						"method": "POST",
 						"header": [
 							{
@@ -1554,13 +1551,16 @@
 								}
 							],
 							"cookie": [],
-							"body": null
+							"body": ""
 						}
 					]
 				},
 				{
-					"name": "Rollback Database (development only)",
+					"name": "Rollback Database (debug only)",
 					"request": {
+						"auth": {
+							"type": "noauth"
+						},
 						"method": "POST",
 						"header": [
 							{
@@ -1626,7 +1626,7 @@
 								}
 							],
 							"cookie": [],
-							"body": null
+							"body": ""
 						}
 					]
 				}
@@ -1785,6 +1785,21 @@
 			]
 		}
 	],
+	"auth": {
+		"type": "basic",
+		"basic": [
+			{
+				"key": "password",
+				"value": "P@ssw0rd",
+				"type": "string"
+			},
+			{
+				"key": "username",
+				"value": "admin",
+				"type": "string"
+			}
+		]
+	},
 	"event": [
 		{
 			"listen": "prerequest",
@@ -1814,8 +1829,8 @@
 					"    pm.expect(pm.cookies.count()).to.be.equal(0);",
 					"});",
 					"",
-					"pm.test(\"response should contain at most 3 headers\", function () { ",
-					"    pm.expect(pm.response.headers.count()).to.be.below(4);",
+					"pm.test(\"response should only contain 3 headers\", function () { ",
+					"    pm.expect(pm.response.headers.count()).to.be.equal(3);",
 					"});"
 				]
 			}
