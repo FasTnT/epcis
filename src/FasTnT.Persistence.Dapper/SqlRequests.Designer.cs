@@ -61,7 +61,7 @@ namespace FasTnT.Persistence.Dapper {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to H4sIAAAAAAAEAM1aW1OjSBR+Xqv8D13WbiXZilYuOjEzNQ+ENJGdCBkuuj5RCB2lhgBycdb99Xu4JYRAwARr1rKigdOnT3/fd7pPN5yfI1nEgohE+gbfUqcntIApCSdfEcsgjpcQ/psVJREFHnG9L2sbiZrMcZHJRfh5etI+PUHwY+goCOAjtOLk+bwbXw5tLHVFkPasuqrmExe9qu6bYT21r3odRPPzediJ86Roqq+a9tPFmU6WamD6Z1lXvzmq5/20Xb3AT783GL7Dk0ueDA/aE12xLeQbK+L56spBPw3/2Q786Ar617bIuhWaYoaS51J0K7zTbskS3fr82Sf/+F1k2T/bnU4yXprnREmgWE5CZ4tvSjj8M7QQ2FtKeEDf8ANqG3qBbfASmSpruGSO/S5j1E4vdE5P4PeelW5Qm2enIvqKGGou4g4QdXpyfo7wgmbr8UsczajgNzK5cMlLAOBUUazbWrAilq9EyNUBNGnoEg0Yrd/sPTxEaCYBJ5e8 [rest of string was truncated]&quot;;.
+        ///   Looks up a localized string similar to H4sIAAAAAAAAC81aW2+jyBJ+j5T/0Ir2KPbKiXxJxuMZzQPGbQ87DngBZzZPiEA7RoOB4ZLZ7F87D+cnnb9wivvFYIhNlBNFTtxdXV1dX3V1VXX/99//ubpCawHzAhLor/iOOj+jeUyJOPqKmDliORHhvxhBFJDnENv5nNCI1HSJy0iu/c/zs875GYIfTUWeBx8+FbteLnths09jyDuClK1sy4pLbPQs2y+a8dS57XcRzS2X/iTWk6TIrqybT9cXKtnInu5eFFlZsuP8Mm21hNWgPxy9jplNnjQHWBBVMg3kajviuPLOQr80d2t6btCC/jENkgxEMzyn1ksx6PJ7Opdrkb789Mklf7s9ZJi/Ot1uxJ3mWEHkKYYV0cXqm+Qr4QKteOaO4h/QN/yAOppaQuv9DEilRGlrlvlzjVEnbuien8Hvd0b8ijocMxPQFzSnlgLuAlznZ4AyXtFMM5SJpWg1KAck1zb56YFy6oBWTcXbEcOVAs01UWiChAKgNh/2 [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string CreateDatabaseZipped {
             get {
@@ -93,6 +93,15 @@ namespace FasTnT.Persistence.Dapper {
         internal static string MasterDataAttributeInsert {
             get {
                 return ResourceManager.GetString("MasterDataAttributeInsert", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to INSERT INTO cbv.hierarchy(type, parent_id, children_id) VALUES(@Type, @ParentId, @ChildrenId);.
+        /// </summary>
+        internal static string MasterDataHierarchyInsert {
+            get {
+                return ResourceManager.GetString("MasterDataHierarchyInsert", resourceCulture);
             }
         }
         

@@ -30,6 +30,11 @@ namespace FasTnT.Persistence.Dapper
                 await _unitOfWork.Execute(SqlRequests.MasterDataInsert, masterData);
                 foreach (var attribute in masterData.Attributes) await _unitOfWork.Execute(SqlRequests.MasterDataAttributeInsert, attribute);
             }
+
+            foreach (var hierarchy in masterDataDocument.HierarchyList)
+            {
+                await _unitOfWork.Execute(SqlRequests.MasterDataHierarchyInsert, hierarchy);
+            }
         }
 
         public void Limit(int limit) => _limit = limit;

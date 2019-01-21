@@ -20,6 +20,30 @@ namespace FasTnT.Formatters.Xml.Requests
             return parsedElements;
         }
 
+        public static IList<EpcisMasterDataHierarchy> ParseMasterDataHierarchy(IEnumerable<XElement> elements)
+        {
+            var parsedElements = new List<EpcisMasterDataHierarchy>();
+
+            foreach (var element in elements)
+            {
+                parsedElements.AddRange(ParseHierarchy(element.Attribute("type").Value, element.Element("VocabularyElementList").Elements("VocabularyElement")));
+            }
+
+            return parsedElements;
+        }
+
+        private static IEnumerable<EpcisMasterDataHierarchy> ParseHierarchy(string type, IEnumerable<XElement> elements)
+        {
+            return elements.SelectMany(e => {
+                return e.Element("children") != null ?
+                e.Element("children")?.Elements("id")?.Select(x =>
+                {
+                    return new EpcisMasterDataHierarchy { Type = type, ParentId = e.Attribute("id").Value, ChildrenId = x.Value };
+                })
+                : new EpcisMasterDataHierarchy[0];
+            });
+        }
+
         private static IEnumerable<EpcisMasterData> ParseVocabularyElements(string type, IEnumerable<XElement> elements)
         {
             return elements.Select(e => 
@@ -33,7 +57,6 @@ namespace FasTnT.Formatters.Xml.Requests
 
         private static IEnumerable<MasterDataAttribute> ParseAttributes(IEnumerable<XElement> elements, EpcisMasterData masterData)
         {
-            if (elements.Any(x => x.HasElements)) throw new NotImplementedException("Inner CBV properties is not implemented yet.");
             return elements.Select(a => new MasterDataAttribute
             {
                 ParentId = masterData.Id,
