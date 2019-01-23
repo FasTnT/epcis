@@ -27,8 +27,13 @@ namespace FasTnT.Persistence.Dapper
         {
             foreach (var masterData in masterDataDocument.MasterDataList)
             {
+                await _unitOfWork.Execute(SqlRequests.MasterDataDelete, masterData);
                 await _unitOfWork.Execute(SqlRequests.MasterDataInsert, masterData);
-                foreach (var attribute in masterData.Attributes) await _unitOfWork.Execute(SqlRequests.MasterDataAttributeInsert, attribute);
+                foreach (var attribute in masterData.Attributes)
+                {
+                    await _unitOfWork.Execute(SqlRequests.MasterDataAttributeInsert, attribute);
+                    await _unitOfWork.Execute(SqlRequests.MasterDataAttributeFieldInsert, attribute.Fields);
+                }
             }
 
             foreach (var hierarchy in masterDataDocument.HierarchyList)

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Linq;
 using FasTnT.Model.MasterDatas;
@@ -8,6 +7,8 @@ namespace FasTnT.Formatters.Xml.Requests
 {
     public static class XmlMasterDataParser
     {
+        private static int _internalId = 0;
+
         public static IList<EpcisMasterData> ParseMasterDatas(IEnumerable<XElement> elements)
         {
             var parsedElements = new List<EpcisMasterData>();
@@ -46,8 +47,9 @@ namespace FasTnT.Formatters.Xml.Requests
 
         private static IEnumerable<EpcisMasterData> ParseVocabularyElements(string type, IEnumerable<XElement> elements)
         {
-            return elements.Select(e => 
+            return elements.Select(e =>
             {
+                _internalId = 0;
                 var masterData = new EpcisMasterData { Id = e.Attribute("id").Value, Type = type };
                 masterData.Attributes = ParseAttributes(e.Elements("attribute"), masterData).ToList();
 
@@ -57,13 +59,43 @@ namespace FasTnT.Formatters.Xml.Requests
 
         private static IEnumerable<MasterDataAttribute> ParseAttributes(IEnumerable<XElement> elements, EpcisMasterData masterData)
         {
-            return elements.Select(a => new MasterDataAttribute
+            return elements.Select(element =>
             {
-                ParentId = masterData.Id,
-                ParentType = masterData.Type,
-                Id = a.Attribute("id").Value,
-                Value = a.Value
+                var attr = new MasterDataAttribute
+                {
+                    ParentId = masterData.Id,
+                    ParentType = masterData.Type,
+                    Id = element.Attribute("id").Value,
+                    Value = element.Value
+                };
+
+                if (element.HasElements) attr.Fields.AddRange(ParseField(element.Elements(), attr));
+
+                return attr;
             });
+        }
+
+        private static IEnumerable<MasterDataField> ParseField(IEnumerable<XElement> elements, MasterDataAttribute attribute, int? parentId = null)
+        {
+            var fields = new List<MasterDataField>();
+
+            foreach(var element in elements)
+            {
+                fields.Add(new MasterDataField
+                {
+                    Id = _internalId++,
+                    InternalParentId = parentId,
+                    Name = element.Name.LocalName,
+                    Namespace = element.Name.NamespaceName,
+                    ParentId = attribute.Id,
+                    MasterdataId = attribute.ParentId,
+                    MasterdataType = attribute.ParentType,
+                    Value = element.HasElements ? null : element.Value
+                });
+                fields.AddRange(ParseField(element.Elements(), attribute, fields.Last().Id));
+            }
+
+            return fields;
         }
     }
 }

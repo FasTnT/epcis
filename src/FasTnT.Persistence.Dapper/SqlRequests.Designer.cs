@@ -61,7 +61,7 @@ namespace FasTnT.Persistence.Dapper {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to H4sIAAAAAAAAC81aW2+jyBJ+j5T/0Ir2KPbKiXxJxuMZzQPGbQ87DngBZzZPiEA7RoOB4ZLZ7F87D+cnnb9wivvFYIhNlBNFTtxdXV1dX3V1VXX/99//ubpCawHzAhLor/iOOj+jeUyJOPqKmDliORHhvxhBFJDnENv5nNCI1HSJy0iu/c/zs875GYIfTUWeBx8+FbteLnths09jyDuClK1sy4pLbPQs2y+a8dS57XcRzS2X/iTWk6TIrqybT9cXKtnInu5eFFlZsuP8Mm21hNWgPxy9jplNnjQHWBBVMg3kajviuPLOQr80d2t6btCC/jENkgxEMzyn1ksx6PJ7Opdrkb789Mklf7s9ZJi/Ot1uxJ3mWEHkKYYV0cXqm+Qr4QKteOaO4h/QN/yAOppaQuv9DEilRGlrlvlzjVEnbuien8Hvd0b8ijocMxPQFzSnlgLuAlznZ4AyXtFMM5SJpWg1KAck1zb56YFy6oBWTcXbEcOVAs01UWiChAKgNh/2 [rest of string was truncated]&quot;;.
+        ///   Looks up a localized string similar to H4sIAAAAAAAAC81a3XKjOhK+3lT5HVSpsxV7y0nFdjIZz9RcECxnOOOAD+DM5ooiICfUYGD4yWz21fZiH+m8wmnEPwZMbFI5qZQTS61W6/taUrekP//3/9NTtJKwKCGJ/YpvmR4rYkbG8TfEzREvyAj/m5NkCQUecb3PiYjMXC9wlcRZ+Nnr9xD8GDoKAvgIZfjVYjGkpaGApW4I0p5UV9V84qJn1X0xrMf+5fkAscJiEfbgPCqa6qum/Xh2rJO1Gpj+cUmTo3reL9vVKzSNzseTV+lyyaPhgQaiK7aFfGNDPF/dOOiX4T/ZgU9L0H9ti6Tt0AzPmdVCplVhTf9kJbMnnz755D/+EFn2r/5gEClnBV6SRYbjZXS8/KaECByjpcjdMuI9+obvUd/Qt0WDn1RSSQFb8dwfK4z6ScGgN+h95+SvqC9wMwl9QXNmIeHB514PiMVLlmtFLHE0o5lYKnHmkp8BgNLIrW5rwYZYvkLhaoNigr4GPLZv9QrsKYSx [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string CreateDatabaseZipped {
             get {
@@ -88,11 +88,29 @@ namespace FasTnT.Persistence.Dapper {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to INSERT INTO cbv.attribute_field(internal_id, internal_parent_id, masterdata_id, masterdata_type, parent_id, name, namespace, value) VALUES(@Id, @InternalParentId, @MasterdataId, @MasterdataType, @ParentId, @Name, @Namespace, @Value);.
+        /// </summary>
+        internal static string MasterDataAttributeFieldInsert {
+            get {
+                return ResourceManager.GetString("MasterDataAttributeFieldInsert", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to INSERT INTO cbv.attribute(masterdata_id, masterdata_type, id, value) VALUES(@ParentId, @ParentType, @Id, @Value) ON CONFLICT ON CONSTRAINT pk_cbv_masterdata_attribute DO UPDATE SET value = @Value;.
         /// </summary>
         internal static string MasterDataAttributeInsert {
             get {
                 return ResourceManager.GetString("MasterDataAttributeInsert", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to DELETE FROM cbv.attribute_field WHERE masterdata_type = @Type AND masterdata_id = @Id; DELETE FROM cbv.hierarchy WHERE type = @Type AND (parent_id = @Id OR children_id = @Id); DELETE FROM cbv.attribute WHERE masterdata_id = @Id AND masterdata_type = @Type; DELETE FROM cbv.masterdata WHERE id = @Id AND type = @Type;.
+        /// </summary>
+        internal static string MasterDataDelete {
+            get {
+                return ResourceManager.GetString("MasterDataDelete", resourceCulture);
             }
         }
         
