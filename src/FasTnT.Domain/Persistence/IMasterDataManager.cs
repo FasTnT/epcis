@@ -13,6 +13,6 @@ namespace FasTnT.Domain.Persistence
         void WhereIdIn(string[] values);
         void WhereAnyAttributeNamed(string[] values);
         void Limit(int limit);
-        Task<IEnumerable<EpcisMasterData>> ToList(bool includeAttributes);
+        Task<IEnumerable<EpcisMasterData>> ToList(params string[] attributes);
     }
 }

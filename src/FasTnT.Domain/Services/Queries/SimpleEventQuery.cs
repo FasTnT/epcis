@@ -48,6 +48,8 @@ namespace FasTnT.Model.Queries.Implementations
                 else if (Equals(parameter.Name, "EXISTS_errorDeclaration")) unitOfWork.EventManager.WhereExistsErrorDeclaration();
                 else if (Equals(parameter.Name, "EQ_errorReason")) unitOfWork.EventManager.WhereErrorReasonIn(parameter.Values);
                 else if (Equals(parameter.Name, "EQ_correctiveEventID")) unitOfWork.EventManager.WhereCorrectiveEventIdIn(parameter.Values);
+                else if (Equals(parameter.Name, "WD_readPoint")) unitOfWork.EventManager.WhereMasterDataHierarchyContains(EpcisField.ReadPoint, parameter.Values);
+                else if (Equals(parameter.Name, "WD_bizLocation")) unitOfWork.EventManager.WhereMasterDataHierarchyContains(EpcisField.BusinessLocation, parameter.Values);
 
                 else if (Equals(parameter.Name, "orderBy")) _orderField = Enumeration.GetByDisplayName<EpcisField>(parameter.Values.Single());
                 else if (Equals(parameter.Name, "orderDirection")) _orderDirection = Enumeration.GetByDisplayName<OrderDirection>(parameter.Values.Single());
@@ -66,9 +68,10 @@ namespace FasTnT.Model.Queries.Implementations
                 else if (Regex.IsMatch(parameter.Name, "^(EQ|GT|LT|GE|LE)_INNER_")) ApplyCustomFieldParameter(parameter, true, FieldType.EventExtension, unitOfWork);
                 else if (Regex.IsMatch(parameter.Name, "^(EQ|GT|LT|GE|LE)_")) ApplyCustomFieldParameter(parameter, false, FieldType.EventExtension, unitOfWork);
                 else if (Regex.IsMatch(parameter.Name, "^EXISTS_INNER")) ApplyExistCustomFieldParameter(parameter, true, FieldType.EventExtension, unitOfWork);
-                else if (Regex.IsMatch(parameter.Name, "^EXISTS_")) ApplyExistCustomFieldParameter(parameter, false, FieldType.EventExtension, unitOfWork);
+                // TODO: masterdata attributes parameters
+                //else if (Regex.IsMatch(parameter.Name, "^EXISTS_")) ApplyExistAttributeParameter(parameter, false, FieldType.EventExtension, unitOfWork);
+                //else if (Regex.IsMatch(parameter.Name, "^HASATTR_")) ApplyHasAttributeParameter(parameter, false, FieldType.EventExtension, unitOfWork);
 
-                //TODO: add missing parameters: ATTR-based, WD_*
                 else throw new NotImplementedException($"Query parameter unexpected or not implemented: '{parameter.Name}'");
             }
 
@@ -133,10 +136,9 @@ namespace FasTnT.Model.Queries.Implementations
             unitOfWork.EventManager.WhereSimpleFieldMatches(field, filterOperator, parameter.GetValue<DateTime>());
         }
 
-        //TODO: fix epcType parsing: does not comply with EPCIS 1.2 specification
         private void ApplyEpcMatchParameter(QueryParameter parameter, IUnitOfWork unitOfWork)
         {
-            unitOfWork.EventManager.WhereEpcMatches(parameter.Values, parameter.GetMatchEpcTypes());
+            unitOfWork.EventManager.WhereEpcMatches(parameter.Values.Select(x => x.Replace("*", "%")).ToArray(), parameter.GetMatchEpcTypes());
         }
     }
 }

@@ -8,6 +8,7 @@ namespace FasTnT.Persistence.Dapper
     {
         public IDictionary<string, object> Values { get; set; } = new Dictionary<string, object>();
 
+        public string Last => $"@qp_{Values.Keys.Count-1}";
         public string Add<T>(IEnumerable<T> value) => Add(value.ToArray());
 
         public string Add<T>(T value)

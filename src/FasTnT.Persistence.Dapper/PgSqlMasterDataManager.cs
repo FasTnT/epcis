@@ -1,9 +1,11 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Dapper;
 using FasTnT.Domain.Persistence;
 using FasTnT.Model;
 using FasTnT.Model.MasterDatas;
+using MoreLinq;
 using static Dapper.SqlBuilder;
 
 namespace FasTnT.Persistence.Dapper
@@ -47,12 +49,16 @@ namespace FasTnT.Persistence.Dapper
         public void WhereIdIn(string[] values) => _query = _query.Where($"md.id = ANY({_parameters.Add(values)})");
         public void WhereTypeIn(string[] values) => _query = _query.Where($"md.type = ANY({_parameters.Add(values)})");
 
-        public async Task<IEnumerable<EpcisMasterData>> ToList(bool includeAttributes)
+        public async Task<IEnumerable<EpcisMasterData>> ToList(params string[] attributes)
         {
             _parameters.SetLimit(_limit > 0 ? _limit : int.MaxValue);
             var masterData = await _unitOfWork.Query<EpcisMasterData>(_sqlTemplate.RawSql, _parameters.Values);
 
-            // TODO: handle includeAttributes
+            if (attributes.Any())
+            {
+                // TODO
+                masterData.ForEach(m => m.Attributes.AddRange(null));
+            }
 
             return masterData;
         }

@@ -8,6 +8,6 @@ namespace FasTnT.Model.MasterDatas
         public string Type { get; set; }
         public string Id { get; set; }
 
-        public IList<MasterDataAttribute> Attributes { get; set; } = new List<MasterDataAttribute>();
+        public List<MasterDataAttribute> Attributes { get; set; } = new List<MasterDataAttribute>();
     }
 }

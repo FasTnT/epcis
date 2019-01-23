@@ -18,6 +18,7 @@ namespace FasTnT.Domain.Persistence
         void WhereExistsErrorDeclaration();
         void WhereErrorReasonIn(string[] errorReasons);
         void WhereCorrectiveEventIdIn(string[] correctiveEventIds);
+        void WhereMasterDataHierarchyContains(EpcisField businessLocation, string[] values);
         void WhereCustomFieldMatches(bool inner, FieldType fieldType, string fieldNamespace, string fieldName, string[] values);
         void WhereCustomFieldMatches(bool inner, FieldType fieldType, string fieldNamespace, string fieldName, FilterComparator comparator, object value);
         void WhereCustomFieldExists(bool inner, FieldType fieldType, string fieldNamespace, string fieldName);
