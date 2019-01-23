@@ -14,7 +14,9 @@ namespace FasTnT.Host.Infrastructure.Authentication
 {
     public class BasicAuthHandler : AuthenticationHandler<AuthenticationSchemeOptions>
     {
-        const string Realm = "FasTnT";
+        public const string DefaultScheme = "BasicAuthentication";
+        public const string Realm = "FasTnT";
+
         private readonly IUnitOfWork _unitOfWork;
         private readonly UserContext _userContext;
 

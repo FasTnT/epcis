@@ -24,7 +24,7 @@ namespace FasTnT.Host
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddAuthentication("BasicAuthentication").AddScheme<AuthenticationSchemeOptions, BasicAuthHandler>("BasicAuthentication", null);
+            services.AddAuthentication(BasicAuthHandler.DefaultScheme).AddScheme<AuthenticationSchemeOptions, BasicAuthHandler>(BasicAuthHandler.DefaultScheme, null);
             services.AddEpcisDomain();
             services.AddEpcisPersistence(Configuration.GetConnectionString("FasTnT.Database"));
             services.AddScoped(typeof(IResponseFormatter), typeof(XmlResponseFormatter)); // Use XML as default formatter for subscriptions.
