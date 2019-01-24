@@ -23,6 +23,8 @@ namespace FasTnT.Domain.Persistence
         void WhereCustomFieldMatches(bool inner, FieldType fieldType, string fieldNamespace, string fieldName, FilterComparator comparator, object value);
         void WhereCustomFieldExists(bool inner, FieldType fieldType, string fieldNamespace, string fieldName);
         void WhereEpcQuantityMatches(FilterComparator filterOperator, double value);
+        void WhereMasterdataHasAttribute(EpcisField attribute, string[] values);
+        void WhereMasterdataAttributeValueIn(EpcisField attribute, string v, string[] values);
 
         Task<IEnumerable<EpcisEvent>> ToList();
     }

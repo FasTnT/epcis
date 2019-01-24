@@ -85,5 +85,11 @@ namespace FasTnT.Persistence.Dapper
 
         public void WhereMasterDataHierarchyContains(EpcisField field, string[] values)
             => _query = _query.Where($"({field.ToPgSql()} = ANY({_parameters.Add(values)}) OR EXISTS(SELECT h.parent_id FROM cbv.masterdata_hierarchy h WHERE h.parent_id = ANY({_parameters.Last}) AND h.children_id = {field.ToPgSql()} AND h.type = '{field.ToCbvType()}'))");
+
+        public void WhereMasterdataHasAttribute(EpcisField attribute, string[] values)
+            => _query = _query.Where($"EXISTS(SELECT a.id FROM cbv.attribute a WHERE a.masterdata_type = {_parameters.Add(attribute.ToCbvType())} AND a.masterdata_id = {attribute.ToPgSql()} AND a.id = ANY({_parameters.Add(values)}))");
+
+        public void WhereMasterdataAttributeValueIn(EpcisField attribute, string id, string[] values)
+            => _query = _query.Where($"EXISTS(SELECT a.id FROM cbv.attribute a WHERE a.masterdata_type = {_parameters.Add(attribute.ToCbvType())} AND a.masterdata_id = {attribute.ToPgSql()} AND a.id = {_parameters.Add(id)} AND a.value = ANY({_parameters.Add(values)}))");
     }
 }

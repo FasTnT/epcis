@@ -69,8 +69,8 @@ namespace FasTnT.Model.Queries.Implementations
                 else if (Regex.IsMatch(parameter.Name, "^(EQ|GT|LT|GE|LE)_")) ApplyCustomFieldParameter(parameter, false, FieldType.EventExtension, unitOfWork);
                 else if (Regex.IsMatch(parameter.Name, "^EXISTS_INNER")) ApplyExistCustomFieldParameter(parameter, true, FieldType.EventExtension, unitOfWork);
                 // TODO: masterdata attributes parameters
-                //else if (Regex.IsMatch(parameter.Name, "^EXISTS_")) ApplyExistAttributeParameter(parameter, false, FieldType.EventExtension, unitOfWork);
-                //else if (Regex.IsMatch(parameter.Name, "^HASATTR_")) ApplyHasAttributeParameter(parameter, false, FieldType.EventExtension, unitOfWork);
+                else if (Regex.IsMatch(parameter.Name, "^EQATTR_")) ApplyExistAttributeParameter(parameter, unitOfWork);
+                else if (Regex.IsMatch(parameter.Name, "^HASATTR_")) ApplyHasAttributeParameter(parameter, unitOfWork);
 
                 else throw new NotImplementedException($"Query parameter unexpected or not implemented: '{parameter.Name}'");
             }
@@ -139,6 +139,19 @@ namespace FasTnT.Model.Queries.Implementations
         private void ApplyEpcMatchParameter(QueryParameter parameter, IUnitOfWork unitOfWork)
         {
             unitOfWork.EventManager.WhereEpcMatches(parameter.Values.Select(x => x.Replace("*", "%")).ToArray(), parameter.GetMatchEpcTypes());
+        }
+
+        private void ApplyExistAttributeParameter(QueryParameter parameter, IUnitOfWork unitOfWork)
+        {
+            var parts = parameter.Name.Substring(7).Split("_", 2);
+            var attribute = Enumeration.GetByDisplayName<EpcisField>(parts[0]);
+            unitOfWork.EventManager.WhereMasterdataAttributeValueIn(attribute, parts[1], parameter.Values);
+        }
+
+        private void ApplyHasAttributeParameter(QueryParameter parameter, IUnitOfWork unitOfWork)
+        {
+            var attribute = Enumeration.GetByDisplayName<EpcisField>(parameter.Name.Substring(8));
+            unitOfWork.EventManager.WhereMasterdataHasAttribute(attribute, parameter.Values);
         }
     }
 }
