@@ -42,8 +42,7 @@ namespace FasTnT.Formatters.Xml
                 {
                     CreationDate = DateTime.Parse(document.Root.Attribute("creationDate").Value, CultureInfo.InvariantCulture),
                     SchemaVersion = document.Root.Attribute("schemaVersion").Value,
-                    MasterDataList = XmlMasterDataParser.ParseMasterDatas(document.Root.Element("EPCISBody").Element("VocabularyList").Elements("Vocabulary")),
-                    HierarchyList = XmlMasterDataParser.ParseMasterDataHierarchy(document.Root.Element("EPCISBody").Element("VocabularyList").Elements("Vocabulary"))
+                    MasterDataList = XmlMasterDataParser.ParseMasterDatas(document.Root.Element("EPCISBody").Element("VocabularyList").Elements("Vocabulary"))
                 };
             }
 

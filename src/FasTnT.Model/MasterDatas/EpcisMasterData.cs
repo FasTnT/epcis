@@ -9,5 +9,6 @@ namespace FasTnT.Model.MasterDatas
         public string Id { get; set; }
 
         public List<MasterDataAttribute> Attributes { get; set; } = new List<MasterDataAttribute>();
+        public List<EpcisMasterDataHierarchy> Children { get; set; } = new List<EpcisMasterDataHierarchy>();
     }
 }
