@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "91ab93af-cfc8-4a1d-9d98-8a59dd530f27",
+		"_postman_id": "1486d5a9-714f-45b3-a91c-1876aab87c32",
 		"name": "EPCIS Examples",
 		"description": "Collection containing sample requests to be made to an EPCIS repository _(FasTnT)_.\n\n",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
@@ -9,6 +9,27 @@
 		{
 			"name": "Capture",
 			"item": [
+				{
+					"name": "Events",
+					"item": [
+						{
+							"name": "Capture ObjectEvent",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": ""
+								}
+							},
+							"response": []
+						}
+					],
+					"_postman_isSubFolder": true
+				},
 				{
 					"name": "Capture MasterData",
 					"request": {
@@ -21,7 +42,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\n <epcismd:EPCISMasterDataDocument xmlns:epcismd=\"urn:epcglobal:epcis-masterdata:xsd:1\" schemaVersion=\"1\" creationDate=\"2005-07-11T11:30:47.0Z\">\n <EPCISBody>\n   <VocabularyList>\n     <Vocabulary type=\"urn:epcglobal:epcis:vtype:ReadPoint\">\n       <VocabularyElementList>\n            <VocabularyElement id=\"urn:epc:id:sgln:0614141.00300.3\">\n                <attribute id=\"urn:epcglobal:cbv:mda:site\">0614141003006</attribute>\n            </VocabularyElement>\n            <VocabularyElement id=\"urn:epc:id:sgln:0614141.00300.1\">\n                <attribute id=\"urn:epcglobal:cbv:mda:site\">0614141003007</attribute>\n                <attribute id=\"urn:epcglobal:cbv:mda:sst\">208</attribute>\n                <attribute id=\"urn:epcglobal:cbv:mda:ssa\">4521</attribute>\n                <attribute id=\"urn:epcglobal:cbv:mda:ssd\">Line #1 at Manufacturing Plant 1</attribute>\n            </VocabularyElement>\n            <VocabularyElement id=\"urn:epc:id:sgln:0614141.00300.2\">\n                <attribute id=\"urn:epcglobal:cbv:mda:site\">0614141003008</attribute>\n                <attribute id=\"urn:epcglobal:cbv:mda:sst\">251</attribute>\n                <attribute id=\"urn:epcglobal:cbv:mda:ssa\">416,417</attribute>\n            </VocabularyElement>\n       </VocabularyElementList> \n     </Vocabulary>\n   </VocabularyList>\n </EPCISBody>\n </epcismd:EPCISMasterDataDocument>"
+							"raw": " <epcismd:EPCISMasterDataDocument xmlns:epcismd=\"urn:epcglobal:epcis-masterdata:xsd:1\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" schemaVersion=\"1.0\" creationDate=\"2005-07-11T11:30:47.0Z\">\r\n   <EPCISBody> \r\n     <VocabularyList> \r\n       <Vocabulary type=\"urn:epcglobal:epcis:vtype:BusinessLocation\"> \r\n         <VocabularyElementList> \r\n           <VocabularyElement id=\"urn:epc:id:sgln:0037000.00729.0\"> \r\n             <attribute id=\"http://epcis.example.com/mda/latitude\">+18.0000</attribute> \r\n            <attribute id=\"http://epcis.example.com/mda/longitude\">-70.0000</attribute>\r\n             <attribute id=\"http://epcis.example.com/mda/address\">\r\n               <example:Address xmlns:example=\"http://epcis.example.com/ns\">\r\n                 <Street>100 Nowhere Street</Street>\r\n                 <City>Fancy</City>\r\n                 <State>DC</State>\r\n                 <Zip>99999</Zip>\r\n               </example:Address>\r\n             </attribute>\r\n             <children>\r\n               <id>urn:epc:id:sgln:0037000.00729.8201</id>\r\n               <id>urn:epc:id:sgln:0037000.00729.8202</id>\r\n             </children>\r\n           </VocabularyElement>\r\n           <VocabularyElement id=\"urn:epc:id:sgln:0037000.00729.8201\">\r\n             <attribute id=\"urn:epcglobal:cbv:mda:sst\">201</attribute>\r\n           </VocabularyElement>\r\n           <VocabularyElement id=\"urn:epc:id:sgln:0037000.00729.8202\">\r\n             <attribute id=\"urn:epcglobal:cbv:mda:sst\">202</attribute>\r\n             <children>\r\n               <id>urn:epc:id:sgln:0037000.00729.8203</id>\r\n             </children>\r\n           </VocabularyElement>\r\n           <VocabularyElement id=\"urn:epc:id:sgln:0037000.00729.8203\">\r\n             <attribute id=\"urn:epcglobal:cbv:mda:sst\">202</attribute>\r\n             <attribute id=\"urn:epcglobal:cbv:mda:ssa\">402</attribute>\r\n           </VocabularyElement>\r\n         </VocabularyElementList>\r\n       </Vocabulary>\r\n       <Vocabulary type=\"urn:epcglobal:epcis:vtype:ReadPoint\">\r\n         <VocabularyElementList>\r\n           <VocabularyElement id=\"urn:epc:id:sgln:0037000.00729.8201\">\r\n             <attribute id=\"urn:epcglobal:cbv:mda:site\">0037000007296</attribute>\r\n             <attribute id=\"urn:epcglobal:cbv:mda:sst\">201</attribute>\r\n           </VocabularyElement>\r\n           <VocabularyElement id=\"urn:epc:id:sgln:0037000.00729.8202\">\r\n             <attribute id=\"urn:epcglobal:cbv:mda:site\">0037000007296</attribute>\r\n             <attribute id=\"urn:epcglobal:cbv:mda:sst\">202</attribute>\r\n           </VocabularyElement>\r\n           <VocabularyElement id=\"urn:epc:id:sgln:0037000.00729.8203\">\r\n             <attribute id=\"urn:epcglobal:cbv:mda:site\">0037000007296</attribute>\r\n             <attribute id=\"urn:epcglobal:cbv:mda:sst\">203</attribute>\r\n           </VocabularyElement>\r\n         </VocabularyElementList>\r\n       </Vocabulary>\r\n     </VocabularyList>\r\n   </EPCISBody>\r\n </epcismd:EPCISMasterDataDocument>"
 						},
 						"url": {
 							"raw": "{{BaseUrl}}/Services/1.2/Capture/MasterData",
@@ -106,7 +127,7 @@
 								}
 							],
 							"cookie": [],
-							"body": ""
+							"body": null
 						}
 					]
 				}
@@ -656,7 +677,7 @@
 									"response": []
 								},
 								{
-									"name": "WD_readPoint (*)",
+									"name": "WD_readPoint",
 									"request": {
 										"method": "POST",
 										"header": [
@@ -717,14 +738,14 @@
 									"response": []
 								},
 								{
-									"name": "WD_bizLocation (*)",
+									"name": "WD_bizLocation",
 									"request": {
 										"method": "POST",
 										"header": [
 											{
 												"key": "Content-Type",
-												"value": "text/xml",
-												"type": "text"
+												"type": "text",
+												"value": "text/xml"
 											}
 										],
 										"body": {
@@ -885,14 +906,15 @@
 									"raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<epcisq:EPCISQueryDocument xmlns:epcisq=\"urn:epcglobal:epcis-query:xsd:1\" schemaVersion=\"1\" creationDate=\"2018-02-07T11:52:42.685Z\">\n  <EPCISBody>\n    <epcisq:Poll>\n    \t<queryName>SimpleEventQuery</queryName>\n    \t<params />\n    </epcisq:Poll>\n  </EPCISBody>\n</epcisq:EPCISQueryDocument>\n"
 								},
 								"url": {
-									"raw": "{{BaseUrl}}/Services/1.2/Query",
+									"raw": "{{BaseUrl}}/Services/1.2/Query/Poll",
 									"host": [
 										"{{BaseUrl}}"
 									],
 									"path": [
 										"Services",
 										"1.2",
-										"Query"
+										"Query",
+										"Poll"
 									]
 								}
 							},
@@ -1136,6 +1158,37 @@
 									"response": []
 								},
 								{
+									"name": "WD_name",
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Content-Type",
+												"name": "Content-Type",
+												"type": "text",
+												"value": "application/xml"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<epcisq:EPCISQueryDocument xmlns:epcisq=\"urn:epcglobal:epcis-query:xsd:1\" schemaVersion=\"1\" creationDate=\"2018-02-07T11:52:42.685Z\">\n  <EPCISBody>\n    <epcisq:Poll>\n    \t<queryName>SimpleMasterDataQuery</queryName>\n    \t<params>\n    \t\t<param>\n    \t\t\t<name>WD_name</name>\n    \t\t\t<value>urn:epc:id:sgln:0037000.00729.0</value>\n    \t\t</param>\n    \t</params>\n    </epcisq:Poll>\n  </EPCISBody>\n</epcisq:EPCISQueryDocument>"
+										},
+										"url": {
+											"raw": "{{BaseUrl}}/Services/1.2/Query/Poll",
+											"host": [
+												"{{BaseUrl}}"
+											],
+											"path": [
+												"Services",
+												"1.2",
+												"Query",
+												"Poll"
+											]
+										}
+									},
+									"response": []
+								},
+								{
 									"name": "HASATTR",
 									"request": {
 										"method": "POST",
@@ -1149,7 +1202,7 @@
 										],
 										"body": {
 											"mode": "raw",
-											"raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<epcisq:EPCISQueryDocument xmlns:epcisq=\"urn:epcglobal:epcis-query:xsd:1\" schemaVersion=\"1\" creationDate=\"2018-02-07T11:52:42.685Z\">\n  <EPCISBody>\n    <epcisq:Poll>\n    \t<queryName>SimpleMasterDataQuery</queryName>\n    \t<params>\n    \t\t<param>\n    \t\t\t<name>HASATTR</name>\n    \t\t\t<value>urn:epcglobal:cbv:mda:ssd</value>\n    \t\t</param>\n    \t</params>\n    </epcisq:Poll>\n  </EPCISBody>\n</epcisq:EPCISQueryDocument>"
+											"raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<epcisq:EPCISQueryDocument xmlns:epcisq=\"urn:epcglobal:epcis-query:xsd:1\" schemaVersion=\"1\" creationDate=\"2018-02-07T11:52:42.685Z\">\n  <EPCISBody>\n    <epcisq:Poll>\n    \t<queryName>SimpleMasterDataQuery</queryName>\n    \t<params>\n    \t\t<param>\n    \t\t\t<name>HASATTR</name>\n    \t\t\t<value>urn:epcglobal:cbv:mda:sst</value>\n    \t\t</param>\n    \t</params>\n    </epcisq:Poll>\n  </EPCISBody>\n</epcisq:EPCISQueryDocument>"
 										},
 										"url": {
 											"raw": "{{BaseUrl}}/Services/1.2/Query/Poll",
@@ -1181,6 +1234,99 @@
 										"body": {
 											"mode": "raw",
 											"raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<epcisq:EPCISQueryDocument xmlns:epcisq=\"urn:epcglobal:epcis-query:xsd:1\" schemaVersion=\"1\" creationDate=\"2018-02-07T11:52:42.685Z\">\n  <EPCISBody>\n    <epcisq:Poll>\n    \t<queryName>SimpleMasterDataQuery</queryName>\n    \t<params>\n    \t\t<param>\n    \t\t\t<name>maxElementCount</name>\n    \t\t\t<value>3</value>\n    \t\t</param>\n    \t</params>\n    </epcisq:Poll>\n  </EPCISBody>\n</epcisq:EPCISQueryDocument>"
+										},
+										"url": {
+											"raw": "{{BaseUrl}}/Services/1.2/Query/Poll",
+											"host": [
+												"{{BaseUrl}}"
+											],
+											"path": [
+												"Services",
+												"1.2",
+												"Query",
+												"Poll"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "includeAttributes",
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Content-Type",
+												"name": "Content-Type",
+												"type": "text",
+												"value": "application/xml"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<epcisq:EPCISQueryDocument xmlns:epcisq=\"urn:epcglobal:epcis-query:xsd:1\" schemaVersion=\"1\" creationDate=\"2018-02-07T11:52:42.685Z\">\n  <EPCISBody>\n    <epcisq:Poll>\n    \t<queryName>SimpleMasterDataQuery</queryName>\n    \t<params>\n    \t\t<param>\n    \t\t\t<name>includeAttributes</name>\n    \t\t\t<value>true</value>\n    \t\t</param>\n    \t</params>\n    </epcisq:Poll>\n  </EPCISBody>\n</epcisq:EPCISQueryDocument>"
+										},
+										"url": {
+											"raw": "{{BaseUrl}}/Services/1.2/Query/Poll",
+											"host": [
+												"{{BaseUrl}}"
+											],
+											"path": [
+												"Services",
+												"1.2",
+												"Query",
+												"Poll"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "attributeNames",
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Content-Type",
+												"name": "Content-Type",
+												"type": "text",
+												"value": "application/xml"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<epcisq:EPCISQueryDocument xmlns:epcisq=\"urn:epcglobal:epcis-query:xsd:1\" schemaVersion=\"1\" creationDate=\"2018-02-07T11:52:42.685Z\">\n  <EPCISBody>\n    <epcisq:Poll>\n    \t<queryName>SimpleMasterDataQuery</queryName>\n    \t<params>\n    \t\t<param>\n    \t\t\t<name>includeAttributes</name>\n    \t\t\t<value>true</value>\n    \t\t</param>\n    \t\t<param>\n    \t\t\t<name>attributeNames</name>\n    \t\t\t<value>\n    \t\t\t\t<value>urn:epcglobal:cbv:mda:sst</value>\n    \t\t\t\t<value>urn:epcglobal:cbv:mda:site</value>\n    \t\t\t</value>\n    \t\t</param>\n    \t</params>\n    </epcisq:Poll>\n  </EPCISBody>\n</epcisq:EPCISQueryDocument>"
+										},
+										"url": {
+											"raw": "{{BaseUrl}}/Services/1.2/Query/Poll",
+											"host": [
+												"{{BaseUrl}}"
+											],
+											"path": [
+												"Services",
+												"1.2",
+												"Query",
+												"Poll"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "includeChildren",
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Content-Type",
+												"name": "Content-Type",
+												"type": "text",
+												"value": "application/xml"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<epcisq:EPCISQueryDocument xmlns:epcisq=\"urn:epcglobal:epcis-query:xsd:1\" schemaVersion=\"1\" creationDate=\"2018-02-07T11:52:42.685Z\">\n  <EPCISBody>\n    <epcisq:Poll>\n    \t<queryName>SimpleMasterDataQuery</queryName>\n    \t<params>\n    \t\t<param>\n    \t\t\t<name>includeChildren</name>\n    \t\t\t<value>true</value>\n    \t\t</param>\n    \t</params>\n    </epcisq:Poll>\n  </EPCISBody>\n</epcisq:EPCISQueryDocument>"
 										},
 										"url": {
 											"raw": "{{BaseUrl}}/Services/1.2/Query/Poll",
@@ -1405,7 +1551,12 @@
 						"header": [
 							{
 								"key": "Content-Type",
-								"value": "text/xml"
+								"value": "application/xml"
+							},
+							{
+								"key": "Accept",
+								"value": "application/xml",
+								"type": "text"
 							}
 						],
 						"body": {
@@ -1481,11 +1632,8 @@
 			"name": "Database setup",
 			"item": [
 				{
-					"name": "Migrate Database  (debug only)",
+					"name": "Migrate Database  (development only)",
 					"request": {
-						"auth": {
-							"type": "noauth"
-						},
 						"method": "POST",
 						"header": [
 							{
@@ -1551,16 +1699,13 @@
 								}
 							],
 							"cookie": [],
-							"body": ""
+							"body": null
 						}
 					]
 				},
 				{
-					"name": "Rollback Database (debug only)",
+					"name": "Rollback Database (development only)",
 					"request": {
-						"auth": {
-							"type": "noauth"
-						},
 						"method": "POST",
 						"header": [
 							{
@@ -1626,7 +1771,7 @@
 								}
 							],
 							"cookie": [],
-							"body": ""
+							"body": null
 						}
 					]
 				}
@@ -1789,13 +1934,13 @@
 		"type": "basic",
 		"basic": [
 			{
-				"key": "password",
-				"value": "P@ssw0rd",
+				"key": "username",
+				"value": "admin",
 				"type": "string"
 			},
 			{
-				"key": "username",
-				"value": "admin",
+				"key": "password",
+				"value": "P@ssw0rd",
 				"type": "string"
 			}
 		]
@@ -1829,8 +1974,8 @@
 					"    pm.expect(pm.cookies.count()).to.be.equal(0);",
 					"});",
 					"",
-					"pm.test(\"response should only contain 3 headers\", function () { ",
-					"    pm.expect(pm.response.headers.count()).to.be.equal(3);",
+					"pm.test(\"response should contain at most 3 headers\", function () { ",
+					"    pm.expect(pm.response.headers.count()).to.be.below(4);",
 					"});"
 				]
 			}
