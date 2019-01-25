@@ -25,6 +25,7 @@ namespace FasTnT.Formatters.Xml.Responses
         {
             var element = CreateEvent(epcisEvent);
             eventBuilder[epcisEvent.Type].ForEach(a => a(epcisEvent, element));
+            if (epcisEvent.Type == EventType.Transformation) element = new XElement("extension", element);
 
             return element;
         }
@@ -43,21 +44,29 @@ namespace FasTnT.Formatters.Xml.Responses
 
         public static void EpcList(EpcisEvent evt, XContainer element)
         {
-            var epcList = new XElement("epcList");
-            var epcQuantity = new XElement("epcQuantity");
-            foreach (var epc in evt.Epcs.Where(x => x.Type == EpcType.List)) epcList.Add(new XElement("epc", epc.Id));
-            foreach (var epc in evt.Epcs.Where(x => x.Type == EpcType.Quantity))
-            {
-                var qtyElement = new XElement("quantityElement");
-                qtyElement.Add(new XElement("epcClass", epc.Id));
-                if (epc.Quantity.HasValue) qtyElement.Add(new XElement("quantity", epc.Quantity));
-                if (!string.IsNullOrEmpty(epc.UnitOfMeasure)) qtyElement.Add(new XElement("uom", epc.UnitOfMeasure));
-
-                epcQuantity.Add(qtyElement);
-            }
+            var epcList = new XElement("epcList", evt.Epcs.Where(x => x.Type == EpcType.List).Select(e => new XElement("epc", e.Id)));
+            var inputEpcList = new XElement("inputEPCList", evt.Epcs.Where(x => x.Type == EpcType.InputEpc).Select(e => new XElement("epc", e.Id)));
+            var inputQuantity = new XElement("inputQuantityList", evt.Epcs.Where(x => x.Type == EpcType.InputQuantity).Select(FormatQuantity));
+            var epcQuantity = new XElement("epcQuantity", evt.Epcs.Where(x => x.Type == EpcType.Quantity).Select(FormatQuantity));
+            var outputQuantity = new XElement("outputQuantityList", evt.Epcs.Where(x => x.Type == EpcType.OutputQuantity).Select(FormatQuantity));
+            var outputEpcList = new XElement("outputEPCList", evt.Epcs.Where(x => x.Type == EpcType.OutputEpc).Select(e => new XElement("epc", e.Id)));
 
             if (epcList.HasElements) element.Add(epcList);
+            if (inputEpcList.HasElements) element.Add(inputEpcList);
+            if (inputQuantity.HasElements) element.Add(inputQuantity);
             if (epcQuantity.HasElements) AddInExtension(element, epcQuantity);
+            if (outputQuantity.HasElements) element.Add(outputQuantity);
+            if (outputEpcList.HasElements) element.Add(outputEpcList);
+        }
+
+        public static XElement FormatQuantity(Epc epc)
+        {
+            var qtyElement = new XElement("quantityElement");
+            qtyElement.Add(new XElement("epcClass", epc.Id));
+            if (epc.Quantity.HasValue) qtyElement.Add(new XElement("quantity", epc.Quantity));
+            if (!string.IsNullOrEmpty(epc.UnitOfMeasure)) qtyElement.Add(new XElement("uom", epc.UnitOfMeasure));
+
+            return qtyElement;
         }
 
         public static void Action(EpcisEvent evt, XContainer container)
@@ -114,7 +123,6 @@ namespace FasTnT.Formatters.Xml.Responses
         private static void Ilmd(EpcisEvent @event, XContainer element)
         {
             var ilmdElement = new XElement("ilmd");
-
             CustomFields(@event, ilmdElement, FieldType.Ilmd);
 
             if (ilmdElement.HasAttributes || ilmdElement.HasElements) AddInExtension(element, ilmdElement);
