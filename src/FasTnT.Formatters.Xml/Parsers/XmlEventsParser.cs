@@ -53,17 +53,17 @@ namespace FasTnT.Formatters.Xml.Requests
                     case "action":
                         epcisEvent.Action = Enumeration.GetByDisplayName<EventAction>(node.Value); break;
                     case "epcList":
-                        node.ParseEpcListInto(epcisEvent); break;
+                        node.ParseEpcListInto(EpcType.List, epcisEvent); break;
                     case "childEPCs":
                         node.ParseChildEpcListInto(epcisEvent); break;
                     case "inputQuantityList":
                         node.ParseQuantityListInto(epcisEvent, true); break;
                     case "inputEPCList":
-                        node.ParseEpcListInto(epcisEvent, true); break;
+                        node.ParseEpcListInto(EpcType.InputEpc, epcisEvent); break;
                     case "outputQuantityList":
                         node.ParseQuantityListInto(epcisEvent, false); break;
                     case "outputEPCList":
-                        node.ParseEpcListInto(epcisEvent, false); break;
+                        node.ParseEpcListInto(EpcType.OutputEpc, epcisEvent); break;
                     case "epcClass":
                         epcisEvent.Epcs.Add(new Epc { Type = EpcType.Quantity, Id = node.Value, IsQuantity = true }); break;
                     case "quantity":
