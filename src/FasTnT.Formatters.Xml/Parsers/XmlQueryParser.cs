@@ -24,7 +24,7 @@ namespace FasTnT.Formatters.Xml.Requests
             foreach (var element in elements ?? new XElement[0])
             {
                 var name = element.Element("name")?.Value?.Trim();
-                var values = element.Element("values")?.HasElements ?? false ? element.Element("values").Elements("value").Select(x => x.Value) : new[] { element.Element("value")?.Value };
+                var values = element.Element("value")?.HasElements ?? false ? element.Element("value").Elements("value").Select(x => x.Value) : new[] { element.Element("value")?.Value };
 
                 yield return new QueryParameter
                 {

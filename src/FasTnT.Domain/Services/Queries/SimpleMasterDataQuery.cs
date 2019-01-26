@@ -19,24 +19,26 @@ namespace FasTnT.Model.Queries.Implementations
 
         public async Task<IEnumerable<IEntity>> Execute(IEnumerable<QueryParameter> parameters, IUnitOfWork unitOfWork)
         {
-            var includeAttributes = false;
-            foreach(var parameter in parameters)
+            var attributeNames = new List<string>();
+            bool includeAttributes = false, includeChilren = false;
+
+            foreach (var parameter in parameters)
             {
                 if (Equals(parameter.Name, "includeAttributes")) includeAttributes = parameter.GetValue<bool>();
                 else if (Equals(parameter.Name, "vocabularyName")) unitOfWork.MasterDataManager.WhereTypeIn(parameter.Values);
                 else if (Equals(parameter.Name, "EQ_name")) unitOfWork.MasterDataManager.WhereIdIn(parameter.Values);
                 else if (Equals(parameter.Name, "HASATTR")) unitOfWork.MasterDataManager.WhereAnyAttributeNamed(parameter.Values);
                 else if (Equals(parameter.Name, "maxElementCount")) unitOfWork.MasterDataManager.Limit(parameter.GetValue<int>() + 1);
-                else if (Equals(parameter.Name, "WD_name")) throw new NotImplementedException("Parameter 'includeChildren' is not implemented yet.");
-                else if (Equals(parameter.Name, "includeChildren")) throw new NotImplementedException("Parameter 'includeChildren' is not implemented yet.");
-                else if (Equals(parameter.Name, "attributeNames")) throw new NotImplementedException("Parameter 'attributeNames' is not implemented yet.");
+                else if (Equals(parameter.Name, "WD_name")) unitOfWork.MasterDataManager.WhereIsDescendantOf(parameter.Values);
+                else if (Equals(parameter.Name, "includeChildren")) includeChilren = parameter.GetValue<bool>();
+                else if (Equals(parameter.Name, "attributeNames")) attributeNames.AddRange(parameter.Values);
                 else if (Regex.IsMatch(parameter.Name, "^EQATTR_")) throw new NotImplementedException("Parameter 'EQATTR_*' is not implemented yet.");
             }
 
-            var results = await unitOfWork.MasterDataManager.ToList(includeAttributes);
+            var results = await unitOfWork.MasterDataManager.ToList(includeAttributes ? attributeNames.ToArray() : null, includeChilren);
 
-            // Check for the maxEventCount parameter
-            if (parameters.Any(x => x.Name == "maxEventCount") && results.Count() == parameters.Last(x => x.Name == "maxEventCount").GetValue<int>() + 1)
+            // Check for the maxElementCount parameter
+            if (parameters.Any(x => x.Name == "maxElementCount") && results.Count() == parameters.Last(x => x.Name == "maxElementCount").GetValue<int>() + 1)
                 throw new EpcisException(ExceptionType.QueryTooLargeException, "Too many results returned by the request");
 
             return results;

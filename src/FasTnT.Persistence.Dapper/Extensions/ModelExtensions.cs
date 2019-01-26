@@ -49,5 +49,13 @@ namespace FasTnT.Persistence.Dapper
 
             throw new Exception($"Unknown simple EPCIS event field: '{field.DisplayName}'");
         }
+
+        public static string ToCbvType(this EpcisField field)
+        {
+            if (field.Equals(EpcisField.BusinessLocation)) return "urn:epcglobal:epcis:vtype:BusinessLocation";
+            if (field.Equals(EpcisField.ReadPoint)) return "urn:epcglobal:epcis:vtype:ReadPoint";
+
+            throw new Exception($"Cannot convert to CBV type: '{field.DisplayName}'");
+        }
     }
 }

@@ -61,7 +61,7 @@ namespace FasTnT.Persistence.Dapper
             => _query = _query.Where($"EXISTS(SELECT sd.event_id FROM epcis.source_destination sd WHERE sd.direction = {type.Id} AND sd.type = {_parameters.Add(sourceName)} AND sd.source_dest_id = ANY({_parameters.Add(sourceValues)}) AND sd.event_id = event.id)");
 
         public void WhereEpcMatches(string[] values, EpcType[] epcTypes)
-            => _query = _query.Where($"EXISTS(SELECT epc.event_id FROM epcis.epc epc WHERE epc.event_id = event.id AND epc.epc = ANY({_parameters.Add(values)}) AND epc.type = ANY({_parameters.Add(epcTypes)}))");
+            => _query = _query.Where($"EXISTS(SELECT epc.event_id FROM epcis.epc epc WHERE epc.event_id = event.id AND epc.epc LIKE ANY({_parameters.Add(values)}) AND epc.type = ANY({_parameters.Add(epcTypes)}))");
 
         public void WhereExistsErrorDeclaration()
             => _query = _query.Where($"EXISTS(SELECT ed.event_id FROM epcis.event_declaration ed WHERE ed.event_id = event.id)");
@@ -82,5 +82,14 @@ namespace FasTnT.Persistence.Dapper
             => _query = _query.Where($"EXISTS(SELECT epc.event_id FROM epcis.epc epc WHERE epc.type = {EpcType.Quantity} AND epc.quantity {filterOperator.ToSql()} {_parameters.Add(value)} AND epc.event_id = event.id)");
 
         public void OrderBy(EpcisField field, OrderDirection direction) => _query.OrderBy($"{field.ToPgSql()} {direction.ToPgSql()}");
+
+        public void WhereMasterDataHierarchyContains(EpcisField field, string[] values)
+            => _query = _query.Where($"({field.ToPgSql()} = ANY({_parameters.Add(values)}) OR EXISTS(SELECT h.parent_id FROM cbv.masterdata_hierarchy h WHERE h.parent_id = ANY({_parameters.Last}) AND h.children_id = {field.ToPgSql()} AND h.type = '{field.ToCbvType()}'))");
+
+        public void WhereMasterdataHasAttribute(EpcisField attribute, string[] values)
+            => _query = _query.Where($"EXISTS(SELECT a.id FROM cbv.attribute a WHERE a.masterdata_type = {_parameters.Add(attribute.ToCbvType())} AND a.masterdata_id = {attribute.ToPgSql()} AND a.id = ANY({_parameters.Add(values)}))");
+
+        public void WhereMasterdataAttributeValueIn(EpcisField attribute, string id, string[] values)
+            => _query = _query.Where($"EXISTS(SELECT a.id FROM cbv.attribute a WHERE a.masterdata_type = {_parameters.Add(attribute.ToCbvType())} AND a.masterdata_id = {attribute.ToPgSql()} AND a.id = {_parameters.Add(id)} AND a.value = ANY({_parameters.Add(values)}))");
     }
 }

@@ -205,4 +205,10 @@ SELECT event_id, type, source_dest_id as id, direction FROM epcis.source_destina
   <data name="MasterDataDelete" xml:space="preserve">
     <value>DELETE FROM cbv.attribute_field WHERE masterdata_type = @Type AND masterdata_id = @Id; DELETE FROM cbv.hierarchy WHERE type = @Type AND (parent_id = @Id OR children_id = @Id); DELETE FROM cbv.attribute WHERE masterdata_id = @Id AND masterdata_type = @Type; DELETE FROM cbv.masterdata WHERE id = @Id AND type = @Type;</value>
   </data>
+  <data name="MasterDataAttributeQuery" xml:space="preserve">
+    <value>SELECT masterdata_type AS parent_type, masterdata_id AS parent_id, id, value FROM cbv.attribute WHERE masterdata_id = ANY(@Ids) AND id = ANY(@Attributes);</value>
+  </data>
+  <data name="MasterDataAllAttributeQuery" xml:space="preserve">
+    <value>SELECT masterdata_type AS parent_type, masterdata_id AS parent_id, id, value FROM cbv.attribute WHERE masterdata_id = ANY(@Ids);</value>
+  </data>
 </root>

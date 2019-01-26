@@ -88,6 +88,15 @@ namespace FasTnT.Persistence.Dapper {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to SELECT masterdata_type AS parent_type, masterdata_id AS parent_id, id, value FROM cbv.attribute WHERE masterdata_id = ANY(@Ids);.
+        /// </summary>
+        internal static string MasterDataAllAttributeQuery {
+            get {
+                return ResourceManager.GetString("MasterDataAllAttributeQuery", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to INSERT INTO cbv.attribute_field(internal_id, internal_parent_id, masterdata_id, masterdata_type, parent_id, name, namespace, value) VALUES(@Id, @InternalParentId, @MasterdataId, @MasterdataType, @ParentId, @Name, @Namespace, @Value);.
         /// </summary>
         internal static string MasterDataAttributeFieldInsert {
@@ -102,6 +111,15 @@ namespace FasTnT.Persistence.Dapper {
         internal static string MasterDataAttributeInsert {
             get {
                 return ResourceManager.GetString("MasterDataAttributeInsert", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to SELECT masterdata_type AS parent_type, masterdata_id AS parent_id, id, value FROM cbv.attribute WHERE masterdata_id = ANY(@Ids) AND id = ANY(@Attributes);.
+        /// </summary>
+        internal static string MasterDataAttributeQuery {
+            get {
+                return ResourceManager.GetString("MasterDataAttributeQuery", resourceCulture);
             }
         }
         
