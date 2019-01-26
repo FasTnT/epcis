@@ -15,15 +15,8 @@ namespace FasTnT.Formatters.Xml
         public static EventType ToEventType(this XElement element) => Enumeration.GetByDisplayName<EventType>(element.Name.LocalName);
         public static EventAction ToEventAction(this XElement element) => Enumeration.GetByDisplayName<EventAction>(element.Value);
 
-        public static void ParseEpcListInto(this XElement element, EpcisEvent destination)
+        public static void ParseEpcListInto(this XElement element, EpcType type, EpcisEvent destination)
         {
-            foreach (var epc in element.Elements()) destination.Epcs.Add(new Epc { Type = EpcType.List, Id = epc.Value });
-        }
-
-        public static void ParseEpcListInto(this XElement element, EpcisEvent destination, bool isInput)
-        {
-            var type = isInput ? EpcType.InputEpc : EpcType.OutputEpc;
-
             foreach (var epc in element.Elements("epc")) destination.Epcs.Add(new Epc { Type = type, Id = epc.Value });
         }
 
@@ -36,8 +29,8 @@ namespace FasTnT.Formatters.Xml
                     Type = isInput ? EpcType.InputQuantity : EpcType.OutputQuantity,
                     Id = epc.Element("epcClass").Value,
                     IsQuantity = true,
-                    Quantity = float.Parse(element.Element("Quantity").Value, CultureInfo.InvariantCulture),
-                    UnitOfMeasure = element.Element("uom") != null ? element.Element("uom").Value : null
+                    Quantity = float.Parse(epc.Element("quantity").Value, CultureInfo.InvariantCulture),
+                    UnitOfMeasure = epc.Element("uom") != null ? epc.Element("uom").Value : null
                 });
             }
         }
