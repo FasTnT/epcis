@@ -29,10 +29,11 @@ namespace FasTnT.Formatters.Xml
             }
             else if (document.Root.Name == XName.Get("EPCISQueryDocument", EpcisNamespaces.Query)) // Subscription result
             {
-                return new EpcisEventDocument
+                return new EpcisQueryCallbackDocument
                 {
                     CreationDate = DateTime.Parse(document.Root.Attribute("creationDate").Value, CultureInfo.InvariantCulture),
                     SchemaVersion = document.Root.Attribute("schemaVersion").Value,
+                    SubscriptionName = document.Root.Element("EPCISBody").Element(XName.Get("QueryResults", EpcisNamespaces.Query)).Element("subscriptionID").Value,
                     EventList = XmlEventsParser.ParseEvents(document.Root.Element("EPCISBody").Element(XName.Get("QueryResults", EpcisNamespaces.Query)).Element("resultsBody").Element("EventList").Elements().ToArray())
                 };
             }
