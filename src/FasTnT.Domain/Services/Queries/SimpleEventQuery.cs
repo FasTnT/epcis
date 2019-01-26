@@ -68,7 +68,6 @@ namespace FasTnT.Model.Queries.Implementations
                 else if (Regex.IsMatch(parameter.Name, "^(EQ|GT|LT|GE|LE)_INNER_")) ApplyCustomFieldParameter(parameter, true, FieldType.EventExtension, unitOfWork);
                 else if (Regex.IsMatch(parameter.Name, "^(EQ|GT|LT|GE|LE)_")) ApplyCustomFieldParameter(parameter, false, FieldType.EventExtension, unitOfWork);
                 else if (Regex.IsMatch(parameter.Name, "^EXISTS_INNER")) ApplyExistCustomFieldParameter(parameter, true, FieldType.EventExtension, unitOfWork);
-                // TODO: masterdata attributes parameters
                 else if (Regex.IsMatch(parameter.Name, "^EQATTR_")) ApplyExistAttributeParameter(parameter, unitOfWork);
                 else if (Regex.IsMatch(parameter.Name, "^HASATTR_")) ApplyHasAttributeParameter(parameter, unitOfWork);
 
