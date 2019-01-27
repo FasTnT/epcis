@@ -3,6 +3,7 @@ using FasTnT.Domain.Persistence;
 using FasTnT.Model.Exceptions;
 using FasTnT.Model.Queries.Implementations;
 using FasTnT.Model.Subscriptions;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -24,6 +25,7 @@ namespace FasTnT.Domain.Services
         public async Task Process(Subscription request)
         {
             EnsureQueryAllowsSubscription(request);
+            EnsureDestinationHasEndSlash(request);
 
             using (new CommitOnDispose(_unitOfWork))
             {
@@ -32,6 +34,8 @@ namespace FasTnT.Domain.Services
                 _backgroundService.Register(request);
             }
         }
+
+        private void EnsureDestinationHasEndSlash(Subscription request) => request.Destination = $"{request.Destination.TrimEnd('/')}/";
 
         public async Task Process(UnsubscribeRequest query)
         {
