@@ -45,8 +45,7 @@ namespace FasTnT.Host
                 app.UseDeveloperExceptionPage();
             }
 
-            // TODO: get from configuration?
-            SubscriptionBackgroundService.DelayTimeoutInMs = 5000;
+            SubscriptionBackgroundService.DelayTimeoutInMs = Configuration.GetSection("Settings").GetValue<int>("SubscriptionWaitTimeout", 5000);
 
             app.UseExceptionHandlingMiddleware()
                .UseAuthentication()
