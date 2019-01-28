@@ -21,7 +21,7 @@ namespace FasTnT.UnitTest.Domain.SubscriptionServiceTests
             base.Arrange();
 
             SubscriptionManager = A.Fake<ISubscriptionManager>();
-            Request = new Subscription { SubscriptionId = "TestSubscription", QueryName = EpcisQueries.First(x => x.AllowSubscription).Name };
+            Request = new Subscription { SubscriptionId = "TestSubscription", Destination = "http://test-url.com/", QueryName = EpcisQueries.First(x => x.AllowSubscription).Name };
 
             A.CallTo(() => UnitOfWork.SubscriptionManager).Returns(SubscriptionManager);
             A.CallTo(() => SubscriptionManager.GetById("TestSubscription")).Returns(Task.FromResult(default(Subscription)));
@@ -54,7 +54,7 @@ namespace FasTnT.UnitTest.Domain.SubscriptionServiceTests
             base.Arrange();
 
             SubscriptionManager = A.Fake<ISubscriptionManager>();
-            Request = new Subscription { SubscriptionId = "TestSubscription", QueryName = EpcisQueries.First(x => x.AllowSubscription).Name };
+            Request = new Subscription { SubscriptionId = "TestSubscription", Destination = "http://some-url.com/", QueryName = EpcisQueries.First(x => x.AllowSubscription).Name };
 
             A.CallTo(() => UnitOfWork.SubscriptionManager).Returns(SubscriptionManager);
             A.CallTo(() => SubscriptionManager.GetById("TestSubscription")).Returns(Task.FromResult(new Subscription()));
@@ -79,7 +79,7 @@ namespace FasTnT.UnitTest.Domain.SubscriptionServiceTests
         public void TheExceptionShouldBeEpcisException() => Assert.IsInstanceOfType(Catched, typeof(EpcisException));
 
         [Assert]
-        public void TheExceptionTypeShouldBeNoSubscribeNotPermittedException() => Assert.AreEqual(ExceptionType.SubscribeNotPermittedException, ((EpcisException)Catched).ExceptionType);
+        public void TheExceptionTypeShouldBeSubscribeNotPermittedException() => Assert.AreEqual(ExceptionType.SubscribeNotPermittedException, ((EpcisException)Catched).ExceptionType);
 
         [Assert]
         public void ItShouldHaveBeginTheUnitOfWorkTransaction() => A.CallTo(() => UnitOfWork.BeginTransaction()).MustHaveHappened();
