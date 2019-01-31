@@ -3,6 +3,7 @@ using FasTnT.Domain.Persistence;
 using FasTnT.Model.Exceptions;
 using FasTnT.Model.Queries.Implementations;
 using FasTnT.Model.Subscriptions;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -23,6 +24,7 @@ namespace FasTnT.Domain.Services
 
         public async Task Process(Subscription request)
         {
+            EnsureDestinationIsValidURI(request);
             EnsureQueryAllowsSubscription(request);
 
             using (new CommitOnDispose(_unitOfWork))
@@ -48,6 +50,8 @@ namespace FasTnT.Domain.Services
         }
 
         public Task Process(TriggerSubscriptionRequest query) => Task.Run(() => _backgroundService.Trigger(query.Trigger));
+
+        private void EnsureDestinationIsValidURI(Subscription request) => UriValidator.Validate(request.Destination, true);
 
         private async Task EnsureSubscriptionDoesNotExist(Subscription request)
         {
