@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 namespace FasTnT.UnitTest.Domain.SubscriptionServiceTests
 {
     [TestClass]
-    public class WhenProcessingASubscriptionRequestForAQueryThatDoesntAllowSubscription : BaseSubscriptionServiceUnitTest
+    public class WhenProcessingASubscriptionRequestGivenSubscriptionAlreadyExist : BaseSubscriptionServiceUnitTest
     {
         public ISubscriptionManager SubscriptionManager { get; set; }
         public Subscription Request { get; set; }
@@ -22,10 +22,10 @@ namespace FasTnT.UnitTest.Domain.SubscriptionServiceTests
             base.Arrange();
 
             SubscriptionManager = A.Fake<ISubscriptionManager>();
-            Request = new Subscription { SubscriptionId = "TestSubscription", Destination = "http://test.com/callback", QueryName = EpcisQueries.First(x => !x.AllowSubscription).Name };
+            Request = new Subscription { SubscriptionId = "TestSubscription", Destination = "http://test.com/callback", QueryName = EpcisQueries.First(x => x.AllowSubscription).Name };
 
             A.CallTo(() => UnitOfWork.SubscriptionManager).Returns(SubscriptionManager);
-            A.CallTo(() => SubscriptionManager.GetById("TestSubscription")).Returns(Task.FromResult(default(Subscription)));
+            A.CallTo(() => SubscriptionManager.GetById("TestSubscription")).Returns(Task.FromResult(new Subscription()));
         }
 
         public override void Act()
@@ -34,7 +34,7 @@ namespace FasTnT.UnitTest.Domain.SubscriptionServiceTests
             {
                 Task.WaitAll(SubscriptionService.Process(Request));
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Catched = (ex is AggregateException) ? ex.InnerException : ex;
             }
@@ -50,13 +50,10 @@ namespace FasTnT.UnitTest.Domain.SubscriptionServiceTests
         public void TheExceptionTypeShouldBeNoSubscribeNotPermittedException() => Assert.AreEqual(ExceptionType.SubscribeNotPermittedException, ((EpcisException)Catched).ExceptionType);
 
         [Assert]
-        public void ItShouldNotHaveBeginTheUnitOfWorkTransaction() => A.CallTo(() => UnitOfWork.BeginTransaction()).MustNotHaveHappened();
+        public void ItShouldHaveBeginTheUnitOfWorkTransaction() => A.CallTo(() => UnitOfWork.BeginTransaction()).MustHaveHappened();
 
         [Assert]
-        public void ItShouldNotHaveCommitTheTransaction() => A.CallTo(() => UnitOfWork.Commit()).MustNotHaveHappened();
-
-        [Assert]
-        public void ItShouldNotCallTheSubscriptionManagerProperty() => A.CallTo(() => UnitOfWork.SubscriptionManager).MustNotHaveHappened();
+        public void ItShouldCallTheSubscriptionManagerProperty() => A.CallTo(() => UnitOfWork.SubscriptionManager).MustHaveHappened();
 
         [Assert]
         public void ItShouldNotAddTheSubscriptionToTheService() => A.CallTo(() => SubscriptionBackgroundService.Register(A<Subscription>._)).MustNotHaveHappened();
