@@ -1,6 +1,5 @@
 ﻿using FakeItEasy;
 using FasTnT.Domain.Persistence;
-using FasTnT.Model.Exceptions;
 using FasTnT.Model.Subscriptions;
 using FasTnT.UnitTest.Common;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -21,7 +20,7 @@ namespace FasTnT.UnitTest.Domain.SubscriptionServiceTests
             base.Arrange();
 
             SubscriptionManager = A.Fake<ISubscriptionManager>();
-            Request = new Subscription { SubscriptionId = "TestSubscription", QueryName = EpcisQueries.First(x => x.AllowSubscription).Name };
+            Request = new Subscription { SubscriptionId = "TestSubscription", Destination = "http://test.com/callback", QueryName = EpcisQueries.First(x => x.AllowSubscription).Name };
 
             A.CallTo(() => UnitOfWork.SubscriptionManager).Returns(SubscriptionManager);
             A.CallTo(() => SubscriptionManager.GetById("TestSubscription")).Returns(Task.FromResult(default(Subscription)));
@@ -42,8 +41,9 @@ namespace FasTnT.UnitTest.Domain.SubscriptionServiceTests
         public void ItShouldAddTheSubscriptionToTheService() => A.CallTo(() => SubscriptionBackgroundService.Register(A<Subscription>._)).MustHaveHappened();
     }
 
+
     [TestClass]
-    public class WhenProcessingASubscriptionRequestGivenSubscriptionAlreadyExist : BaseSubscriptionServiceUnitTest
+    public class WhenProcessingASubscriptionRequestWithInvalidDestination : BaseSubscriptionServiceUnitTest
     {
         public ISubscriptionManager SubscriptionManager { get; set; }
         public Subscription Request { get; set; }
@@ -54,10 +54,10 @@ namespace FasTnT.UnitTest.Domain.SubscriptionServiceTests
             base.Arrange();
 
             SubscriptionManager = A.Fake<ISubscriptionManager>();
-            Request = new Subscription { SubscriptionId = "TestSubscription", QueryName = EpcisQueries.First(x => x.AllowSubscription).Name };
+            Request = new Subscription { SubscriptionId = "TestSubscription", Destination = "invalid_url", QueryName = EpcisQueries.First(x => x.AllowSubscription).Name };
 
             A.CallTo(() => UnitOfWork.SubscriptionManager).Returns(SubscriptionManager);
-            A.CallTo(() => SubscriptionManager.GetById("TestSubscription")).Returns(Task.FromResult(new Subscription()));
+            A.CallTo(() => SubscriptionManager.GetById("TestSubscription")).Returns(Task.FromResult(default(Subscription)));
         }
 
         public override void Act()
@@ -73,21 +73,18 @@ namespace FasTnT.UnitTest.Domain.SubscriptionServiceTests
         }
 
         [Assert]
-        public void ItShouldThrowAnException() => Assert.IsNotNull(Catched);
+        public void ItShouldNotHaveBeginTheUnitOfWorkTransaction() => A.CallTo(() => UnitOfWork.BeginTransaction()).MustNotHaveHappened();
 
         [Assert]
-        public void TheExceptionShouldBeEpcisException() => Assert.IsInstanceOfType(Catched, typeof(EpcisException));
+        public void ItShouldNotHaveCommitTheTransaction() => A.CallTo(() => UnitOfWork.Commit()).MustNotHaveHappened();
 
         [Assert]
-        public void TheExceptionTypeShouldBeNoSubscribeNotPermittedException() => Assert.AreEqual(ExceptionType.SubscribeNotPermittedException, ((EpcisException)Catched).ExceptionType);
-
-        [Assert]
-        public void ItShouldHaveBeginTheUnitOfWorkTransaction() => A.CallTo(() => UnitOfWork.BeginTransaction()).MustHaveHappened();
-
-        [Assert]
-        public void ItShouldCallTheSubscriptionManagerProperty() => A.CallTo(() => UnitOfWork.SubscriptionManager).MustHaveHappened();
+        public void ItShouldNotCallTheSubscriptionManagerProperty() => A.CallTo(() => UnitOfWork.SubscriptionManager).MustNotHaveHappened();
 
         [Assert]
         public void ItShouldNotAddTheSubscriptionToTheService() => A.CallTo(() => SubscriptionBackgroundService.Register(A<Subscription>._)).MustNotHaveHappened();
+
+        [Assert]
+        public void ItShoultThrowAnException() => Assert.IsNotNull(Catched);
     }
 }
