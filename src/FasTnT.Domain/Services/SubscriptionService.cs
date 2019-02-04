@@ -24,6 +24,7 @@ namespace FasTnT.Domain.Services
 
         public async Task Process(Subscription request)
         {
+            EnsureDestinationIsValidURI(request);
             EnsureQueryAllowsSubscription(request);
             EnsureDestinationHasEndSlash(request);
 
@@ -52,6 +53,8 @@ namespace FasTnT.Domain.Services
         }
 
         public Task Process(TriggerSubscriptionRequest query) => Task.Run(() => _backgroundService.Trigger(query.Trigger));
+
+        private void EnsureDestinationIsValidURI(Subscription request) => UriValidator.Validate(request.Destination, true);
 
         private async Task EnsureSubscriptionDoesNotExist(Subscription request)
         {
