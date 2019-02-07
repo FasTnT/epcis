@@ -143,7 +143,7 @@ namespace FasTnT.Formatters.Xml.Requests
                 }
             }
 
-            foreach (var attribute in element.Attributes())
+            foreach (var attribute in element.Attributes().Where(a => a.Name.Namespace != XNamespace.Xmlns && a.Name.LocalName != "xmlns"))
             {
                 var attributeField = new CustomField
                 {
