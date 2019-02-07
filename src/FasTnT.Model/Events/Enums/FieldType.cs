@@ -10,7 +10,6 @@ namespace FasTnT.Model.Events.Enums
         public static FieldType ReadPointExtension = new FieldType(3, "ReadPointExtension");
         public static FieldType Attribute = new FieldType(4, "Attribute");
         public static FieldType BusinessLocationExtension = new FieldType(5, "BusinessLocationExtension");
-        public static FieldType CustomField = new FieldType(6, "CustomField");
 
         public FieldType()
         {
@@ -19,6 +18,5 @@ namespace FasTnT.Model.Events.Enums
         public FieldType(short id, string displayName) : base(id, displayName)
         {
         }
-
     }
 }
