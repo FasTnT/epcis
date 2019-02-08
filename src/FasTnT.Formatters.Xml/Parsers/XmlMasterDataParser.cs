@@ -5,11 +5,11 @@ using FasTnT.Model.MasterDatas;
 
 namespace FasTnT.Formatters.Xml.Requests
 {
-    public static class XmlMasterDataParser
+    public class XmlMasterDataParser
     {
-        private static int _internalId = 0;
+        private int _internalId = 0;
 
-        public static IList<EpcisMasterData> ParseMasterDatas(IEnumerable<XElement> elements)
+        public IList<EpcisMasterData> ParseMasterDatas(IEnumerable<XElement> elements)
         {
             var parsedElements = new List<EpcisMasterData>();
 
@@ -21,12 +21,12 @@ namespace FasTnT.Formatters.Xml.Requests
             return parsedElements;
         }
 
-        private static IEnumerable<EpcisMasterDataHierarchy> ParseHierarchy(IEnumerable<XElement> elements)
+        private IEnumerable<EpcisMasterDataHierarchy> ParseHierarchy(IEnumerable<XElement> elements)
         {
             return elements?.Select(x => new EpcisMasterDataHierarchy { ChildrenId = x.Value }) ?? new EpcisMasterDataHierarchy[0];
         }
 
-        private static IEnumerable<EpcisMasterData> ParseVocabularyElements(string type, IEnumerable<XElement> elements)
+        private IEnumerable<EpcisMasterData> ParseVocabularyElements(string type, IEnumerable<XElement> elements)
         {
             return elements.Select(e =>
             {
@@ -38,7 +38,7 @@ namespace FasTnT.Formatters.Xml.Requests
             });
         }
 
-        private static IEnumerable<MasterDataAttribute> ParseAttributes(IEnumerable<XElement> elements, EpcisMasterData masterData)
+        private IEnumerable<MasterDataAttribute> ParseAttributes(IEnumerable<XElement> elements, EpcisMasterData masterData)
         {
             return elements.Select(element =>
             {
@@ -56,7 +56,7 @@ namespace FasTnT.Formatters.Xml.Requests
             });
         }
 
-        private static IEnumerable<MasterDataField> ParseField(IEnumerable<XElement> elements, MasterDataAttribute attribute, int? parentId = null)
+        private IEnumerable<MasterDataField> ParseField(IEnumerable<XElement> elements, MasterDataAttribute attribute, int? parentId = null)
         {
             var fields = new List<MasterDataField>();
 
