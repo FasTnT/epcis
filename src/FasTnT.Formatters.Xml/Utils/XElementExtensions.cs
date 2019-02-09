@@ -45,13 +45,13 @@ namespace FasTnT.Formatters.Xml
             return element.Elements("bizTransaction").Select(child => new BusinessTransaction { Type = child.Attribute("type").Value, Id = child.Value }).ToList();
         }
 
-        public static void ParseReadPoint(this XElement element, EpcisEvent Event)
+        public static void ParseReadPoint(this XElement element, EpcisEvent Event, XmlEventsParser parser)
         {
             Event.ReadPoint = element.Element("id").Value;
 
             foreach (var innerElement in element.Elements().Where(x => x.Name.Namespace != XNamespace.None))
             {
-                Event.CustomFields.Add(XmlEventsParser.ParseCustomField(innerElement, Event, FieldType.ReadPointExtension));
+                Event.CustomFields.Add(parser.ParseCustomField(innerElement, Event, FieldType.ReadPointExtension));
             }
         }
 
@@ -81,21 +81,21 @@ namespace FasTnT.Formatters.Xml
             }
         }
 
-        public static void ParseBusinessLocation(this XElement element, EpcisEvent Event)
+        public static void ParseBusinessLocation(this XElement element, EpcisEvent Event, XmlEventsParser parser)
         {
             foreach (var innerElement in element.Elements().Where(x => !new[] { "id", "corrective" }.Contains(x.Name.LocalName)))
             {
-                Event.CustomFields.Add(XmlEventsParser.ParseCustomField(innerElement, Event, FieldType.BusinessLocationExtension));
+                Event.CustomFields.Add(parser.ParseCustomField(innerElement, Event, FieldType.BusinessLocationExtension));
             }
 
             Event.BusinessLocation = element.Element("id").Value;
         }
 
-        public static ErrorDeclaration ToErrorDeclaration(this XElement element, EpcisEvent Event)
+        public static ErrorDeclaration ToErrorDeclaration(this XElement element, EpcisEvent Event, XmlEventsParser parser)
         {
             foreach (var innerElement in element.Elements().Where(x => !new[] { "id", "corrective" }.Contains(x.Name.LocalName)))
             {
-                Event.CustomFields.Add(XmlEventsParser.ParseCustomField(innerElement, Event, FieldType.ErrorDeclarationExtension));
+                Event.CustomFields.Add(parser.ParseCustomField(innerElement, Event, FieldType.ErrorDeclarationExtension));
             }
 
             var declarationTime = DateTime.Parse(element.Element("declarationTime").Value, CultureInfo.InvariantCulture);
