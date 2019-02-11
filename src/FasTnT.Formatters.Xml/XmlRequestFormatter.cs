@@ -16,6 +16,8 @@ namespace FasTnT.Formatters.Xml
     {
         public Request Read(Stream input)
         {
+            var eventParser = new XmlEventsParser();
+            var masterdataParser = new XmlMasterDataParser();
             var document = XmlDocumentParser.Instance.Load(input);
 
             if (document.Root.Name == XName.Get("EPCISDocument", EpcisNamespaces.Capture))
@@ -24,7 +26,7 @@ namespace FasTnT.Formatters.Xml
                 {
                     CreationDate = DateTime.Parse(document.Root.Attribute("creationDate").Value, CultureInfo.InvariantCulture),
                     SchemaVersion = document.Root.Attribute("schemaVersion").Value,
-                    EventList = XmlEventsParser.ParseEvents(document.Root.XPathSelectElement("EPCISBody/EventList").Elements().ToArray())
+                    EventList = eventParser.ParseEvents(document.Root.XPathSelectElement("EPCISBody/EventList").Elements().ToArray())
                 };
             }
             else if (document.Root.Name == XName.Get("EPCISQueryDocument", EpcisNamespaces.Query)) // Subscription result
@@ -33,8 +35,7 @@ namespace FasTnT.Formatters.Xml
                 {
                     CreationDate = DateTime.Parse(document.Root.Attribute("creationDate").Value, CultureInfo.InvariantCulture),
                     SchemaVersion = document.Root.Attribute("schemaVersion").Value,
-                    SubscriptionName = document.Root.Element("EPCISBody").Element(XName.Get("QueryResults", EpcisNamespaces.Query)).Element("subscriptionID").Value,
-                    EventList = XmlEventsParser.ParseEvents(document.Root.Element("EPCISBody").Element(XName.Get("QueryResults", EpcisNamespaces.Query)).Element("resultsBody").Element("EventList").Elements().ToArray())
+                    EventList = eventParser.ParseEvents(document.Root.Element("EPCISBody").Element(XName.Get("QueryResults", EpcisNamespaces.Query)).Element("resultsBody").Element("EventList").Elements().ToArray())
                 };
             }
             else if (document.Root.Name == XName.Get("EPCISMasterDataDocument", EpcisNamespaces.MasterData))
@@ -43,7 +44,7 @@ namespace FasTnT.Formatters.Xml
                 {
                     CreationDate = DateTime.Parse(document.Root.Attribute("creationDate").Value, CultureInfo.InvariantCulture),
                     SchemaVersion = document.Root.Attribute("schemaVersion").Value,
-                    MasterDataList = XmlMasterDataParser.ParseMasterDatas(document.Root.Element("EPCISBody").Element("VocabularyList").Elements("Vocabulary"))
+                    MasterDataList = masterdataParser.ParseMasterDatas(document.Root.Element("EPCISBody").Element("VocabularyList").Elements("Vocabulary"))
                 };
             }
 
