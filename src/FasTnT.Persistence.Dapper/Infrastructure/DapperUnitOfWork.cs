@@ -20,6 +20,7 @@ namespace FasTnT.Persistence.Dapper
         {
             _connection = connection ?? throw new ArgumentNullException(nameof(connection));
             EventStore = new PgSqlEventStore(this);
+            CallbackStore = new PgSqlCallbackStore(this);
             RequestStore = new PgSqlRequestStore(this);
             EventManager = new PgSqlEventRepository(this);
             SubscriptionManager = new PgSqlSubscriptionManager(this);
@@ -28,6 +29,7 @@ namespace FasTnT.Persistence.Dapper
             UserManager = new PgSqlUserManager(this);
         }
 
+        public ICallbackStore CallbackStore { get; }
         public IRequestStore RequestStore { get; }
         public IEventStore EventStore { get; }
         public IEventRepository EventManager { get; }

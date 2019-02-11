@@ -18,6 +18,7 @@ namespace FasTnT.Domain.Extensions
             catch
             {
                 unitOfWork.Rollback();
+                throw;
             }
         }
     }

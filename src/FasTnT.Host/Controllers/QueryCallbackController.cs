@@ -1,5 +1,6 @@
 ﻿using FasTnT.Domain.Services;
 using FasTnT.Model;
+using FasTnT.Model.Events.Enums;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
@@ -14,12 +15,12 @@ namespace FasTnT.Host.Controllers
         public QueryCallbackController(CallbackService callbackService) => _callbackService = callbackService;
 
         [HttpPost("CallbackResults", Name = "Capture query callback results")]
-        public async Task CallbackResults(EpcisQueryCallbackDocument callbackResult) => _callbackService.Process(callbackResult);
+        public async Task CallbackResults(EpcisQueryCallbackDocument callbackResult) => await _callbackService.Process(callbackResult);
 
         [HttpPost("CallbackQueryTooLargeException", Name = "Capture query callback query too large exception")]
-        public void CallbackQueryTooLargeException() { /* TODO: do something smart with this callback */ }
+        public async Task CallbackQueryTooLargeException() => await _callbackService.ProcessException(QueryCallbackType.QueryTooLargeException);
 
         [HttpPost("CallbackImplementationException", Name = "Capture query callback implementation exception")]
-        public void CallbackImplementationException() { /* TODO: do something smart with this callback */ }
+        public async Task CallbackImplementationException() => await _callbackService.ProcessException(QueryCallbackType.ImplementationException);
     }
 }

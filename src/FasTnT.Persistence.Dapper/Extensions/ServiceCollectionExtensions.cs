@@ -21,6 +21,7 @@ namespace FasTnT.Persistence.Dapper
             SqlMapper.AddTypeHandler(EnumerationHandler<FieldType>.Default);
             SqlMapper.AddTypeHandler(EnumerationHandler<SourceDestinationType>.Default);
             SqlMapper.AddTypeHandler(EnumerationHandler<EpcType>.Default);
+            SqlMapper.AddTypeHandler(EnumerationHandler<QueryCallbackType>.Default);
             DefaultTypeMap.MatchNamesWithUnderscores = true;
 
             services.AddScoped(typeof(IDbConnection), ctx => new NpgsqlConnection(connectionString));
