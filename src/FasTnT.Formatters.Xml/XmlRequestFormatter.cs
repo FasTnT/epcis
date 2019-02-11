@@ -24,8 +24,7 @@ namespace FasTnT.Formatters.Xml
             {
                 return new EpcisEventDocument
                 {
-                    CreationDate = DateTime.Parse(document.Root.Attribute("creationDate").Value, CultureInfo.InvariantCulture),
-                    SchemaVersion = document.Root.Attribute("schemaVersion").Value,
+                    Header = ParseHeader(document.Root),
                     EventList = eventParser.ParseEvents(document.Root.XPathSelectElement("EPCISBody/EventList").Elements().ToArray())
                 };
             }
@@ -33,8 +32,8 @@ namespace FasTnT.Formatters.Xml
             {
                 return new EpcisQueryCallbackDocument
                 {
-                    CreationDate = DateTime.Parse(document.Root.Attribute("creationDate").Value, CultureInfo.InvariantCulture),
-                    SchemaVersion = document.Root.Attribute("schemaVersion").Value,
+                    Header = ParseHeader(document.Root),
+                    SubscriptionName = document.Root.Element("EPCISBody").Element(XName.Get("QueryResults", EpcisNamespaces.Query)).Element("subscriptionID").Value,
                     EventList = eventParser.ParseEvents(document.Root.Element("EPCISBody").Element(XName.Get("QueryResults", EpcisNamespaces.Query)).Element("resultsBody").Element("EventList").Elements().ToArray())
                 };
             }
@@ -42,13 +41,21 @@ namespace FasTnT.Formatters.Xml
             {
                 return new EpcisMasterdataDocument
                 {
-                    CreationDate = DateTime.Parse(document.Root.Attribute("creationDate").Value, CultureInfo.InvariantCulture),
-                    SchemaVersion = document.Root.Attribute("schemaVersion").Value,
+                    Header = ParseHeader(document.Root),
                     MasterDataList = masterdataParser.ParseMasterDatas(document.Root.Element("EPCISBody").Element("VocabularyList").Elements("Vocabulary"))
                 };
             }
 
             throw new Exception($"Document with root '{document.Root.Name.ToString()}' is not expected here.");
+        }
+
+        private EpcisRequestHeader ParseHeader(XElement root)
+        {
+            return new EpcisRequestHeader
+            {
+                DocumentTime = DateTime.Parse(root.Attribute("creationDate").Value, CultureInfo.InvariantCulture),
+                SchemaVersion = root.Attribute("schemaVersion").Value
+            };
         }
 
         public void Write(Request entity, Stream output)
@@ -63,8 +70,8 @@ namespace FasTnT.Formatters.Xml
         {
             return new XDocument(
                 XName.Get("EPCISDocument", EpcisNamespaces.Capture),
-                new XAttribute("creationDate", entity.CreationDate.ToString("yyyy-MM-ddThh:MM:ssZ")),
-                new XAttribute("schemaVersion", entity.SchemaVersion),
+                new XAttribute("creationDate", entity.Header.DocumentTime.ToString("yyyy-MM-ddThh:MM:ssZ")),
+                new XAttribute("schemaVersion", entity.Header.SchemaVersion),
                 new XElement("EPCISBody", new XElement("EventList", entity.EventList.Select(XmlEventFormatter.Format)))
             );
         }

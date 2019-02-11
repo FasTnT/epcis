@@ -5,63 +5,59 @@ using System.Threading.Tasks;
 using FasTnT.Domain.Persistence;
 using FasTnT.Model;
 using MoreLinq;
-using StoreAction = System.Func<FasTnT.Model.EpcisEventDocument, FasTnT.Persistence.Dapper.DapperUnitOfWork, System.Threading.Tasks.Task>;
+using StoreAction = System.Func<FasTnT.Model.EpcisEvent[], FasTnT.Persistence.Dapper.DapperUnitOfWork, System.Threading.Tasks.Task>;
 
 namespace FasTnT.Persistence.Dapper
 {
     public class PgSqlEventStore : IEventStore
     {
         private readonly DapperUnitOfWork _unitOfWork;
-        private readonly IEnumerable<StoreAction> _actions = new StoreAction[]{ StoreRequest, StoreEvents, StoreEpcs, StoreCustomFields, StoreSourceDestinations, StoreBusinessTransactions, StoreErrorDeclaration };
+        private readonly IEnumerable<StoreAction> _actions = new StoreAction[]{ StoreEvents, StoreEpcs, StoreCustomFields, StoreSourceDestinations, StoreBusinessTransactions, StoreErrorDeclaration };
 
         public PgSqlEventStore(DapperUnitOfWork unitOfWork) => _unitOfWork = unitOfWork;
 
-        public async Task Store(EpcisEventDocument request)
+        public async Task Store(Guid eventsId, EpcisEvent[] events)
         {
+            events.ForEach(x => x.RequestId = eventsId);
+
             foreach (var action in _actions)
             {
-                await action(request, _unitOfWork);
+                await action(events, _unitOfWork);
             }
         }
 
-        private async static Task StoreRequest(EpcisEventDocument request, DapperUnitOfWork unitOfWork)
+        private async static Task StoreEvents(EpcisEvent[] events, DapperUnitOfWork unitOfWork)
         {
-            await unitOfWork.Execute(SqlRequests.StoreRequest, new { request.Id, DocumentTime = request.CreationDate, RecordTime = DateTime.UtcNow });
+            await unitOfWork.Execute(SqlRequests.StoreEvent, events);
         }
 
-        private async static Task StoreEvents(EpcisEventDocument request, DapperUnitOfWork unitOfWork)
+        private async static Task StoreEpcs(EpcisEvent[] events, DapperUnitOfWork unitOfWork)
         {
-            request.EventList.ForEach(x => x.RequestId = request.Id);
-            await unitOfWork.Execute(SqlRequests.StoreEvent, request.EventList);
+            events.ForEach(x => x.Epcs.ForEach(e => e.EventId = x.Id));
+            await unitOfWork.Execute(SqlRequests.StoreEpcs, events.SelectMany(x => x.Epcs));
         }
 
-        private async static Task StoreEpcs(EpcisEventDocument request, DapperUnitOfWork unitOfWork)
+        private async static Task StoreCustomFields(EpcisEvent[] events, DapperUnitOfWork unitOfWork)
         {
-            request.EventList.ForEach(x => x.Epcs.ForEach(e => e.EventId = x.Id));
-            await unitOfWork.Execute(SqlRequests.StoreEpcs, request.EventList.SelectMany(x => x.Epcs));
+            events.ForEach(x => x.CustomFields.ForEach(f => f.EventId = x.Id));
+            await unitOfWork.Execute(SqlRequests.StoreCustomField, events.SelectMany(x => x.CustomFields));
         }
 
-        private async static Task StoreCustomFields(EpcisEventDocument request, DapperUnitOfWork unitOfWork)
+        private async static Task StoreSourceDestinations(EpcisEvent[] events, DapperUnitOfWork unitOfWork)
         {
-            request.EventList.ForEach(x => x.CustomFields.ForEach(f => f.EventId = x.Id));
-            await unitOfWork.Execute(SqlRequests.StoreCustomField, request.EventList.SelectMany(x => x.CustomFields));
+            events.ForEach(x => x.SourceDestinationList.ForEach(s => s.EventId = x.Id));
+            await unitOfWork.Execute(SqlRequests.StoreSourceDestination, events.SelectMany(x => x.SourceDestinationList));
         }
 
-        private async static Task StoreSourceDestinations(EpcisEventDocument request, DapperUnitOfWork unitOfWork)
+        private async static Task StoreBusinessTransactions(EpcisEvent[] events, DapperUnitOfWork unitOfWork)
         {
-            request.EventList.ForEach(x => x.SourceDestinationList.ForEach(s => s.EventId = x.Id));
-            await unitOfWork.Execute(SqlRequests.StoreSourceDestination, request.EventList.SelectMany(x => x.SourceDestinationList));
+            events.ForEach(x => x.BusinessTransactions.ForEach(t => t.EventId = x.Id));
+            await unitOfWork.Execute(SqlRequests.StoreBusinessTransaction, events.SelectMany(x => x.BusinessTransactions));
         }
 
-        private async static Task StoreBusinessTransactions(EpcisEventDocument request, DapperUnitOfWork unitOfWork)
+        private async static Task StoreErrorDeclaration(EpcisEvent[] events, DapperUnitOfWork unitOfWork)
         {
-            request.EventList.ForEach(x => x.BusinessTransactions.ForEach(t => t.EventId = x.Id));
-            await unitOfWork.Execute(SqlRequests.StoreBusinessTransaction, request.EventList.SelectMany(x => x.BusinessTransactions));
-        }
-
-        private async static Task StoreErrorDeclaration(EpcisEventDocument request, DapperUnitOfWork unitOfWork)
-        {
-            var eventsWithErrorDeclaration = request.EventList.Where(x => x.ErrorDeclaration != null);
+            var eventsWithErrorDeclaration = events.Where(x => x.ErrorDeclaration != null);
 
             eventsWithErrorDeclaration.ForEach(x => x.ErrorDeclaration.EventId = x.Id);
             eventsWithErrorDeclaration.ForEach(x => x.ErrorDeclaration.CorrectiveEventIds.ForEach(t => t.EventId = x.Id));

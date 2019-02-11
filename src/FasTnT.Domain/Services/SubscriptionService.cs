@@ -1,4 +1,5 @@
 ﻿using FasTnT.Domain.BackgroundTasks;
+using FasTnT.Domain.Extensions;
 using FasTnT.Domain.Persistence;
 using FasTnT.Model.Exceptions;
 using FasTnT.Model.Queries.Implementations;
@@ -28,48 +29,42 @@ namespace FasTnT.Domain.Services
             EnsureQueryAllowsSubscription(request);
             EnsureDestinationHasEndSlash(request);
 
-            using (new CommitOnDispose(_unitOfWork))
+            await _unitOfWork.Execute(async tx =>
             {
-                await EnsureSubscriptionDoesNotExist(request);
-                await _unitOfWork.SubscriptionManager.Store(request);
+                await EnsureSubscriptionDoesNotExist(tx, request);
+                await tx.SubscriptionManager.Store(request);
                 _backgroundService.Register(request);
-            }
+            });
         }
 
         private void EnsureDestinationHasEndSlash(Subscription request) => request.Destination = $"{request.Destination.TrimEnd('/')}/";
 
         public async Task Process(UnsubscribeRequest query)
         {
-            using (new CommitOnDispose(_unitOfWork))
+            await _unitOfWork.Execute(async tx =>
             {
-                var subscription = await _unitOfWork.SubscriptionManager.GetById(query.SubscriptionId);
+                var subscription = await tx.SubscriptionManager.GetById(query.SubscriptionId);
+                if (subscription == null) throw new EpcisException(ExceptionType.NoSuchNameException, $"Subscription with ID '{query.SubscriptionId}' does not exist.");
 
-                if (subscription == null)
-                    throw new EpcisException(ExceptionType.NoSuchNameException, $"Subscription with ID '{query.SubscriptionId}' does not exist.");
-
-                await _unitOfWork.SubscriptionManager.Delete(subscription.Id);
+                await tx.SubscriptionManager.Delete(subscription.Id);
                 _backgroundService.Remove(subscription);
-            }
+            });
         }
 
         public Task Process(TriggerSubscriptionRequest query) => Task.Run(() => _backgroundService.Trigger(query.Trigger));
 
         private void EnsureDestinationIsValidURI(Subscription request) => UriValidator.Validate(request.Destination, true);
 
-        private async Task EnsureSubscriptionDoesNotExist(Subscription request)
+        private async static Task EnsureSubscriptionDoesNotExist(IUnitOfWork transaction, Subscription request)
         {
-            var subscription = await _unitOfWork.SubscriptionManager.GetById(request.SubscriptionId);
-
-            if (subscription != null)
-                throw new EpcisException(ExceptionType.SubscribeNotPermittedException, $"Subscription '{request.QueryName}' already exist.");
+            var subscription = await transaction.SubscriptionManager.GetById(request.SubscriptionId);
+            if (subscription != null) throw new EpcisException(ExceptionType.SubscribeNotPermittedException, $"Subscription '{request.QueryName}' already exist.");
         }
 
         private void EnsureQueryAllowsSubscription(Subscription subscribe)
         {
             var query = _queries.SingleOrDefault(x => x.Name == subscribe.QueryName);
-
-            if (query == null || !query.AllowSubscription)
-                throw new EpcisException(ExceptionType.SubscribeNotPermittedException, $"Query '{subscribe.QueryName}' does not exist or doesn't allow subscription");
+            if (query == null || !query.AllowSubscription) throw new EpcisException(ExceptionType.SubscribeNotPermittedException, $"Query '{subscribe.QueryName}' does not exist or doesn't allow subscription");
         }
     }
 }

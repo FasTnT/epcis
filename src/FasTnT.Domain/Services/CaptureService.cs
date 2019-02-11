@@ -1,9 +1,8 @@
-﻿using FasTnT.Domain.Persistence;
+﻿using FasTnT.Domain.Extensions;
+using FasTnT.Domain.Persistence;
 using FasTnT.Model;
 using MoreLinq;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace FasTnT.Domain.Services
@@ -14,21 +13,17 @@ namespace FasTnT.Domain.Services
 
         public CaptureService(IUnitOfWork unitOfWork) => _unitOfWork = unitOfWork;
 
-        public async Task Capture(EpcisEventDocument events)
+        public async Task Capture(EpcisEventDocument captureDocument)
         {
-            events.EventList.ForEach(x => x.Epcs.ForEach(e => UriValidator.Validate(e.Id)));
+            captureDocument.EventList.ForEach(x => x.Epcs.ForEach(e => UriValidator.Validate(e.Id)));
 
-            await CommitOnDispose(async () => await _unitOfWork.EventStore.Store(events));
-        }
-
-        public async Task Capture(EpcisMasterdataDocument masterData) => await CommitOnDispose(async () => await _unitOfWork.MasterDataManager.Store(masterData));
-
-        private async Task CommitOnDispose(Func<Task> method)
-        {
-            using(new CommitOnDispose(_unitOfWork))
+            await _unitOfWork.Execute(async tx =>
             {
-                await method();
-            }
+                await tx.RequestStore.Store(captureDocument.Header);
+                await tx.EventStore.Store(captureDocument.Header.Id, captureDocument.EventList);
+            });
         }
+
+        public async Task Capture(EpcisMasterdataDocument masterData) => await _unitOfWork.Execute(async tx => await tx.MasterDataManager.Store(masterData));
     }
 }

@@ -4,6 +4,7 @@ namespace FasTnT.Domain.Persistence
 {
     public interface IUnitOfWork
     {
+        IRequestStore RequestStore { get; }
         IEventStore EventStore { get; }
         IEventRepository EventManager { get; }
         ISubscriptionManager SubscriptionManager { get; }
