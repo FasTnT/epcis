@@ -16,7 +16,7 @@ namespace FasTnT.UnitTest.Domain.CaptureServiceTests
         {
             base.Arrange();
 
-            Request = new EpcisEventDocument { EventList = new EpcisEvent[0] };
+            Request = new EpcisEventDocument { Header = new EpcisRequestHeader(), EventList = new EpcisEvent[0] };
         }
 
         public override void Act() => Task.WaitAll(CaptureService.Capture(Request));
@@ -26,6 +26,9 @@ namespace FasTnT.UnitTest.Domain.CaptureServiceTests
 
         [Assert]
         public void ItShouldHaveCommitTheTransaction() => A.CallTo(() => UnitOfWork.Commit()).MustHaveHappened();
+
+        [Assert]
+        public void ItShouldHaveAccessedTheRequestStore() => A.CallTo(() => UnitOfWork.RequestStore).MustHaveHappened();
 
         [Assert]
         public void ItShouldHaveAccessedTheEventStore() => A.CallTo(() => UnitOfWork.EventStore).MustHaveHappened();

@@ -1,11 +1,10 @@
 ﻿using FasTnT.Model;
-using System;
 using System.Threading.Tasks;
 
 namespace FasTnT.Domain.Persistence
 {
-    public interface IEventStore
+    public interface IRequestStore
     {
-        Task Store(Guid requestId, EpcisEvent[] events);
+        Task Store(EpcisRequestHeader request);
     }
 }

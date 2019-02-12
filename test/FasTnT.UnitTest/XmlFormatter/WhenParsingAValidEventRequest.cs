@@ -33,7 +33,7 @@ namespace FasTnT.UnitTest.XmlFormatter
         [Assert]
         public void ItShouldParseCorrectlyTheSchemaVersion()
         {
-            Assert.AreEqual("1.2", ParsedFile.SchemaVersion);
+            Assert.AreEqual("1.2", ParsedFile.Header.SchemaVersion);
         }
 
         [Assert]
@@ -41,7 +41,7 @@ namespace FasTnT.UnitTest.XmlFormatter
         {
             var expectedDate = DateTime.Parse("2017-09-19T12:57:12Z", CultureInfo.InvariantCulture);
 
-            Assert.AreEqual(expectedDate, ParsedFile.CreationDate);
+            Assert.AreEqual(expectedDate, ParsedFile.Header.DocumentTime);
         }
 
         [Assert]

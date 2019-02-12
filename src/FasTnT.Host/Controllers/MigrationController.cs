@@ -4,6 +4,7 @@ using FasTnT.Domain.Services.Setup;
 using FasTnT.Host.Infrastructure.Attributes;
 using FasTnT.Domain.Persistence;
 using System;
+using FasTnT.Domain.Extensions;
 
 namespace FasTnT.Host.Controllers
 {
@@ -23,10 +24,7 @@ namespace FasTnT.Host.Controllers
 
         private async Task Commit(Func<IDatabaseMigrator, Task> action)
         {
-            using (new CommitOnDispose(_unitOfWork))
-            {
-                await action(_unitOfWork.DatabaseManager);
-            }
+            await _unitOfWork.Execute(async tx => await action(tx.DatabaseManager));
         }
     }
 }

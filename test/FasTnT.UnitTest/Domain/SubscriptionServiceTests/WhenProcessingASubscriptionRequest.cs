@@ -76,6 +76,9 @@ namespace FasTnT.UnitTest.Domain.SubscriptionServiceTests
         public void ItShouldNotHaveBeginTheUnitOfWorkTransaction() => A.CallTo(() => UnitOfWork.BeginTransaction()).MustNotHaveHappened();
 
         [Assert]
+        public void ItShouldThrowAnException() => Assert.IsNotNull(Catched);
+
+        [Assert]
         public void ItShouldNotHaveCommitTheTransaction() => A.CallTo(() => UnitOfWork.Commit()).MustNotHaveHappened();
 
         [Assert]

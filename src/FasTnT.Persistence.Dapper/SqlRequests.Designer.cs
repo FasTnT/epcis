@@ -61,7 +61,7 @@ namespace FasTnT.Persistence.Dapper {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to H4sIAAAAAAAEAM1abXObuBb+vJnxf9Bkcsf2rpPxS9LUm9kPBMspWwe8gJPt/cIQkGOmGBxe0s399fcgXgwYMLHJdDstTdDR0dHzPJKOhM7P0ULCooQk9gu+Z1qsiBkZR78hbop4QUb4b06SJeS7xHFvYhOZuZ3hIouL4NnqtBD8MXTk+/AIbPjFbNajbwMDS10TpK1UR9U84qBX1XkzrOfOVb+LWGE2C1rYPCua6qmm/XxxqpOl6pveac7TRnXdH7ajF3ga9Iejd/lyyLPhggeiK7aFPGNNXE9db9APw1vZvkffoP/ZFknqoQmeMouZTIuCkk57IbPt33/3yD9eD1n2j063GzpnBV6SRYbjZXQ6/6oECJyiucjdM+I39BV/Qx1D3zX1X6ilkgC24Lm/Fhh14hfdVrf1yMlfUEfgJhL6A02ZmYS7N63W+TnCc5arRSzZaEY1sdTiwiEvPoBSya1ua/6aWJ5C4aqDYoy+BjzWr/UO7CmEUbThG9d/cjXH [rest of string was truncated]&quot;;.
+        ///   Looks up a localized string similar to H4sIAAAAAAAAC81b23KjSBJ9HkfoHyoc3rC0Kyt0sdutccwDRiU3YzVoQLLH+0JgQBbRCNRc3Ov9tX3YT9pf2CwoEHdhCUePolvdhqysrHNOVWVd/L///PfiAi0lLEpIYr/gr0yLFTGzwPQnxE0RLywQ/pOTFhLyXd1xbyKTBXM7w0UWPfLdarcQfAwN+T58ERt+OZt1g6fEwFI2OlLXiqOonu6gV8V5M6yX9lW/g1hhNiM1bF9kVfEU037pnWr6SvFN7zTjaau47g/b0Qo8DfrD0bt8OfqL4YIHXZNtC3nGRnc9ZbNFPwxvbfte8AT927b0uBya4CmznC2CV+RN+3y5YM9//dXT/+V1kWX/aHc6oXNW4KWFyHD8Ap3O72WCwCmai9xXRnxC9/gJtQ0tb+p/DyzlGLAlz/2xxKgdPei0Oq1HbvEFtQVuIqHf0JSZSbhz02oBsXjOcrWI1beqUU1sYNFz9O8+gFLJrWar/ka3PDmAqw6KEfoq8Fi/1Duw [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string CreateDatabaseZipped {
             get {
@@ -70,7 +70,7 @@ namespace FasTnT.Persistence.Dapper {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to H4sIAAAAAAAA/3MJ8g9QCHb2cPV1VPB0U3CN8AwOCVYoLk0qTi7KLCjJzM8rVnB2DHZ2dHG15nLBqjg5qYyQktSC5EyC5iSWpmSWEFJUWpxahG6SW6ifc4invx8uD+iVFqQklqTGowhaAwD9IG4I+gAAAA==.
+        ///   Looks up a localized string similar to H4sIAAAAAAAAC3u/e79LkH+AQrCzh6uvo4Knm4JrhGdwSLBCcmJOTlJicraCs2Ows6OLqzUvdnXFpUnFyUWZBSWZ+XnFcMVcOAxNKiOkJLUgOZOgOYmlKZklhBSVFqcWoZvkFurnHOLp74fLA3qlBSmJJanxKILWAEVYcAElAQAA.
         /// </summary>
         internal static string DropDatabaseZipped {
             get {
@@ -222,6 +222,15 @@ namespace FasTnT.Persistence.Dapper {
         internal static string StoreEvent {
             get {
                 return ResourceManager.GetString("StoreEvent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to INSERT INTO callback.query_callback(id, request_id, subscription_id, callback_type) VALUES(@Id, @RequestId, @SubscriptionId, @CallbackType);.
+        /// </summary>
+        internal static string StoreQueryCallback {
+            get {
+                return ResourceManager.GetString("StoreQueryCallback", resourceCulture);
             }
         }
         

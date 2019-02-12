@@ -1,4 +1,5 @@
-﻿using FasTnT.Domain.Persistence;
+﻿using FasTnT.Domain.Extensions;
+using FasTnT.Domain.Persistence;
 using FasTnT.Model.Events.Enums;
 using FasTnT.Model.Queries.Implementations;
 using FasTnT.Model.Responses;
@@ -23,21 +24,21 @@ namespace FasTnT.Domain.Services.Subscriptions
 
         public async Task Run(Subscription subscription)
         {
-            using (new CommitOnDispose(_unitOfWork))
+            await _unitOfWork.Execute(async tx =>
             {
                 var query = GetQueryForSubscription(subscription);
                 var response = new PollResponse { QueryName = query.Name, SubscriptionId = subscription.SubscriptionId };
-                var pendingRequests = await _unitOfWork.SubscriptionManager.GetPendingRequestIds(subscription.Id);
+                var pendingRequests = await tx.SubscriptionManager.GetPendingRequestIds(subscription.Id);
 
                 if (pendingRequests.Any())
                 {
-                    _unitOfWork.EventManager.WhereSimpleFieldIn(EpcisField.RequestId, pendingRequests.ToArray());
-                    response.Entities = await query.Execute(subscription.Parameters, _unitOfWork);
+                    tx.EventManager.WhereSimpleFieldIn(EpcisField.RequestId, pendingRequests.ToArray());
+                    response.Entities = await query.Execute(subscription.Parameters, tx);
                 }
 
                 await SendSubscriptionResults(subscription, response);
-                await _unitOfWork.SubscriptionManager.AcknowledgePendingRequests(subscription.Id, pendingRequests);
-            }
+                await tx.SubscriptionManager.AcknowledgePendingRequests(subscription.Id, pendingRequests);
+            });
         }
 
         private async Task SendSubscriptionResults(Subscription subscription, PollResponse response)

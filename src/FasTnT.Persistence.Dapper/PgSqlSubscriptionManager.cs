@@ -23,7 +23,7 @@ namespace FasTnT.Persistence.Dapper
             return (await _unitOfWork.Query<Subscription>($"{SqlRequests.SubscriptionListIds} WHERE s.subscription_id = @Id", new { Id = subscriptionId })).SingleOrDefault();
         }
 
-        public async Task<IEnumerable<Subscription>> GetAll(bool withDetails = false)
+        public async Task<IEnumerable<Subscription>> GetAll(bool includeDetails = false)
         {
             var subscriptions = (await _unitOfWork.Query<dynamic>(SqlRequests.SubscriptionsList)).Select(x => new Subscription
             {
@@ -45,28 +45,26 @@ namespace FasTnT.Persistence.Dapper
                 }
             }).ToArray();
 
-            if (withDetails)
-            {
-                //TODO: review to have more clear/concise code.. (LAA)
-                var @params = (await _unitOfWork.Query<dynamic>(SqlRequests.SubscriptionListParameters))
-                                .GroupBy(x => (Guid) x.subscription_id)
-                                .Select(x => new 
-                                {
-                                    SubscriptionId = x.Key,
-                                    Parameters = x.GroupBy(g => (string) g.name).Select(p => new QueryParameter
-                                    {
-                                        Name = p.Key,
-                                        Values = p.Select(v => (string) v.value).ToArray()
-                                    }).ToArray()
-                                }).ToArray();
-
-                foreach (var subscription in subscriptions)
-                {
-                    subscription.Parameters = @params.SingleOrDefault(p => p.SubscriptionId == subscription.Id)?.Parameters;
-                }
-            }
+            if (includeDetails) await LoadParameters(subscriptions);
 
             return subscriptions;
+        }
+
+        private async Task LoadParameters(Subscription[] subscriptions)
+        {
+            var @params = (await _unitOfWork.Query<dynamic>(SqlRequests.SubscriptionListParameters))
+                .GroupBy(x => (Guid)x.subscription_id)
+                .Select(x => new
+                {
+                    SubscriptionId = x.Key,
+                    Parameters = x.GroupBy(g => (string)g.name).Select(p => new QueryParameter
+                    {
+                        Name = p.Key,
+                        Values = p.Select(v => (string)v.value).ToArray()
+                    }).ToArray()
+                }).ToArray();
+
+            subscriptions.ForEach(s => s.Parameters = @params.SingleOrDefault(p => p.SubscriptionId == s.Id)?.Parameters);
         }
 
         public async Task Delete(Guid id)

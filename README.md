@@ -25,6 +25,7 @@ The API is secured using HTTP Basic authentication. The default username:passwor
 
 - Capture: `/Services/1.2/Capture` 
 - Queries : `/Services/1.2/Query`
+- Query Callback : `/Services/1.2/QueryCallback`
 - Subscriptions : `/Services/1.2/Subscription`
 
 ### Others endpoints:
@@ -48,6 +49,10 @@ The file `documents\EPCIS_Samples.postman_collection.json` contains examples of 
   - Poll 
     - SimpleEventQuery
     - SimpleMasterDataQuery
+- Query Callback:
+  - CallbackResults
+  - CallbackQueryTooLargeException
+  - CallbackImplementationException
 - Subscriptions:
   - Subscribe to an EPCIS request 
   - Unsubscribe from EPCIS repository

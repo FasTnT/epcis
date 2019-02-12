@@ -26,7 +26,7 @@ namespace FasTnT.Formatters.Xml
         public XDocument Format(PollResponse response)
         {
             var formatted = CreateResponse("EPCISQueryDocument");
-            var resultName = string.Empty;
+            var resultName = "EventList";
             var typeOfResponse = response.Entities.GetType().GenericTypeArguments[0];
 
             if (typeOfResponse == typeof(EpcisEvent)) resultName = "EventList";
