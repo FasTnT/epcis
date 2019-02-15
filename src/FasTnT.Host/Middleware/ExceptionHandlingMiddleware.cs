@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using FasTnT.Model.Exceptions;
 using FasTnT.Model.Responses;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Mvc.Formatters;
 
 namespace FasTnT.Host.Middleware
@@ -12,11 +13,13 @@ namespace FasTnT.Host.Middleware
     {
         const int BadRequest = 400, InternalServerError = 500;
         private readonly RequestDelegate _next;
+        private readonly ILogger _logger;
 
-        public ExceptionHandlingMiddleware(RequestDelegate next)
+        public ExceptionHandlingMiddleware(RequestDelegate next, ILogger<ExceptionHandlingMiddleware> logger)
         {
             _next = next;
-        }
+            _logger = logger;
+        } 
 
         public async Task Invoke(HttpContext context)
         {
@@ -26,6 +29,7 @@ namespace FasTnT.Host.Middleware
             }
             catch(Exception ex)
             {
+                _logger.LogError($"[{context.TraceIdentifier}] Request failed with reason '{ex.Message}'");
                 var epcisException = ex as EpcisException;
                 var response = new ExceptionResponse
                 {

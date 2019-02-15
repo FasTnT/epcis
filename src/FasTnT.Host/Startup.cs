@@ -11,6 +11,8 @@ using FasTnT.Host.BackgroundTasks;
 using FasTnT.Domain.Extensions;
 using FasTnT.Formatters;
 using FasTnT.Formatters.Xml;
+using FasTnT.Host.Infrastructure.Log;
+using Microsoft.Extensions.Logging;
 using FasTnT.Domain.BackgroundTasks;
 using Microsoft.AspNetCore.Authentication;
 
@@ -19,8 +21,13 @@ namespace FasTnT.Host
     public class Startup
     {
         public IConfiguration Configuration { get; }
+        public ILoggerFactory LogFactory { get; }
 
-        public Startup(IConfiguration configuration) => Configuration = configuration;
+        public Startup(IConfiguration configuration, ILoggerFactory logFactory)
+        {
+            Configuration = configuration;
+            LogFactory = logFactory;
+        }
 
         public void ConfigureServices(IServiceCollection services)
         {
@@ -45,6 +52,7 @@ namespace FasTnT.Host
                 app.UseDeveloperExceptionPage();
             }
 
+            ApplicationLogging.LoggerFactory = LogFactory;
             SubscriptionBackgroundService.DelayTimeoutInMs = Configuration.GetSection("Settings").GetValue<int>("SubscriptionWaitTimeout", 5000);
 
             app.UseExceptionHandlingMiddleware()
