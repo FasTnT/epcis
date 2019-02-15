@@ -1,6 +1,6 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27130.2036
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.28606.126
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FasTnT.Domain", "src\FasTnT.Domain\FasTnT.Domain.csproj", "{8BAE20FC-162A-45EC-91E9-4FA7055E3D82}"
 EndProject
@@ -22,7 +22,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FasTnT.Formatters", "src\Fa
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{782D506E-BAFC-4FC2-92D9-6B93E6676017}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FasTnT.UnitTest", "test\FasTnT.UnitTest\FasTnT.UnitTest.csproj", "{483533AA-F2E3-495C-91EC-3D208DEB21DA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FasTnT.UnitTest", "test\FasTnT.UnitTest\FasTnT.UnitTest.csproj", "{483533AA-F2E3-495C-91EC-3D208DEB21DA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
