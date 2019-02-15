@@ -22,11 +22,12 @@ namespace FasTnT.Domain.Services
             });
         }
 
-        public async Task ProcessException(QueryCallbackType callbackType)
+        public async Task ProcessException(EpcisQueryCallbackException result)
         {
             await _unitOfWork.Execute(async tx =>
             {
-                await tx.CallbackStore.Store(null, "unknown", callbackType);
+                await tx.RequestStore.Store(result.Header);
+                await tx.CallbackStore.Store(result.Header.Id, result.SubscriptionName, result.CallbackType);
             });
         }
     }
