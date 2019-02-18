@@ -18,9 +18,9 @@ namespace FasTnT.Host.Controllers
         public async Task CallbackResults(EpcisQueryCallbackDocument callbackResult) => await _callbackService.Process(callbackResult);
 
         [HttpPost("CallbackQueryTooLargeException", Name = "Capture query callback query too large exception")]
-        public async Task CallbackQueryTooLargeException() => await _callbackService.ProcessException(QueryCallbackType.QueryTooLargeException);
+        public async Task CallbackQueryTooLargeException(EpcisQueryCallbackException callbackResult) => await _callbackService.ProcessException(callbackResult);
 
         [HttpPost("CallbackImplementationException", Name = "Capture query callback implementation exception")]
-        public async Task CallbackImplementationException() => await _callbackService.ProcessException(QueryCallbackType.ImplementationException);
+        public async Task CallbackImplementationException(EpcisQueryCallbackException callbackResult) => await _callbackService.ProcessException(callbackResult);
     }
 }
