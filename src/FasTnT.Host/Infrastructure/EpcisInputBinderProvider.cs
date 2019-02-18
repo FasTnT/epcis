@@ -1,4 +1,5 @@
-﻿using FasTnT.Formatters.Xml;
+﻿using FasTnT.Formatters.Json;
+using FasTnT.Formatters.Xml;
 using FasTnT.Model;
 using FasTnT.Model.Queries;
 using FasTnT.Model.Subscriptions;
@@ -10,9 +11,9 @@ namespace FasTnT.Host.Binders
 {
     public class EpcisInputBinderProvider : IModelBinderProvider
     {
-        static readonly EpcisModelBinder<Request> RequestBinder = new EpcisModelBinder<Request>(new XmlRequestFormatter(), null); 
-        static readonly EpcisModelBinder<EpcisQuery> QueryBinder = new EpcisModelBinder<EpcisQuery>(new XmlQueryFormatter(), null); 
-        static readonly EpcisModelBinder<SubscriptionRequest> SubscriptionBinder = new EpcisModelBinder<SubscriptionRequest>(new XmlSubscriptionFormatter(), null); 
+        static readonly EpcisModelBinder<Request> RequestBinder = new EpcisModelBinder<Request>(new XmlRequestFormatter(), new JsonRequestFormatter()); 
+        static readonly EpcisModelBinder<EpcisQuery> QueryBinder = new EpcisModelBinder<EpcisQuery>(new XmlQueryFormatter(), new JsonQueryFormatter()); 
+        static readonly EpcisModelBinder<SubscriptionRequest> SubscriptionBinder = new EpcisModelBinder<SubscriptionRequest>(new XmlSubscriptionFormatter(), new JsonSubscriptionFormatter()); 
 
         public IDictionary<Type, IModelBinder> Mappings = new Dictionary<Type, IModelBinder>
         {

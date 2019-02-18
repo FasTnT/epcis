@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using FasTnT.Formatters;
+using FasTnT.Formatters.Json;
 using FasTnT.Formatters.Xml;
 using FasTnT.Model.Responses;
 using Microsoft.AspNetCore.Mvc.Formatters;
@@ -29,16 +30,16 @@ namespace FasTnT.Host
         private static IResponseFormatter GetEpcisFormatter(OutputFormatterWriteContext context)
         {
             var requestAcceptedContentType = context.HttpContext.Request.Headers["Accept"].FirstOrDefault();
+
             if (string.IsNullOrEmpty(requestAcceptedContentType) || requestAcceptedContentType == "*/*")
             {
-                // Default to XML.
-                requestAcceptedContentType = context.ContentType.HasValue ? context.ContentType.Value : "text/xml";
+                requestAcceptedContentType = context.HttpContext.Request.ContentType ?? "text/xml"; // Default to XML.
             }
 
             switch (requestAcceptedContentType.ToLower())
             {
                 case "application/json":
-                    throw new NotImplementedException();
+                    return new JsonResponseFormatter();
                 case "application/xml":
                 case "text/xml":
                     return new XmlResponseFormatter();
