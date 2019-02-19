@@ -23,6 +23,7 @@ namespace FasTnT.Formatters.Json
             {
                 switch (key)
                 {
+                    // TODO: EPCs
                     case "isA": epcisEvent.Type = Enumeration.GetByDisplayName<EventType>(eventDict[key].ToString()); break;
                     case "eventTime": epcisEvent.EventTime = DateTime.Parse(eventDict[key].ToString()); break;
                     case "eventTimeZoneOffset": epcisEvent.EventTimeZoneOffset = new TimeZoneOffset { Representation = eventDict[key].ToString() }; break;
@@ -32,6 +33,9 @@ namespace FasTnT.Formatters.Json
                     case "bizLocation": epcisEvent.BusinessLocation = eventDict[key].ToString(); break;
                     case "readPoint": epcisEvent.ReadPoint = eventDict[key].ToString(); break;
                     case "epcList": epcisEvent.Epcs.Add(new Epc { Id = "urn:fastnt:testepc", Type = EpcType.List }); break;
+                    case "sourceList": break;
+                    case "destinationList": break;
+                    case "ilmd": break;
                     default: TryParseCustomField(epcisEvent, key, eventDict[key] as IDictionary<string, object>); break;
                 }
             }

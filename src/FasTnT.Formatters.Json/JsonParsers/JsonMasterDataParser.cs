@@ -25,22 +25,19 @@ namespace FasTnT.Formatters.Json
             {
                 Type = type,
                 Id = masterData["id"].ToString(),
-                Attributes = ParseAttributes(masterData["attributes"] as IList<object>, type, masterData["id"].ToString()).ToList()
+                Attributes = (masterData["attributes"] as IList<object>).Cast<IDictionary<string, object>>().Select(x => ParseAttributes(x, type, masterData["id"].ToString())).ToList()
             };
         }
 
-        private IEnumerable<MasterDataAttribute> ParseAttributes(IList<object> masterDataAttributes, string type, string id)
+        private MasterDataAttribute ParseAttributes(IDictionary<string, object> masterDataAttributes, string type, string id)
         {
-            foreach(var attr in masterDataAttributes.Cast<IDictionary<string, object>>())
+            return new MasterDataAttribute
             {
-                yield return new MasterDataAttribute
-                {
-                    Id = attr["id"].ToString(),
-                    ParentType = type,
-                    ParentId = id,
-                    Value = attr.ContainsKey("attribute") ? attr["attribute"]?.ToString() : null
-                };
-            }
+                Id = masterDataAttributes["id"].ToString(),
+                ParentType = type,
+                ParentId = id,
+                Value = masterDataAttributes.ContainsKey("attribute") ? masterDataAttributes["attribute"]?.ToString() : null
+            };
         }
     }
 }
