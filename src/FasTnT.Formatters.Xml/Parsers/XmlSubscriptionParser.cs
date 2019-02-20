@@ -2,13 +2,14 @@
 using System.Linq;
 using System.Xml.Linq;
 using FasTnT.Formatters.Xml.Requests;
+using FasTnT.Model.Queries;
 using FasTnT.Model.Subscriptions;
 
 namespace FasTnT.Formatters.Xml
 {
     public static class XmlSubscriptionParser
     {
-        public static SubscriptionRequest ParseSubscription(XElement element)
+        public static EpcisQuery ParseSubscription(XElement element)
         {
             var subscription = new Subscription
             {
@@ -25,7 +26,7 @@ namespace FasTnT.Formatters.Xml
             return subscription;
         }
 
-        public static SubscriptionRequest ParseUnsubscription(XElement element)
+        public static EpcisQuery ParseUnsubscription(XElement element)
         {
             return new UnsubscribeRequest
             {

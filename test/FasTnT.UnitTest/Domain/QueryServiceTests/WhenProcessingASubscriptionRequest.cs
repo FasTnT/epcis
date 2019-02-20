@@ -2,6 +2,7 @@
 using FasTnT.Domain.Persistence;
 using FasTnT.Model.Subscriptions;
 using FasTnT.UnitTest.Common;
+using FasTnT.UnitTest.Domain.QueryServiceTests;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Linq;
@@ -10,7 +11,7 @@ using System.Threading.Tasks;
 namespace FasTnT.UnitTest.Domain.SubscriptionServiceTests
 {
     [TestClass]
-    public class WhenProcessingASubscriptionRequest : BaseSubscriptionServiceUnitTest
+    public class WhenProcessingASubscriptionRequest : BaseQueryServiceUnitTest
     {
         public ISubscriptionManager SubscriptionManager { get; set; }
         public Subscription Request { get; set; }
@@ -26,7 +27,7 @@ namespace FasTnT.UnitTest.Domain.SubscriptionServiceTests
             A.CallTo(() => SubscriptionManager.GetById("TestSubscription")).Returns(Task.FromResult(default(Subscription)));
         }
 
-        public override void Act() => Task.WaitAll(SubscriptionService.Process(Request));
+        public override void Act() => Task.WaitAll(QueryService.Process(Request));
 
         [Assert]
         public void ItShouldHaveBeginTheUnitOfWorkTransaction() => A.CallTo(() => UnitOfWork.BeginTransaction()).MustHaveHappened();
@@ -43,7 +44,7 @@ namespace FasTnT.UnitTest.Domain.SubscriptionServiceTests
 
 
     [TestClass]
-    public class WhenProcessingASubscriptionRequestWithInvalidDestination : BaseSubscriptionServiceUnitTest
+    public class WhenProcessingASubscriptionRequestWithInvalidDestination : BaseQueryServiceUnitTest
     {
         public ISubscriptionManager SubscriptionManager { get; set; }
         public Subscription Request { get; set; }
@@ -64,7 +65,7 @@ namespace FasTnT.UnitTest.Domain.SubscriptionServiceTests
         {
             try
             {
-                Task.WaitAll(SubscriptionService.Process(Request));
+                Task.WaitAll(QueryService.Process(Request));
             }
             catch (Exception ex)
             {

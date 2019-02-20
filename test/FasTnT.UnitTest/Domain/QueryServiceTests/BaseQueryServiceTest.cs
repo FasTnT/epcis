@@ -1,4 +1,5 @@
 ﻿using FakeItEasy;
+using FasTnT.Domain.BackgroundTasks;
 using FasTnT.Domain.Persistence;
 using FasTnT.Domain.Services;
 using FasTnT.Model.Queries.Implementations;
@@ -9,6 +10,7 @@ namespace FasTnT.UnitTest.Domain.QueryServiceTests
     public abstract class BaseQueryServiceUnitTest : BaseUnitTest
     {
         public IUnitOfWork UnitOfWork { get; set; } = A.Fake<IUnitOfWork>();
+        public ISubscriptionBackgroundService SubscriptionBackgroundService { get; set; } = A.Fake<ISubscriptionBackgroundService>();
         public IEpcisQuery[] EpcisQueries { get; set; } = new IEpcisQuery[] { new SimpleEventQuery(), new SimpleMasterDataQuery() };
         public QueryService QueryService { get; set; }
 
@@ -16,7 +18,7 @@ namespace FasTnT.UnitTest.Domain.QueryServiceTests
         {
             base.Arrange();
 
-            QueryService = new QueryService(EpcisQueries, UnitOfWork);
+            QueryService = new QueryService(EpcisQueries, UnitOfWork, SubscriptionBackgroundService);
         }
     }
 }
