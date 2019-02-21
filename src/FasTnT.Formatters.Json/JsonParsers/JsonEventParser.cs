@@ -4,6 +4,7 @@ using System.Linq;
 using FasTnT.Model;
 using FasTnT.Model.Events.Enums;
 using FasTnT.Model.Utils;
+using MoreLinq;
 
 namespace FasTnT.Formatters.Json
 {
@@ -32,7 +33,9 @@ namespace FasTnT.Formatters.Json
                     case "disposition": epcisEvent.Disposition = eventDict[key].ToString(); break;
                     case "bizLocation": epcisEvent.BusinessLocation = eventDict[key].ToString(); break;
                     case "readPoint": epcisEvent.ReadPoint = eventDict[key].ToString(); break;
-                    case "epcList": epcisEvent.Epcs.Add(new Epc { Id = "urn:fastnt:testepc", Type = EpcType.List }); break;
+                    case "epcList": epcisEvent.Epcs.Add(new Epc { Id = "urn:fastnt:testepc", Type = EpcType.List }); break; // TODO
+                    case "parentID": epcisEvent.Epcs.Add(new Epc { Id = eventDict[key].ToString(), Type = EpcType.ParentId }); break;
+                    case "childEPCs": ParseChildEpcsInto(eventDict[key] as IList<string>, epcisEvent); break;
                     case "sourceList": break;
                     case "destinationList": break;
                     case "ilmd": break;
@@ -43,17 +46,25 @@ namespace FasTnT.Formatters.Json
             return epcisEvent;
         }
 
+        private void ParseChildEpcsInto(IList<string> list, EpcisEvent epcisEvent)
+        {
+            list.ForEach(epc => epcisEvent.Epcs.Add(new Epc { Id = epc, Type = EpcType.ChildEpc }));
+        }
+
         private void TryParseCustomField(EpcisEvent epcisEvent, string id, IDictionary<string, object> dictionary)
         {
             if (dictionary == null) throw new Exception($"Element with name '{id}' is not expected here");
 
             var namespaceName = id.Contains(':') ? $"@{id.Split(':')[0]}" : "@xmlns";
+            if (!dictionary.ContainsKey(namespaceName)) throw new Exception($"Custom event field must have a custom namespace");
+
+            var namespaceValue = dictionary[namespaceName].ToString();
             var value = dictionary["#text"].ToString();
 
             epcisEvent.CustomFields.Add(new CustomField
             {
                 Id = _internalCounter++,
-                Namespace = dictionary[namespaceName].ToString(),
+                Namespace = namespaceValue,
                 Name = id.Split(':').Last(),
                 TextValue = value,
                 Type = FieldType.EventExtension
@@ -66,7 +77,7 @@ namespace FasTnT.Formatters.Json
                     ParentId = _internalCounter - 1,
                     Id = _internalCounter++,
                     Name = key.Substring(1),
-                    Namespace = dictionary[namespaceName].ToString(),
+                    Namespace = namespaceValue,
                     TextValue = dictionary[key].ToString(),
                     Type = FieldType.Attribute
                 });
