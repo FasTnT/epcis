@@ -39,10 +39,10 @@ namespace FasTnT.Host
 
         public abstract Task Process(T request);
 
-        public async Task Created<TService>(Func<TService, Task> action)
+        public async Task Execute<TService>(Func<TService, Task> action)
             => await action(_serviceProvider.GetService<TService>());
 
-        public async Task Write<TService>(Func<TService, Task<IEpcisResponse>> action)
+        public async Task Execute<TService>(Func<TService, Task<IEpcisResponse>> action)
         {
             var result = await action(_serviceProvider.GetService<TService>());
 

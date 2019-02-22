@@ -37,9 +37,7 @@ namespace FasTnT.Host
         {
             if (env.IsDevelopment())
             {
-                app
-                    .UseDeveloperExceptionPage()
-                    .UseEpcisMigrationEndpoint("/EpcisServices/1.2/Database");
+                app.UseDeveloperExceptionPage();
             }
 
             SubscriptionBackgroundService.DelayTimeoutInMs = Configuration.GetSection("Settings").GetValue("SubscriptionWaitTimeout", 5000);
@@ -47,7 +45,8 @@ namespace FasTnT.Host
             app.UseExceptionHandlingMiddleware()
                 .UseBasicAuthentication("FasTnT")
                 .UseEpcisCaptureEndpoint("/EpcisServices/1.2/Capture")
-                .UseEpcisQueryEndpoint("/EpcisServices/1.2/Query");
+                .UseEpcisQueryEndpoint("/EpcisServices/1.2/Query")
+                .UseEpcisMigrationEndpoint("/EpcisServices/1.2/Database", env.IsDevelopment());
         }
     }
 }

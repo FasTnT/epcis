@@ -14,9 +14,9 @@ namespace FasTnT.Host
         public override async Task Process(Request request)
         {
             if (request is EpcisEventDocument eventDocument)
-                await Created<CaptureService>(async s => await s.Capture(eventDocument));
+                await Execute<CaptureService>(async s => await s.Capture(eventDocument));
             else if (request is EpcisMasterdataDocument masterDataDocument)
-                await Created<CaptureService>(async s => await s.Capture(masterDataDocument));
+                await Execute<CaptureService>(async s => await s.Capture(masterDataDocument));
         }
     }
 }

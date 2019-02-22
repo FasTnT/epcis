@@ -2,31 +2,40 @@
 using FasTnT.Formatters.Xml;
 using FasTnT.Model;
 using FasTnT.Model.Queries;
+using FasTnT.Model.Responses;
 using Microsoft.AspNetCore.Http;
 using System;
-using System.Collections.Generic;
+using System.Linq;
 
 namespace FasTnT.Host.Infrastructure
 {
     public class HttpFormatterFactory
     {
+        private IFormatterFactory[] _formatters;
         public static HttpFormatterFactory Instance { get; } = new HttpFormatterFactory();
 
-        IDictionary<string, IDictionary<Type, object>> _knownTypes = new Dictionary<string, IDictionary<Type, object>>
+        private HttpFormatterFactory()
         {
-            { "application/xml", new Dictionary<Type, object>
-                {
-                    { typeof(Request), new XmlRequestFormatter() },
-                    { typeof(EpcisQuery), new XmlQueryFormatter() },
-                }
-            }
-        };
-
-        private HttpFormatterFactory() { }
+            _formatters = new[]
+            {
+                new XmlFormatterFactory()
+            };
+        }
 
         public IFormatter<T> GetFormatter<T>(HttpContext httpContext)
         {
-            return _knownTypes["application/xml"][typeof(T)] as IFormatter<T>;
+            var factory = _formatters.FirstOrDefault(x => x.AllowedContentTypes.Contains(httpContext.Request.ContentType, StringComparer.OrdinalIgnoreCase));
+
+            return (IFormatter<T>) GetFormatter(typeof(T), factory);
+        }
+
+        private object GetFormatter(Type type, IFormatterFactory factory)
+        {
+            if (type == typeof(Request)) return factory?.RequestFormatter;
+            if (type == typeof(EpcisQuery)) return factory?.QueryFormatter;
+            if (type == typeof(IEpcisResponse)) return factory?.ResponseFormatter;
+
+            return null;
         }
     }
 }
