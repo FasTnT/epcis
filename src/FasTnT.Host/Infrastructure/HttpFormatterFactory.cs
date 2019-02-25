@@ -1,4 +1,5 @@
 ﻿using FasTnT.Formatters;
+using FasTnT.Formatters.Soap;
 using FasTnT.Formatters.Xml;
 using FasTnT.Model;
 using FasTnT.Model.Queries;
@@ -16,9 +17,10 @@ namespace FasTnT.Host.Infrastructure
 
         private HttpFormatterFactory()
         {
-            _formatters = new[]
+            _formatters = new IFormatterFactory[]
             {
-                new XmlFormatterFactory()
+                new XmlFormatterFactory(),
+                new SoapFormatterFactory()
             };
         }
 

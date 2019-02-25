@@ -16,6 +16,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\FasTnT.Domain\FasTnT.Domain.csproj" />
+    <ProjectReference Include="..\FasTnT.Formatters.Soap\FasTnT.Formatters.Soap.csproj" />
     <ProjectReference Include="..\FasTnT.Formatters.Xml\FasTnT.Formatters.Xml.csproj" />
     <ProjectReference Include="..\FasTnT.Persistence.Dapper\FasTnT.Persistence.Dapper.csproj" />
   </ItemGroup>
