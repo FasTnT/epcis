@@ -3,6 +3,7 @@ using FasTnT.Domain.Persistence;
 using FasTnT.Model.Exceptions;
 using FasTnT.Model.Subscriptions;
 using FasTnT.UnitTest.Common;
+using FasTnT.UnitTest.Domain.QueryServiceTests;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Linq;
@@ -11,7 +12,7 @@ using System.Threading.Tasks;
 namespace FasTnT.UnitTest.Domain.SubscriptionServiceTests
 {
     [TestClass]
-    public class WhenProcessingASubscriptionRequestForAQueryThatDoesntAllowSubscription : BaseSubscriptionServiceUnitTest
+    public class WhenProcessingASubscriptionRequestForAQueryThatDoesntAllowSubscription : BaseQueryServiceUnitTest
     {
         public ISubscriptionManager SubscriptionManager { get; set; }
         public Subscription Request { get; set; }
@@ -32,7 +33,7 @@ namespace FasTnT.UnitTest.Domain.SubscriptionServiceTests
         {
             try
             {
-                Task.WaitAll(SubscriptionService.Process(Request));
+                Task.WaitAll(QueryService.Process(Request));
             }
             catch(Exception ex)
             {

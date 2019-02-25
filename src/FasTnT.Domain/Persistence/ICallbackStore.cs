@@ -1,5 +1,4 @@
-﻿using FasTnT.Model;
-using FasTnT.Model.Events.Enums;
+﻿using FasTnT.Model.Events.Enums;
 using System;
 using System.Threading.Tasks;
 

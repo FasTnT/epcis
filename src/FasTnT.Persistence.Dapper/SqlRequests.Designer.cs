@@ -8,10 +8,10 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace FasTnT.Persistence.Dapper {
-    using System;
-    
-    
+namespace FasTnT.Persistence.Dapper
+{
+
+
     /// <summary>
     ///   A strongly-typed resource class, for looking up localized strings, etc.
     /// </summary>
