@@ -9,10 +9,9 @@ using FasTnT.Model.Responses;
 
 namespace FasTnT.Host
 {
-
     internal class EpcisQueryMiddleware : EpcisMiddleware<EpcisQuery>
     {
-        public EpcisQueryMiddleware(ILogger<EpcisCaptureMiddleware> logger, RequestDelegate next, string path)
+        public EpcisQueryMiddleware(ILogger<EpcisQueryMiddleware> logger, RequestDelegate next, string path)
             : base(logger, next, path) { }
 
         public override async Task Process(EpcisQuery parameter)

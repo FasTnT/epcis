@@ -46,6 +46,7 @@ namespace FasTnT.Host
                 .UseBasicAuthentication("FasTnT")
                 .UseEpcisCaptureEndpoint("/EpcisServices/1.2/Capture")
                 .UseEpcisQueryEndpoint("/EpcisServices/1.2/Query")
+                .UseEpcisSubscriptionTrigger("/EpcisServices/1.2/Subscription/Trigger")
                 .UseEpcisMigrationEndpoint("/EpcisServices/1.2/Database", env.IsDevelopment());
         }
     }

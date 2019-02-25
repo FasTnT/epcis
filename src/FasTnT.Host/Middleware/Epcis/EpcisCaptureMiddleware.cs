@@ -17,6 +17,10 @@ namespace FasTnT.Host
                 await Execute<CaptureService>(async s => await s.Capture(eventDocument));
             else if (request is EpcisMasterdataDocument masterDataDocument)
                 await Execute<CaptureService>(async s => await s.Capture(masterDataDocument));
+            else if (request is EpcisQueryCallbackDocument queryCallbackDocument)
+                await Execute<CallbackService>(async s => await s.Process(queryCallbackDocument));
+            else if (request is EpcisQueryCallbackException queryCallbackException)
+                await Execute<CallbackService>(async s => await s.ProcessException(queryCallbackException));
         }
     }
 }
