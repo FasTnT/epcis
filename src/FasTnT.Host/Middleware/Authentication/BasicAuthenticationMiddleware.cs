@@ -1,8 +1,12 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using FasTnT.Domain.Persistence;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using FasTnT.Domain.Services.Users;
+using System.Text;
 
 namespace FasTnT.Host.Middleware.Authentication
 {
@@ -29,10 +33,21 @@ namespace FasTnT.Host.Middleware.Authentication
             }
             else
             {
-                // TODO: validate and authenticate user
+                var unitOfWork = serviceProvider.GetService<IUnitOfWork>();
+                var userContext = serviceProvider.GetService<UserContext>();
+                var (username, password) = ParseCredentials(authHeader.Value.First());
+                var user = await unitOfWork.UserManager.GetByUsername(username);
 
-                await _next(httpContext);
+                if (userContext.Authenticate(user, password)) await _next(httpContext);
+                else Unauthenticated(httpContext);
             }
+        }
+
+        private (string username, string password) ParseCredentials(string basicAuth)
+        {
+            var credentials = Encoding.UTF8.GetString(Convert.FromBase64String(basicAuth.Split(' ', 2).Last())).Split(':');
+
+            return (credentials[0], credentials[1]);
         }
 
         private void Unauthenticated(HttpContext httpContext)
