@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace FasTnT.Formatters.Soap
+namespace FasTnT.Formatters.Xml
 {
     public class SoapFormatterFactory : IFormatterFactory
     {

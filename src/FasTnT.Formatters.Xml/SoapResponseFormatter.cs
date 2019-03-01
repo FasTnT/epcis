@@ -2,12 +2,12 @@
 using System.IO;
 using System.Linq;
 using System.Xml.Linq;
-using FasTnT.Formatters.Soap.Responses;
+using FasTnT.Formatters.Xml.Responses;
 using FasTnT.Model;
 using FasTnT.Model.MasterDatas;
 using FasTnT.Model.Responses;
 
-namespace FasTnT.Formatters.Soap
+namespace FasTnT.Formatters.Xml
 {
     internal class SoapResponseFormatter : IResponseFormatter
     {

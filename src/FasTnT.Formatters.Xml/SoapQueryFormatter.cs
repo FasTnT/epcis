@@ -2,10 +2,10 @@
 using System.IO;
 using System.Linq;
 using System.Xml.Linq;
-using FasTnT.Formatters.Soap.Requests;
+using FasTnT.Formatters.Xml.Requests;
 using FasTnT.Model.Queries;
 
-namespace FasTnT.Formatters.Soap
+namespace FasTnT.Formatters.Xml
 {
     internal class SoapQueryFormatter : IQueryFormatter
     {
@@ -60,7 +60,7 @@ namespace FasTnT.Formatters.Soap
                 throw new Exception($"Element not expected: '{element?.Name?.LocalName ?? null}'");
             }
 
-            throw new Exception($"EPCISBody element must contain the query type.");
+            throw new Exception($"Invalid SOAP request: empty Body.");
         }
 
         public void Write(EpcisQuery entity, Stream output) => throw new NotImplementedException();
