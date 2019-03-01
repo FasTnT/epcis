@@ -16,9 +16,10 @@ namespace FasTnT.Host.Infrastructure
 
         private HttpFormatterFactory()
         {
-            _formatters = new[]
+            _formatters = new IFormatterFactory[]
             {
-                new XmlFormatterFactory()
+                new XmlFormatterFactory(),
+                new SoapFormatterFactory()
             };
         }
 
