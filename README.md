@@ -27,6 +27,12 @@ The API is secured using HTTP Basic authentication. The default username:passwor
 - Queries : `POST /EpcisServices/1.2/Query`
 - Subscription trigger : `GET /EpcisServices/1.2/Subscription/Trigger/{triggerName}`
 
+**Capture** endpoint only supports requests with `content-type: application/xml` or `content-type: text/xml` header and XML payload.
+
+**Queries** endpoint supports XML and SOAP requests. Note that it will not return the wsdl on a `GET` request. SOAP requests *must* contain a `content-type` header with value set to either `application/soap+xml` or `text/soap+xml`.
+
+See the `documents\EPCIS_Samples.postman_collection.json` file for more informations and requests examples.
+
 ### Others endpoints:
 
 - Database migration: `POST /EpcisServices/1.2/Database/Migrate`
@@ -64,4 +70,4 @@ This project is licensed under the Apache 2.0 license - see the LICENSE file for
 
 Contact: fastnt@pm.me
 
-_Last update: february 2019_
+_Last update: march 2019_
