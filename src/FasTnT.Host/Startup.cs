@@ -16,6 +16,7 @@ namespace FasTnT.Host
 {
     public class Startup
     {
+        public static string Prefix = "/EpcisServices/1.2";
         public IConfiguration Configuration { get; }
         public ILoggerFactory LogFactory { get; }
 
@@ -44,10 +45,10 @@ namespace FasTnT.Host
 
             app.UseExceptionHandlingMiddleware()
                 .UseBasicAuthentication("FasTnT")
-                .UseEpcisCaptureEndpoint("/EpcisServices/1.2/Capture")
-                .UseEpcisQueryEndpoint("/EpcisServices/1.2/Query")
-                .UseEpcisSubscriptionTrigger("/EpcisServices/1.2/Subscription/Trigger")
-                .UseEpcisMigrationEndpoint("/EpcisServices/1.2/Database", env.IsDevelopment());
+                .UseEpcisCaptureEndpoint($"{Prefix}/Capture")
+                .UseEpcisQueryEndpoint($"{Prefix}/Query")
+                .UseEpcisSubscriptionTrigger($"{Prefix}/Subscription/Trigger")
+                .UseEpcisMigrationEndpoint($"{Prefix}/Database", env.IsDevelopment());
         }
     }
 }
