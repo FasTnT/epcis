@@ -8,7 +8,6 @@ using FasTnT.Host.BackgroundTasks;
 using FasTnT.Domain.Extensions;
 using FasTnT.Formatters;
 using FasTnT.Formatters.Xml;
-using Microsoft.Extensions.Logging;
 using FasTnT.Domain.BackgroundTasks;
 using FasTnT.Host.Middleware.Authentication;
 
@@ -18,12 +17,17 @@ namespace FasTnT.Host
     {
         public static string Prefix = "/EpcisServices/1.2";
         public IConfiguration Configuration { get; }
-        public ILoggerFactory LogFactory { get; }
 
-        public Startup(IConfiguration configuration, ILoggerFactory logFactory)
+        public Startup(IHostingEnvironment env)
         {
-            Configuration = configuration;
-            LogFactory = logFactory;
+            var builder = new ConfigurationBuilder().SetBasePath(env.ContentRootPath);
+
+            if (env.IsDevelopment())
+            {
+                builder.AddUserSecrets<Startup>();
+            }
+
+            Configuration = builder.Build();
         }
 
         public void ConfigureServices(IServiceCollection services)

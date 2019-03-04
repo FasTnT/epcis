@@ -11,10 +11,10 @@ Prerequisites:
 - .NET Core 2.2 SDK
 
 Steps:
-1. Download the source code, and create a new user/database in PostGreSQL for FasTnT;
-2. Update the `FasTnT.Database` connection string in the project `FasTnT.Host` with your PostGreSQL connection string;
-3. Start the repository with the command `$ dotnet run -p src\FasTnT.Host\FasTnT.Host.csproj`
-4. Create the SQL schemas and tables: `curl -X POST http://localhost:54805/EpcisServices/1.2/Database/Migrate`
+1. Download the source code, and create a new user/database in PostGreSQL for FasTnT ;
+2. Update the connection string: `$ dotnet user-secrets set ConnectionStrings:FasTnT.Database "{your connectionstring}" -p src\FasTnT.Host\FasTnT.Host.csproj` ;
+3. Start the repository with the command `$ dotnet run -p src\FasTnT.Host\FasTnT.Host.csproj` ;
+4. Create the SQL schemas and tables: `curl -X POST http://localhost:54805/EpcisServices/1.2/Database/Migrate` ;
 5. That's it! You have a properly working EPCIS 1.2 repository.
 
 ## HTTP Endpoints
