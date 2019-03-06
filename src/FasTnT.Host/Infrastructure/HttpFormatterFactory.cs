@@ -1,5 +1,6 @@
 ﻿using FasTnT.Formatters;
 using FasTnT.Formatters.Xml;
+using FasTnT.Formatters.Json;
 using FasTnT.Model;
 using FasTnT.Model.Queries;
 using FasTnT.Model.Responses;
@@ -19,7 +20,8 @@ namespace FasTnT.Host.Infrastructure
             _formatters = new IFormatterFactory[]
             {
                 new XmlFormatterFactory(),
-                new SoapFormatterFactory()
+                new SoapFormatterFactory(),
+                new JsonFormatterFactory()
             };
         }
 
