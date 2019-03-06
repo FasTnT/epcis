@@ -1,13 +1,14 @@
 ﻿using FakeItEasy;
 using FasTnT.Model.Subscriptions;
 using FasTnT.UnitTest.Common;
+using FasTnT.UnitTest.Domain.QueryServiceTests;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Threading.Tasks;
 
 namespace FasTnT.UnitTest.Domain.SubscriptionServiceTests
 {
     [TestClass]
-    public class WhenProcessingAnUnsubscribeRequest : BaseSubscriptionServiceUnitTest
+    public class WhenProcessingAnUnsubscribeRequest : BaseQueryServiceUnitTest
     {
         public UnsubscribeRequest Request { get; set; }
 
@@ -18,7 +19,7 @@ namespace FasTnT.UnitTest.Domain.SubscriptionServiceTests
             Request = new UnsubscribeRequest { SubscriptionId = "TestSubscription" };
         }
 
-        public override void Act() => Task.WaitAll(SubscriptionService.Process(Request));
+        public override void Act() => Task.WaitAll(QueryService.Process(Request));
 
         [Assert]
         public void ItShouldCallTheSubscriptionManagerProperty() => A.CallTo(() => UnitOfWork.SubscriptionManager).MustHaveHappened();

@@ -41,6 +41,14 @@ namespace FasTnT.Formatters.Xml
                     {
                         return XmlQueryParser.Parse(element);
                     }
+                    if (element.Name == XName.Get("Subscribe", EpcisNamespaces.Query))
+                    {
+                        return XmlSubscriptionParser.ParseSubscription(element);
+                    }
+                    if (element.Name == XName.Get("Unsubscribe", EpcisNamespaces.Query))
+                    {
+                        return XmlSubscriptionParser.ParseUnsubscription(element);
+                    }
                     throw new Exception($"Element not expected: '{element?.Name?.LocalName ?? null}'");
                 }
 

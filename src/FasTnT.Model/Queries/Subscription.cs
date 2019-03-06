@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace FasTnT.Model.Subscriptions
 {
-    public class Subscription : SubscriptionRequest
+    public class Subscription : EpcisQuery
     {
         public Guid Id { get; set; } = Guid.NewGuid();
         public bool Active { get; set; } = true;
