@@ -40,6 +40,7 @@ namespace FasTnT.Domain.Services
             }
             else
             {
+                query.Parameters = query.Parameters.Where(x => !x.Values.All(string.IsNullOrEmpty));
                 try
                 {
                     epcisQuery.ValidateParameters(query.Parameters);
@@ -59,6 +60,7 @@ namespace FasTnT.Domain.Services
             EnsureDestinationIsValidURI(request);
             EnsureQueryAllowsSubscription(request);
             EnsureDestinationHasEndSlash(request);
+            request.Parameters = request.Parameters.Where(x => !x.Values.All(string.IsNullOrEmpty));
 
             await _unitOfWork.Execute(async tx =>
             {
