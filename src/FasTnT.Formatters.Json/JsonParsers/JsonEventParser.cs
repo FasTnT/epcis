@@ -17,6 +17,7 @@ namespace FasTnT.Formatters.Json
             return list.Cast<IDictionary<string, object>>().Select(Parse);
         }
 
+        // TODO: implement empty cases.
         public EpcisEvent Parse(IDictionary<string, object> eventDict)
         {
             var epcisEvent = new EpcisEvent();
@@ -24,21 +25,31 @@ namespace FasTnT.Formatters.Json
             {
                 switch (key)
                 {
-                    // TODO: EPCs
                     case "isA": epcisEvent.Type = Enumeration.GetByDisplayName<EventType>(eventDict[key].ToString()); break;
                     case "eventTime": epcisEvent.EventTime = DateTime.Parse(eventDict[key].ToString()); break;
                     case "eventTimeZoneOffset": epcisEvent.EventTimeZoneOffset = new TimeZoneOffset { Representation = eventDict[key].ToString() }; break;
                     case "action": epcisEvent.Action = Enumeration.GetByDisplayName<EventAction>(eventDict[key].ToString()); break;
+                    case "epcList": epcisEvent.Epcs.Add(new Epc { Id = "urn:fastnt:testepc", Type = EpcType.List }); break; // TODO
+                    case "childEPCs": ParseChildEpcsInto(eventDict[key] as IList<string>, epcisEvent); break;
+                    case "inputQuantityList": break;
+                    case "inputEPCList": break;
+                    case "outputQuantityList": break;
+                    case "outputEPCList": break;
+                    case "epcClass": break;
+                    case "quantity": break;
                     case "bizStep": epcisEvent.BusinessStep = eventDict[key].ToString(); break;
                     case "disposition": epcisEvent.Disposition = eventDict[key].ToString(); break;
+                    case "eventID": epcisEvent.EventId = eventDict[key].ToString(); break;
+                    case "errorDeclaration": break;
+                    case "transformationId": epcisEvent.TransformationId = eventDict[key].ToString(); break;
                     case "bizLocation": epcisEvent.BusinessLocation = eventDict[key].ToString(); break;
+                    case "bizTransactionList": break;
                     case "readPoint": epcisEvent.ReadPoint = eventDict[key].ToString(); break;
-                    case "epcList": epcisEvent.Epcs.Add(new Epc { Id = "urn:fastnt:testepc", Type = EpcType.List }); break; // TODO
-                    case "parentID": epcisEvent.Epcs.Add(new Epc { Id = eventDict[key].ToString(), Type = EpcType.ParentId }); break;
-                    case "childEPCs": ParseChildEpcsInto(eventDict[key] as IList<string>, epcisEvent); break;
                     case "sourceList": break;
                     case "destinationList": break;
                     case "ilmd": break;
+                    case "parentID": epcisEvent.Epcs.Add(new Epc { Id = eventDict[key].ToString(), Type = EpcType.ParentId }); break;
+                    case "recordTime": break; // We don't process record time as it will be overrided in any case..
                     default: TryParseCustomField(epcisEvent, key, eventDict[key] as IDictionary<string, object>); break;
                 }
             }
