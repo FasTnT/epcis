@@ -29,16 +29,7 @@ namespace FasTnT.Host.Infrastructure
         {
             var factory = _formatters.FirstOrDefault(x => x.AllowedContentTypes.Contains(httpContext.Request.ContentType, StringComparer.OrdinalIgnoreCase));
 
-            return (IFormatter<T>) GetFormatter(typeof(T), factory);
-        }
-
-        private object GetFormatter(Type type, IFormatterFactory factory)
-        {
-            if (type == typeof(Request)) return factory?.RequestFormatter;
-            if (type == typeof(EpcisQuery)) return factory?.QueryFormatter;
-            if (type == typeof(IEpcisResponse)) return factory?.ResponseFormatter;
-
-            return null;
+            return factory.GetFormatter<T>();
         }
     }
 }
