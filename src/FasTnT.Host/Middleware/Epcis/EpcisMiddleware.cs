@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Http;
 using System;
 using FasTnT.Host.Infrastructure;
 using FasTnT.Model.Responses;
+using FasTnT.Domain;
 
 namespace FasTnT.Host
 {
@@ -28,7 +29,10 @@ namespace FasTnT.Host
                 _serviceProvider = serviceProvider;
                 _httpContext = httpContext;
 
-                var request = HttpFormatterFactory.Instance.GetFormatter<T>(_httpContext).Read(httpContext.Request.Body);
+                var formatterFactory = serviceProvider.GetService<FormatterProvider>();
+                var contentType = _httpContext.Request.ContentType;
+                var request = formatterFactory.GetFormatter<T>(contentType).Read(httpContext.Request.Body);
+
                 await Process(request);
             }
             else
@@ -39,8 +43,7 @@ namespace FasTnT.Host
 
         public abstract Task Process(T request);
 
-        public async Task Execute<TService>(Func<TService, Task> action)
-            => await action(_serviceProvider.GetService<TService>());
+        public async Task Execute<TService>(Func<TService, Task> action) => await action(_serviceProvider.GetService<TService>());
 
         public async Task Execute<TService>(Func<TService, Task<IEpcisResponse>> action)
         {
