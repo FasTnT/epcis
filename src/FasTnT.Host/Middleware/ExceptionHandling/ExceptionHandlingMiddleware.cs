@@ -4,6 +4,9 @@ using FasTnT.Model.Exceptions;
 using FasTnT.Model.Responses;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.DependencyInjection;
+using FasTnT.Formatters;
+using FasTnT.Domain;
 
 namespace FasTnT.Host.Middleware
 {
@@ -29,6 +32,8 @@ namespace FasTnT.Host.Middleware
             {
                 _logger.LogError($"[{context.TraceIdentifier}] Request failed with reason '{ex.Message}'");
                 var epcisException = ex as EpcisException;
+                var formatterProvider = context.RequestServices.GetService<FormatterProvider>();
+                var formatter = formatterProvider.GetFormatter<IEpcisResponse>(context.Request.ContentType) as IResponseFormatter;
                 var response = new ExceptionResponse
                 {
                     Exception = (epcisException?.ExceptionType ?? ExceptionType.ImplementationException).DisplayName,
@@ -37,7 +42,7 @@ namespace FasTnT.Host.Middleware
                 };
 
                 context.Response.StatusCode = (ex is EpcisException) ? BadRequest : InternalServerError;
-                context.SetEpcisResponse(response);
+                context.SetEpcisResponse(response, formatter);
             }
         }
     }

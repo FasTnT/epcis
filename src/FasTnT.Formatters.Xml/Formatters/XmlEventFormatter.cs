@@ -20,11 +20,11 @@ namespace FasTnT.Formatters.Xml.Responses
         {
             eventBuilder = new Dictionary<EventType, FormatAction[]>
             {
-                { EventType.Object, new FormatAction[]{ EpcList, Action, BizStep, Disposition, ReadPoint, BizLocation, BizTransaction, Ilmd, SourceDest, AddExtensionField, AddEventExtension } },
+                { EventType.Object, new FormatAction[]{ EpcList, Action, BizStep, Disposition, ReadPoint, BizLocation, BizTransaction, ExtensionIlmd, SourceDest, AddExtensionField, AddEventExtension } },
                 { EventType.Quantity, new FormatAction[]{ EpcList, Action, BizStep, Disposition, ReadPoint, BizLocation, BizTransaction, SourceDest, AddExtensionField, AddEventExtension } },
                 { EventType.Aggregation, new FormatAction[]{ ParentId, ChildEpcs, Action, BizStep, Disposition, ReadPoint, BizLocation, BizTransaction, SourceDest, AddExtensionField, AddEventExtension } },
                 { EventType.Transaction, new FormatAction[]{ EpcList, Action, BizStep, Disposition, ReadPoint, BizLocation, BizTransaction, SourceDest, AddExtensionField, AddEventExtension } },
-                { EventType.Transformation, new FormatAction[]{ EpcList, TransformationId, BizStep, Disposition, ReadPoint, BizLocation, BizTransaction, SourceDest, AddExtensionField, AddEventExtension } },
+                { EventType.Transformation, new FormatAction[]{ EpcList, TransformationId, BizStep, Disposition, ReadPoint, BizLocation, BizTransaction, SourceDest, Ilmd, AddExtensionField, AddEventExtension } },
             };
         }
 
@@ -129,12 +129,19 @@ namespace FasTnT.Formatters.Xml.Responses
             element.Add(transactions);
         }
 
-        private void Ilmd(EpcisEvent @event, XContainer element)
+        private void ExtensionIlmd(EpcisEvent @event, XContainer element) => Ilmd(@event, element, true);
+        private void Ilmd(EpcisEvent @event, XContainer element) => Ilmd(@event, element, false);
+
+        private void Ilmd(EpcisEvent @event, XContainer element, bool inExtension)
         {
             var ilmdElement = new XElement("ilmd");
             CustomFields(@event, ilmdElement, FieldType.Ilmd);
 
-            if (ilmdElement.HasAttributes || ilmdElement.HasElements) AddInExtension(element, ilmdElement);
+            if (ilmdElement.HasAttributes || ilmdElement.HasElements)
+            {
+                if (inExtension) AddInExtension(element, ilmdElement);
+                else element.Add(ilmdElement);
+            }
         }
 
         public void AddExtensionField(EpcisEvent @event, XContainer element)

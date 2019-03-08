@@ -23,6 +23,11 @@ namespace FasTnT.Formatters.Json
             }
         }
 
+        public string Format(GetStandardVersionResponse response)
+        {
+            return JSON.ToJSON(response.Version);
+        }
+
         public string Format(ExceptionResponse response)
         {
             return JSON.ToJSON(new Dictionary<string, object>
