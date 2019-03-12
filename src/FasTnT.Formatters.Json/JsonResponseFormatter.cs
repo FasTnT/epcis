@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using fastJSON;
+using FasTnT.Formatters.Json.JsonFormatter;
+using FasTnT.Model;
 using FasTnT.Model.Responses;
 
 namespace FasTnT.Formatters.Json
@@ -21,6 +24,25 @@ namespace FasTnT.Formatters.Json
                     writer.Write(Format((dynamic)entity));
                 }
             }
+        }
+
+        public string Format(PollResponse response)
+        {
+            var dict = new Dictionary<string, object>
+            {
+                { "@context", "https://id.gs1.org/epcis-context.jsonld" },
+                { "isA", "EPCISDocument" },
+                { "creationDate", DateTime.UtcNow },
+                { "schemaVersion", "1.2" },
+                { "format", "application/ld+json" },
+                { "epcisBody", new Dictionary<string, object>
+                    {
+                        { "eventList", response.Entities.Select(x => new JsonEventFormatter().FormatEvent((EpcisEvent)x)) }
+                    }
+                }
+            };
+
+            return JSON.ToJSON(dict);
         }
 
         public string Format(GetStandardVersionResponse response)
