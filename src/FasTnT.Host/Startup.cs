@@ -61,8 +61,7 @@ namespace FasTnT.Host
                      .UseEpcisCaptureEndpoint($"{EpcisServicePath}/Capture")
                      .UseEpcisQueryEndpoint($"{EpcisServicePath}/Query")
                      .UseEpcisSubscriptionTrigger($"{EpcisServicePath}/Subscription/Trigger");
-                })
-                .UseMvc();
+                });
         }
     }
 }

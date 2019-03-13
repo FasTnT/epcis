@@ -1,9 +1,6 @@
 ﻿using FasTnT.Formatters;
 using FasTnT.Formatters.Xml;
 using FasTnT.Formatters.Json;
-using FasTnT.Model;
-using FasTnT.Model.Queries;
-using FasTnT.Model.Responses;
 using Microsoft.AspNetCore.Http;
 using System;
 using System.Linq;

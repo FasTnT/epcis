@@ -3,11 +3,8 @@ using Microsoft.Extensions.Logging;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using System;
-using FasTnT.Host.Infrastructure;
 using FasTnT.Model.Responses;
 using FasTnT.Domain;
-using System.Linq;
-using FasTnT.Formatters;
 
 namespace FasTnT.Host
 {
@@ -51,22 +48,7 @@ namespace FasTnT.Host
         {
             var result = await action(_serviceProvider.GetService<TService>());
 
-            var formatterFactory = _serviceProvider.GetService<FormatterProvider>();
-            var contentType = GetContentType(_httpContext);
-            var formatter = formatterFactory.GetFormatter<IEpcisResponse>(contentType) as IResponseFormatter;
-
-            _httpContext.SetEpcisResponse(result, formatter);
-        }
-
-        private string GetContentType(HttpContext httpContext)
-        {
-            if (httpContext.Request.Headers.ContainsKey("Accept"))
-            {
-                var acceptValue = httpContext.Request.Headers["Accept"].First();
-                if (acceptValue != "*/*") return acceptValue;
-            }
-
-            return httpContext.Request.ContentType;
+            _httpContext.SetEpcisResponse(result);
         }
     }
 }

@@ -1,7 +1,4 @@
 using FasTnT.Formatters;
-using FasTnT.Model;
-using FasTnT.Model.Queries;
-using FasTnT.Model.Responses;
 using System;
 using System.Linq;
 
