@@ -18,8 +18,8 @@ namespace FasTnT.Domain.Services
 
             await _unitOfWork.Execute(async tx =>
             {
-                await tx.RequestStore.Store(captureDocument.Header);
-                await tx.EventStore.Store(captureDocument.Header.Id, captureDocument.EventList);
+                var headerId = await tx.RequestStore.Store(captureDocument.Header);
+                await tx.EventStore.Store(headerId, captureDocument.EventList);
             });
         }
 

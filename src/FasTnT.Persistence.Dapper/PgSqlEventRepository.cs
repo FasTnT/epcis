@@ -29,21 +29,21 @@ namespace FasTnT.Persistence.Dapper
         public async Task<IEnumerable<EpcisEvent>> ToList()
         {
             _parameters.SetLimit(_limit > 0 ? _limit : int.MaxValue);
-            var events = await _unitOfWork.Query<EpcisEvent>(_sqlTemplate.RawSql, _parameters.Values);
+            var events = await _unitOfWork.Query<EpcisEventEntity>(_sqlTemplate.RawSql, _parameters.Values);
 
             using (var reader = await _unitOfWork.FetchMany(SqlRequests.RelatedQuery, new { EventIds = events.Select(x => x.Id).ToArray() }))
             {
-                var epcs = await reader.ReadAsync<Epc>();
-                var fields = await reader.ReadAsync<CustomField>();
-                var transactions = await reader.ReadAsync<BusinessTransaction>();
-                var sourceDests = await reader.ReadAsync<SourceDestination>();
+                var epcs = await reader.ReadAsync<EpcEntity>();
+                var fields = await reader.ReadAsync<CustomFieldEntity>();
+                var transactions = await reader.ReadAsync<BusinessTransactionEntity>();
+                var sourceDests = await reader.ReadAsync<SourceDestinationEntity>();
 
                 foreach (var evt in events)
                 {
-                    evt.Epcs = epcs.Where(x => x.EventId == evt.Id).ToList();
-                    evt.CustomFields = fields.Where(x => x.EventId == evt.Id).ToList();
-                    evt.BusinessTransactions = transactions.Where(x => x.EventId == evt.Id).ToList();
-                    evt.SourceDestinationList = sourceDests.Where(x => x.EventId == evt.Id).ToList();
+                    evt.Epcs = epcs.Where(x => x.EventId == evt.Id).ToList<Epc>();
+                    evt.CustomFields = fields.Where(x => x.EventId == evt.Id).ToList<CustomField>();
+                    evt.BusinessTransactions = transactions.Where(x => x.EventId == evt.Id).ToList<BusinessTransaction>();
+                    evt.SourceDestinationList = sourceDests.Where(x => x.EventId == evt.Id).ToList<SourceDestination>();
                 }
             }
 

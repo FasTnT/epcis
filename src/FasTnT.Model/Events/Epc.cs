@@ -5,7 +5,6 @@ namespace FasTnT.Model
 {
     public class Epc
     {
-        public Guid EventId { get; set; }
         public string Id { get; set; }
         public EpcType Type { get; set; }
         public bool IsQuantity { get; set; }
