@@ -5,7 +5,6 @@ namespace FasTnT.Model
 {
     public class CustomField
     {
-        public Guid EventId { get; set; }
         public int Id { get; set; }
         public FieldType Type { get; set; }
         public string Name { get; set; }

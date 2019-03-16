@@ -100,7 +100,7 @@ namespace FasTnT.Formatters.Xml
                 XName.Get("EPCISDocument", EpcisNamespaces.Capture),
                 new XAttribute("creationDate", entity.Header.DocumentTime.ToString("yyyy-MM-ddThh:MM:ssZ")),
                 new XAttribute("schemaVersion", entity.Header.SchemaVersion),
-                new XElement("EPCISBody", new XElement("EventList", entity.EventList.Select(XmlEventFormatter.Format)))
+                new XElement("EPCISBody", new XElement("EventList", entity.EventList.Select(new XmlEventFormatter().Format)))
             );
         }
     }

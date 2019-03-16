@@ -31,7 +31,7 @@ namespace FasTnT.UnitTest.XmlFormatter
 
         public override void Act()
         {
-            Result = XmlEventFormatter.Format(ObjectEvent);
+            Result = new XmlEventFormatter().Format(ObjectEvent);
         }
 
         [Assert]

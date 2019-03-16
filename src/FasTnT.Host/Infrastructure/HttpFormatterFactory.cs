@@ -1,8 +1,6 @@
 ﻿using FasTnT.Formatters;
 using FasTnT.Formatters.Xml;
-using FasTnT.Model;
-using FasTnT.Model.Queries;
-using FasTnT.Model.Responses;
+using FasTnT.Formatters.Json;
 using Microsoft.AspNetCore.Http;
 using System;
 using System.Linq;
@@ -19,7 +17,8 @@ namespace FasTnT.Host.Infrastructure
             _formatters = new IFormatterFactory[]
             {
                 new XmlFormatterFactory(),
-                new SoapFormatterFactory()
+                new SoapFormatterFactory(),
+                new JsonFormatterFactory()
             };
         }
 
@@ -27,16 +26,7 @@ namespace FasTnT.Host.Infrastructure
         {
             var factory = _formatters.FirstOrDefault(x => x.AllowedContentTypes.Contains(httpContext.Request.ContentType, StringComparer.OrdinalIgnoreCase));
 
-            return (IFormatter<T>) GetFormatter(typeof(T), factory);
-        }
-
-        private object GetFormatter(Type type, IFormatterFactory factory)
-        {
-            if (type == typeof(Request)) return factory?.RequestFormatter;
-            if (type == typeof(EpcisQuery)) return factory?.QueryFormatter;
-            if (type == typeof(IEpcisResponse)) return factory?.ResponseFormatter;
-
-            return null;
+            return factory.GetFormatter<T>();
         }
     }
 }
