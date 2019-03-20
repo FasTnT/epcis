@@ -197,8 +197,11 @@ namespace FasTnT.Formatters.Xml.Responses
 
         private void ChildEpcs(EpcisEvent @event, XContainer element)
         {
-            var childEpcs = @event.Epcs.Where(e => e.Type == EpcType.ChildEpc);
-            if (childEpcs.Any()) element.Add(new XElement("childEPCs", childEpcs.Select(x => new XElement("epc", x.Id))));
+            var childEpcs = @event.Epcs.Where(e => e.Type == EpcType.ChildEpc).Select(x => new XElement("epc", x.Id));
+            var childQuantity = new XElement("childQuantityList", @event.Epcs.Where(x => x.Type == EpcType.ChildQuantity).Select(FormatQuantity));
+
+            element.Add(new XElement("childEPCs", childEpcs));
+            if (childQuantity.HasElements) AddInExtension(element, childQuantity);
         }
 
         private void ReadPoint(EpcisEvent @event, XContainer element)

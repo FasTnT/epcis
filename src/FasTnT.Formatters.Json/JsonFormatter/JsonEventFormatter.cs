@@ -36,27 +36,12 @@ namespace FasTnT.Formatters.Json.JsonFormatter
         {
             var epcs = evt.Epcs;
             var list = epcs.Where(x => x.Type == EpcType.List).Select(x => x.Id);
-            var qtyList = epcs.Where(x => x.Type == EpcType.Quantity).Select(x => new Dictionary<string, object>
-            {
-                { "epcClass", x.Id },
-                { "quantity", x.Quantity },
-                { "uom", x.UnitOfMeasure }
-            });
-
+            var qtyList = epcs.Where(x => x.Type == EpcType.Quantity).Select(FormatQuantity);
             var inputEpc = epcs.Where(x => x.Type == EpcType.InputEpc).Select(x => x.Id);
-            var inputQty = epcs.Where(x => x.Type == EpcType.InputQuantity).Select(x => new Dictionary<string, object>
-            {
-                { "epcClass", x.Id },
-                { "quantity", x.Quantity },
-                { "uom", x.UnitOfMeasure }
-            });
+            var inputQty = epcs.Where(x => x.Type == EpcType.InputQuantity).Select(FormatQuantity);
             var outputEpc = epcs.Where(x => x.Type == EpcType.OutputEpc).Select(x => x.Id);
-            var outputQty = epcs.Where(x => x.Type == EpcType.OutputQuantity).Select(x => new Dictionary<string, object>
-            {
-                { "epcClass", x.Id },
-                { "quantity", x.Quantity },
-                { "uom", x.UnitOfMeasure }
-            });
+            var outputQty = epcs.Where(x => x.Type == EpcType.OutputQuantity).Select(FormatQuantity);
+            var childQty = epcs.Where(x => x.Type == EpcType.ChildQuantity).Select(FormatQuantity);
 
 
             if (list.Any()) dictionary.Add("epcList", list);
@@ -65,6 +50,17 @@ namespace FasTnT.Formatters.Json.JsonFormatter
             if (inputQty.Any()) dictionary.Add("inputQuantityList", inputQty);
             if (outputEpc.Any()) dictionary.Add("outputEpcList", outputEpc);
             if (outputQty.Any()) dictionary.Add("outputQuantityList", outputQty);
+            if (childQty.Any()) dictionary.Add("childQuantityList", childQty);
+        }
+
+        private object FormatQuantity(Epc x)
+        {
+            return new Dictionary<string, object>
+            {
+                { "epcClass", x.Id },
+                { "quantity", x.Quantity },
+                { "uom", x.UnitOfMeasure }
+            };
         }
 
         private void AddSourceDestinationList(EpcisEvent evt, Dictionary<string, object> dictionary)

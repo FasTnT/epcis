@@ -35,6 +35,7 @@ namespace FasTnT.Formatters.Json
                     case "inputEPCList": ParseEpcs(epcisEvent, eventDict[key] as IList<object>, EpcType.InputEpc); break; 
                     case "outputQuantityList": ParceQuantityList(epcisEvent, eventDict[key] as IList<object>, EpcType.OutputQuantity); break;
                     case "outputEPCList": ParseEpcs(epcisEvent, eventDict[key] as IList<object>, EpcType.OutputEpc); break;
+                    case "childQuantityList": ParceQuantityList(epcisEvent, eventDict[key] as IList<object>, EpcType.ChildQuantity); break;
                     case "epcClass": epcisEvent.Epcs.Add(new Epc { Type = EpcType.Quantity, Id = eventDict[key].ToString(), IsQuantity = true }); break;
                     case "quantity": epcisEvent.Epcs.Single(x => x.Type == EpcType.Quantity).Quantity = float.Parse(eventDict[key].ToString(), CultureInfo.InvariantCulture); break;
                     case "quantityList": ParseQuantityList(epcisEvent, eventDict[key] as IList<object>); break;
