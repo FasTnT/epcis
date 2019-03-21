@@ -11,8 +11,6 @@ namespace FasTnT.Formatters.Json
 {
     public class JsonEventParser
     {
-        private int _internalCounter = 0;
-
         public IEnumerable<EpcisEvent> Parse(IList<object> list)
         {
             return list.Cast<IDictionary<string, object>>().Select(Parse);
@@ -140,27 +138,26 @@ namespace FasTnT.Formatters.Json
             var namespaceValue = dictionary[namespaceName].ToString();
             var value = dictionary["#text"].ToString();
 
-            epcisEvent.CustomFields.Add(new CustomField
+            var customField = new CustomField
             {
-                Id = _internalCounter++,
                 Namespace = namespaceValue,
                 Name = id.Split(':').Last(),
                 TextValue = value,
                 Type = type
-            });
+            };
 
             foreach (var key in dictionary.Keys.Where(k => k.StartsWith("@") && !string.Equals(k, namespaceName)))
             {
-                epcisEvent.CustomFields.Add(new CustomField
+                customField.Children.Add(new CustomField
                 {
-                    ParentId = _internalCounter - 1,
-                    Id = _internalCounter++,
                     Name = key.Substring(1),
                     Namespace = namespaceValue,
                     TextValue = dictionary[key].ToString(),
                     Type = FieldType.Attribute
                 });
             }
+
+            epcisEvent.CustomFields.Add(customField);
         }
 
         private static string GetCustomFieldNamespace(string id, IDictionary<string, object> dictionary)

@@ -1,6 +1,6 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.28307.421
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.28606.126
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FasTnT.Domain", "src\FasTnT.Domain\FasTnT.Domain.csproj", "{8BAE20FC-162A-45EC-91E9-4FA7055E3D82}"
 EndProject
