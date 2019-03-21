@@ -159,12 +159,12 @@ namespace FasTnT.Formatters.Xml.Responses
 
         private void CustomFields(EpcisEvent @event, XContainer element, FieldType type)
         {
-            foreach (var rootField in @event.CustomFields.Where(x => x.Type == type && x.ParentId == null))
+            foreach (var rootField in @event.CustomFields.Where(x => x.Type == type))
             {
                 var xmlElement = new XElement(XName.Get(rootField.Name, rootField.Namespace), rootField.TextValue);
 
-                InnerCustomFields(@event, xmlElement, type, rootField.Id);
-                foreach (var attribute in @event.CustomFields.Where(x => x.Type == FieldType.Attribute && x.ParentId == rootField.Id))
+                InnerCustomFields(xmlElement, type, rootField);
+                foreach (var attribute in rootField.Children.Where(x => x.Type == FieldType.Attribute))
                 {
                     xmlElement.Add(new XAttribute(XName.Get(attribute.Name, attribute.Namespace), attribute.TextValue));
                 }
@@ -173,14 +173,14 @@ namespace FasTnT.Formatters.Xml.Responses
             }
         }
 
-        private void InnerCustomFields(EpcisEvent @event, XContainer element, FieldType type, int parentId)
+        private void InnerCustomFields(XContainer element, FieldType type, CustomField parent)
         {
-            foreach (var field in @event.CustomFields.Where(x => x.Type == type && x.ParentId == parentId))
+            foreach (var field in parent.Children.Where(x => x.Type == type))
             {
                 var xmlElement = new XElement(XName.Get(field.Name, field.Namespace), field.TextValue);
 
-                InnerCustomFields(@event, xmlElement, type, field.Id);
-                foreach (var attribute in @event.CustomFields.Where(x => x.Type == FieldType.Attribute && x.ParentId == field.Id))
+                InnerCustomFields(xmlElement, type, field);
+                foreach (var attribute in field.Children.Where(x => x.Type == FieldType.Attribute))
                 {
                     xmlElement.Add(new XAttribute(XName.Get(attribute.Name, attribute.Namespace), attribute.TextValue));
                 }

@@ -17,7 +17,6 @@ namespace FasTnT.Formatters.Xml
     {
         public Request Read(Stream input)
         {
-            var eventParser = new XmlEventsParser();
             var masterdataParser = new XmlMasterDataParser();
             var document = XmlDocumentParser.Instance.Load(input);
 
@@ -26,12 +25,12 @@ namespace FasTnT.Formatters.Xml
                 return new EpcisEventDocument
                 {
                     Header = ParseHeader(document.Root),
-                    EventList = eventParser.ParseEvents(document.Root.XPathSelectElement("EPCISBody/EventList").Elements().ToArray())
+                    EventList = XmlEventsParser.ParseEvents(document.Root.XPathSelectElement("EPCISBody/EventList").Elements().ToArray())
                 };
             }
             else if (document.Root.Name == XName.Get("EPCISQueryDocument", EpcisNamespaces.Query)) // Subscription result
             {
-                return ParseCallback(document, eventParser);
+                return ParseCallback(document);
             }
             else if (document.Root.Name == XName.Get("EPCISMasterDataDocument", EpcisNamespaces.MasterData))
             {
@@ -45,7 +44,7 @@ namespace FasTnT.Formatters.Xml
             throw new Exception($"Document with root '{document.Root.Name.ToString()}' is not expected here.");
         }
 
-        private Request ParseCallback(XDocument document, XmlEventsParser eventParser)
+        private Request ParseCallback(XDocument document)
         {
             switch (document.Root.Element("EPCISBody").Elements().First().Name.LocalName)
             {
@@ -70,7 +69,7 @@ namespace FasTnT.Formatters.Xml
                     {
                         Header = ParseHeader(document.Root),
                         SubscriptionName = document.Root.Element("EPCISBody").Element(XName.Get("QueryResults", EpcisNamespaces.Query)).Element("subscriptionID").Value,
-                        EventList = eventParser.ParseEvents(document.Root.Element("EPCISBody").Element(XName.Get("QueryResults", EpcisNamespaces.Query)).Element("resultsBody").Element("EventList").Elements().ToArray())
+                        EventList = XmlEventsParser.ParseEvents(document.Root.Element("EPCISBody").Element(XName.Get("QueryResults", EpcisNamespaces.Query)).Element("resultsBody").Element("EventList").Elements().ToArray())
                     };
             }
 

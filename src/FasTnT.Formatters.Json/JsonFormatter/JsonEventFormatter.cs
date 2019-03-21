@@ -27,7 +27,7 @@ namespace FasTnT.Formatters.Json.JsonFormatter
             AddIfNotNull(evt, dictionary, "readPoint", x => x.ReadPoint);
             AddIfNotNull(evt, dictionary, "bizLocation", x => x.BusinessLocation);
             AddSourceDestinationList(evt, dictionary);
-            AddCustomFields(evt, dictionary);
+            AddCustomFields(evt.CustomFields, dictionary);
 
             return dictionary;
         }
@@ -84,9 +84,9 @@ namespace FasTnT.Formatters.Json.JsonFormatter
             if (dests.Any()) dictionary.Add("destinationList", dests);
         }
 
-        private void AddCustomFields(EpcisEvent evt, Dictionary<string, object> dictionary)
+        private void AddCustomFields(IEnumerable<CustomField> fields, Dictionary<string, object> dictionary)
         {
-            foreach (var field in evt.CustomFields.Where(x => x.ParentId == null))
+            foreach (var field in fields)
             {
                 var customField = new Dictionary<string, object>
                 {
@@ -94,10 +94,11 @@ namespace FasTnT.Formatters.Json.JsonFormatter
                     { "#text", (object)field.NumericValue ?? field.TextValue }
                 };
 
-                foreach(var attribute in evt.CustomFields.Where(x => x.Type == FieldType.Attribute && x.ParentId == field.Id))
+                foreach(var attribute in field.Children.Where(x => x.Type == FieldType.Attribute))
                 {
                     customField.Add($"@{attribute.Name}", (object)attribute.NumericValue ?? attribute.TextValue);
                 }
+                AddCustomFields(field.Children.Where(x => x.Type != FieldType.Attribute), customField);
 
                 dictionary.Add(field.Name, customField);
             }
