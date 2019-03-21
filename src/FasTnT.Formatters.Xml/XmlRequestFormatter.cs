@@ -17,7 +17,6 @@ namespace FasTnT.Formatters.Xml
     {
         public Request Read(Stream input)
         {
-            var masterdataParser = new XmlMasterDataParser();
             var document = XmlDocumentParser.Instance.Load(input);
 
             if (document.Root.Name == XName.Get("EPCISDocument", EpcisNamespaces.Capture))
@@ -37,7 +36,7 @@ namespace FasTnT.Formatters.Xml
                 return new EpcisMasterdataDocument
                 {
                     Header = ParseHeader(document.Root),
-                    MasterDataList = masterdataParser.ParseMasterDatas(document.Root.Element("EPCISBody").Element("VocabularyList").Elements("Vocabulary"))
+                    MasterDataList = XmlMasterDataParser.ParseMasterDatas(document.Root.Element("EPCISBody").Element("VocabularyList").Elements("Vocabulary"))
                 };
             }
 

@@ -1,4 +1,5 @@
 ﻿using FasTnT.Model;
+using FasTnT.Model.MasterDatas;
 using MoreLinq;
 using System;
 using System.Collections.Generic;
@@ -10,7 +11,7 @@ namespace FasTnT.Persistence.Dapper
     public static class ModelMapper
     {
         static IDictionary<Type, PropertyInfo[]> properties = new Dictionary<Type, PropertyInfo[]>();
-        static Type[] types = new[] { typeof(Epc), typeof(EpcisEvent), typeof(ErrorDeclaration), typeof(SourceDestination), typeof(BusinessTransaction), typeof(CorrectiveEventId), typeof(CustomField), typeof(EpcisRequestHeader) };
+        static Type[] types = new[] { typeof(Epc), typeof(EpcisEvent), typeof(ErrorDeclaration), typeof(SourceDestination), typeof(BusinessTransaction), typeof(CorrectiveEventId), typeof(CustomField), typeof(EpcisRequestHeader), typeof(MasterDataField) };
 
         static ModelMapper() => types.ForEach(t => properties.Add(t, t.GetProperties().ToArray()));
 
