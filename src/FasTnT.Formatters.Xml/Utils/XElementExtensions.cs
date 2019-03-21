@@ -20,13 +20,13 @@ namespace FasTnT.Formatters.Xml
             foreach (var epc in element.Elements("epc")) destination.Epcs.Add(new Epc { Type = type, Id = epc.Value });
         }
 
-        public static void ParseQuantityListInto(this XElement element, EpcisEvent destination, bool isInput)
+        public static void ParseQuantityListInto(this XElement element, EpcisEvent destination, EpcType type)
         {
             foreach (var epc in element.Elements("quantityElement"))
             {
                 destination.Epcs.Add(new Epc
                 {
-                    Type = isInput ? EpcType.InputQuantity : EpcType.OutputQuantity,
+                    Type = type,
                     Id = epc.Element("epcClass").Value,
                     IsQuantity = true,
                     Quantity = float.Parse(epc.Element("quantity").Value, CultureInfo.InvariantCulture),
