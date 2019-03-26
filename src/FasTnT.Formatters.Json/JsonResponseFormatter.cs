@@ -9,24 +9,21 @@ using FasTnT.Model.Responses;
 
 namespace FasTnT.Formatters.Json
 {
-    public class JsonResponseFormatter : IResponseFormatter
+    public class JsonResponseFormatter : BaseResponseFormatter<string>
     {
-        public string ToContentTypeString() => "application/json";
+        public override string ToContentTypeString() => "application/json";
 
-        public IEpcisResponse Read(Stream input) => throw new NotImplementedException();
-
-        public void Write(IEpcisResponse entity, Stream output)
+        public override void Write(IEpcisResponse entity, Stream output)
         {
-            if (entity != default(IEpcisResponse))
+            if (entity == default(IEpcisResponse)) return;
+
+            using(var writer = new StreamWriter(output))
             {
-                using(var writer = new StreamWriter(output))
-                {
-                    writer.Write(Format((dynamic)entity));
-                }
+                writer.Write(Format(entity));
             }
         }
 
-        public string Format(PollResponse response)
+        protected override string FormatInternal(PollResponse response)
         {
             var dict = new Dictionary<string, object>
             {
@@ -45,12 +42,10 @@ namespace FasTnT.Formatters.Json
             return JSON.ToJSON(dict);
         }
 
-        public string Format(GetStandardVersionResponse response)
-        {
-            return JSON.ToJSON(response.Version);
-        }
+        protected override string FormatInternal(GetStandardVersionResponse response) => JSON.ToJSON(response.Version);
+        protected override string FormatInternal(GetVendorVersionResponse response) => JSON.ToJSON(response.Version);
 
-        public string Format(ExceptionResponse response)
+        protected override string FormatInternal(ExceptionResponse response)
         {
             return JSON.ToJSON(new Dictionary<string, object>
             {
@@ -67,5 +62,8 @@ namespace FasTnT.Formatters.Json
                 }
             });
         }
+
+        protected override string FormatInternal(GetSubscriptionIdsResult response) => throw new NotImplementedException();
+        protected override string FormatInternal(GetQueryNamesResponse response) => throw new NotImplementedException();
     }
 }
