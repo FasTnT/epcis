@@ -8,6 +8,7 @@ using FasTnT.Model.Events.Enums;
 using Dapper;
 using static Dapper.SqlBuilder;
 using FasTnT.Domain.Persistence;
+using MoreLinq;
 
 namespace FasTnT.Persistence.Dapper
 {
@@ -41,13 +42,21 @@ namespace FasTnT.Persistence.Dapper
                 foreach (var evt in events)
                 {
                     evt.Epcs = epcs.Where(x => x.EventId == evt.Id).ToList<Epc>();
-                    evt.CustomFields = fields.Where(x => x.EventId == evt.Id).ToList<CustomField>();
+                    evt.CustomFields = CreateHierarchy(fields.Where(x => x.EventId == evt.Id));
                     evt.BusinessTransactions = transactions.Where(x => x.EventId == evt.Id).ToList<BusinessTransaction>();
                     evt.SourceDestinationList = sourceDests.Where(x => x.EventId == evt.Id).ToList<SourceDestination>();
                 }
             }
 
             return events;
+        }
+
+        private IList<CustomField> CreateHierarchy(IEnumerable<CustomFieldEntity> customFields, int? parentId = null)
+        {
+            var elements = customFields.Where(x => x.ParentId == parentId);
+            elements.ForEach(x => x.Children = CreateHierarchy(customFields, x.Id));
+
+            return elements.ToList<CustomField>();
         }
 
         public void SetLimit(int eventLimit) => _limit = eventLimit;

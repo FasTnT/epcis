@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using FasTnT.Domain.Persistence;
 using FasTnT.Model;
+using MoreLinq;
 using StoreAction = System.Func<FasTnT.Persistence.Dapper.EpcisEventEntity[], FasTnT.Persistence.Dapper.DapperUnitOfWork, System.Threading.Tasks.Task>;
 
 namespace FasTnT.Persistence.Dapper
@@ -38,8 +39,23 @@ namespace FasTnT.Persistence.Dapper
 
         private async static Task StoreCustomFields(EpcisEventEntity[] events, DapperUnitOfWork unitOfWork)
         {
-            var fields = events.SelectMany(e => e.CustomFields.Select(f => f.Map<CustomField, CustomFieldEntity>(r => r.EventId = e.Id)));
+            var fields = new List<CustomFieldEntity>();
+            events.ForEach(evt => ParseFields(evt.CustomFields, evt.Id, fields));
+
             await unitOfWork.Execute(SqlRequests.StoreCustomField, fields);
+        }
+
+        private static void ParseFields(IList<CustomField> customFields, Guid eventId, List<CustomFieldEntity> mappedList, int? parentId = null)
+        {
+            if (customFields == null || !customFields.Any()) return;
+
+            foreach(var field in customFields)
+            {
+                var entity = field.Map<CustomField, CustomFieldEntity>(f => { f.EventId = eventId; f.Id = mappedList.Count; f.ParentId = parentId; });
+                mappedList.Add(entity);
+
+                ParseFields(field.Children, eventId, mappedList, entity.Id);
+            }
         }
 
         private async static Task StoreSourceDestinations(EpcisEventEntity[] events, DapperUnitOfWork unitOfWork)
