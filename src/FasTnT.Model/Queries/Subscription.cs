@@ -15,6 +15,6 @@ namespace FasTnT.Model.Subscriptions
         public string Trigger { get; set; }
         public DateTime? InitialRecordTime { get; set; }
         public bool ReportIfEmpty { get; set; }
-        public IEnumerable<QueryParameter> Parameters { get; set; }
+        public IEnumerable<QueryParameter> Parameters { get; set; } = new QueryParameter[0];
     }
 }
