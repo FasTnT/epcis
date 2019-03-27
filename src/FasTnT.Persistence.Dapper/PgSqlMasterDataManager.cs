@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Dapper;
@@ -33,13 +34,25 @@ namespace FasTnT.Persistence.Dapper
                 await _unitOfWork.Execute(SqlRequests.MasterDataInsert, masterData);
                 foreach (var attribute in masterData.Attributes)
                 {
+                    var output = new List<MasterDataFieldEntity>();
+                    ParseFields(attribute.Fields, output);
+
                     await _unitOfWork.Execute(SqlRequests.MasterDataAttributeInsert, attribute);
-                    await _unitOfWork.Execute(SqlRequests.MasterDataAttributeFieldInsert, attribute.Fields);
+                    await _unitOfWork.Execute(SqlRequests.MasterDataAttributeFieldInsert, output);
                 }
             }
 
             var hierarchies = masterDataDocument.MasterDataList.SelectMany(x => x.Children.Select(c => new EpcisMasterDataHierarchy { Type = x.Type, ChildrenId = c.ChildrenId, ParentId = x.Id }));
             await _unitOfWork.Execute(SqlRequests.MasterDataHierarchyInsert, hierarchies);
+        }
+
+        private void ParseFields(IEnumerable<MasterDataField> fields, List<MasterDataFieldEntity> output, int? parentId = null)
+        {
+            foreach(var field in fields ?? new MasterDataField[0])
+            {
+                output.Add(field.Map<MasterDataField, MasterDataFieldEntity>(e => { e.Id = output.Count; e.InternalParentId = parentId; }));
+                ParseFields(field.Children, output, output.Count - 1);
+            }
         }
 
         public void Limit(int limit) => _limit = limit;
@@ -66,6 +79,14 @@ namespace FasTnT.Persistence.Dapper
             }
 
             return masterData;
+        }
+
+        private IList<MasterDataField> CreateHierarchy(IEnumerable<MasterDataFieldEntity> fields, int? parentId = null)
+        {
+            var elements = fields.Where(x => x.InternalParentId == parentId);
+            elements.ForEach(x => x.Children = CreateHierarchy(fields, x.Id));
+
+            return elements.ToList<MasterDataField>();
         }
     }
 }

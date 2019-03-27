@@ -9,21 +9,19 @@ using FasTnT.Model.Responses;
 
 namespace FasTnT.Formatters.Xml
 {
-    public class XmlResponseFormatter : IResponseFormatter
+    public class XmlResponseFormatter : BaseResponseFormatter<XDocument>
     {
         private const SaveOptions Options = SaveOptions.DisableFormatting | SaveOptions.OmitDuplicateNamespaces;
-        public IEpcisResponse Read(Stream input) => throw new NotImplementedException();
+        public override string ToContentTypeString() => "application/xml";
 
-        public void Write(IEpcisResponse entity, Stream output)
+        public override void Write(IEpcisResponse entity, Stream output)
         {
-            if (entity != default(IEpcisResponse))
-            {
-                Format((dynamic)entity).Save(output, Options);
-            }
+            if (entity == default(IEpcisResponse)) return;
+
+            Format(entity).Save(output, Options);
         }
 
-        public string ToContentTypeString() => "application/xml";
-        public XDocument Format(PollResponse response)
+        protected override XDocument FormatInternal(PollResponse response)
         {
             var formatted = CreateResponse("EPCISQueryDocument");
             var resultName = "EventList";
@@ -45,7 +43,7 @@ namespace FasTnT.Formatters.Xml
             return formatted;
         }
 
-        public XDocument Format(GetVendorVersionResponse response)
+        protected override XDocument FormatInternal(GetVendorVersionResponse response)
         {
             var formatted = CreateResponse("EPCISQueryDocument");
             formatted.Root.Add(new XElement("EPCISBody", new XElement(XName.Get("GetVendorVersionResult", EpcisNamespaces.Query), response.Version)));
@@ -53,7 +51,7 @@ namespace FasTnT.Formatters.Xml
             return formatted;
         }
 
-        public XDocument Format(GetStandardVersionResponse response)
+        protected override XDocument FormatInternal(GetStandardVersionResponse response)
         {
             var formatted = CreateResponse("EPCISQueryDocument");
             formatted.Root.Add(new XElement("EPCISBody", new XElement(XName.Get("GetStandardVersionResult", EpcisNamespaces.Query), response.Version)));
@@ -61,7 +59,7 @@ namespace FasTnT.Formatters.Xml
             return formatted;
         }
 
-        public XDocument Format(GetQueryNamesResponse response)
+        protected override XDocument FormatInternal(GetQueryNamesResponse response)
         {
             var formatted = CreateResponse("EPCISQueryDocument");
             formatted.Root.Add(
@@ -71,7 +69,7 @@ namespace FasTnT.Formatters.Xml
             return formatted;
         }
 
-        public XDocument Format(GetSubscriptionIdsResult response)
+        protected override XDocument FormatInternal(GetSubscriptionIdsResult response)
         {
             var formatted = CreateResponse("EPCISQueryDocument");
             formatted.Root.Add(
@@ -81,7 +79,7 @@ namespace FasTnT.Formatters.Xml
             return formatted;
         }
 
-        public XDocument Format(ExceptionResponse response)
+        protected override XDocument FormatInternal(ExceptionResponse response)
         {
             var formatted = CreateResponse(response.Exception, false);
             formatted.Root.Add(!string.IsNullOrEmpty(response.Reason) ? new XElement("reason", response.Reason) : null);

@@ -7,11 +7,9 @@ namespace FasTnT.Model
 {
     public class EpcisEvent : IEntity
     {
-        public Guid Id { get; set; } = Guid.NewGuid();
-        public Guid RequestId { get; set; }
         public DateTime CaptureTime { get; set; }
         public DateTime EventTime { get; set; }
-        public TimeZoneOffset EventTimeZoneOffset { get; set; }
+        public TimeZoneOffset EventTimeZoneOffset { get; set; } = TimeZoneOffset.Default;
         public EventType Type { get; set; }
         public EventAction Action { get; set; }
         public string EventId { get; set; }

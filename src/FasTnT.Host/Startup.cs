@@ -10,12 +10,14 @@ using FasTnT.Formatters;
 using FasTnT.Formatters.Xml;
 using FasTnT.Domain.BackgroundTasks;
 using FasTnT.Host.Middleware.Authentication;
+using FasTnT.Domain;
+using FasTnT.Formatters.Json;
 
 namespace FasTnT.Host
 {
     public class Startup
     {
-        public static string Prefix = "/EpcisServices/1.2";
+        public static string EpcisServicePath = "/EpcisServices/1.2";
         public IConfiguration Configuration { get; }
 
         public Startup(IHostingEnvironment env)
@@ -37,29 +39,29 @@ namespace FasTnT.Host
         {
             services.AddEpcisDomain();
             services.AddEpcisPersistence(Configuration.GetConnectionString("FasTnT.Database"));
-            services.AddScoped(typeof(IResponseFormatter), typeof(XmlResponseFormatter)); // Use XML as default formatter for subscriptions.
             services.AddSingleton<Microsoft.Extensions.Hosting.IHostedService, BackgroundService>();
+            services.AddSingleton(new FormatterProvider(new IFormatterFactory[]{ new JsonFormatterFactory(), new XmlFormatterFactory(), new SoapFormatterFactory() }));
 
             services.AddMvc();
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
+            SubscriptionBackgroundService.DelayTimeoutInMs = Configuration.GetSection("Settings").GetValue("SubscriptionWaitTimeout", 5000);
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage()
-                   .UseEpcisMigrationEndpoint($"{Prefix}/Database");
+                   .UseEpcisMigrationEndpoint($"{EpcisServicePath}/Database");
             }
 
-            SubscriptionBackgroundService.DelayTimeoutInMs = Configuration.GetSection("Settings").GetValue("SubscriptionWaitTimeout", 5000);
-
             app.UseExceptionHandlingMiddleware()
-                .UseBasicAuthentication("FasTnT")
-                .UseEpcisCaptureEndpoint($"{Prefix}/Capture")
-                .UseEpcisQueryEndpoint($"{Prefix}/Query")
-                .UseEpcisSubscriptionTrigger($"{Prefix}/Subscription/Trigger");
-
-            app.UseMvc();
+               .UseWhen(context => context.Request.Path.StartsWithSegments(EpcisServicePath), x => {
+                    x.UseBasicAuthentication("FasTnT")
+                     .UseEpcisCaptureEndpoint($"{EpcisServicePath}/Capture")
+                     .UseEpcisQueryEndpoint($"{EpcisServicePath}/Query")
+                     .UseEpcisSubscriptionTrigger($"{EpcisServicePath}/Subscription/Trigger");
+                });
         }
     }
 }

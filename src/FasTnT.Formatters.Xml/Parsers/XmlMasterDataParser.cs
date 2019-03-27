@@ -5,11 +5,9 @@ using FasTnT.Model.MasterDatas;
 
 namespace FasTnT.Formatters.Xml.Requests
 {
-    public class XmlMasterDataParser
+    public static class XmlMasterDataParser
     {
-        private int _internalId = 0;
-
-        public IList<EpcisMasterData> ParseMasterDatas(IEnumerable<XElement> elements)
+        public static IList<EpcisMasterData> ParseMasterDatas(IEnumerable<XElement> elements)
         {
             var parsedElements = new List<EpcisMasterData>();
 
@@ -21,16 +19,15 @@ namespace FasTnT.Formatters.Xml.Requests
             return parsedElements;
         }
 
-        private IEnumerable<EpcisMasterDataHierarchy> ParseHierarchy(IEnumerable<XElement> elements)
+        private static IEnumerable<EpcisMasterDataHierarchy> ParseHierarchy(IEnumerable<XElement> elements)
         {
             return elements?.Select(x => new EpcisMasterDataHierarchy { ChildrenId = x.Value }) ?? new EpcisMasterDataHierarchy[0];
         }
 
-        private IEnumerable<EpcisMasterData> ParseVocabularyElements(string type, IEnumerable<XElement> elements)
+        private static IEnumerable<EpcisMasterData> ParseVocabularyElements(string type, IEnumerable<XElement> elements)
         {
             return elements.Select(e =>
             {
-                _internalId = 0;
                 var masterData = new EpcisMasterData { Id = e.Attribute("id").Value, Type = type };
                 masterData.Attributes = ParseAttributes(e.Elements("attribute"), masterData).ToList();
                 masterData.Children = ParseHierarchy(e.Element("children")?.Elements("id")).ToList();
@@ -38,7 +35,7 @@ namespace FasTnT.Formatters.Xml.Requests
             });
         }
 
-        private IEnumerable<MasterDataAttribute> ParseAttributes(IEnumerable<XElement> elements, EpcisMasterData masterData)
+        private static IEnumerable<MasterDataAttribute> ParseAttributes(IEnumerable<XElement> elements, EpcisMasterData masterData)
         {
             return elements.Select(element =>
             {
@@ -50,33 +47,31 @@ namespace FasTnT.Formatters.Xml.Requests
                     Value = element.Value
                 };
 
-                if (element.HasElements) attr.Fields.AddRange(ParseField(element.Elements(), attr));
+                ParseField(element.Elements(), attr.Fields, attr);
 
                 return attr;
             });
         }
 
-        private IEnumerable<MasterDataField> ParseField(IEnumerable<XElement> elements, MasterDataAttribute attribute, int? parentId = null)
+        private static void ParseField(IEnumerable<XElement> elements, IList<MasterDataField> output, MasterDataAttribute attribute)
         {
-            var fields = new List<MasterDataField>();
+            if (elements == null || !elements.Any()) return;
 
             foreach(var element in elements)
             {
-                fields.Add(new MasterDataField
+                var field = new MasterDataField
                 {
-                    Id = _internalId++,
-                    InternalParentId = parentId,
                     Name = element.Name.LocalName,
                     Namespace = element.Name.NamespaceName,
                     ParentId = attribute.Id,
                     MasterdataId = attribute.ParentId,
                     MasterdataType = attribute.ParentType,
                     Value = element.HasElements ? null : element.Value
-                });
-                fields.AddRange(ParseField(element.Elements(), attribute, fields.Last().Id));
-            }
+                };
 
-            return fields;
+                output.Add(field);
+                ParseField(element.Elements(), field.Children, attribute);
+            }
         }
     }
 }

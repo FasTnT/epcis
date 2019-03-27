@@ -20,13 +20,13 @@ namespace FasTnT.Formatters.Xml
             foreach (var epc in element.Elements("epc")) destination.Epcs.Add(new Epc { Type = type, Id = epc.Value });
         }
 
-        public static void ParseQuantityListInto(this XElement element, EpcisEvent destination, bool isInput)
+        public static void ParseQuantityListInto(this XElement element, EpcisEvent destination, EpcType type)
         {
             foreach (var epc in element.Elements("quantityElement"))
             {
                 destination.Epcs.Add(new Epc
                 {
-                    Type = isInput ? EpcType.InputQuantity : EpcType.OutputQuantity,
+                    Type = type,
                     Id = epc.Element("epcClass").Value,
                     IsQuantity = true,
                     Quantity = float.Parse(epc.Element("quantity").Value, CultureInfo.InvariantCulture),
@@ -45,13 +45,13 @@ namespace FasTnT.Formatters.Xml
             return element.Elements("bizTransaction").Select(child => new BusinessTransaction { Type = child.Attribute("type").Value, Id = child.Value }).ToList();
         }
 
-        public static void ParseReadPoint(this XElement element, EpcisEvent Event, XmlEventsParser parser)
+        public static void ParseReadPoint(this XElement element, EpcisEvent Event)
         {
             Event.ReadPoint = element.Element("id").Value;
 
             foreach (var innerElement in element.Elements().Where(x => x.Name.Namespace != XNamespace.None))
             {
-                Event.CustomFields.Add(parser.ParseCustomField(innerElement, Event, FieldType.ReadPointExtension));
+                Event.CustomFields.Add(XmlEventsParser.ParseCustomField(innerElement, Event, FieldType.ReadPointExtension));
             }
         }
 
@@ -81,21 +81,21 @@ namespace FasTnT.Formatters.Xml
             }
         }
 
-        public static void ParseBusinessLocation(this XElement element, EpcisEvent Event, XmlEventsParser parser)
+        public static void ParseBusinessLocation(this XElement element, EpcisEvent Event)
         {
             foreach (var innerElement in element.Elements().Where(x => !new[] { "id", "corrective" }.Contains(x.Name.LocalName)))
             {
-                Event.CustomFields.Add(parser.ParseCustomField(innerElement, Event, FieldType.BusinessLocationExtension));
+                Event.CustomFields.Add(XmlEventsParser.ParseCustomField(innerElement, Event, FieldType.BusinessLocationExtension));
             }
 
             Event.BusinessLocation = element.Element("id").Value;
         }
 
-        public static ErrorDeclaration ToErrorDeclaration(this XElement element, EpcisEvent Event, XmlEventsParser parser)
+        public static ErrorDeclaration ToErrorDeclaration(this XElement element, EpcisEvent Event)
         {
             foreach (var innerElement in element.Elements().Where(x => !new[] { "id", "corrective" }.Contains(x.Name.LocalName)))
             {
-                Event.CustomFields.Add(parser.ParseCustomField(innerElement, Event, FieldType.ErrorDeclarationExtension));
+                Event.CustomFields.Add(XmlEventsParser.ParseCustomField(innerElement, Event, FieldType.ErrorDeclarationExtension));
             }
 
             var declarationTime = DateTime.Parse(element.Element("declarationTime").Value, CultureInfo.InvariantCulture);

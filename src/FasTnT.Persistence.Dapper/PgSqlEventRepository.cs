@@ -8,6 +8,7 @@ using FasTnT.Model.Events.Enums;
 using Dapper;
 using static Dapper.SqlBuilder;
 using FasTnT.Domain.Persistence;
+using MoreLinq;
 
 namespace FasTnT.Persistence.Dapper
 {
@@ -29,25 +30,33 @@ namespace FasTnT.Persistence.Dapper
         public async Task<IEnumerable<EpcisEvent>> ToList()
         {
             _parameters.SetLimit(_limit > 0 ? _limit : int.MaxValue);
-            var events = await _unitOfWork.Query<EpcisEvent>(_sqlTemplate.RawSql, _parameters.Values);
+            var events = await _unitOfWork.Query<EpcisEventEntity>(_sqlTemplate.RawSql, _parameters.Values);
 
             using (var reader = await _unitOfWork.FetchMany(SqlRequests.RelatedQuery, new { EventIds = events.Select(x => x.Id).ToArray() }))
             {
-                var epcs = await reader.ReadAsync<Epc>();
-                var fields = await reader.ReadAsync<CustomField>();
-                var transactions = await reader.ReadAsync<BusinessTransaction>();
-                var sourceDests = await reader.ReadAsync<SourceDestination>();
+                var epcs = await reader.ReadAsync<EpcEntity>();
+                var fields = await reader.ReadAsync<CustomFieldEntity>();
+                var transactions = await reader.ReadAsync<BusinessTransactionEntity>();
+                var sourceDests = await reader.ReadAsync<SourceDestinationEntity>();
 
                 foreach (var evt in events)
                 {
-                    evt.Epcs = epcs.Where(x => x.EventId == evt.Id).ToList();
-                    evt.CustomFields = fields.Where(x => x.EventId == evt.Id).ToList();
-                    evt.BusinessTransactions = transactions.Where(x => x.EventId == evt.Id).ToList();
-                    evt.SourceDestinationList = sourceDests.Where(x => x.EventId == evt.Id).ToList();
+                    evt.Epcs = epcs.Where(x => x.EventId == evt.Id).ToList<Epc>();
+                    evt.CustomFields = CreateHierarchy(fields.Where(x => x.EventId == evt.Id));
+                    evt.BusinessTransactions = transactions.Where(x => x.EventId == evt.Id).ToList<BusinessTransaction>();
+                    evt.SourceDestinationList = sourceDests.Where(x => x.EventId == evt.Id).ToList<SourceDestination>();
                 }
             }
 
             return events;
+        }
+
+        private IList<CustomField> CreateHierarchy(IEnumerable<CustomFieldEntity> customFields, int? parentId = null)
+        {
+            var elements = customFields.Where(x => x.ParentId == parentId);
+            elements.ForEach(x => x.Children = CreateHierarchy(customFields, x.Id));
+
+            return elements.ToList<CustomField>();
         }
 
         public void SetLimit(int eventLimit) => _limit = eventLimit;

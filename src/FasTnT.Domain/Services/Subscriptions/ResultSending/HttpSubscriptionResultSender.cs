@@ -7,22 +7,22 @@ namespace FasTnT.Domain.Services.Subscriptions
 {
     public class HttpSubscriptionResultSender : ISubscriptionResultSender
     {
-        private readonly IResponseFormatter _responseFormatter;
+        private readonly FormatterProvider _formatterFactory;
 
-        public HttpSubscriptionResultSender(IResponseFormatter responseFormatter)
+        public HttpSubscriptionResultSender(FormatterProvider formatterFactory)
         {
-            _responseFormatter = responseFormatter;
+            _formatterFactory = formatterFactory;
         }
-
-        public async Task Send(string destination, IEpcisResponse epcisResponse)
+        public async Task Send(string destination, IEpcisResponse epcisResponse, string contentType = "application/xml")
         {
+            var responseFormatter = _formatterFactory.GetFormatter<IEpcisResponse>(contentType) as IResponseFormatter;
             var request = WebRequest.Create($"{destination}{GetCallbackUrl(epcisResponse)}");
             request.Method = "POST";
-            request.ContentType = _responseFormatter.ToContentTypeString();
+            request.ContentType = responseFormatter.ToContentTypeString();
 
             using (var stream = await request.GetRequestStreamAsync())
             {
-                _responseFormatter.Write(epcisResponse, stream);
+                responseFormatter.Write(epcisResponse, stream);
             }
 
             var response = await request.GetResponseAsync();
