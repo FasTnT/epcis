@@ -27,7 +27,7 @@ namespace FasTnT.UnitTest.Domain.SubscriptionServiceTests
             A.CallTo(() => SubscriptionManager.GetById("TestSubscription")).Returns(Task.FromResult(default(Subscription)));
         }
 
-        public override void Act() => Task.WaitAll(QueryService.Process(Request));
+        public override void Act() => Task.WaitAll(QueryService.Subscribe(Request));
 
         [Assert]
         public void ItShouldHaveBeginTheUnitOfWorkTransaction() => A.CallTo(() => UnitOfWork.BeginTransaction()).MustHaveHappened();
@@ -65,7 +65,7 @@ namespace FasTnT.UnitTest.Domain.SubscriptionServiceTests
         {
             try
             {
-                Task.WaitAll(QueryService.Process(Request));
+                Task.WaitAll(QueryService.Subscribe(Request));
             }
             catch (Exception ex)
             {

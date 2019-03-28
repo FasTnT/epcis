@@ -8,10 +8,10 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace FasTnT.Persistence.Dapper
-{
-
-
+namespace FasTnT.Persistence.Dapper {
+    using System;
+    
+    
     /// <summary>
     ///   A strongly-typed resource class, for looking up localized strings, etc.
     /// </summary>
@@ -19,7 +19,7 @@ namespace FasTnT.Persistence.Dapper
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class SqlRequests {
@@ -253,7 +253,7 @@ namespace FasTnT.Persistence.Dapper
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to DELETE FROM subscriptions.pendingrequest WHERE subscription_id = @SubscriptionId AND request_id = ANY(@RequestId);.
+        ///   Looks up a localized string similar to DELETE FROM subscriptions.pendingrequest WHERE subscription_id = (SELECT id FROM subscriptions.subscription WHERE subscription_id = @SubscriptionId) AND request_id = ANY(@RequestId);.
         /// </summary>
         internal static string SubscriptionAcknowledgePendingRequests {
             get {
@@ -262,7 +262,7 @@ namespace FasTnT.Persistence.Dapper
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to DELETE from subscriptions.subscription WHERE id = @Id;.
+        ///   Looks up a localized string similar to DELETE from subscriptions.subscription WHERE subscription_id = @Id;.
         /// </summary>
         internal static string SubscriptionDelete {
             get {
@@ -289,7 +289,7 @@ namespace FasTnT.Persistence.Dapper
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to SELECT request_id FROM subscriptions.pendingrequest WHERE subscription_id = @SubscriptionId;.
+        ///   Looks up a localized string similar to SELECT pr.request_id FROM subscriptions.pendingrequest pr JOIN subscriptions.subscription s ON s.id = pr.subscriptionid WHERE s.subscription_id = @SubscriptionId;.
         /// </summary>
         internal static string SubscriptionListPendingRequestIds {
             get {

@@ -6,7 +6,7 @@ namespace FasTnT.Domain
 {
     public class FormatterProvider
     {
-        private IFormatterFactory[] _formatters;
+        private readonly IFormatterFactory[] _formatters;
         
         public FormatterProvider(IFormatterFactory[] formatters)
         {

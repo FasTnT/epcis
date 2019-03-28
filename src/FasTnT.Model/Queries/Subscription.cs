@@ -6,7 +6,6 @@ namespace FasTnT.Model.Subscriptions
 {
     public class Subscription : EpcisQuery
     {
-        public Guid Id { get; set; } = Guid.NewGuid();
         public bool Active { get; set; } = true;
         public string QueryName { get; set; }
         public string Destination { get; set; }

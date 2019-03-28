@@ -19,7 +19,7 @@ namespace FasTnT.UnitTest.Domain.SubscriptionServiceTests
             Request = new UnsubscribeRequest { SubscriptionId = "TestSubscription" };
         }
 
-        public override void Act() => Task.WaitAll(QueryService.Process(Request));
+        public override void Act() => Task.WaitAll(QueryService.Unsubscribe(Request));
 
         [Assert]
         public void ItShouldCallTheSubscriptionManagerProperty() => A.CallTo(() => UnitOfWork.SubscriptionManager).MustHaveHappened();

@@ -11,17 +11,9 @@ namespace FasTnT.UnitTest.Domain.QueryServiceTests
     {
         static string ExpectedVersion = Constants.ProductVersion;
 
-        public GetVendorVersion Request { get; set; }
         public GetVendorVersionResponse Response { get; set; }
 
-        public override void Arrange()
-        {
-            base.Arrange();
-
-            Request = new GetVendorVersion();
-        }
-
-        public override void Act() => Response = QueryService.Process(Request).Result;
+        public override void Act() => Response = QueryService.GetVendorVersion().Result;
 
         [Assert]
         public void TheResponseShouldNotBeNull() => Assert.IsNotNull(Response);

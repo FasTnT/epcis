@@ -20,7 +20,7 @@ namespace FasTnT.UnitTest.Domain.QueryServiceTests
             Request = new GetSubscriptionIds { QueryName = EpcisQueries.First().Name };
         }
 
-        public override void Act() => Response = QueryService.Process(Request).Result;
+        public override void Act() => Response = QueryService.GetSubscriptionId(Request).Result;
 
         [Assert]
         public void TheResponseShouldNotBeNull() => Assert.IsNotNull(Response);

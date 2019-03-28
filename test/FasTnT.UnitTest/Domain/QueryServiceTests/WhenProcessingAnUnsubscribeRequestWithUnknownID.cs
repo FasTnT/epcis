@@ -32,7 +32,7 @@ namespace FasTnT.UnitTest.Domain.SubscriptionServiceTests
         {
             try
             {
-                Task.WaitAll(QueryService.Process(Request));
+                Task.WaitAll(QueryService.Unsubscribe(Request));
             }
             catch (Exception ex)
             {
