@@ -25,9 +25,9 @@ namespace FasTnT.Persistence.Dapper
 
         public async Task<IEnumerable<Subscription>> GetAll(bool includeDetails = false)
         {
-            var subscriptions = (await _unitOfWork.Query<dynamic>(SqlRequests.SubscriptionsList)).Select(x => new Subscription
+            var subscriptions = (await _unitOfWork.Query<dynamic>(SqlRequests.SubscriptionsList)).Select(x => new SubscriptionEntity
             {
-                Id = x.id,
+                Id = x.Id,
                 Active = x.active,
                 Destination = x.destination,
                 QueryName = x.query_name,
@@ -50,7 +50,7 @@ namespace FasTnT.Persistence.Dapper
             return subscriptions;
         }
 
-        private async Task LoadParameters(Subscription[] subscriptions)
+        private async Task LoadParameters(SubscriptionEntity[] subscriptions)
         {
             var @params = (await _unitOfWork.Query<dynamic>(SqlRequests.SubscriptionListParameters))
                 .GroupBy(x => (Guid)x.subscription_id)
@@ -67,17 +67,18 @@ namespace FasTnT.Persistence.Dapper
             subscriptions.ForEach(s => s.Parameters = @params.SingleOrDefault(p => p.SubscriptionId == s.Id)?.Parameters);
         }
 
-        public async Task Delete(Guid id)
-            => await _unitOfWork.Execute(SqlRequests.SubscriptionDelete, new { Id = id });
+        public async Task Delete(string subscriptionId)
+            => await _unitOfWork.Execute(SqlRequests.SubscriptionDelete, new { Id = subscriptionId });
 
-        public async Task<IEnumerable<Guid>> GetPendingRequestIds(Guid subscriptionId) 
+        public async Task<IEnumerable<Guid>> GetPendingRequestIds(string subscriptionId) 
             => await _unitOfWork.Query<Guid>(SqlRequests.SubscriptionListPendingRequestIds, new { SubscriptionId = subscriptionId });
 
-        public async Task AcknowledgePendingRequests(Guid subscriptionId, IEnumerable<Guid> requestIds) 
+        public async Task AcknowledgePendingRequests(string subscriptionId, IEnumerable<Guid> requestIds) 
             => await _unitOfWork.Execute(SqlRequests.SubscriptionAcknowledgePendingRequests, new { SubscriptionId = subscriptionId, RequestId = requestIds });
 
         public async Task Store(Subscription subscription)
         {
+            var entity = subscription.Map<Subscription, SubscriptionEntity>(s => s.Id = Guid.NewGuid());
             var parameters = new List<object>();
             var values = new List<object>();
 
@@ -85,34 +86,13 @@ namespace FasTnT.Persistence.Dapper
             {
                 var id = Guid.NewGuid();
 
-                parameters.Add(new { Id = id, SubscriptionId = subscription.Id, parameter.Name });
+                parameters.Add(new { Id = id, SubscriptionId = entity.Id, parameter.Name });
                 parameter.Values.ForEach(value => values.Add(new { Id = Guid.NewGuid(), ParameterId = id, Value = value }));
             });
 
-            await _unitOfWork.Execute(SqlRequests.SubscriptionStore, GetPgSqlSubscription(subscription));
+            await _unitOfWork.Execute(SqlRequests.SubscriptionStore, entity);
             await _unitOfWork.Execute(SqlRequests.SubscriptionStoreParameter, parameters);
             await _unitOfWork.Execute(SqlRequests.SubscriptionStoreParameterValue, values);
-        }
-
-        private object GetPgSqlSubscription(Subscription subscription)
-        {
-            return new
-            {
-                subscription.Id,
-                subscription.SubscriptionId,
-                subscription.QueryName,
-                subscription.ReportIfEmpty,
-                subscription.Trigger,
-                subscription.InitialRecordTime,
-                subscription.Destination,
-                subscription.Active,
-                subscription.Schedule.Second,
-                subscription.Schedule.Minute,
-                subscription.Schedule.Hour,
-                subscription.Schedule.Month,
-                subscription.Schedule.DayOfMonth,
-                subscription.Schedule.DayOfWeek
-            };
         }
     }
 }

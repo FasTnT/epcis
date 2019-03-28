@@ -26,9 +26,9 @@ namespace FasTnT.Domain.Services.Subscriptions
         {
             await _unitOfWork.Execute(async tx =>
             {
-                var query = GetQueryForSubscription(subscription);
+                var query = _epcisQueries.Single(x => x.Name == subscription.QueryName);
                 var response = new PollResponse { QueryName = query.Name, SubscriptionId = subscription.SubscriptionId };
-                var pendingRequests = await tx.SubscriptionManager.GetPendingRequestIds(subscription.Id);
+                var pendingRequests = await tx.SubscriptionManager.GetPendingRequestIds(subscription.SubscriptionId);
 
                 if (pendingRequests.Any())
                 {
@@ -37,7 +37,7 @@ namespace FasTnT.Domain.Services.Subscriptions
                 }
 
                 await SendSubscriptionResults(subscription, response);
-                await tx.SubscriptionManager.AcknowledgePendingRequests(subscription.Id, pendingRequests);
+                await tx.SubscriptionManager.AcknowledgePendingRequests(subscription.SubscriptionId, pendingRequests);
             });
         }
 
@@ -48,7 +48,5 @@ namespace FasTnT.Domain.Services.Subscriptions
                 await _resultSender.Send(subscription.Destination, response);
             }
         }
-
-        private IEpcisQuery GetQueryForSubscription(Subscription subscription) => _epcisQueries.Single(x => x.Name == subscription.QueryName);
     }
 }

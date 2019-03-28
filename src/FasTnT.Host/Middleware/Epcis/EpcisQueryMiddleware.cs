@@ -17,19 +17,19 @@ namespace FasTnT.Host
         public override async Task Process(EpcisQuery parameter)
         {
             if (parameter is GetQueryNames getQueryNames)
-                await Execute(async s => await s.Process(getQueryNames));
+                await Execute(async s => await s.GetQueryNames());
             else if (parameter is GetSubscriptionIds getSubscriptionIds)
-                await Execute(async s => await s.Process(getSubscriptionIds));
+                await Execute(async s => await s.GetSubscriptionId(getSubscriptionIds));
             else if (parameter is Poll poll)
-                await Execute(async s => await s.Process(poll));
+                await Execute(async s => await s.Poll(poll));
             else if (parameter is GetStandardVersion getStandardVersion)
-                await Execute(async s => await s.Process(getStandardVersion));
+                await Execute(async s => await s.GetStandardVersion());
             else if (parameter is GetVendorVersion getVendorVersion)
-                await Execute(async s => await s.Process(getVendorVersion));
+                await Execute(async s => await s.GetVendorVersion());
             else if (parameter is Subscription subscription)
-                await Execute(async s => await s.Process(subscription));
+                await Execute(async s => await s.Subscribe(subscription));
             else if (parameter is UnsubscribeRequest unsubscribeRequest)
-                await Execute(async s => await s.Process(unsubscribeRequest));
+                await Execute(async s => await s.Unsubscribe(unsubscribeRequest));
         }
 
         private async Task Execute(Func<QueryService, Task<IEpcisResponse>> action) => await Execute<QueryService>(async s => await action(s));

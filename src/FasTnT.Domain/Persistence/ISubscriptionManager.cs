@@ -10,8 +10,8 @@ namespace FasTnT.Domain.Persistence
         Task<Subscription> GetById(string subscriptionId);
         Task<IEnumerable<Subscription>> GetAll(bool withDetails = false);
         Task Store(Subscription subscription);
-        Task Delete(Guid id);
-        Task<IEnumerable<Guid>> GetPendingRequestIds(Guid subscriptionId);
-        Task AcknowledgePendingRequests(Guid subscriptionId, IEnumerable<Guid> requestIds);
+        Task Delete(string subscriptionId);
+        Task<IEnumerable<Guid>> GetPendingRequestIds(string subscriptionId);
+        Task AcknowledgePendingRequests(string subscriptionId, IEnumerable<Guid> requestIds);
     }
 }

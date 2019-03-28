@@ -9,17 +9,9 @@ namespace FasTnT.UnitTest.Domain.QueryServiceTests
     [TestClass]
     public class WhenProcessingAGetQueryNamesRequest : BaseQueryServiceUnitTest
     {
-        public GetQueryNames Request { get; set; }
         public GetQueryNamesResponse Response { get; set; }
 
-        public override void Arrange()
-        {
-            base.Arrange();
-
-            Request = new GetQueryNames();
-        }
-
-        public override void Act() => Response = QueryService.Process(Request).Result;
+        public override void Act() => Response = QueryService.GetQueryNames().Result;
 
         [Assert]
         public void TheResponseShouldNotBeNull() => Assert.IsNotNull(Response);

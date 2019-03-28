@@ -10,6 +10,7 @@ namespace FasTnT.Model.Exceptions
         public EpcisException(ExceptionType exceptionType, string message, ExceptionSeverity severity = null) : base(message)
         {
             ExceptionType = exceptionType;
+            Severity = severity;
         }
     }
 }
