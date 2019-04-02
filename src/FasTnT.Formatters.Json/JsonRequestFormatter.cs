@@ -22,7 +22,6 @@ namespace FasTnT.Formatters.Json
         private Request ParseInternal(IDictionary<string, object> dictionary)
         {
             var body = dictionary["epcisBody"] as IDictionary<string, object>;
-            var requestType = (dictionary["epcisBody"] as IDictionary<string, object>).Keys.First();
             var header = new EpcisRequestHeader
             {
                 DocumentTime = DateTime.Parse(dictionary["creationDate"].ToString()),
@@ -33,9 +32,9 @@ namespace FasTnT.Formatters.Json
             switch (body.Keys.First())
             {
                 case "vocabularyList":
-                    return new EpcisMasterdataDocument { Header = header, MasterDataList = new JsonMasterDataParser().Parse((IList<object>) body.Values.First()) };
+                    return new CaptureRequest { Header = header, MasterDataList = new JsonMasterDataParser().Parse((IList<object>) body.Values.First()) };
                 case "eventList":
-                    return new EpcisEventDocument { Header = header, EventList = new JsonEventParser().Parse((IList<object>) body.Values.First()).ToArray() };
+                    return new CaptureRequest { Header = header, EventList = new JsonEventParser().Parse((IList<object>) body.Values.First()).ToArray() };
                 default:
                     throw new NotImplementedException();
             }

@@ -21,10 +21,11 @@ namespace FasTnT.Formatters.Xml
 
             if (document.Root.Name == XName.Get("EPCISDocument", EpcisNamespaces.Capture))
             {
-                return new EpcisEventDocument
+                return new CaptureRequest
                 {
                     Header = ParseHeader(document.Root),
-                    EventList = XmlEventsParser.ParseEvents(document.Root.XPathSelectElement("EPCISBody/EventList").Elements().ToArray())
+                    EventList = XmlEventsParser.ParseEvents(document.Root.XPathSelectElement("EPCISBody/EventList").Elements().ToArray()),
+                    MasterDataList = XmlMasterDataParser.ParseMasterDatas(document.Root.XPathSelectElement("EPCISHeader/extension/EPCISMasterData/VocabularyList")?.Elements()?.ToArray() ?? new XElement[0]),
                 };
             }
             else if (document.Root.Name == XName.Get("EPCISQueryDocument", EpcisNamespaces.Query)) // Subscription result
@@ -33,7 +34,7 @@ namespace FasTnT.Formatters.Xml
             }
             else if (document.Root.Name == XName.Get("EPCISMasterDataDocument", EpcisNamespaces.MasterData))
             {
-                return new EpcisMasterdataDocument
+                return new CaptureRequest
                 {
                     Header = ParseHeader(document.Root),
                     MasterDataList = XmlMasterDataParser.ParseMasterDatas(document.Root.Element("EPCISBody").Element("VocabularyList").Elements("Vocabulary"))
@@ -92,7 +93,7 @@ namespace FasTnT.Formatters.Xml
             output.Write(bytes, 0, bytes.Length);
         }
 
-        private XDocument Write(EpcisEventDocument entity)
+        private XDocument Write(CaptureRequest entity)
         {
             return new XDocument(
                 XName.Get("EPCISDocument", EpcisNamespaces.Capture),

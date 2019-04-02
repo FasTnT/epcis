@@ -10,13 +10,13 @@ namespace FasTnT.UnitTest.Domain.CaptureServiceTests
     [TestClass]
     public class WhenCapturingAnEpcisEventDocument : BaseCaptureServiceUnitTest
     {
-        public EpcisEventDocument Request { get; set; }
+        public CaptureRequest Request { get; set; }
 
         public override void Arrange()
         {
             base.Arrange();
 
-            Request = new EpcisEventDocument { Header = new EpcisRequestHeader(), EventList = new EpcisEvent[0] };
+            Request = new CaptureRequest { Header = new EpcisRequestHeader(), EventList = new EpcisEvent[0] };
         }
 
         public override void Act() => Task.WaitAll(CaptureService.Capture(Request));
