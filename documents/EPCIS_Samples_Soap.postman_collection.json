@@ -1,0 +1,224 @@
+{
+	"info": {
+		"_postman_id": "6ca59820-cc07-47b2-96fe-0d5a17287fff",
+		"name": "EPCIS Examples - Soap",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Queries",
+			"item": [
+				{
+					"name": "Get Vendor Version",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/soap+xml",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:urn=\"urn:epcglobal:epcis-query:xsd:1\">\r\n   <soapenv:Header />\r\n   <soapenv:Body>\r\n      <urn:GetVendorVersion />\r\n   </soapenv:Body>\r\n</soapenv:Envelope>"
+						},
+						"url": {
+							"raw": "{{BaseUrl}}/EpcisServices/1.2/Query",
+							"host": [
+								"{{BaseUrl}}"
+							],
+							"path": [
+								"EpcisServices",
+								"1.2",
+								"Query"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get EPCIS Standard Version",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/soap+xml",
+								"description": "SOAP",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:urn=\"urn:epcglobal:epcis-query:xsd:1\">\r\n   <soapenv:Header />\r\n   <soapenv:Body>\r\n      <urn:GetStandardVersion />\r\n   </soapenv:Body>\r\n</soapenv:Envelope>"
+						},
+						"url": {
+							"raw": "{{BaseUrl}}/EpcisServices/1.2/Query",
+							"host": [
+								"{{BaseUrl}}"
+							],
+							"path": [
+								"EpcisServices",
+								"1.2",
+								"Query"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Query Names",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/soap+xml",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:hs=\"urn:epcglobal:epcis-query:xsd:1\">\r\n <soapenv:Body>\r\n   <hs:GetQueryNames />\r\n </soapenv:Body>\r\n</soapenv:Envelope>"
+						},
+						"url": {
+							"raw": "{{BaseUrl}}/EpcisServices/1.2/Query",
+							"host": [
+								"{{BaseUrl}}"
+							],
+							"path": [
+								"EpcisServices",
+								"1.2",
+								"Query"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Subscription IDs",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/soap+xml"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:urn=\"urn:epcglobal:epcis-query:xsd:1\">\r\n   <soapenv:Header />\r\n   <soapenv:Body>\r\n      <urn:GetSubscriptionIDs>\r\n      \t<queryName>SimpleEventQuery</queryName>\r\n      \t</urn:GetSubscriptionIDs>\r\n   </soapenv:Body>\r\n</soapenv:Envelope>"
+						},
+						"url": {
+							"raw": "{{BaseUrl}}/Services/1.2/QueryService.svc",
+							"host": [
+								"{{BaseUrl}}"
+							],
+							"path": [
+								"Services",
+								"1.2",
+								"QueryService.svc"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Poll",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/soap+xml"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:urn=\"urn:epcglobal:epcis-query:xsd:1\">\r\n   <soapenv:Header />\r\n   <soapenv:Body>\r\n      <urn:Poll>\r\n         <queryName>SimpleEventQuery</queryName>\r\n         <params>\r\n\t\t\t<param>\r\n\t\t\t\t<name>eventCountLimit</name>\r\n\t\t\t\t<value>10</value>\r\n\t\t\t</param>\r\n         </params>\r\n      </urn:Poll>\r\n   </soapenv:Body>\r\n</soapenv:Envelope>"
+						},
+						"url": {
+							"raw": "{{BaseUrl}}/EpcisServices/1.2/Query",
+							"host": [
+								"{{BaseUrl}}"
+							],
+							"path": [
+								"EpcisServices",
+								"1.2",
+								"Query"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "db2f4d32-cc9f-4e4c-9fec-4f2ef79fdf0c",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "6a22e026-b7cc-4032-8b9e-59b19bc2612d",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		}
+	],
+	"auth": {
+		"type": "basic",
+		"basic": [
+			{
+				"key": "password",
+				"value": "P@ssw0rd",
+				"type": "string"
+			},
+			{
+				"key": "username",
+				"value": "admin",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "cc2b6c61-0ba6-46db-9fc0-3c92e2bd4678",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "749412c5-a539-45f8-9629-b78bc257a59e",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}

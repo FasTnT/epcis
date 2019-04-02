@@ -1,7 +1,7 @@
 {
 	"info": {
 		"_postman_id": "1486d5a9-714f-45b3-a91c-1876aab87c32",
-		"name": "EPCIS Examples",
+		"name": "EPCIS Examples - XML",
 		"description": "Collection containing sample requests to be made to an EPCIS repository _(FasTnT)_.\n\n",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -173,6 +173,34 @@
 							"body": null
 						}
 					]
+				},
+				{
+					"name": "Capture Event with MasterData",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "text/xml"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<epcis:EPCISDocument xmlns:cbvmda=\"urn:epcglobal:cbv:mda\" xmlns:epcis=\"urn:epcglobal:epcis:xsd:1\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:wg4=\"http://epcis.wg4.fr/ns\" xmlns:sbdh=\"http://www.unece.org/cefact/namespaces/StandardBusinessDocumentHeader\" schemaVersion=\"1.2\" creationDate=\"2016-09-20T17:45:20.0Z\">\r\n  <EPCISHeader>\r\n    <sbdh:StandardBusinessDocumentHeader>\r\n      <sbdh:HeaderVersion>1.0</sbdh:HeaderVersion>\r\n      <sbdh:Sender>\r\n        <sbdh:Identifier>Sending Party</sbdh:Identifier>\r\n      </sbdh:Sender>\r\n      <sbdh:Receiver>\r\n        <sbdh:Identifier>Receiving Party</sbdh:Identifier>\r\n      </sbdh:Receiver>\r\n      <sbdh:DocumentIdentification>\r\n        <sbdh:Standard>EPCglobal</sbdh:Standard>\r\n        <sbdh:TypeVersion>1.2</sbdh:TypeVersion>\r\n        <sbdh:InstanceIdentifier>201812244444400001</sbdh:InstanceIdentifier>\r\n        <sbdh:Type>Events</sbdh:Type>\r\n        <sbdh:CreationDateAndTime>2018-12-06T12:45:20.0Z</sbdh:CreationDateAndTime>\r\n      </sbdh:DocumentIdentification>\r\n    </sbdh:StandardBusinessDocumentHeader>\r\n    <extension>\r\n      <EPCISMasterData>\r\n        <VocabularyList>\r\n          <Vocabulary type=\"urn:epcglobal:epcis:vtype:ReadPoint\">\r\n           <VocabularyElementList>\r\n            <VocabularyElement id=\"urn:epc:id:sgln:0037000.00729.8201\">\r\n             <attribute id=\"urn:epcglobal:cbv:mda:site\">0037000007296</attribute>\r\n             <attribute id=\"urn:epcglobal:cbv:mda:sst\">201</attribute>\r\n            </VocabularyElement>\r\n            <VocabularyElement id=\"urn:epc:id:sgln:0037000.00729.8202\">\r\n             <attribute id=\"urn:epcglobal:cbv:mda:site\">0037000007296</attribute>\r\n             <attribute id=\"urn:epcglobal:cbv:mda:sst\">202</attribute>\r\n            </VocabularyElement>\r\n            <VocabularyElement id=\"urn:epc:id:sgln:0037000.00729.8203\">\r\n             <attribute id=\"urn:epcglobal:cbv:mda:site\">0037000007296</attribute>\r\n             <attribute id=\"urn:epcglobal:cbv:mda:sst\">203</attribute>\r\n            </VocabularyElement>\r\n           </VocabularyElementList>\r\n         </Vocabulary>\r\n        </VocabularyList>\r\n      </EPCISMasterData>\r\n    </extension>\r\n  </EPCISHeader>\r\n  <EPCISBody>\r\n    <EventList>\r\n      <ObjectEvent>\r\n        <eventTime>2012-04-05T11:35:00.000Z</eventTime>\r\n        <eventTimeZoneOffset>-02:00</eventTimeZoneOffset>\r\n        <epcList>\r\n          <epc>urn:epc:id:sscc:098765.40670000101</epc>\r\n        </epcList>\r\n        <action>ADD</action>\r\n        <bizStep>urn:epcglobal:cbv:bizstep:commissioning</bizStep>\r\n        <disposition>urn:epcglobal:cbv:disp:active</disposition>\r\n        <bizLocation>\r\n          <id>urn:epc:id:sgln:409876.500001.0</id>\r\n        </bizLocation>\r\n      </ObjectEvent>\r\n      <ObjectEvent>\r\n        <eventTime>2012-04-05T11:35:00.000Z</eventTime>\r\n        <eventTimeZoneOffset>-02:00</eventTimeZoneOffset>\r\n        <epcList>\r\n          <epc>urn:epc:id:sgtin:409876.0789012.s012346671</epc>\r\n          <epc>urn:epc:id:sgtin:409876.0789012.s012346672</epc>\r\n          <epc>urn:epc:id:sgtin:409876.0789012.s012346770</epc>\r\n        </epcList>\r\n        <action>ADD</action>\r\n        <bizStep>urn:epcglobal:cbv:bizstep:commissioning</bizStep>\r\n        <disposition>urn:epcglobal:cbv:disp:active</disposition>\r\n        <bizLocation>\r\n          <id>urn:epc:id:sgln:409876.500001.0</id>\r\n        </bizLocation>\r\n        <extension>\r\n          <quantityList>\r\n            <quantityElement>\r\n              <epcClass>urn:epc:class:lgtin:409876.0000001.L1</epcClass>\r\n              <quantity>3500</quantity>\r\n            </quantityElement>\r\n            <quantityElement>\r\n              <epcClass>urn:epc:class:lgtin:409876.0000002.L4</epcClass>\r\n              <quantity>200</quantity>\r\n            </quantityElement>\r\n          </quantityList>\r\n          <ilmd>\r\n            <cbvmda:lotNumber>00123</cbvmda:lotNumber>\r\n            <cbvmda:itemExpirationDate>2020-12-12</cbvmda:itemExpirationDate>\r\n          </ilmd>\r\n        </extension>\r\n      </ObjectEvent>\r\n    </EventList>\r\n  </EPCISBody>\r\n</epcis:EPCISDocument>"
+						},
+						"url": {
+							"raw": "{{BaseUrl}}/EpcisServices/1.2/Capture",
+							"host": [
+								"{{BaseUrl}}"
+							],
+							"path": [
+								"EpcisServices",
+								"1.2",
+								"Capture"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
@@ -180,1435 +208,21 @@
 			"name": "Queries",
 			"item": [
 				{
-					"name": "XML",
+					"name": "Subscriptions",
 					"item": [
 						{
-							"name": "SimpleEventQuery",
-							"item": [
-								{
-									"name": "Parameters",
-									"item": [
-										{
-											"name": "eventType",
-											"request": {
-												"method": "POST",
-												"header": [
-													{
-														"key": "Content-Type",
-														"value": "text/xml",
-														"type": "text"
-													}
-												],
-												"body": {
-													"mode": "raw",
-													"raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<epcisq:EPCISQueryDocument xmlns:epcisq=\"urn:epcglobal:epcis-query:xsd:1\" schemaVersion=\"1\" creationDate=\"2018-02-07T11:52:42.685Z\">\r\n  <EPCISBody>\r\n    <epcisq:Poll>\r\n    \t<queryName>SimpleEventQuery</queryName>\r\n    \t<params>\r\n    \t\t<param>\r\n    \t\t\t<name>eventType</name>\r\n    \t\t\t<value>\r\n    \t\t\t\t<value>QuantityEvent</value>\r\n    \t\t\t\t<value>AggregationEvent</value>\r\n    \t\t\t</value>\r\n    \t\t</param>\r\n    \t</params>\r\n    </epcisq:Poll>\r\n  </EPCISBody>\r\n</epcisq:EPCISQueryDocument>\r\n"
-												},
-												"url": {
-													"raw": "{{BaseUrl}}/EpcisServices/1.2/Query",
-													"host": [
-														"{{BaseUrl}}"
-													],
-													"path": [
-														"EpcisServices",
-														"1.2",
-														"Query"
-													]
-												}
-											},
-											"response": []
-										},
-										{
-											"name": "GE_eventTime",
-											"request": {
-												"method": "POST",
-												"header": [
-													{
-														"key": "Content-Type",
-														"value": "text/xml",
-														"type": "text"
-													}
-												],
-												"body": {
-													"mode": "raw",
-													"raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<epcisq:EPCISQueryDocument xmlns:epcisq=\"urn:epcglobal:epcis-query:xsd:1\" schemaVersion=\"1\" creationDate=\"2018-02-07T11:52:42.685Z\">\n  <EPCISBody>\n    <epcisq:Poll>\n    \t<queryName>SimpleEventQuery</queryName>\n    \t<params>\n    \t\t<param>\n    \t\t\t<name>GE_eventTime</name>\n    \t\t\t<value>2018-04-01T10:21:10.521Z</value>\n    \t\t</param>\n    \t</params>\n    </epcisq:Poll>\n  </EPCISBody>\n</epcisq:EPCISQueryDocument>\n"
-												},
-												"url": {
-													"raw": "{{BaseUrl}}/EpcisServices/1.2/Query",
-													"host": [
-														"{{BaseUrl}}"
-													],
-													"path": [
-														"EpcisServices",
-														"1.2",
-														"Query"
-													]
-												}
-											},
-											"response": []
-										},
-										{
-											"name": "LT_eventTime",
-											"request": {
-												"method": "POST",
-												"header": [
-													{
-														"key": "Content-Type",
-														"value": "text/xml",
-														"type": "text"
-													}
-												],
-												"body": {
-													"mode": "raw",
-													"raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<epcisq:EPCISQueryDocument xmlns:epcisq=\"urn:epcglobal:epcis-query:xsd:1\" schemaVersion=\"1\" creationDate=\"2018-02-07T11:52:42.685Z\">\r\n  <EPCISBody>\r\n    <epcisq:Poll>\r\n    \t<queryName>SimpleEventQuery</queryName>\r\n    \t<params>\r\n    \t\t<param>\r\n    \t\t\t<name>LT_eventTime</name>\r\n    \t\t\t<value>2018-04-01T10:21:10.521Z</value>\r\n    \t\t</param>\r\n    \t</params>\r\n    </epcisq:Poll>\r\n  </EPCISBody>\r\n</epcisq:EPCISQueryDocument>\r\n"
-												},
-												"url": {
-													"raw": "{{BaseUrl}}/EpcisServices/1.2/Query",
-													"host": [
-														"{{BaseUrl}}"
-													],
-													"path": [
-														"EpcisServices",
-														"1.2",
-														"Query"
-													]
-												}
-											},
-											"response": []
-										},
-										{
-											"name": "GE_recordTime",
-											"request": {
-												"method": "POST",
-												"header": [
-													{
-														"key": "Content-Type",
-														"value": "text/xml",
-														"type": "text"
-													}
-												],
-												"body": {
-													"mode": "raw",
-													"raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<epcisq:EPCISQueryDocument xmlns:epcisq=\"urn:epcglobal:epcis-query:xsd:1\" schemaVersion=\"1\" creationDate=\"2018-02-07T11:52:42.685Z\">\r\n  <EPCISBody>\r\n    <epcisq:Poll>\r\n    \t<queryName>SimpleEventQuery</queryName>\r\n    \t<params>\r\n    \t\t<param>\r\n    \t\t\t<name>GE_recordTime</name>\r\n    \t\t\t<value>2019-02-21T05:40:00.000Z</value>\r\n    \t\t</param>\r\n    \t</params>\r\n    </epcisq:Poll>\r\n  </EPCISBody>\r\n</epcisq:EPCISQueryDocument>\r\n"
-												},
-												"url": {
-													"raw": "{{BaseUrl}}/EpcisServices/1.2/Query",
-													"host": [
-														"{{BaseUrl}}"
-													],
-													"path": [
-														"EpcisServices",
-														"1.2",
-														"Query"
-													]
-												}
-											},
-											"response": []
-										},
-										{
-											"name": "LT_recordTime",
-											"request": {
-												"method": "POST",
-												"header": [
-													{
-														"key": "Content-Type",
-														"value": "text/xml",
-														"type": "text"
-													}
-												],
-												"body": {
-													"mode": "raw",
-													"raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<epcisq:EPCISQueryDocument xmlns:epcisq=\"urn:epcglobal:epcis-query:xsd:1\" schemaVersion=\"1\" creationDate=\"2018-02-07T11:52:42.685Z\">\r\n  <EPCISBody>\r\n    <epcisq:Poll>\r\n    \t<queryName>SimpleEventQuery</queryName>\r\n    \t<params>\r\n    \t\t<param>\r\n    \t\t\t<name>LT_recordTime</name>\r\n    \t\t\t<value>2019-01-08T10:21:10.521Z</value>\r\n    \t\t</param>\r\n    \t</params>\r\n    </epcisq:Poll>\r\n  </EPCISBody>\r\n</epcisq:EPCISQueryDocument>\r\n"
-												},
-												"url": {
-													"raw": "{{BaseUrl}}/EpcisServices/1.2/Query",
-													"host": [
-														"{{BaseUrl}}"
-													],
-													"path": [
-														"EpcisServices",
-														"1.2",
-														"Query"
-													]
-												}
-											},
-											"response": []
-										},
-										{
-											"name": "EQ_action",
-											"request": {
-												"method": "POST",
-												"header": [
-													{
-														"key": "Content-Type",
-														"value": "text/xml",
-														"type": "text"
-													}
-												],
-												"body": {
-													"mode": "raw",
-													"raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<epcisq:EPCISQueryDocument xmlns:epcisq=\"urn:epcglobal:epcis-query:xsd:1\" schemaVersion=\"1\" creationDate=\"2018-02-07T11:52:42.685Z\">\r\n  <EPCISBody>\r\n    <epcisq:Poll>\r\n    \t<queryName>SimpleEventQuery</queryName>\r\n    \t<params>\r\n    \t\t<param>\r\n    \t\t\t<name>EQ_action</name>\r\n    \t\t\t<value>\r\n    \t\t\t\t<value>ADD</value>\r\n    \t\t\t\t<value>DELETE</value>\r\n    \t\t\t</value>\r\n    \t\t</param>\r\n    \t</params>\r\n    </epcisq:Poll>\r\n  </EPCISBody>\r\n</epcisq:EPCISQueryDocument>\r\n"
-												},
-												"url": {
-													"raw": "{{BaseUrl}}/EpcisServices/1.2/Query",
-													"host": [
-														"{{BaseUrl}}"
-													],
-													"path": [
-														"EpcisServices",
-														"1.2",
-														"Query"
-													]
-												}
-											},
-											"response": []
-										},
-										{
-											"name": "EQ_bizStep",
-											"request": {
-												"method": "POST",
-												"header": [
-													{
-														"key": "Content-Type",
-														"value": "text/xml",
-														"type": "text"
-													}
-												],
-												"body": {
-													"mode": "raw",
-													"raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<epcisq:EPCISQueryDocument xmlns:epcisq=\"urn:epcglobal:epcis-query:xsd:1\" schemaVersion=\"1\" creationDate=\"2018-02-07T11:52:42.685Z\">\r\n  <EPCISBody>\r\n    <epcisq:Poll>\r\n    \t<queryName>SimpleEventQuery</queryName>\r\n    \t<params>\r\n    \t\t<param>\r\n    \t\t\t<name>EQ_bizStep</name>\r\n    \t\t\t<value>\r\n    \t\t\t\t<value>urn:fastnt:demo:bizstep:demo:packing</value>\r\n    \t\t\t</value>\r\n    \t\t</param>\r\n    \t</params>\r\n    </epcisq:Poll>\r\n  </EPCISBody>\r\n</epcisq:EPCISQueryDocument>\r\n"
-												},
-												"url": {
-													"raw": "{{BaseUrl}}/EpcisServices/1.2/Query",
-													"host": [
-														"{{BaseUrl}}"
-													],
-													"path": [
-														"EpcisServices",
-														"1.2",
-														"Query"
-													]
-												}
-											},
-											"response": []
-										},
-										{
-											"name": "EQ_disposition",
-											"request": {
-												"method": "POST",
-												"header": [
-													{
-														"key": "Content-Type",
-														"value": "text/xml",
-														"type": "text"
-													}
-												],
-												"body": {
-													"mode": "raw",
-													"raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<epcisq:EPCISQueryDocument xmlns:epcisq=\"urn:epcglobal:epcis-query:xsd:1\" schemaVersion=\"1\" creationDate=\"2018-02-07T11:52:42.685Z\">\r\n  <EPCISBody>\r\n    <epcisq:Poll>\r\n    \t<queryName>SimpleEventQuery</queryName>\r\n    \t<params>\r\n    \t\t<param>\r\n    \t\t\t<name>EQ_disposition</name>\r\n    \t\t\t<value>\r\n    \t\t\t\t<value>urn:epcglobal:cbv:disp:loading</value>\r\n    \t\t\t</value>\r\n    \t\t</param>\r\n    \t</params>\r\n    </epcisq:Poll>\r\n  </EPCISBody>\r\n</epcisq:EPCISQueryDocument>\r\n"
-												},
-												"url": {
-													"raw": "{{BaseUrl}}/EpcisServices/1.2/Query",
-													"host": [
-														"{{BaseUrl}}"
-													],
-													"path": [
-														"EpcisServices",
-														"1.2",
-														"Query"
-													]
-												}
-											},
-											"response": []
-										},
-										{
-											"name": "EQ_readPoint",
-											"request": {
-												"method": "POST",
-												"header": [
-													{
-														"key": "Content-Type",
-														"value": "text/xml",
-														"type": "text"
-													}
-												],
-												"body": {
-													"mode": "raw",
-													"raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<epcisq:EPCISQueryDocument xmlns:epcisq=\"urn:epcglobal:epcis-query:xsd:1\" schemaVersion=\"1\" creationDate=\"2018-02-07T11:52:42.685Z\">\r\n  <EPCISBody>\r\n    <epcisq:Poll>\r\n    \t<queryName>SimpleEventQuery</queryName>\r\n    \t<params>\r\n    \t\t<param>\r\n    \t\t\t<name>EQ_readPoint</name>\r\n    \t\t\t<value>\r\n    \t\t\t\t<value>urn:fastnt:demo:readpoint:0037000.00729.210,432</value>\r\n    \t\t\t</value>\r\n    \t\t</param>\r\n    \t</params>\r\n    </epcisq:Poll>\r\n  </EPCISBody>\r\n</epcisq:EPCISQueryDocument>\r\n"
-												},
-												"url": {
-													"raw": "{{BaseUrl}}/EpcisServices/1.2/Query",
-													"host": [
-														"{{BaseUrl}}"
-													],
-													"path": [
-														"EpcisServices",
-														"1.2",
-														"Query"
-													]
-												}
-											},
-											"response": []
-										},
-										{
-											"name": "WD_readPoint",
-											"request": {
-												"method": "POST",
-												"header": [
-													{
-														"key": "Content-Type",
-														"value": "text/xml",
-														"type": "text"
-													}
-												],
-												"body": {
-													"mode": "raw",
-													"raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<epcisq:EPCISQueryDocument xmlns:epcisq=\"urn:epcglobal:epcis-query:xsd:1\" schemaVersion=\"1\" creationDate=\"2018-02-07T11:52:42.685Z\">\r\n  <EPCISBody>\r\n    <epcisq:Poll>\r\n    \t<queryName>SimpleEventQuery</queryName>\r\n    \t<params>\r\n    \t\t<param>\r\n    \t\t\t<name>WD_readPoint</name>\r\n    \t\t\t<value>\r\n    \t\t\t\t<value>urn:fastnt:demo:readpoint:0037000.00729.210,432</value>\r\n    \t\t\t</value>\r\n    \t\t</param>\r\n    \t</params>\r\n    </epcisq:Poll>\r\n  </EPCISBody>\r\n</epcisq:EPCISQueryDocument>\r\n"
-												},
-												"url": {
-													"raw": "{{BaseUrl}}/EpcisServices/1.2/Query",
-													"host": [
-														"{{BaseUrl}}"
-													],
-													"path": [
-														"EpcisServices",
-														"1.2",
-														"Query"
-													]
-												},
-												"description": "Not implemented yet."
-											},
-											"response": []
-										},
-										{
-											"name": "EQ_bizLocation",
-											"request": {
-												"method": "POST",
-												"header": [
-													{
-														"key": "Content-Type",
-														"value": "text/xml",
-														"type": "text"
-													}
-												],
-												"body": {
-													"mode": "raw",
-													"raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<epcisq:EPCISQueryDocument xmlns:epcisq=\"urn:epcglobal:epcis-query:xsd:1\" schemaVersion=\"1\" creationDate=\"2018-02-07T11:52:42.685Z\">\r\n  <EPCISBody>\r\n    <epcisq:Poll>\r\n    \t<queryName>SimpleEventQuery</queryName>\r\n    \t<params>\r\n    \t\t<param>\r\n    \t\t\t<name>EQ_bizLocation</name>\r\n    \t\t\t<value>\r\n    \t\t\t\t<value>urn:fastnt:demo:bizlocation:001024:054</value>\r\n    \t\t\t</value>\r\n    \t\t</param>\r\n    \t</params>\r\n    </epcisq:Poll>\r\n  </EPCISBody>\r\n</epcisq:EPCISQueryDocument>\r\n"
-												},
-												"url": {
-													"raw": "{{BaseUrl}}/EpcisServices/1.2/Query",
-													"host": [
-														"{{BaseUrl}}"
-													],
-													"path": [
-														"EpcisServices",
-														"1.2",
-														"Query"
-													]
-												}
-											},
-											"response": []
-										},
-										{
-											"name": "WD_bizLocation",
-											"request": {
-												"method": "POST",
-												"header": [
-													{
-														"key": "Content-Type",
-														"type": "text",
-														"value": "text/xml"
-													}
-												],
-												"body": {
-													"mode": "raw",
-													"raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<epcisq:EPCISQueryDocument xmlns:epcisq=\"urn:epcglobal:epcis-query:xsd:1\" schemaVersion=\"1\" creationDate=\"2018-02-07T11:52:42.685Z\">\r\n  <EPCISBody>\r\n    <epcisq:Poll>\r\n    \t<queryName>SimpleEventQuery</queryName>\r\n    \t<params>\r\n    \t\t<param>\r\n    \t\t\t<name>WD_bizLocation</name>\r\n    \t\t\t<value>\r\n    \t\t\t\t<value>urn:fastnt:demo:bizlocation:001024:054</value>\r\n    \t\t\t</value>\r\n    \t\t</param>\r\n    \t</params>\r\n    </epcisq:Poll>\r\n  </EPCISBody>\r\n</epcisq:EPCISQueryDocument>\r\n"
-												},
-												"url": {
-													"raw": "{{BaseUrl}}/EpcisServices/1.2/Query",
-													"host": [
-														"{{BaseUrl}}"
-													],
-													"path": [
-														"EpcisServices",
-														"1.2",
-														"Query"
-													]
-												}
-											},
-											"response": []
-										},
-										{
-											"name": "EQ_transformationID",
-											"request": {
-												"method": "POST",
-												"header": [
-													{
-														"key": "Content-Type",
-														"value": "text/xml",
-														"type": "text"
-													}
-												],
-												"body": {
-													"mode": "raw",
-													"raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<epcisq:EPCISQueryDocument xmlns:epcisq=\"urn:epcglobal:epcis-query:xsd:1\" schemaVersion=\"1\" creationDate=\"2018-02-07T11:52:42.685Z\">\r\n  <EPCISBody>\r\n    <epcisq:Poll>\r\n    \t<queryName>SimpleEventQuery</queryName>\r\n    \t<params>\r\n    \t\t<param>\r\n    \t\t\t<name>EQ_transformationID</name>\r\n    \t\t\t<value>\r\n    \t\t\t\t<value>urn:fastnt:demo:transformation:00001</value>\r\n    \t\t\t</value>\r\n    \t\t</param>\r\n    \t</params>\r\n    </epcisq:Poll>\r\n  </EPCISBody>\r\n</epcisq:EPCISQueryDocument>\r\n"
-												},
-												"url": {
-													"raw": "{{BaseUrl}}/EpcisServices/1.2/Query",
-													"host": [
-														"{{BaseUrl}}"
-													],
-													"path": [
-														"EpcisServices",
-														"1.2",
-														"Query"
-													]
-												}
-											},
-											"response": []
-										},
-										{
-											"name": "MATCH_anyEPC",
-											"request": {
-												"method": "POST",
-												"header": [
-													{
-														"key": "Content-Type",
-														"value": "text/xml",
-														"type": "text"
-													}
-												],
-												"body": {
-													"mode": "raw",
-													"raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<epcisq:EPCISQueryDocument xmlns:epcisq=\"urn:epcglobal:epcis-query:xsd:1\" schemaVersion=\"1\" creationDate=\"2018-02-07T11:52:42.685Z\">\r\n  <EPCISBody>\r\n    <epcisq:Poll>\r\n    \t<queryName>SimpleEventQuery</queryName>\r\n    \t<params>\r\n    \t\t<param>\r\n    \t\t\t<name>MATCH_anyEPC</name>\r\n    \t\t\t<value>\r\n    \t\t\t\t<value>urn:epc:id:sgtin:0037779.013777.4181390463157395501</value>\r\n    \t\t\t</value>\r\n    \t\t</param>\r\n    \t</params>\r\n    </epcisq:Poll>\r\n  </EPCISBody>\r\n</epcisq:EPCISQueryDocument>\r\n"
-												},
-												"url": {
-													"raw": "{{BaseUrl}}/EpcisServices/1.2/Query",
-													"host": [
-														"{{BaseUrl}}"
-													],
-													"path": [
-														"EpcisServices",
-														"1.2",
-														"Query"
-													]
-												}
-											},
-											"response": []
-										},
-										{
-											"name": "MATCH_parentID",
-											"request": {
-												"method": "POST",
-												"header": [
-													{
-														"key": "Content-Type",
-														"value": "text/xml",
-														"type": "text"
-													}
-												],
-												"body": {
-													"mode": "raw",
-													"raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<epcisq:EPCISQueryDocument xmlns:epcisq=\"urn:epcglobal:epcis-query:xsd:1\" schemaVersion=\"1\" creationDate=\"2018-02-07T11:52:42.685Z\">\r\n  <EPCISBody>\r\n    <epcisq:Poll>\r\n    \t<queryName>SimpleEventQuery</queryName>\r\n    \t<params>\r\n    \t\t<param>\r\n    \t\t\t<name>MATCH_parentID</name>\r\n    \t\t\t<value>\r\n    \t\t\t\t<value>urn:epc:id:sscc:4001356.5900000817</value>\r\n    \t\t\t</value>\r\n    \t\t</param>\r\n    \t</params>\r\n    </epcisq:Poll>\r\n  </EPCISBody>\r\n</epcisq:EPCISQueryDocument>\r\n"
-												},
-												"url": {
-													"raw": "{{BaseUrl}}/EpcisServices/1.2/Query",
-													"host": [
-														"{{BaseUrl}}"
-													],
-													"path": [
-														"EpcisServices",
-														"1.2",
-														"Query"
-													]
-												}
-											},
-											"response": []
-										},
-										{
-											"name": "MATCH_epc",
-											"request": {
-												"method": "POST",
-												"header": [
-													{
-														"key": "Content-Type",
-														"value": "text/xml",
-														"type": "text"
-													}
-												],
-												"body": {
-													"mode": "raw",
-													"raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<epcisq:EPCISQueryDocument xmlns:epcisq=\"urn:epcglobal:epcis-query:xsd:1\" schemaVersion=\"1\" creationDate=\"2018-02-07T11:52:42.685Z\">\r\n  <EPCISBody>\r\n    <epcisq:Poll>\r\n    \t<queryName>SimpleEventQuery</queryName>\r\n    \t<params>\r\n    \t\t<param>\r\n    \t\t\t<name>MATCH_epc</name>\r\n    \t\t\t<value>\r\n    \t\t\t\t<value>urn:epc:id:sscc:4001356.5900000818</value>\r\n    \t\t\t</value>\r\n    \t\t</param>\r\n    \t</params>\r\n    </epcisq:Poll>\r\n  </EPCISBody>\r\n</epcisq:EPCISQueryDocument>\r\n"
-												},
-												"url": {
-													"raw": "{{BaseUrl}}/EpcisServices/1.2/Query",
-													"host": [
-														"{{BaseUrl}}"
-													],
-													"path": [
-														"EpcisServices",
-														"1.2",
-														"Query"
-													]
-												}
-											},
-											"response": []
-										}
-									],
-									"description": "One example of every kind of SimpleEventQuery parameters",
-									"_postman_isSubFolder": true
-								},
-								{
-									"name": "Perform a Poll query",
-									"request": {
-										"method": "POST",
-										"header": [
-											{
-												"key": "Content-Type",
-												"value": "text/xml"
-											}
-										],
-										"body": {
-											"mode": "raw",
-											"raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<epcisq:EPCISQueryDocument xmlns:epcisq=\"urn:epcglobal:epcis-query:xsd:1\" schemaVersion=\"1\" creationDate=\"2018-02-07T11:52:42.685Z\">\n  <EPCISBody>\n    <epcisq:Poll>\n    \t<queryName>SimpleEventQuery</queryName>\n    \t<params />\n    </epcisq:Poll>\n  </EPCISBody>\n</epcisq:EPCISQueryDocument>\n"
-										},
-										"url": {
-											"raw": "{{BaseUrl}}/EpcisServices/1.2/Query",
-											"host": [
-												"{{BaseUrl}}"
-											],
-											"path": [
-												"EpcisServices",
-												"1.2",
-												"Query"
-											]
-										}
-									},
-									"response": [
-										{
-											"name": "Perform a Poll query",
-											"originalRequest": {
-												"method": "POST",
-												"header": [
-													{
-														"key": "Content-Type",
-														"value": "text/xml"
-													}
-												],
-												"body": {
-													"mode": "raw",
-													"raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<epcisq:EPCISQueryDocument xmlns:epcisq=\"urn:epcglobal:epcis-query:xsd:1\" schemaVersion=\"1\" creationDate=\"2018-02-07T11:52:42.685Z\">\r\n  <EPCISBody>\r\n    <epcisq:Poll>\r\n    \t<queryName>SimpleEventQuery</queryName>\r\n    \t<params>\r\n    \t\t<param>\r\n    \t\t\t<name>eventCountLimit</name>\r\n\t\t\t\t<value>1</value>\r\n    \t\t</param>\r\n    \t</params>\r\n    </epcisq:Poll>\r\n  </EPCISBody>\r\n</epcisq:EPCISQueryDocument>\r\n"
-												},
-												"url": {
-													"raw": "{{BaseUrl}}/Services/1.2/Query",
-													"host": [
-														"{{BaseUrl}}"
-													],
-													"path": [
-														"Services",
-														"1.2",
-														"Query"
-													]
-												}
-											},
-											"status": "OK",
-											"code": 200,
-											"_postman_previewlanguage": "xml",
-											"header": [
-												{
-													"key": "Date",
-													"value": "Mon, 14 Jan 2019 10:08:36 GMT"
-												},
-												{
-													"key": "Content-Type",
-													"value": "application/xml"
-												},
-												{
-													"key": "Transfer-Encoding",
-													"value": "chunked"
-												}
-											],
-											"cookie": [],
-											"body": "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<epcisq:EPCISQueryDocument creationDate=\"2019-01-14T10:08:36.7934758Z\" schemaVersion=\"1\" xmlns:epcisq=\"urn:epcglobal:epcis-query:xsd:1\">\n    <EPCISBody>\n        <epcisq:QueryResults>\n            <queryName>SimpleEventQuery</queryName>\n            <resultsBody>\n                <EventList />\n            </resultsBody>\n        </epcisq:QueryResults>\n    </EPCISBody>\n</epcisq:EPCISQueryDocument>"
-										},
-										{
-											"name": "Perform a Poll query",
-											"originalRequest": {
-												"method": "POST",
-												"header": [
-													{
-														"key": "Content-Type",
-														"value": "text/xml"
-													},
-													{
-														"key": "SOAPAction",
-														"value": "http://schemas.xmlsoap.org/wsdl/EpcisQuery/poll"
-													},
-													{
-														"key": "Authorization",
-														"value": "{{Authorization}}"
-													}
-												],
-												"body": {
-													"mode": "raw",
-													"raw": "<s:Envelope xmlns:s=\"http://schemas.xmlsoap.org/soap/envelope/\">\r\n  <s:Header></s:Header>\r\n  <s:Body>\r\n    <poll xmlns=\"http://schemas.xmlsoap.org/wsdl/\">\r\n    \t<queryName>SimpleEventQuery</queryName>\r\n    \t<queryParams>\r\n    \t\t<queryParam>\r\n    \t\t\t<name>eventCountLimit</name>\r\n    \t\t\t<value>\r\n    \t\t\t\t<value>15</value>\r\n    \t\t\t</value>\r\n    \t\t</queryParam>\r\n    \t</queryParams>\r\n    </poll>\r\n  </s:Body>\r\n</s:Envelope>"
-												},
-												"url": {
-													"raw": "{{BaseUrl}}/{{QueryEndpoint}}",
-													"host": [
-														"{{BaseUrl}}"
-													],
-													"path": [
-														"{{QueryEndpoint}}"
-													]
-												}
-											},
-											"status": "OK",
-											"code": 200,
-											"_postman_previewlanguage": "xml",
-											"header": [
-												{
-													"key": "Cache-Control",
-													"value": "private",
-													"name": "Cache-Control",
-													"description": "Tells all caching mechanisms from server to client whether they may cache this object. It is measured in seconds"
-												},
-												{
-													"key": "Content-Encoding",
-													"value": "gzip",
-													"name": "Content-Encoding",
-													"description": "The type of encoding used on the data."
-												},
-												{
-													"key": "Content-Length",
-													"value": "944",
-													"name": "Content-Length",
-													"description": "The length of the response body in octets (8-bit bytes)"
-												},
-												{
-													"key": "Content-Type",
-													"value": "text/xml; charset=utf-8",
-													"name": "Content-Type",
-													"description": "The mime type of this content"
-												},
-												{
-													"key": "Date",
-													"value": "Sat, 24 Feb 2018 15:28:45 GMT",
-													"name": "Date",
-													"description": "The date and time that the message was sent"
-												},
-												{
-													"key": "Server",
-													"value": "Microsoft-IIS/10.0",
-													"name": "Server",
-													"description": "A name for the server"
-												},
-												{
-													"key": "Vary",
-													"value": "Accept-Encoding",
-													"name": "Vary",
-													"description": "Tells downstream proxies how to match future request headers to decide whether the cached response can be used rather than requesting a fresh one from the origin server."
-												},
-												{
-													"key": "X-AspNet-Version",
-													"value": "4.0.30319",
-													"name": "X-AspNet-Version",
-													"description": "Custom header"
-												},
-												{
-													"key": "X-Powered-By",
-													"value": "ASP.NET",
-													"name": "X-Powered-By",
-													"description": "Specifies the technology (ASP.NET, PHP, JBoss, e.g.) supporting the web application (version details are often in X-Runtime, X-Version, or X-AspNet-Version)"
-												},
-												{
-													"key": "X-SourceFiles",
-													"value": "=?UTF-8?B?RTpcRGV2ZWxvcHBlbWVudFxHaXRIdWJcZXBjaXNcc3JjXEZhc1RuVC5XZWJcU2VydmljZXNcMS4yXEVwY2lzUXVlcnlc?=",
-													"name": "X-SourceFiles",
-													"description": "Custom header"
-												}
-											],
-											"cookie": [
-												{
-													"expires": "Invalid Date",
-													"httpOnly": true,
-													"domain": "localhost",
-													"path": "/",
-													"secure": false,
-													"value": "udtlscy4tdt5kocudrbjalnq",
-													"key": "ASP.NET_SessionId"
-												},
-												{
-													"expires": "Invalid Date",
-													"httpOnly": true,
-													"domain": "localhost",
-													"path": "/",
-													"secure": false,
-													"value": "fx9n2gaF3y3ei8rHTHflUkS0JreDEi-RHLlh08akmp8_TKvlfyQcW3MeJCij6ClkhrEc-2mkVg8RDf0o7J2CnOup4_pcTtYInmDIb1ri6jQ1",
-													"key": "__RequestVerificationToken"
-												}
-											],
-											"body": "<s:Envelope xmlns:s=\"http://schemas.xmlsoap.org/soap/envelope/\"><s:Body><QueryResults xmlns=\"http://schemas.xmlsoap.org/wsdl/\"><queryName>SimpleEventQuery</queryName><subscriptionID i:nil=\"true\" xmlns:i=\"http://www.w3.org/2001/XMLSchema-instance\"/><eventList><ObjectEvent>\r\n  <eventTime>2017-09-14T14:51:17.000Z</eventTime>\r\n  <recordTime>2018-02-12T16:57:20.000Z</recordTime>\r\n  <eventTimeZoneOffset>+01:00</eventTimeZoneOffset>\r\n  <epcList>\r\n    <epc>urn:epc:id:sscc:4001356.5900000817</epc>\r\n    <epc>urn:epc:id:sscc:4001356.5900000818</epc>\r\n    <epc>urn:epc:id:sscc:4001356.5900000819</epc>\r\n    <epc>urn:epc:id:sscc:4001356.5900000820</epc>\r\n  </epcList>\r\n  <action>ADD</action>\r\n  <bizStep>urn:fastnt:demo:bizstep:demo:packing</bizStep>\r\n  <disposition>urn:epcglobal:cbv:disp:loading</disposition>\r\n  <readPoint>\r\n    <id>urn:fastnt:demo:readpoint:0037000.00729.210,432</id>\r\n  </readPoint>\r\n  <bizLocation>\r\n    <id>urn:fastnt:demo:bizloc:0037000.00729.210</id>\r\n  </bizLocation>\r\n  <extension>\r\n    <ilmd>\r\n      <test p4:id=\"test\" xmlns:p4=\"http://mns.com/epcis/test\" xmlns=\"http://mns.com/epcis/test\" />\r\n      <first xmlns=\"http://mns.com/epcis/test\">first</first>\r\n      <second xmlns=\"http://mns.com/epcis/test\">second</second>\r\n    </ilmd>\r\n  </extension>\r\n</ObjectEvent><ObjectEvent>\r\n  <eventTime>2017-09-14T14:51:17.000Z</eventTime>\r\n  <recordTime>2018-02-24T14:45:48.000Z</recordTime>\r\n  <eventTimeZoneOffset>+01:00</eventTimeZoneOffset>\r\n  <epcList>\r\n    <epc>urn:epc:id:sscc:4001356.5900000817</epc>\r\n    <epc>urn:epc:id:sscc:4001356.5900000818</epc>\r\n    <epc>urn:epc:id:sscc:4001356.5900000819</epc>\r\n    <epc>urn:epc:id:sscc:4001356.5900000820</epc>\r\n  </epcList>\r\n  <action>ADD</action>\r\n  <bizStep>urn:fastnt:demo:bizstep:demo:packing</bizStep>\r\n  <disposition>urn:epcglobal:cbv:disp:loading</disposition>\r\n  <readPoint>\r\n    <id>urn:fastnt:demo:readpoint:0037000.00729.210,432</id>\r\n  </readPoint>\r\n  <bizLocation>\r\n    <id>urn:fastnt:demo:bizloc:0037000.00729.210</id>\r\n  </bizLocation>\r\n  <extension>\r\n    <ilmd>\r\n      <test p4:id=\"test\" xmlns:p4=\"http://mns.com/epcis/test\" xmlns=\"http://mns.com/epcis/test\" />\r\n      <first xmlns=\"http://mns.com/epcis/test\">first</first>\r\n      <second xmlns=\"http://mns.com/epcis/test\">second</second>\r\n    </ilmd>\r\n  </extension>\r\n</ObjectEvent><ObjectEvent>\r\n  <eventTime>2017-09-14T14:51:17.000Z</eventTime>\r\n  <recordTime>2018-02-24T14:49:36.000Z</recordTime>\r\n  <eventTimeZoneOffset>+01:00</eventTimeZoneOffset>\r\n  <epcList>\r\n    <epc>urn:epc:id:sscc:4001356.5900000817</epc>\r\n    <epc>urn:epc:id:sscc:4001356.5900000818</epc>\r\n    <epc>urn:epc:id:sscc:4001356.5900000819</epc>\r\n    <epc>urn:epc:id:sscc:4001356.5900000820</epc>\r\n  </epcList>\r\n  <action>ADD</action>\r\n  <bizStep>urn:fastnt:demo:bizstep:demo:packing</bizStep>\r\n  <disposition>urn:epcglobal:cbv:disp:loading</disposition>\r\n  <readPoint>\r\n    <id>urn:fastnt:demo:readpoint:0037000.00729.210,432</id>\r\n  </readPoint>\r\n  <bizLocation>\r\n    <id>urn:fastnt:demo:bizloc:0037000.00729.210</id>\r\n  </bizLocation>\r\n  <extension>\r\n    <ilmd>\r\n      <test p4:id=\"test\" xmlns:p4=\"http://mns.com/epcis/test\" xmlns=\"http://mns.com/epcis/test\" />\r\n      <first xmlns=\"http://mns.com/epcis/test\">first</first>\r\n      <second xmlns=\"http://mns.com/epcis/test\">second</second>\r\n    </ilmd>\r\n  </extension>\r\n</ObjectEvent><ObjectEvent>\r\n  <eventTime>2017-09-14T14:51:17.000Z</eventTime>\r\n  <recordTime>2018-02-24T14:50:29.000Z</recordTime>\r\n  <eventTimeZoneOffset>+01:00</eventTimeZoneOffset>\r\n  <epcList>\r\n    <epc>urn:epc:id:sscc:4001356.5900000817</epc>\r\n    <epc>urn:epc:id:sscc:4001356.5900000818</epc>\r\n    <epc>urn:epc:id:sscc:4001356.5900000819</epc>\r\n    <epc>urn:epc:id:sscc:4001356.5900000820</epc>\r\n  </epcList>\r\n  <action>ADD</action>\r\n  <bizStep>urn:fastnt:demo:bizstep:demo:packing</bizStep>\r\n  <disposition>urn:epcglobal:cbv:disp:loading</disposition>\r\n  <readPoint>\r\n    <id>urn:fastnt:demo:readpoint:0037000.00729.210,432</id>\r\n  </readPoint>\r\n  <bizLocation>\r\n    <id>urn:fastnt:demo:bizloc:0037000.00729.210</id>\r\n  </bizLocation>\r\n  <extension>\r\n    <ilmd>\r\n      <test p4:id=\"test\" xmlns:p4=\"http://mns.com/epcis/test\" xmlns=\"http://mns.com/epcis/test\" />\r\n      <first xmlns=\"http://mns.com/epcis/test\">first</first>\r\n      <second xmlns=\"http://mns.com/epcis/test\">second</second>\r\n    </ilmd>\r\n  </extension>\r\n</ObjectEvent><AggregationEvent>\r\n  <eventTime>2017-09-14T14:51:17.000Z</eventTime>\r\n  <recordTime>2018-02-24T15:25:01.000Z</recordTime>\r\n  <eventTimeZoneOffset>+01:00</eventTimeZoneOffset>\r\n  <parentID>urn:epc:id:sscc:4001356.5900000817</parentID>\r\n  <childEPCs>\r\n    <epc>urn:epc:id:sscc:4001356.5900000818</epc>\r\n    <epc>urn:epc:id:sscc:4001356.5900000819</epc>\r\n    <epc>urn:epc:id:sscc:4001356.5900000820</epc>\r\n  </childEPCs>\r\n  <action>ADD</action>\r\n  <bizStep>urn:fastnt:demo:bizstep:demo:packing</bizStep>\r\n  <disposition>urn:epcglobal:cbv:disp:loading</disposition>\r\n  <readPoint>\r\n    <id>urn:fastnt:demo:readpoint:0037000.00729.210,432</id>\r\n  </readPoint>\r\n  <bizLocation>\r\n    <id>urn:fastnt:demo:bizloc:0037000.00729.210</id>\r\n  </bizLocation>\r\n</AggregationEvent></eventList></QueryResults></s:Body></s:Envelope>"
-										}
-									]
-								}
-							],
-							"_postman_isSubFolder": true
-						},
-						{
-							"name": "SimpleMasterDataQuery",
-							"item": [
-								{
-									"name": "Parameters",
-									"item": [
-										{
-											"name": "vocabularyName",
-											"request": {
-												"method": "POST",
-												"header": [
-													{
-														"key": "Content-Type",
-														"name": "Content-Type",
-														"value": "application/xml",
-														"type": "text"
-													}
-												],
-												"body": {
-													"mode": "raw",
-													"raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<epcisq:EPCISQueryDocument xmlns:epcisq=\"urn:epcglobal:epcis-query:xsd:1\" schemaVersion=\"1\" creationDate=\"2018-02-07T11:52:42.685Z\">\n  <EPCISBody>\n    <epcisq:Poll>\n    \t<queryName>SimpleMasterDataQuery</queryName>\n    \t<params>\n    \t\t<param>\n    \t\t\t<name>vocabularyName</name>\n    \t\t\t<value>urn:epcglobal:epcis:vtype:ReadPoint</value>\n    \t\t</param>\n    \t</params>\n    </epcisq:Poll>\n  </EPCISBody>\n</epcisq:EPCISQueryDocument>"
-												},
-												"url": {
-													"raw": "{{BaseUrl}}/EpcisServices/1.2/Query",
-													"host": [
-														"{{BaseUrl}}"
-													],
-													"path": [
-														"EpcisServices",
-														"1.2",
-														"Query"
-													]
-												}
-											},
-											"response": []
-										},
-										{
-											"name": "EQ_name",
-											"request": {
-												"method": "POST",
-												"header": [
-													{
-														"key": "Content-Type",
-														"name": "Content-Type",
-														"type": "text",
-														"value": "application/xml"
-													}
-												],
-												"body": {
-													"mode": "raw",
-													"raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<epcisq:EPCISQueryDocument xmlns:epcisq=\"urn:epcglobal:epcis-query:xsd:1\" schemaVersion=\"1\" creationDate=\"2018-02-07T11:52:42.685Z\">\n  <EPCISBody>\n    <epcisq:Poll>\n    \t<queryName>SimpleMasterDataQuery</queryName>\n    \t<params>\n    \t\t<param>\n    \t\t\t<name>EQ_name</name>\n    \t\t\t<value>urn:epc:id:sgln:0614141.00300.3</value>\n    \t\t</param>\n    \t</params>\n    </epcisq:Poll>\n  </EPCISBody>\n</epcisq:EPCISQueryDocument>"
-												},
-												"url": {
-													"raw": "{{BaseUrl}}/EpcisServices/1.2/Query",
-													"host": [
-														"{{BaseUrl}}"
-													],
-													"path": [
-														"EpcisServices",
-														"1.2",
-														"Query"
-													]
-												}
-											},
-											"response": []
-										},
-										{
-											"name": "WD_name",
-											"request": {
-												"method": "POST",
-												"header": [
-													{
-														"key": "Content-Type",
-														"name": "Content-Type",
-														"type": "text",
-														"value": "application/xml"
-													}
-												],
-												"body": {
-													"mode": "raw",
-													"raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<epcisq:EPCISQueryDocument xmlns:epcisq=\"urn:epcglobal:epcis-query:xsd:1\" schemaVersion=\"1\" creationDate=\"2018-02-07T11:52:42.685Z\">\n  <EPCISBody>\n    <epcisq:Poll>\n    \t<queryName>SimpleMasterDataQuery</queryName>\n    \t<params>\n    \t\t<param>\n    \t\t\t<name>WD_name</name>\n    \t\t\t<value>urn:epc:id:sgln:0037000.00729.0</value>\n    \t\t</param>\n    \t</params>\n    </epcisq:Poll>\n  </EPCISBody>\n</epcisq:EPCISQueryDocument>"
-												},
-												"url": {
-													"raw": "{{BaseUrl}}/EpcisServices/1.2/Query",
-													"host": [
-														"{{BaseUrl}}"
-													],
-													"path": [
-														"EpcisServices",
-														"1.2",
-														"Query"
-													]
-												}
-											},
-											"response": []
-										},
-										{
-											"name": "HASATTR",
-											"request": {
-												"method": "POST",
-												"header": [
-													{
-														"key": "Content-Type",
-														"name": "Content-Type",
-														"type": "text",
-														"value": "application/xml"
-													}
-												],
-												"body": {
-													"mode": "raw",
-													"raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<epcisq:EPCISQueryDocument xmlns:epcisq=\"urn:epcglobal:epcis-query:xsd:1\" schemaVersion=\"1\" creationDate=\"2018-02-07T11:52:42.685Z\">\n  <EPCISBody>\n    <epcisq:Poll>\n    \t<queryName>SimpleMasterDataQuery</queryName>\n    \t<params>\n    \t\t<param>\n    \t\t\t<name>HASATTR</name>\n    \t\t\t<value>urn:epcglobal:cbv:mda:sst</value>\n    \t\t</param>\n    \t</params>\n    </epcisq:Poll>\n  </EPCISBody>\n</epcisq:EPCISQueryDocument>"
-												},
-												"url": {
-													"raw": "{{BaseUrl}}/EpcisServices/1.2/Query",
-													"host": [
-														"{{BaseUrl}}"
-													],
-													"path": [
-														"EpcisServices",
-														"1.2",
-														"Query"
-													]
-												}
-											},
-											"response": []
-										},
-										{
-											"name": "maxElementCount",
-											"request": {
-												"method": "POST",
-												"header": [
-													{
-														"key": "Content-Type",
-														"name": "Content-Type",
-														"type": "text",
-														"value": "application/xml"
-													}
-												],
-												"body": {
-													"mode": "raw",
-													"raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<epcisq:EPCISQueryDocument xmlns:epcisq=\"urn:epcglobal:epcis-query:xsd:1\" schemaVersion=\"1\" creationDate=\"2018-02-07T11:52:42.685Z\">\n  <EPCISBody>\n    <epcisq:Poll>\n    \t<queryName>SimpleMasterDataQuery</queryName>\n    \t<params>\n    \t\t<param>\n    \t\t\t<name>maxElementCount</name>\n    \t\t\t<value>3</value>\n    \t\t</param>\n    \t</params>\n    </epcisq:Poll>\n  </EPCISBody>\n</epcisq:EPCISQueryDocument>"
-												},
-												"url": {
-													"raw": "{{BaseUrl}}/EpcisServices/1.2/Query",
-													"host": [
-														"{{BaseUrl}}"
-													],
-													"path": [
-														"EpcisServices",
-														"1.2",
-														"Query"
-													]
-												}
-											},
-											"response": []
-										},
-										{
-											"name": "includeAttributes",
-											"request": {
-												"method": "POST",
-												"header": [
-													{
-														"key": "Content-Type",
-														"name": "Content-Type",
-														"type": "text",
-														"value": "application/xml"
-													}
-												],
-												"body": {
-													"mode": "raw",
-													"raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<epcisq:EPCISQueryDocument xmlns:epcisq=\"urn:epcglobal:epcis-query:xsd:1\" schemaVersion=\"1\" creationDate=\"2018-02-07T11:52:42.685Z\">\n  <EPCISBody>\n    <epcisq:Poll>\n    \t<queryName>SimpleMasterDataQuery</queryName>\n    \t<params>\n    \t\t<param>\n    \t\t\t<name>includeAttributes</name>\n    \t\t\t<value>true</value>\n    \t\t</param>\n    \t</params>\n    </epcisq:Poll>\n  </EPCISBody>\n</epcisq:EPCISQueryDocument>"
-												},
-												"url": {
-													"raw": "{{BaseUrl}}/EpcisServices/1.2/Query",
-													"host": [
-														"{{BaseUrl}}"
-													],
-													"path": [
-														"EpcisServices",
-														"1.2",
-														"Query"
-													]
-												}
-											},
-											"response": []
-										},
-										{
-											"name": "attributeNames",
-											"request": {
-												"method": "POST",
-												"header": [
-													{
-														"key": "Content-Type",
-														"name": "Content-Type",
-														"type": "text",
-														"value": "application/xml"
-													}
-												],
-												"body": {
-													"mode": "raw",
-													"raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<epcisq:EPCISQueryDocument xmlns:epcisq=\"urn:epcglobal:epcis-query:xsd:1\" schemaVersion=\"1\" creationDate=\"2018-02-07T11:52:42.685Z\">\n  <EPCISBody>\n    <epcisq:Poll>\n    \t<queryName>SimpleMasterDataQuery</queryName>\n    \t<params>\n    \t\t<param>\n    \t\t\t<name>includeAttributes</name>\n    \t\t\t<value>true</value>\n    \t\t</param>\n    \t\t<param>\n    \t\t\t<name>attributeNames</name>\n    \t\t\t<value>\n    \t\t\t\t<value>urn:epcglobal:cbv:mda:sst</value>\n    \t\t\t\t<value>urn:epcglobal:cbv:mda:site</value>\n    \t\t\t</value>\n    \t\t</param>\n    \t</params>\n    </epcisq:Poll>\n  </EPCISBody>\n</epcisq:EPCISQueryDocument>"
-												},
-												"url": {
-													"raw": "{{BaseUrl}}/EpcisServices/1.2/Query",
-													"host": [
-														"{{BaseUrl}}"
-													],
-													"path": [
-														"EpcisServices",
-														"1.2",
-														"Query"
-													]
-												}
-											},
-											"response": []
-										},
-										{
-											"name": "includeChildren",
-											"request": {
-												"method": "POST",
-												"header": [
-													{
-														"key": "Content-Type",
-														"name": "Content-Type",
-														"type": "text",
-														"value": "application/xml"
-													}
-												],
-												"body": {
-													"mode": "raw",
-													"raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<epcisq:EPCISQueryDocument xmlns:epcisq=\"urn:epcglobal:epcis-query:xsd:1\" schemaVersion=\"1\" creationDate=\"2018-02-07T11:52:42.685Z\">\n  <EPCISBody>\n    <epcisq:Poll>\n    \t<queryName>SimpleMasterDataQuery</queryName>\n    \t<params>\n    \t\t<param>\n    \t\t\t<name>includeChildren</name>\n    \t\t\t<value>true</value>\n    \t\t</param>\n    \t</params>\n    </epcisq:Poll>\n  </EPCISBody>\n</epcisq:EPCISQueryDocument>"
-												},
-												"url": {
-													"raw": "{{BaseUrl}}/EpcisServices/1.2/Query",
-													"host": [
-														"{{BaseUrl}}"
-													],
-													"path": [
-														"EpcisServices",
-														"1.2",
-														"Query"
-													]
-												}
-											},
-											"response": []
-										},
-										{
-											"name": "HASATTR",
-											"request": {
-												"method": "POST",
-												"header": [
-													{
-														"key": "Content-Type",
-														"value": "text/xml",
-														"type": "text"
-													}
-												],
-												"body": {
-													"mode": "raw",
-													"raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<epcisq:EPCISQueryDocument xmlns:epcisq=\"urn:epcglobal:epcis-query:xsd:1\" schemaVersion=\"1\" creationDate=\"2018-02-07T11:52:42.685Z\">\r\n  <EPCISBody>\r\n    <epcisq:Poll>\r\n    \t<queryName>SimpleEventQuery</queryName>\r\n    \t<params>\r\n    \t\t<param>\r\n    \t\t\t<name>HASATTR_bizLocation</name>\r\n    \t\t\t<value>\r\n    \t\t\t\t<value>http://epcis.example.com/mda/latitude</value>\r\n    \t\t\t</value>\r\n    \t\t</param>\r\n    \t</params>\r\n    </epcisq:Poll>\r\n  </EPCISBody>\r\n</epcisq:EPCISQueryDocument>\r\n"
-												},
-												"url": {
-													"raw": "{{BaseUrl}}/EpcisServices/1.2/Query",
-													"host": [
-														"{{BaseUrl}}"
-													],
-													"path": [
-														"EpcisServices",
-														"1.2",
-														"Query"
-													]
-												}
-											},
-											"response": []
-										}
-									],
-									"_postman_isSubFolder": true
-								},
-								{
-									"name": "Perform a Poll query",
-									"request": {
-										"method": "POST",
-										"header": [
-											{
-												"key": "Content-Type",
-												"value": "text/xml"
-											}
-										],
-										"body": {
-											"mode": "raw",
-											"raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<epcisq:EPCISQueryDocument xmlns:epcisq=\"urn:epcglobal:epcis-query:xsd:1\" schemaVersion=\"1\" creationDate=\"2018-02-07T11:52:42.685Z\">\n  <EPCISBody>\n    <epcisq:Poll>\n    \t<queryName>SimpleMasterDataQuery</queryName>\n    \t<params />\n    </epcisq:Poll>\n  </EPCISBody>\n</epcisq:EPCISQueryDocument>\n"
-										},
-										"url": {
-											"raw": "{{BaseUrl}}/EpcisServices/1.2/Query",
-											"host": [
-												"{{BaseUrl}}"
-											],
-											"path": [
-												"EpcisServices",
-												"1.2",
-												"Query"
-											]
-										}
-									},
-									"response": [
-										{
-											"name": "Perform a Poll query",
-											"originalRequest": {
-												"method": "POST",
-												"header": [
-													{
-														"key": "Content-Type",
-														"value": "text/xml"
-													}
-												],
-												"body": {
-													"mode": "raw",
-													"raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<epcisq:EPCISQueryDocument xmlns:epcisq=\"urn:epcglobal:epcis-query:xsd:1\" schemaVersion=\"1\" creationDate=\"2018-02-07T11:52:42.685Z\">\r\n  <EPCISBody>\r\n    <epcisq:Poll>\r\n    \t<queryName>SimpleEventQuery</queryName>\r\n    \t<params>\r\n    \t\t<param>\r\n    \t\t\t<name>eventCountLimit</name>\r\n\t\t\t\t<value>1</value>\r\n    \t\t</param>\r\n    \t</params>\r\n    </epcisq:Poll>\r\n  </EPCISBody>\r\n</epcisq:EPCISQueryDocument>\r\n"
-												},
-												"url": {
-													"raw": "{{BaseUrl}}/Services/1.2/Query",
-													"host": [
-														"{{BaseUrl}}"
-													],
-													"path": [
-														"Services",
-														"1.2",
-														"Query"
-													]
-												}
-											},
-											"status": "OK",
-											"code": 200,
-											"_postman_previewlanguage": "xml",
-											"header": [
-												{
-													"key": "Date",
-													"value": "Mon, 14 Jan 2019 10:08:36 GMT"
-												},
-												{
-													"key": "Content-Type",
-													"value": "application/xml"
-												},
-												{
-													"key": "Transfer-Encoding",
-													"value": "chunked"
-												}
-											],
-											"cookie": [],
-											"body": "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<epcisq:EPCISQueryDocument creationDate=\"2019-01-14T10:08:36.7934758Z\" schemaVersion=\"1\" xmlns:epcisq=\"urn:epcglobal:epcis-query:xsd:1\">\n    <EPCISBody>\n        <epcisq:QueryResults>\n            <queryName>SimpleEventQuery</queryName>\n            <resultsBody>\n                <EventList />\n            </resultsBody>\n        </epcisq:QueryResults>\n    </EPCISBody>\n</epcisq:EPCISQueryDocument>"
-										},
-										{
-											"name": "Perform a Poll query",
-											"originalRequest": {
-												"method": "POST",
-												"header": [
-													{
-														"key": "Content-Type",
-														"value": "text/xml"
-													},
-													{
-														"key": "SOAPAction",
-														"value": "http://schemas.xmlsoap.org/wsdl/EpcisQuery/poll"
-													},
-													{
-														"key": "Authorization",
-														"value": "{{Authorization}}"
-													}
-												],
-												"body": {
-													"mode": "raw",
-													"raw": "<s:Envelope xmlns:s=\"http://schemas.xmlsoap.org/soap/envelope/\">\r\n  <s:Header></s:Header>\r\n  <s:Body>\r\n    <poll xmlns=\"http://schemas.xmlsoap.org/wsdl/\">\r\n    \t<queryName>SimpleEventQuery</queryName>\r\n    \t<queryParams>\r\n    \t\t<queryParam>\r\n    \t\t\t<name>eventCountLimit</name>\r\n    \t\t\t<value>\r\n    \t\t\t\t<value>15</value>\r\n    \t\t\t</value>\r\n    \t\t</queryParam>\r\n    \t</queryParams>\r\n    </poll>\r\n  </s:Body>\r\n</s:Envelope>"
-												},
-												"url": {
-													"raw": "{{BaseUrl}}/{{QueryEndpoint}}",
-													"host": [
-														"{{BaseUrl}}"
-													],
-													"path": [
-														"{{QueryEndpoint}}"
-													]
-												}
-											},
-											"status": "OK",
-											"code": 200,
-											"_postman_previewlanguage": "xml",
-											"header": [
-												{
-													"key": "Cache-Control",
-													"value": "private",
-													"name": "Cache-Control",
-													"description": "Tells all caching mechanisms from server to client whether they may cache this object. It is measured in seconds"
-												},
-												{
-													"key": "Content-Encoding",
-													"value": "gzip",
-													"name": "Content-Encoding",
-													"description": "The type of encoding used on the data."
-												},
-												{
-													"key": "Content-Length",
-													"value": "944",
-													"name": "Content-Length",
-													"description": "The length of the response body in octets (8-bit bytes)"
-												},
-												{
-													"key": "Content-Type",
-													"value": "text/xml; charset=utf-8",
-													"name": "Content-Type",
-													"description": "The mime type of this content"
-												},
-												{
-													"key": "Date",
-													"value": "Sat, 24 Feb 2018 15:28:45 GMT",
-													"name": "Date",
-													"description": "The date and time that the message was sent"
-												},
-												{
-													"key": "Server",
-													"value": "Microsoft-IIS/10.0",
-													"name": "Server",
-													"description": "A name for the server"
-												},
-												{
-													"key": "Vary",
-													"value": "Accept-Encoding",
-													"name": "Vary",
-													"description": "Tells downstream proxies how to match future request headers to decide whether the cached response can be used rather than requesting a fresh one from the origin server."
-												},
-												{
-													"key": "X-AspNet-Version",
-													"value": "4.0.30319",
-													"name": "X-AspNet-Version",
-													"description": "Custom header"
-												},
-												{
-													"key": "X-Powered-By",
-													"value": "ASP.NET",
-													"name": "X-Powered-By",
-													"description": "Specifies the technology (ASP.NET, PHP, JBoss, e.g.) supporting the web application (version details are often in X-Runtime, X-Version, or X-AspNet-Version)"
-												},
-												{
-													"key": "X-SourceFiles",
-													"value": "=?UTF-8?B?RTpcRGV2ZWxvcHBlbWVudFxHaXRIdWJcZXBjaXNcc3JjXEZhc1RuVC5XZWJcU2VydmljZXNcMS4yXEVwY2lzUXVlcnlc?=",
-													"name": "X-SourceFiles",
-													"description": "Custom header"
-												}
-											],
-											"cookie": [
-												{
-													"expires": "Invalid Date",
-													"httpOnly": true,
-													"domain": "localhost",
-													"path": "/",
-													"secure": false,
-													"value": "udtlscy4tdt5kocudrbjalnq",
-													"key": "ASP.NET_SessionId"
-												},
-												{
-													"expires": "Invalid Date",
-													"httpOnly": true,
-													"domain": "localhost",
-													"path": "/",
-													"secure": false,
-													"value": "fx9n2gaF3y3ei8rHTHflUkS0JreDEi-RHLlh08akmp8_TKvlfyQcW3MeJCij6ClkhrEc-2mkVg8RDf0o7J2CnOup4_pcTtYInmDIb1ri6jQ1",
-													"key": "__RequestVerificationToken"
-												}
-											],
-											"body": "<s:Envelope xmlns:s=\"http://schemas.xmlsoap.org/soap/envelope/\"><s:Body><QueryResults xmlns=\"http://schemas.xmlsoap.org/wsdl/\"><queryName>SimpleEventQuery</queryName><subscriptionID i:nil=\"true\" xmlns:i=\"http://www.w3.org/2001/XMLSchema-instance\"/><eventList><ObjectEvent>\r\n  <eventTime>2017-09-14T14:51:17.000Z</eventTime>\r\n  <recordTime>2018-02-12T16:57:20.000Z</recordTime>\r\n  <eventTimeZoneOffset>+01:00</eventTimeZoneOffset>\r\n  <epcList>\r\n    <epc>urn:epc:id:sscc:4001356.5900000817</epc>\r\n    <epc>urn:epc:id:sscc:4001356.5900000818</epc>\r\n    <epc>urn:epc:id:sscc:4001356.5900000819</epc>\r\n    <epc>urn:epc:id:sscc:4001356.5900000820</epc>\r\n  </epcList>\r\n  <action>ADD</action>\r\n  <bizStep>urn:fastnt:demo:bizstep:demo:packing</bizStep>\r\n  <disposition>urn:epcglobal:cbv:disp:loading</disposition>\r\n  <readPoint>\r\n    <id>urn:fastnt:demo:readpoint:0037000.00729.210,432</id>\r\n  </readPoint>\r\n  <bizLocation>\r\n    <id>urn:fastnt:demo:bizloc:0037000.00729.210</id>\r\n  </bizLocation>\r\n  <extension>\r\n    <ilmd>\r\n      <test p4:id=\"test\" xmlns:p4=\"http://mns.com/epcis/test\" xmlns=\"http://mns.com/epcis/test\" />\r\n      <first xmlns=\"http://mns.com/epcis/test\">first</first>\r\n      <second xmlns=\"http://mns.com/epcis/test\">second</second>\r\n    </ilmd>\r\n  </extension>\r\n</ObjectEvent><ObjectEvent>\r\n  <eventTime>2017-09-14T14:51:17.000Z</eventTime>\r\n  <recordTime>2018-02-24T14:45:48.000Z</recordTime>\r\n  <eventTimeZoneOffset>+01:00</eventTimeZoneOffset>\r\n  <epcList>\r\n    <epc>urn:epc:id:sscc:4001356.5900000817</epc>\r\n    <epc>urn:epc:id:sscc:4001356.5900000818</epc>\r\n    <epc>urn:epc:id:sscc:4001356.5900000819</epc>\r\n    <epc>urn:epc:id:sscc:4001356.5900000820</epc>\r\n  </epcList>\r\n  <action>ADD</action>\r\n  <bizStep>urn:fastnt:demo:bizstep:demo:packing</bizStep>\r\n  <disposition>urn:epcglobal:cbv:disp:loading</disposition>\r\n  <readPoint>\r\n    <id>urn:fastnt:demo:readpoint:0037000.00729.210,432</id>\r\n  </readPoint>\r\n  <bizLocation>\r\n    <id>urn:fastnt:demo:bizloc:0037000.00729.210</id>\r\n  </bizLocation>\r\n  <extension>\r\n    <ilmd>\r\n      <test p4:id=\"test\" xmlns:p4=\"http://mns.com/epcis/test\" xmlns=\"http://mns.com/epcis/test\" />\r\n      <first xmlns=\"http://mns.com/epcis/test\">first</first>\r\n      <second xmlns=\"http://mns.com/epcis/test\">second</second>\r\n    </ilmd>\r\n  </extension>\r\n</ObjectEvent><ObjectEvent>\r\n  <eventTime>2017-09-14T14:51:17.000Z</eventTime>\r\n  <recordTime>2018-02-24T14:49:36.000Z</recordTime>\r\n  <eventTimeZoneOffset>+01:00</eventTimeZoneOffset>\r\n  <epcList>\r\n    <epc>urn:epc:id:sscc:4001356.5900000817</epc>\r\n    <epc>urn:epc:id:sscc:4001356.5900000818</epc>\r\n    <epc>urn:epc:id:sscc:4001356.5900000819</epc>\r\n    <epc>urn:epc:id:sscc:4001356.5900000820</epc>\r\n  </epcList>\r\n  <action>ADD</action>\r\n  <bizStep>urn:fastnt:demo:bizstep:demo:packing</bizStep>\r\n  <disposition>urn:epcglobal:cbv:disp:loading</disposition>\r\n  <readPoint>\r\n    <id>urn:fastnt:demo:readpoint:0037000.00729.210,432</id>\r\n  </readPoint>\r\n  <bizLocation>\r\n    <id>urn:fastnt:demo:bizloc:0037000.00729.210</id>\r\n  </bizLocation>\r\n  <extension>\r\n    <ilmd>\r\n      <test p4:id=\"test\" xmlns:p4=\"http://mns.com/epcis/test\" xmlns=\"http://mns.com/epcis/test\" />\r\n      <first xmlns=\"http://mns.com/epcis/test\">first</first>\r\n      <second xmlns=\"http://mns.com/epcis/test\">second</second>\r\n    </ilmd>\r\n  </extension>\r\n</ObjectEvent><ObjectEvent>\r\n  <eventTime>2017-09-14T14:51:17.000Z</eventTime>\r\n  <recordTime>2018-02-24T14:50:29.000Z</recordTime>\r\n  <eventTimeZoneOffset>+01:00</eventTimeZoneOffset>\r\n  <epcList>\r\n    <epc>urn:epc:id:sscc:4001356.5900000817</epc>\r\n    <epc>urn:epc:id:sscc:4001356.5900000818</epc>\r\n    <epc>urn:epc:id:sscc:4001356.5900000819</epc>\r\n    <epc>urn:epc:id:sscc:4001356.5900000820</epc>\r\n  </epcList>\r\n  <action>ADD</action>\r\n  <bizStep>urn:fastnt:demo:bizstep:demo:packing</bizStep>\r\n  <disposition>urn:epcglobal:cbv:disp:loading</disposition>\r\n  <readPoint>\r\n    <id>urn:fastnt:demo:readpoint:0037000.00729.210,432</id>\r\n  </readPoint>\r\n  <bizLocation>\r\n    <id>urn:fastnt:demo:bizloc:0037000.00729.210</id>\r\n  </bizLocation>\r\n  <extension>\r\n    <ilmd>\r\n      <test p4:id=\"test\" xmlns:p4=\"http://mns.com/epcis/test\" xmlns=\"http://mns.com/epcis/test\" />\r\n      <first xmlns=\"http://mns.com/epcis/test\">first</first>\r\n      <second xmlns=\"http://mns.com/epcis/test\">second</second>\r\n    </ilmd>\r\n  </extension>\r\n</ObjectEvent><AggregationEvent>\r\n  <eventTime>2017-09-14T14:51:17.000Z</eventTime>\r\n  <recordTime>2018-02-24T15:25:01.000Z</recordTime>\r\n  <eventTimeZoneOffset>+01:00</eventTimeZoneOffset>\r\n  <parentID>urn:epc:id:sscc:4001356.5900000817</parentID>\r\n  <childEPCs>\r\n    <epc>urn:epc:id:sscc:4001356.5900000818</epc>\r\n    <epc>urn:epc:id:sscc:4001356.5900000819</epc>\r\n    <epc>urn:epc:id:sscc:4001356.5900000820</epc>\r\n  </childEPCs>\r\n  <action>ADD</action>\r\n  <bizStep>urn:fastnt:demo:bizstep:demo:packing</bizStep>\r\n  <disposition>urn:epcglobal:cbv:disp:loading</disposition>\r\n  <readPoint>\r\n    <id>urn:fastnt:demo:readpoint:0037000.00729.210,432</id>\r\n  </readPoint>\r\n  <bizLocation>\r\n    <id>urn:fastnt:demo:bizloc:0037000.00729.210</id>\r\n  </bizLocation>\r\n</AggregationEvent></eventList></QueryResults></s:Body></s:Envelope>"
-										}
-									]
-								}
-							],
-							"_postman_isSubFolder": true
-						},
-						{
-							"name": "Subscriptions",
-							"item": [
-								{
-									"name": "List all subscription IDs",
-									"request": {
-										"method": "POST",
-										"header": [
-											{
-												"key": "Content-Type",
-												"value": "text/xml"
-											}
-										],
-										"body": {
-											"mode": "raw",
-											"raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<epcisq:EPCISQueryDocument xmlns:epcisq=\"urn:epcglobal:epcis-query:xsd:1\" schemaVersion=\"1\" creationDate=\"2018-02-07T11:52:42.685Z\">\n  <EPCISBody>\n    <epcisq:GetSubscriptionIDs>\n    \t<queryName>SimpleEventQuery</queryName>\n    </epcisq:GetSubscriptionIDs>\n  </EPCISBody>\n</epcisq:EPCISQueryDocument>\n"
-										},
-										"url": {
-											"raw": "{{BaseUrl}}/EpcisServices/1.2/Query",
-											"host": [
-												"{{BaseUrl}}"
-											],
-											"path": [
-												"EpcisServices",
-												"1.2",
-												"Query"
-											]
-										}
-									},
-									"response": [
-										{
-											"name": "List all subscription IDs",
-											"originalRequest": {
-												"method": "POST",
-												"header": [
-													{
-														"key": "Content-Type",
-														"value": "text/xml"
-													}
-												],
-												"body": {
-													"mode": "raw",
-													"raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<epcisq:EPCISQueryDocument xmlns:epcisq=\"urn:epcglobal:epcis-query:xsd:1\" schemaVersion=\"1\" creationDate=\"2018-02-07T11:52:42.685Z\">\r\n  <EPCISBody>\r\n    <epcisq:GetSubscriptionIDs>\r\n    \t<queryName>SimpleEventQuery</queryName>\r\n    </epcisq:GetSubscriptionIDs>\r\n  </EPCISBody>\r\n</epcisq:EPCISQueryDocument>\r\n"
-												},
-												"url": {
-													"raw": "{{BaseUrl}}/Services/1.2/Query/",
-													"host": [
-														"{{BaseUrl}}"
-													],
-													"path": [
-														"Services",
-														"1.2",
-														"Query",
-														""
-													]
-												}
-											},
-											"status": "OK",
-											"code": 200,
-											"_postman_previewlanguage": "xml",
-											"header": [
-												{
-													"key": "Date",
-													"value": "Mon, 14 Jan 2019 10:08:05 GMT"
-												},
-												{
-													"key": "Content-Type",
-													"value": "application/xml"
-												},
-												{
-													"key": "Transfer-Encoding",
-													"value": "chunked"
-												}
-											],
-											"cookie": [],
-											"body": "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<epcisq:EPCISQueryDocument creationDate=\"2019-01-14T10:08:05.9556957Z\" schemaVersion=\"1\" xmlns:epcisq=\"urn:epcglobal:epcis-query:xsd:1\">\n    <EPCISBody>\n        <GetSubscriptionIDsResult>\n            <string>AllObjectEvents</string>\n        </GetSubscriptionIDsResult>\n    </EPCISBody>\n</epcisq:EPCISQueryDocument>"
-										}
-									]
-								},
-								{
-									"name": "Subscribe to Epcis server",
-									"request": {
-										"method": "POST",
-										"header": [
-											{
-												"key": "Content-Type",
-												"value": "text/xml"
-											}
-										],
-										"body": {
-											"mode": "raw",
-											"raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<epcisq:EPCISQueryDocument xmlns:epcisq=\"urn:epcglobal:epcis-query:xsd:1\" schemaVersion=\"1\" creationDate=\"2018-02-07T11:52:42Z\">\r\n  <EPCISBody>\r\n    <epcisq:Subscribe>\r\n      <queryName>SimpleEventQuery</queryName>\r\n      <params>\r\n        <param>\r\n          <name>eventType</name>\r\n          <value>\r\n            <value>AggregationEvent</value>\r\n          </value>\r\n        </param>\r\n      </params>\r\n      <dest>https://fastnt-dev-api.azurewebsites.net/Services/1.2/Capture</dest>\r\n      <controls>\r\n      \t<schedule>\r\n          <second>0</second>\r\n        </schedule>\r\n        <reportIfEmpty>false</reportIfEmpty>\r\n      </controls>\r\n      <subscriptionID>AllObjectEvents</subscriptionID>\r\n    </epcisq:Subscribe>\r\n  </EPCISBody>\r\n</epcisq:EPCISQueryDocument>"
-										},
-										"url": {
-											"raw": "{{BaseUrl}}/EpcisServices/1.2/Query",
-											"host": [
-												"{{BaseUrl}}"
-											],
-											"path": [
-												"EpcisServices",
-												"1.2",
-												"Query"
-											]
-										}
-									},
-									"response": [
-										{
-											"name": "Subscribe to Epcis server",
-											"originalRequest": {
-												"method": "POST",
-												"header": [
-													{
-														"key": "Content-Type",
-														"value": "text/xml"
-													}
-												],
-												"body": {
-													"mode": "raw",
-													"raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<epcisq:EPCISQueryDocument xmlns:epcisq=\"urn:epcglobal:epcis-query:xsd:1\" schemaVersion=\"1\" creationDate=\"2018-02-07T11:52:42Z\">\r\n  <EPCISBody>\r\n    <epcisq:Subscribe>\r\n      <queryName>SimpleEventQuery</queryName>\r\n      <params>\r\n        <param>\r\n          <name>eventType</name>\r\n          <value>\r\n            <value>ObjectEvent</value>\r\n          </value>\r\n        </param>\r\n      </params>\r\n      <dest>http://localhost:54805/Services/1.2/Capture</dest>\r\n      <controls>\r\n      \t<schedule>\r\n          <second>0</second>\r\n          <minute>0</minute>\r\n        </schedule>\r\n        <reportIfEmpty>true</reportIfEmpty>\r\n      </controls>\r\n      <subscriptionID>AllObjectEvents</subscriptionID>\r\n    </epcisq:Subscribe>\r\n  </EPCISBody>\r\n</epcisq:EPCISQueryDocument>"
-												},
-												"url": {
-													"raw": "{{BaseUrl}}/Services/1.2/Subscription/",
-													"host": [
-														"{{BaseUrl}}"
-													],
-													"path": [
-														"Services",
-														"1.2",
-														"Subscription",
-														""
-													]
-												}
-											},
-											"status": "OK",
-											"code": 200,
-											"_postman_previewlanguage": "xml",
-											"header": [
-												{
-													"key": "Date",
-													"value": "Mon, 14 Jan 2019 10:07:57 GMT"
-												},
-												{
-													"key": "Content-Type",
-													"value": "application/xml"
-												},
-												{
-													"key": "Transfer-Encoding",
-													"value": "chunked"
-												}
-											],
-											"cookie": [],
-											"body": "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<epcisq:EPCISQueryDocument creationDate=\"2019-01-14T10:07:57.4637219Z\" schemaVersion=\"1\" xmlns:epcisq=\"urn:epcglobal:epcis-query:xsd:1\">\n    <EPCISBody>\n        <SubscribeResult />\n    </EPCISBody>\n</epcisq:EPCISQueryDocument>"
-										}
-									]
-								},
-								{
-									"name": "Unsubscribe from Epcis server",
-									"request": {
-										"method": "POST",
-										"header": [
-											{
-												"key": "Content-Type",
-												"value": "text/xml"
-											}
-										],
-										"body": {
-											"mode": "raw",
-											"raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<epcisq:EPCISQueryDocument xmlns:epcisq=\"urn:epcglobal:epcis-query:xsd:1\" schemaVersion=\"1\" creationDate=\"2018-02-07T11:52:42Z\">\r\n  <EPCISBody>\r\n    <epcisq:Unsubscribe>\r\n      <subscriptionID>AllObjectEvents</subscriptionID>\r\n    </epcisq:Unsubscribe>\r\n  </EPCISBody>\r\n</epcisq:EPCISQueryDocument>"
-										},
-										"url": {
-											"raw": "{{BaseUrl}}/EpcisServices/1.2/Query",
-											"host": [
-												"{{BaseUrl}}"
-											],
-											"path": [
-												"EpcisServices",
-												"1.2",
-												"Query"
-											]
-										}
-									},
-									"response": [
-										{
-											"name": "Unsubscribe from Epcis server",
-											"originalRequest": {
-												"method": "POST",
-												"header": [
-													{
-														"key": "Content-Type",
-														"value": "text/xml"
-													}
-												],
-												"body": {
-													"mode": "raw",
-													"raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<epcisq:EPCISQueryDocument xmlns:epcisq=\"urn:epcglobal:epcis-query:xsd:1\" schemaVersion=\"1\" creationDate=\"2018-02-07T11:52:42Z\">\r\n  <EPCISBody>\r\n    <epcisq:Unsubscribe>\r\n      <subscriptionID>AllObjectEvents</subscriptionID>\r\n    </epcisq:Unsubscribe>\r\n  </EPCISBody>\r\n</epcisq:EPCISQueryDocument>"
-												},
-												"url": {
-													"raw": "{{BaseUrl}}/Services/1.2/Subscription/",
-													"host": [
-														"{{BaseUrl}}"
-													],
-													"path": [
-														"Services",
-														"1.2",
-														"Subscription",
-														""
-													]
-												}
-											},
-											"status": "OK",
-											"code": 200,
-											"_postman_previewlanguage": "xml",
-											"header": [
-												{
-													"key": "Date",
-													"value": "Mon, 14 Jan 2019 10:08:13 GMT"
-												},
-												{
-													"key": "Content-Type",
-													"value": "application/xml"
-												},
-												{
-													"key": "Transfer-Encoding",
-													"value": "chunked"
-												}
-											],
-											"cookie": [],
-											"body": "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<epcisq:EPCISQueryDocument creationDate=\"2019-01-14T10:08:14.2204207Z\" schemaVersion=\"1\" xmlns:epcisq=\"urn:epcglobal:epcis-query:xsd:1\">\n    <EPCISBody>\n        <UnsubscribeResult />\n    </EPCISBody>\n</epcisq:EPCISQueryDocument>"
-										}
-									]
-								},
-								{
-									"name": "Trigger subscriptions",
-									"protocolProfileBehavior": {
-										"disableBodyPruning": true
-									},
-									"request": {
-										"method": "GET",
-										"header": [],
-										"body": {
-											"mode": "raw",
-											"raw": ""
-										},
-										"url": {
-											"raw": "{{BaseUrl}}/EpcisServices/1.2/Subscription/Trigger/test",
-											"host": [
-												"{{BaseUrl}}"
-											],
-											"path": [
-												"EpcisServices",
-												"1.2",
-												"Subscription",
-												"Trigger",
-												"test"
-											]
-										}
-									},
-									"response": []
-								}
-							],
-							"_postman_isSubFolder": true
-						},
-						{
-							"name": "Get query names",
+							"name": "List all subscription IDs",
 							"request": {
 								"method": "POST",
 								"header": [
 									{
 										"key": "Content-Type",
-										"value": "application/xml"
-									},
-									{
-										"key": "Accept",
-										"value": "application/xml",
-										"type": "text"
+										"value": "text/xml"
 									}
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<epcisq:EPCISQueryDocument xmlns:epcisq=\"urn:epcglobal:epcis-query:xsd:1\" schemaVersion=\"1\" creationDate=\"2018-02-07T11:52:42.685Z\">\r\n  <EPCISBody>\r\n    <epcisq:GetQueryNames />\r\n  </EPCISBody>\r\n</epcisq:EPCISQueryDocument>\r\n"
+									"raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<epcisq:EPCISQueryDocument xmlns:epcisq=\"urn:epcglobal:epcis-query:xsd:1\" schemaVersion=\"1\" creationDate=\"2018-02-07T11:52:42.685Z\">\n  <EPCISBody>\n    <epcisq:GetSubscriptionIDs>\n    \t<queryName>SimpleEventQuery</queryName>\n    </epcisq:GetSubscriptionIDs>\n  </EPCISBody>\n</epcisq:EPCISQueryDocument>\n"
 								},
 								"url": {
 									"raw": "{{BaseUrl}}/EpcisServices/1.2/Query",
@@ -1624,7 +238,7 @@
 							},
 							"response": [
 								{
-									"name": "Get query names",
+									"name": "List all subscription IDs",
 									"originalRequest": {
 										"method": "POST",
 										"header": [
@@ -1635,7 +249,7 @@
 										],
 										"body": {
 											"mode": "raw",
-											"raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<epcisq:EPCISQueryDocument xmlns:epcisq=\"urn:epcglobal:epcis-query:xsd:1\" schemaVersion=\"1\" creationDate=\"2018-02-07T11:52:42.685Z\">\r\n  <EPCISBody>\r\n    <epcisq:GetQueryNames />\r\n  </EPCISBody>\r\n</epcisq:EPCISQueryDocument>\r\n"
+											"raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<epcisq:EPCISQueryDocument xmlns:epcisq=\"urn:epcglobal:epcis-query:xsd:1\" schemaVersion=\"1\" creationDate=\"2018-02-07T11:52:42.685Z\">\r\n  <EPCISBody>\r\n    <epcisq:GetSubscriptionIDs>\r\n    \t<queryName>SimpleEventQuery</queryName>\r\n    </epcisq:GetSubscriptionIDs>\r\n  </EPCISBody>\r\n</epcisq:EPCISQueryDocument>\r\n"
 										},
 										"url": {
 											"raw": "{{BaseUrl}}/Services/1.2/Query/",
@@ -1656,7 +270,7 @@
 									"header": [
 										{
 											"key": "Date",
-											"value": "Mon, 14 Jan 2019 10:08:20 GMT"
+											"value": "Mon, 14 Jan 2019 10:08:05 GMT"
 										},
 										{
 											"key": "Content-Type",
@@ -1668,13 +282,1451 @@
 										}
 									],
 									"cookie": [],
-									"body": "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<epcisq:EPCISQueryDocument creationDate=\"2019-01-14T10:08:21.1836518Z\" schemaVersion=\"1\" xmlns:epcisq=\"urn:epcglobal:epcis-query:xsd:1\">\n    <EPCISBody>\n        <GetQueryNamesResult>\n            <string>SimpleEventQuery</string>\n        </GetQueryNamesResult>\n    </EPCISBody>\n</epcisq:EPCISQueryDocument>"
+									"body": "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<epcisq:EPCISQueryDocument creationDate=\"2019-01-14T10:08:05.9556957Z\" schemaVersion=\"1\" xmlns:epcisq=\"urn:epcglobal:epcis-query:xsd:1\">\n    <EPCISBody>\n        <GetSubscriptionIDsResult>\n            <string>AllObjectEvents</string>\n        </GetSubscriptionIDsResult>\n    </EPCISBody>\n</epcisq:EPCISQueryDocument>"
 								}
 							]
 						},
 						{
-							"name": "Get EPCIS standard version",
+							"name": "Subscribe to Epcis server",
 							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "text/xml"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<epcisq:EPCISQueryDocument xmlns:epcisq=\"urn:epcglobal:epcis-query:xsd:1\" schemaVersion=\"1\" creationDate=\"2018-02-07T11:52:42Z\">\r\n  <EPCISBody>\r\n    <epcisq:Subscribe>\r\n      <queryName>SimpleEventQuery</queryName>\r\n      <params>\r\n        <param>\r\n          <name>eventType</name>\r\n          <value>\r\n            <value>AggregationEvent</value>\r\n          </value>\r\n        </param>\r\n      </params>\r\n      <dest>https://fastnt-dev-api.azurewebsites.net/Services/1.2/Capture</dest>\r\n      <controls>\r\n      \t<schedule>\r\n          <second>0</second>\r\n        </schedule>\r\n        <reportIfEmpty>false</reportIfEmpty>\r\n      </controls>\r\n      <subscriptionID>AllObjectEvents</subscriptionID>\r\n    </epcisq:Subscribe>\r\n  </EPCISBody>\r\n</epcisq:EPCISQueryDocument>"
+								},
+								"url": {
+									"raw": "{{BaseUrl}}/EpcisServices/1.2/Query",
+									"host": [
+										"{{BaseUrl}}"
+									],
+									"path": [
+										"EpcisServices",
+										"1.2",
+										"Query"
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "Subscribe to Epcis server",
+									"originalRequest": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Content-Type",
+												"value": "text/xml"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<epcisq:EPCISQueryDocument xmlns:epcisq=\"urn:epcglobal:epcis-query:xsd:1\" schemaVersion=\"1\" creationDate=\"2018-02-07T11:52:42Z\">\r\n  <EPCISBody>\r\n    <epcisq:Subscribe>\r\n      <queryName>SimpleEventQuery</queryName>\r\n      <params>\r\n        <param>\r\n          <name>eventType</name>\r\n          <value>\r\n            <value>ObjectEvent</value>\r\n          </value>\r\n        </param>\r\n      </params>\r\n      <dest>http://localhost:54805/Services/1.2/Capture</dest>\r\n      <controls>\r\n      \t<schedule>\r\n          <second>0</second>\r\n          <minute>0</minute>\r\n        </schedule>\r\n        <reportIfEmpty>true</reportIfEmpty>\r\n      </controls>\r\n      <subscriptionID>AllObjectEvents</subscriptionID>\r\n    </epcisq:Subscribe>\r\n  </EPCISBody>\r\n</epcisq:EPCISQueryDocument>"
+										},
+										"url": {
+											"raw": "{{BaseUrl}}/Services/1.2/Subscription/",
+											"host": [
+												"{{BaseUrl}}"
+											],
+											"path": [
+												"Services",
+												"1.2",
+												"Subscription",
+												""
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "xml",
+									"header": [
+										{
+											"key": "Date",
+											"value": "Mon, 14 Jan 2019 10:07:57 GMT"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/xml"
+										},
+										{
+											"key": "Transfer-Encoding",
+											"value": "chunked"
+										}
+									],
+									"cookie": [],
+									"body": "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<epcisq:EPCISQueryDocument creationDate=\"2019-01-14T10:07:57.4637219Z\" schemaVersion=\"1\" xmlns:epcisq=\"urn:epcglobal:epcis-query:xsd:1\">\n    <EPCISBody>\n        <SubscribeResult />\n    </EPCISBody>\n</epcisq:EPCISQueryDocument>"
+								}
+							]
+						},
+						{
+							"name": "Unsubscribe from Epcis server",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "text/xml"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<epcisq:EPCISQueryDocument xmlns:epcisq=\"urn:epcglobal:epcis-query:xsd:1\" schemaVersion=\"1\" creationDate=\"2018-02-07T11:52:42Z\">\r\n  <EPCISBody>\r\n    <epcisq:Unsubscribe>\r\n      <subscriptionID>AllObjectEvents</subscriptionID>\r\n    </epcisq:Unsubscribe>\r\n  </EPCISBody>\r\n</epcisq:EPCISQueryDocument>"
+								},
+								"url": {
+									"raw": "{{BaseUrl}}/EpcisServices/1.2/Query",
+									"host": [
+										"{{BaseUrl}}"
+									],
+									"path": [
+										"EpcisServices",
+										"1.2",
+										"Query"
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "Unsubscribe from Epcis server",
+									"originalRequest": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Content-Type",
+												"value": "text/xml"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<epcisq:EPCISQueryDocument xmlns:epcisq=\"urn:epcglobal:epcis-query:xsd:1\" schemaVersion=\"1\" creationDate=\"2018-02-07T11:52:42Z\">\r\n  <EPCISBody>\r\n    <epcisq:Unsubscribe>\r\n      <subscriptionID>AllObjectEvents</subscriptionID>\r\n    </epcisq:Unsubscribe>\r\n  </EPCISBody>\r\n</epcisq:EPCISQueryDocument>"
+										},
+										"url": {
+											"raw": "{{BaseUrl}}/Services/1.2/Subscription/",
+											"host": [
+												"{{BaseUrl}}"
+											],
+											"path": [
+												"Services",
+												"1.2",
+												"Subscription",
+												""
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "xml",
+									"header": [
+										{
+											"key": "Date",
+											"value": "Mon, 14 Jan 2019 10:08:13 GMT"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/xml"
+										},
+										{
+											"key": "Transfer-Encoding",
+											"value": "chunked"
+										}
+									],
+									"cookie": [],
+									"body": "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<epcisq:EPCISQueryDocument creationDate=\"2019-01-14T10:08:14.2204207Z\" schemaVersion=\"1\" xmlns:epcisq=\"urn:epcglobal:epcis-query:xsd:1\">\n    <EPCISBody>\n        <UnsubscribeResult />\n    </EPCISBody>\n</epcisq:EPCISQueryDocument>"
+								}
+							]
+						},
+						{
+							"name": "Trigger subscriptions",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{BaseUrl}}/EpcisServices/1.2/Subscription/Trigger/test",
+									"host": [
+										"{{BaseUrl}}"
+									],
+									"path": [
+										"EpcisServices",
+										"1.2",
+										"Subscription",
+										"Trigger",
+										"test"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "SimpleMasterDataQuery",
+					"item": [
+						{
+							"name": "Parameters",
+							"item": [
+								{
+									"name": "vocabularyName",
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Content-Type",
+												"name": "Content-Type",
+												"value": "application/xml",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<epcisq:EPCISQueryDocument xmlns:epcisq=\"urn:epcglobal:epcis-query:xsd:1\" schemaVersion=\"1\" creationDate=\"2018-02-07T11:52:42.685Z\">\n  <EPCISBody>\n    <epcisq:Poll>\n    \t<queryName>SimpleMasterDataQuery</queryName>\n    \t<params>\n    \t\t<param>\n    \t\t\t<name>vocabularyName</name>\n    \t\t\t<value>urn:epcglobal:epcis:vtype:ReadPoint</value>\n    \t\t</param>\n    \t</params>\n    </epcisq:Poll>\n  </EPCISBody>\n</epcisq:EPCISQueryDocument>"
+										},
+										"url": {
+											"raw": "{{BaseUrl}}/EpcisServices/1.2/Query",
+											"host": [
+												"{{BaseUrl}}"
+											],
+											"path": [
+												"EpcisServices",
+												"1.2",
+												"Query"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "EQ_name",
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Content-Type",
+												"name": "Content-Type",
+												"type": "text",
+												"value": "application/xml"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<epcisq:EPCISQueryDocument xmlns:epcisq=\"urn:epcglobal:epcis-query:xsd:1\" schemaVersion=\"1\" creationDate=\"2018-02-07T11:52:42.685Z\">\n  <EPCISBody>\n    <epcisq:Poll>\n    \t<queryName>SimpleMasterDataQuery</queryName>\n    \t<params>\n    \t\t<param>\n    \t\t\t<name>EQ_name</name>\n    \t\t\t<value>urn:epc:id:sgln:0614141.00300.3</value>\n    \t\t</param>\n    \t</params>\n    </epcisq:Poll>\n  </EPCISBody>\n</epcisq:EPCISQueryDocument>"
+										},
+										"url": {
+											"raw": "{{BaseUrl}}/EpcisServices/1.2/Query",
+											"host": [
+												"{{BaseUrl}}"
+											],
+											"path": [
+												"EpcisServices",
+												"1.2",
+												"Query"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "WD_name",
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Content-Type",
+												"name": "Content-Type",
+												"type": "text",
+												"value": "application/xml"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<epcisq:EPCISQueryDocument xmlns:epcisq=\"urn:epcglobal:epcis-query:xsd:1\" schemaVersion=\"1\" creationDate=\"2018-02-07T11:52:42.685Z\">\n  <EPCISBody>\n    <epcisq:Poll>\n    \t<queryName>SimpleMasterDataQuery</queryName>\n    \t<params>\n    \t\t<param>\n    \t\t\t<name>WD_name</name>\n    \t\t\t<value>urn:epc:id:sgln:0037000.00729.0</value>\n    \t\t</param>\n    \t</params>\n    </epcisq:Poll>\n  </EPCISBody>\n</epcisq:EPCISQueryDocument>"
+										},
+										"url": {
+											"raw": "{{BaseUrl}}/EpcisServices/1.2/Query",
+											"host": [
+												"{{BaseUrl}}"
+											],
+											"path": [
+												"EpcisServices",
+												"1.2",
+												"Query"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "HASATTR",
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Content-Type",
+												"name": "Content-Type",
+												"type": "text",
+												"value": "application/xml"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<epcisq:EPCISQueryDocument xmlns:epcisq=\"urn:epcglobal:epcis-query:xsd:1\" schemaVersion=\"1\" creationDate=\"2018-02-07T11:52:42.685Z\">\n  <EPCISBody>\n    <epcisq:Poll>\n    \t<queryName>SimpleMasterDataQuery</queryName>\n    \t<params>\n    \t\t<param>\n    \t\t\t<name>HASATTR</name>\n    \t\t\t<value>urn:epcglobal:cbv:mda:sst</value>\n    \t\t</param>\n    \t</params>\n    </epcisq:Poll>\n  </EPCISBody>\n</epcisq:EPCISQueryDocument>"
+										},
+										"url": {
+											"raw": "{{BaseUrl}}/EpcisServices/1.2/Query",
+											"host": [
+												"{{BaseUrl}}"
+											],
+											"path": [
+												"EpcisServices",
+												"1.2",
+												"Query"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "maxElementCount",
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Content-Type",
+												"name": "Content-Type",
+												"type": "text",
+												"value": "application/xml"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<epcisq:EPCISQueryDocument xmlns:epcisq=\"urn:epcglobal:epcis-query:xsd:1\" schemaVersion=\"1\" creationDate=\"2018-02-07T11:52:42.685Z\">\n  <EPCISBody>\n    <epcisq:Poll>\n    \t<queryName>SimpleMasterDataQuery</queryName>\n    \t<params>\n    \t\t<param>\n    \t\t\t<name>maxElementCount</name>\n    \t\t\t<value>3</value>\n    \t\t</param>\n    \t</params>\n    </epcisq:Poll>\n  </EPCISBody>\n</epcisq:EPCISQueryDocument>"
+										},
+										"url": {
+											"raw": "{{BaseUrl}}/EpcisServices/1.2/Query",
+											"host": [
+												"{{BaseUrl}}"
+											],
+											"path": [
+												"EpcisServices",
+												"1.2",
+												"Query"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "includeAttributes",
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Content-Type",
+												"name": "Content-Type",
+												"type": "text",
+												"value": "application/xml"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<epcisq:EPCISQueryDocument xmlns:epcisq=\"urn:epcglobal:epcis-query:xsd:1\" schemaVersion=\"1\" creationDate=\"2018-02-07T11:52:42.685Z\">\n  <EPCISBody>\n    <epcisq:Poll>\n    \t<queryName>SimpleMasterDataQuery</queryName>\n    \t<params>\n    \t\t<param>\n    \t\t\t<name>includeAttributes</name>\n    \t\t\t<value>true</value>\n    \t\t</param>\n    \t</params>\n    </epcisq:Poll>\n  </EPCISBody>\n</epcisq:EPCISQueryDocument>"
+										},
+										"url": {
+											"raw": "{{BaseUrl}}/EpcisServices/1.2/Query",
+											"host": [
+												"{{BaseUrl}}"
+											],
+											"path": [
+												"EpcisServices",
+												"1.2",
+												"Query"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "attributeNames",
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Content-Type",
+												"name": "Content-Type",
+												"type": "text",
+												"value": "application/xml"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<epcisq:EPCISQueryDocument xmlns:epcisq=\"urn:epcglobal:epcis-query:xsd:1\" schemaVersion=\"1\" creationDate=\"2018-02-07T11:52:42.685Z\">\n  <EPCISBody>\n    <epcisq:Poll>\n    \t<queryName>SimpleMasterDataQuery</queryName>\n    \t<params>\n    \t\t<param>\n    \t\t\t<name>includeAttributes</name>\n    \t\t\t<value>true</value>\n    \t\t</param>\n    \t\t<param>\n    \t\t\t<name>attributeNames</name>\n    \t\t\t<value>\n    \t\t\t\t<value>urn:epcglobal:cbv:mda:sst</value>\n    \t\t\t\t<value>urn:epcglobal:cbv:mda:site</value>\n    \t\t\t</value>\n    \t\t</param>\n    \t</params>\n    </epcisq:Poll>\n  </EPCISBody>\n</epcisq:EPCISQueryDocument>"
+										},
+										"url": {
+											"raw": "{{BaseUrl}}/EpcisServices/1.2/Query",
+											"host": [
+												"{{BaseUrl}}"
+											],
+											"path": [
+												"EpcisServices",
+												"1.2",
+												"Query"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "includeChildren",
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Content-Type",
+												"name": "Content-Type",
+												"type": "text",
+												"value": "application/xml"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<epcisq:EPCISQueryDocument xmlns:epcisq=\"urn:epcglobal:epcis-query:xsd:1\" schemaVersion=\"1\" creationDate=\"2018-02-07T11:52:42.685Z\">\n  <EPCISBody>\n    <epcisq:Poll>\n    \t<queryName>SimpleMasterDataQuery</queryName>\n    \t<params>\n    \t\t<param>\n    \t\t\t<name>includeChildren</name>\n    \t\t\t<value>true</value>\n    \t\t</param>\n    \t</params>\n    </epcisq:Poll>\n  </EPCISBody>\n</epcisq:EPCISQueryDocument>"
+										},
+										"url": {
+											"raw": "{{BaseUrl}}/EpcisServices/1.2/Query",
+											"host": [
+												"{{BaseUrl}}"
+											],
+											"path": [
+												"EpcisServices",
+												"1.2",
+												"Query"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "HASATTR",
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Content-Type",
+												"value": "text/xml",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<epcisq:EPCISQueryDocument xmlns:epcisq=\"urn:epcglobal:epcis-query:xsd:1\" schemaVersion=\"1\" creationDate=\"2018-02-07T11:52:42.685Z\">\r\n  <EPCISBody>\r\n    <epcisq:Poll>\r\n    \t<queryName>SimpleEventQuery</queryName>\r\n    \t<params>\r\n    \t\t<param>\r\n    \t\t\t<name>HASATTR_bizLocation</name>\r\n    \t\t\t<value>\r\n    \t\t\t\t<value>http://epcis.example.com/mda/latitude</value>\r\n    \t\t\t</value>\r\n    \t\t</param>\r\n    \t</params>\r\n    </epcisq:Poll>\r\n  </EPCISBody>\r\n</epcisq:EPCISQueryDocument>\r\n"
+										},
+										"url": {
+											"raw": "{{BaseUrl}}/EpcisServices/1.2/Query",
+											"host": [
+												"{{BaseUrl}}"
+											],
+											"path": [
+												"EpcisServices",
+												"1.2",
+												"Query"
+											]
+										}
+									},
+									"response": []
+								}
+							],
+							"_postman_isSubFolder": true
+						},
+						{
+							"name": "Perform a Poll query",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "text/xml"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<epcisq:EPCISQueryDocument xmlns:epcisq=\"urn:epcglobal:epcis-query:xsd:1\" schemaVersion=\"1\" creationDate=\"2018-02-07T11:52:42.685Z\">\n  <EPCISBody>\n    <epcisq:Poll>\n    \t<queryName>SimpleMasterDataQuery</queryName>\n    \t<params />\n    </epcisq:Poll>\n  </EPCISBody>\n</epcisq:EPCISQueryDocument>\n"
+								},
+								"url": {
+									"raw": "{{BaseUrl}}/EpcisServices/1.2/Query",
+									"host": [
+										"{{BaseUrl}}"
+									],
+									"path": [
+										"EpcisServices",
+										"1.2",
+										"Query"
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "Perform a Poll query",
+									"originalRequest": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Content-Type",
+												"value": "text/xml"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<epcisq:EPCISQueryDocument xmlns:epcisq=\"urn:epcglobal:epcis-query:xsd:1\" schemaVersion=\"1\" creationDate=\"2018-02-07T11:52:42.685Z\">\r\n  <EPCISBody>\r\n    <epcisq:Poll>\r\n    \t<queryName>SimpleEventQuery</queryName>\r\n    \t<params>\r\n    \t\t<param>\r\n    \t\t\t<name>eventCountLimit</name>\r\n\t\t\t\t<value>1</value>\r\n    \t\t</param>\r\n    \t</params>\r\n    </epcisq:Poll>\r\n  </EPCISBody>\r\n</epcisq:EPCISQueryDocument>\r\n"
+										},
+										"url": {
+											"raw": "{{BaseUrl}}/Services/1.2/Query",
+											"host": [
+												"{{BaseUrl}}"
+											],
+											"path": [
+												"Services",
+												"1.2",
+												"Query"
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "xml",
+									"header": [
+										{
+											"key": "Date",
+											"value": "Mon, 14 Jan 2019 10:08:36 GMT"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/xml"
+										},
+										{
+											"key": "Transfer-Encoding",
+											"value": "chunked"
+										}
+									],
+									"cookie": [],
+									"body": "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<epcisq:EPCISQueryDocument creationDate=\"2019-01-14T10:08:36.7934758Z\" schemaVersion=\"1\" xmlns:epcisq=\"urn:epcglobal:epcis-query:xsd:1\">\n    <EPCISBody>\n        <epcisq:QueryResults>\n            <queryName>SimpleEventQuery</queryName>\n            <resultsBody>\n                <EventList />\n            </resultsBody>\n        </epcisq:QueryResults>\n    </EPCISBody>\n</epcisq:EPCISQueryDocument>"
+								},
+								{
+									"name": "Perform a Poll query",
+									"originalRequest": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Content-Type",
+												"value": "text/xml"
+											},
+											{
+												"key": "SOAPAction",
+												"value": "http://schemas.xmlsoap.org/wsdl/EpcisQuery/poll"
+											},
+											{
+												"key": "Authorization",
+												"value": "{{Authorization}}"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "<s:Envelope xmlns:s=\"http://schemas.xmlsoap.org/soap/envelope/\">\r\n  <s:Header></s:Header>\r\n  <s:Body>\r\n    <poll xmlns=\"http://schemas.xmlsoap.org/wsdl/\">\r\n    \t<queryName>SimpleEventQuery</queryName>\r\n    \t<queryParams>\r\n    \t\t<queryParam>\r\n    \t\t\t<name>eventCountLimit</name>\r\n    \t\t\t<value>\r\n    \t\t\t\t<value>15</value>\r\n    \t\t\t</value>\r\n    \t\t</queryParam>\r\n    \t</queryParams>\r\n    </poll>\r\n  </s:Body>\r\n</s:Envelope>"
+										},
+										"url": {
+											"raw": "{{BaseUrl}}/{{QueryEndpoint}}",
+											"host": [
+												"{{BaseUrl}}"
+											],
+											"path": [
+												"{{QueryEndpoint}}"
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "xml",
+									"header": [
+										{
+											"key": "Cache-Control",
+											"value": "private",
+											"name": "Cache-Control",
+											"description": "Tells all caching mechanisms from server to client whether they may cache this object. It is measured in seconds"
+										},
+										{
+											"key": "Content-Encoding",
+											"value": "gzip",
+											"name": "Content-Encoding",
+											"description": "The type of encoding used on the data."
+										},
+										{
+											"key": "Content-Length",
+											"value": "944",
+											"name": "Content-Length",
+											"description": "The length of the response body in octets (8-bit bytes)"
+										},
+										{
+											"key": "Content-Type",
+											"value": "text/xml; charset=utf-8",
+											"name": "Content-Type",
+											"description": "The mime type of this content"
+										},
+										{
+											"key": "Date",
+											"value": "Sat, 24 Feb 2018 15:28:45 GMT",
+											"name": "Date",
+											"description": "The date and time that the message was sent"
+										},
+										{
+											"key": "Server",
+											"value": "Microsoft-IIS/10.0",
+											"name": "Server",
+											"description": "A name for the server"
+										},
+										{
+											"key": "Vary",
+											"value": "Accept-Encoding",
+											"name": "Vary",
+											"description": "Tells downstream proxies how to match future request headers to decide whether the cached response can be used rather than requesting a fresh one from the origin server."
+										},
+										{
+											"key": "X-AspNet-Version",
+											"value": "4.0.30319",
+											"name": "X-AspNet-Version",
+											"description": "Custom header"
+										},
+										{
+											"key": "X-Powered-By",
+											"value": "ASP.NET",
+											"name": "X-Powered-By",
+											"description": "Specifies the technology (ASP.NET, PHP, JBoss, e.g.) supporting the web application (version details are often in X-Runtime, X-Version, or X-AspNet-Version)"
+										},
+										{
+											"key": "X-SourceFiles",
+											"value": "=?UTF-8?B?RTpcRGV2ZWxvcHBlbWVudFxHaXRIdWJcZXBjaXNcc3JjXEZhc1RuVC5XZWJcU2VydmljZXNcMS4yXEVwY2lzUXVlcnlc?=",
+											"name": "X-SourceFiles",
+											"description": "Custom header"
+										}
+									],
+									"cookie": [
+										{
+											"expires": "Invalid Date",
+											"httpOnly": true,
+											"domain": "localhost",
+											"path": "/",
+											"secure": false,
+											"value": "udtlscy4tdt5kocudrbjalnq",
+											"key": "ASP.NET_SessionId"
+										},
+										{
+											"expires": "Invalid Date",
+											"httpOnly": true,
+											"domain": "localhost",
+											"path": "/",
+											"secure": false,
+											"value": "fx9n2gaF3y3ei8rHTHflUkS0JreDEi-RHLlh08akmp8_TKvlfyQcW3MeJCij6ClkhrEc-2mkVg8RDf0o7J2CnOup4_pcTtYInmDIb1ri6jQ1",
+											"key": "__RequestVerificationToken"
+										}
+									],
+									"body": "<s:Envelope xmlns:s=\"http://schemas.xmlsoap.org/soap/envelope/\"><s:Body><QueryResults xmlns=\"http://schemas.xmlsoap.org/wsdl/\"><queryName>SimpleEventQuery</queryName><subscriptionID i:nil=\"true\" xmlns:i=\"http://www.w3.org/2001/XMLSchema-instance\"/><eventList><ObjectEvent>\r\n  <eventTime>2017-09-14T14:51:17.000Z</eventTime>\r\n  <recordTime>2018-02-12T16:57:20.000Z</recordTime>\r\n  <eventTimeZoneOffset>+01:00</eventTimeZoneOffset>\r\n  <epcList>\r\n    <epc>urn:epc:id:sscc:4001356.5900000817</epc>\r\n    <epc>urn:epc:id:sscc:4001356.5900000818</epc>\r\n    <epc>urn:epc:id:sscc:4001356.5900000819</epc>\r\n    <epc>urn:epc:id:sscc:4001356.5900000820</epc>\r\n  </epcList>\r\n  <action>ADD</action>\r\n  <bizStep>urn:fastnt:demo:bizstep:demo:packing</bizStep>\r\n  <disposition>urn:epcglobal:cbv:disp:loading</disposition>\r\n  <readPoint>\r\n    <id>urn:fastnt:demo:readpoint:0037000.00729.210,432</id>\r\n  </readPoint>\r\n  <bizLocation>\r\n    <id>urn:fastnt:demo:bizloc:0037000.00729.210</id>\r\n  </bizLocation>\r\n  <extension>\r\n    <ilmd>\r\n      <test p4:id=\"test\" xmlns:p4=\"http://mns.com/epcis/test\" xmlns=\"http://mns.com/epcis/test\" />\r\n      <first xmlns=\"http://mns.com/epcis/test\">first</first>\r\n      <second xmlns=\"http://mns.com/epcis/test\">second</second>\r\n    </ilmd>\r\n  </extension>\r\n</ObjectEvent><ObjectEvent>\r\n  <eventTime>2017-09-14T14:51:17.000Z</eventTime>\r\n  <recordTime>2018-02-24T14:45:48.000Z</recordTime>\r\n  <eventTimeZoneOffset>+01:00</eventTimeZoneOffset>\r\n  <epcList>\r\n    <epc>urn:epc:id:sscc:4001356.5900000817</epc>\r\n    <epc>urn:epc:id:sscc:4001356.5900000818</epc>\r\n    <epc>urn:epc:id:sscc:4001356.5900000819</epc>\r\n    <epc>urn:epc:id:sscc:4001356.5900000820</epc>\r\n  </epcList>\r\n  <action>ADD</action>\r\n  <bizStep>urn:fastnt:demo:bizstep:demo:packing</bizStep>\r\n  <disposition>urn:epcglobal:cbv:disp:loading</disposition>\r\n  <readPoint>\r\n    <id>urn:fastnt:demo:readpoint:0037000.00729.210,432</id>\r\n  </readPoint>\r\n  <bizLocation>\r\n    <id>urn:fastnt:demo:bizloc:0037000.00729.210</id>\r\n  </bizLocation>\r\n  <extension>\r\n    <ilmd>\r\n      <test p4:id=\"test\" xmlns:p4=\"http://mns.com/epcis/test\" xmlns=\"http://mns.com/epcis/test\" />\r\n      <first xmlns=\"http://mns.com/epcis/test\">first</first>\r\n      <second xmlns=\"http://mns.com/epcis/test\">second</second>\r\n    </ilmd>\r\n  </extension>\r\n</ObjectEvent><ObjectEvent>\r\n  <eventTime>2017-09-14T14:51:17.000Z</eventTime>\r\n  <recordTime>2018-02-24T14:49:36.000Z</recordTime>\r\n  <eventTimeZoneOffset>+01:00</eventTimeZoneOffset>\r\n  <epcList>\r\n    <epc>urn:epc:id:sscc:4001356.5900000817</epc>\r\n    <epc>urn:epc:id:sscc:4001356.5900000818</epc>\r\n    <epc>urn:epc:id:sscc:4001356.5900000819</epc>\r\n    <epc>urn:epc:id:sscc:4001356.5900000820</epc>\r\n  </epcList>\r\n  <action>ADD</action>\r\n  <bizStep>urn:fastnt:demo:bizstep:demo:packing</bizStep>\r\n  <disposition>urn:epcglobal:cbv:disp:loading</disposition>\r\n  <readPoint>\r\n    <id>urn:fastnt:demo:readpoint:0037000.00729.210,432</id>\r\n  </readPoint>\r\n  <bizLocation>\r\n    <id>urn:fastnt:demo:bizloc:0037000.00729.210</id>\r\n  </bizLocation>\r\n  <extension>\r\n    <ilmd>\r\n      <test p4:id=\"test\" xmlns:p4=\"http://mns.com/epcis/test\" xmlns=\"http://mns.com/epcis/test\" />\r\n      <first xmlns=\"http://mns.com/epcis/test\">first</first>\r\n      <second xmlns=\"http://mns.com/epcis/test\">second</second>\r\n    </ilmd>\r\n  </extension>\r\n</ObjectEvent><ObjectEvent>\r\n  <eventTime>2017-09-14T14:51:17.000Z</eventTime>\r\n  <recordTime>2018-02-24T14:50:29.000Z</recordTime>\r\n  <eventTimeZoneOffset>+01:00</eventTimeZoneOffset>\r\n  <epcList>\r\n    <epc>urn:epc:id:sscc:4001356.5900000817</epc>\r\n    <epc>urn:epc:id:sscc:4001356.5900000818</epc>\r\n    <epc>urn:epc:id:sscc:4001356.5900000819</epc>\r\n    <epc>urn:epc:id:sscc:4001356.5900000820</epc>\r\n  </epcList>\r\n  <action>ADD</action>\r\n  <bizStep>urn:fastnt:demo:bizstep:demo:packing</bizStep>\r\n  <disposition>urn:epcglobal:cbv:disp:loading</disposition>\r\n  <readPoint>\r\n    <id>urn:fastnt:demo:readpoint:0037000.00729.210,432</id>\r\n  </readPoint>\r\n  <bizLocation>\r\n    <id>urn:fastnt:demo:bizloc:0037000.00729.210</id>\r\n  </bizLocation>\r\n  <extension>\r\n    <ilmd>\r\n      <test p4:id=\"test\" xmlns:p4=\"http://mns.com/epcis/test\" xmlns=\"http://mns.com/epcis/test\" />\r\n      <first xmlns=\"http://mns.com/epcis/test\">first</first>\r\n      <second xmlns=\"http://mns.com/epcis/test\">second</second>\r\n    </ilmd>\r\n  </extension>\r\n</ObjectEvent><AggregationEvent>\r\n  <eventTime>2017-09-14T14:51:17.000Z</eventTime>\r\n  <recordTime>2018-02-24T15:25:01.000Z</recordTime>\r\n  <eventTimeZoneOffset>+01:00</eventTimeZoneOffset>\r\n  <parentID>urn:epc:id:sscc:4001356.5900000817</parentID>\r\n  <childEPCs>\r\n    <epc>urn:epc:id:sscc:4001356.5900000818</epc>\r\n    <epc>urn:epc:id:sscc:4001356.5900000819</epc>\r\n    <epc>urn:epc:id:sscc:4001356.5900000820</epc>\r\n  </childEPCs>\r\n  <action>ADD</action>\r\n  <bizStep>urn:fastnt:demo:bizstep:demo:packing</bizStep>\r\n  <disposition>urn:epcglobal:cbv:disp:loading</disposition>\r\n  <readPoint>\r\n    <id>urn:fastnt:demo:readpoint:0037000.00729.210,432</id>\r\n  </readPoint>\r\n  <bizLocation>\r\n    <id>urn:fastnt:demo:bizloc:0037000.00729.210</id>\r\n  </bizLocation>\r\n</AggregationEvent></eventList></QueryResults></s:Body></s:Envelope>"
+								}
+							]
+						}
+					],
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "SimpleEventQuery",
+					"item": [
+						{
+							"name": "Parameters",
+							"item": [
+								{
+									"name": "eventType",
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Content-Type",
+												"value": "text/xml",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<epcisq:EPCISQueryDocument xmlns:epcisq=\"urn:epcglobal:epcis-query:xsd:1\" schemaVersion=\"1\" creationDate=\"2018-02-07T11:52:42.685Z\">\r\n  <EPCISBody>\r\n    <epcisq:Poll>\r\n    \t<queryName>SimpleEventQuery</queryName>\r\n    \t<params>\r\n    \t\t<param>\r\n    \t\t\t<name>eventType</name>\r\n    \t\t\t<value>\r\n    \t\t\t\t<value>QuantityEvent</value>\r\n    \t\t\t\t<value>AggregationEvent</value>\r\n    \t\t\t</value>\r\n    \t\t</param>\r\n    \t</params>\r\n    </epcisq:Poll>\r\n  </EPCISBody>\r\n</epcisq:EPCISQueryDocument>\r\n"
+										},
+										"url": {
+											"raw": "{{BaseUrl}}/EpcisServices/1.2/Query",
+											"host": [
+												"{{BaseUrl}}"
+											],
+											"path": [
+												"EpcisServices",
+												"1.2",
+												"Query"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "GE_eventTime",
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Content-Type",
+												"value": "text/xml",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<epcisq:EPCISQueryDocument xmlns:epcisq=\"urn:epcglobal:epcis-query:xsd:1\" schemaVersion=\"1\" creationDate=\"2018-02-07T11:52:42.685Z\">\n  <EPCISBody>\n    <epcisq:Poll>\n    \t<queryName>SimpleEventQuery</queryName>\n    \t<params>\n    \t\t<param>\n    \t\t\t<name>GE_eventTime</name>\n    \t\t\t<value>2018-04-01T10:21:10.521Z</value>\n    \t\t</param>\n    \t</params>\n    </epcisq:Poll>\n  </EPCISBody>\n</epcisq:EPCISQueryDocument>\n"
+										},
+										"url": {
+											"raw": "{{BaseUrl}}/EpcisServices/1.2/Query",
+											"host": [
+												"{{BaseUrl}}"
+											],
+											"path": [
+												"EpcisServices",
+												"1.2",
+												"Query"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "LT_eventTime",
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Content-Type",
+												"value": "text/xml",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<epcisq:EPCISQueryDocument xmlns:epcisq=\"urn:epcglobal:epcis-query:xsd:1\" schemaVersion=\"1\" creationDate=\"2018-02-07T11:52:42.685Z\">\r\n  <EPCISBody>\r\n    <epcisq:Poll>\r\n    \t<queryName>SimpleEventQuery</queryName>\r\n    \t<params>\r\n    \t\t<param>\r\n    \t\t\t<name>LT_eventTime</name>\r\n    \t\t\t<value>2018-04-01T10:21:10.521Z</value>\r\n    \t\t</param>\r\n    \t</params>\r\n    </epcisq:Poll>\r\n  </EPCISBody>\r\n</epcisq:EPCISQueryDocument>\r\n"
+										},
+										"url": {
+											"raw": "{{BaseUrl}}/EpcisServices/1.2/Query",
+											"host": [
+												"{{BaseUrl}}"
+											],
+											"path": [
+												"EpcisServices",
+												"1.2",
+												"Query"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "GE_recordTime",
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Content-Type",
+												"value": "text/xml",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<epcisq:EPCISQueryDocument xmlns:epcisq=\"urn:epcglobal:epcis-query:xsd:1\" schemaVersion=\"1\" creationDate=\"2018-02-07T11:52:42.685Z\">\r\n  <EPCISBody>\r\n    <epcisq:Poll>\r\n    \t<queryName>SimpleEventQuery</queryName>\r\n    \t<params>\r\n    \t\t<param>\r\n    \t\t\t<name>GE_recordTime</name>\r\n    \t\t\t<value>2019-02-21T05:40:00.000Z</value>\r\n    \t\t</param>\r\n    \t</params>\r\n    </epcisq:Poll>\r\n  </EPCISBody>\r\n</epcisq:EPCISQueryDocument>\r\n"
+										},
+										"url": {
+											"raw": "{{BaseUrl}}/EpcisServices/1.2/Query",
+											"host": [
+												"{{BaseUrl}}"
+											],
+											"path": [
+												"EpcisServices",
+												"1.2",
+												"Query"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "LT_recordTime",
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Content-Type",
+												"value": "text/xml",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<epcisq:EPCISQueryDocument xmlns:epcisq=\"urn:epcglobal:epcis-query:xsd:1\" schemaVersion=\"1\" creationDate=\"2018-02-07T11:52:42.685Z\">\r\n  <EPCISBody>\r\n    <epcisq:Poll>\r\n    \t<queryName>SimpleEventQuery</queryName>\r\n    \t<params>\r\n    \t\t<param>\r\n    \t\t\t<name>LT_recordTime</name>\r\n    \t\t\t<value>2019-01-08T10:21:10.521Z</value>\r\n    \t\t</param>\r\n    \t</params>\r\n    </epcisq:Poll>\r\n  </EPCISBody>\r\n</epcisq:EPCISQueryDocument>\r\n"
+										},
+										"url": {
+											"raw": "{{BaseUrl}}/EpcisServices/1.2/Query",
+											"host": [
+												"{{BaseUrl}}"
+											],
+											"path": [
+												"EpcisServices",
+												"1.2",
+												"Query"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "EQ_action",
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Content-Type",
+												"value": "text/xml",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<epcisq:EPCISQueryDocument xmlns:epcisq=\"urn:epcglobal:epcis-query:xsd:1\" schemaVersion=\"1\" creationDate=\"2018-02-07T11:52:42.685Z\">\r\n  <EPCISBody>\r\n    <epcisq:Poll>\r\n    \t<queryName>SimpleEventQuery</queryName>\r\n    \t<params>\r\n    \t\t<param>\r\n    \t\t\t<name>EQ_action</name>\r\n    \t\t\t<value>\r\n    \t\t\t\t<value>ADD</value>\r\n    \t\t\t\t<value>DELETE</value>\r\n    \t\t\t</value>\r\n    \t\t</param>\r\n    \t</params>\r\n    </epcisq:Poll>\r\n  </EPCISBody>\r\n</epcisq:EPCISQueryDocument>\r\n"
+										},
+										"url": {
+											"raw": "{{BaseUrl}}/EpcisServices/1.2/Query",
+											"host": [
+												"{{BaseUrl}}"
+											],
+											"path": [
+												"EpcisServices",
+												"1.2",
+												"Query"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "EQ_bizStep",
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Content-Type",
+												"value": "text/xml",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<epcisq:EPCISQueryDocument xmlns:epcisq=\"urn:epcglobal:epcis-query:xsd:1\" schemaVersion=\"1\" creationDate=\"2018-02-07T11:52:42.685Z\">\r\n  <EPCISBody>\r\n    <epcisq:Poll>\r\n    \t<queryName>SimpleEventQuery</queryName>\r\n    \t<params>\r\n    \t\t<param>\r\n    \t\t\t<name>EQ_bizStep</name>\r\n    \t\t\t<value>\r\n    \t\t\t\t<value>urn:fastnt:demo:bizstep:demo:packing</value>\r\n    \t\t\t</value>\r\n    \t\t</param>\r\n    \t</params>\r\n    </epcisq:Poll>\r\n  </EPCISBody>\r\n</epcisq:EPCISQueryDocument>\r\n"
+										},
+										"url": {
+											"raw": "{{BaseUrl}}/EpcisServices/1.2/Query",
+											"host": [
+												"{{BaseUrl}}"
+											],
+											"path": [
+												"EpcisServices",
+												"1.2",
+												"Query"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "EQ_disposition",
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Content-Type",
+												"value": "text/xml",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<epcisq:EPCISQueryDocument xmlns:epcisq=\"urn:epcglobal:epcis-query:xsd:1\" schemaVersion=\"1\" creationDate=\"2018-02-07T11:52:42.685Z\">\r\n  <EPCISBody>\r\n    <epcisq:Poll>\r\n    \t<queryName>SimpleEventQuery</queryName>\r\n    \t<params>\r\n    \t\t<param>\r\n    \t\t\t<name>EQ_disposition</name>\r\n    \t\t\t<value>\r\n    \t\t\t\t<value>urn:epcglobal:cbv:disp:loading</value>\r\n    \t\t\t</value>\r\n    \t\t</param>\r\n    \t</params>\r\n    </epcisq:Poll>\r\n  </EPCISBody>\r\n</epcisq:EPCISQueryDocument>\r\n"
+										},
+										"url": {
+											"raw": "{{BaseUrl}}/EpcisServices/1.2/Query",
+											"host": [
+												"{{BaseUrl}}"
+											],
+											"path": [
+												"EpcisServices",
+												"1.2",
+												"Query"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "EQ_readPoint",
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Content-Type",
+												"value": "text/xml",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<epcisq:EPCISQueryDocument xmlns:epcisq=\"urn:epcglobal:epcis-query:xsd:1\" schemaVersion=\"1\" creationDate=\"2018-02-07T11:52:42.685Z\">\r\n  <EPCISBody>\r\n    <epcisq:Poll>\r\n    \t<queryName>SimpleEventQuery</queryName>\r\n    \t<params>\r\n    \t\t<param>\r\n    \t\t\t<name>EQ_readPoint</name>\r\n    \t\t\t<value>\r\n    \t\t\t\t<value>urn:fastnt:demo:readpoint:0037000.00729.210,432</value>\r\n    \t\t\t</value>\r\n    \t\t</param>\r\n    \t</params>\r\n    </epcisq:Poll>\r\n  </EPCISBody>\r\n</epcisq:EPCISQueryDocument>\r\n"
+										},
+										"url": {
+											"raw": "{{BaseUrl}}/EpcisServices/1.2/Query",
+											"host": [
+												"{{BaseUrl}}"
+											],
+											"path": [
+												"EpcisServices",
+												"1.2",
+												"Query"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "WD_readPoint",
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Content-Type",
+												"value": "text/xml",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<epcisq:EPCISQueryDocument xmlns:epcisq=\"urn:epcglobal:epcis-query:xsd:1\" schemaVersion=\"1\" creationDate=\"2018-02-07T11:52:42.685Z\">\r\n  <EPCISBody>\r\n    <epcisq:Poll>\r\n    \t<queryName>SimpleEventQuery</queryName>\r\n    \t<params>\r\n    \t\t<param>\r\n    \t\t\t<name>WD_readPoint</name>\r\n    \t\t\t<value>\r\n    \t\t\t\t<value>urn:fastnt:demo:readpoint:0037000.00729.210,432</value>\r\n    \t\t\t</value>\r\n    \t\t</param>\r\n    \t</params>\r\n    </epcisq:Poll>\r\n  </EPCISBody>\r\n</epcisq:EPCISQueryDocument>\r\n"
+										},
+										"url": {
+											"raw": "{{BaseUrl}}/EpcisServices/1.2/Query",
+											"host": [
+												"{{BaseUrl}}"
+											],
+											"path": [
+												"EpcisServices",
+												"1.2",
+												"Query"
+											]
+										},
+										"description": "Not implemented yet."
+									},
+									"response": []
+								},
+								{
+									"name": "EQ_bizLocation",
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Content-Type",
+												"value": "text/xml",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<epcisq:EPCISQueryDocument xmlns:epcisq=\"urn:epcglobal:epcis-query:xsd:1\" schemaVersion=\"1\" creationDate=\"2018-02-07T11:52:42.685Z\">\r\n  <EPCISBody>\r\n    <epcisq:Poll>\r\n    \t<queryName>SimpleEventQuery</queryName>\r\n    \t<params>\r\n    \t\t<param>\r\n    \t\t\t<name>EQ_bizLocation</name>\r\n    \t\t\t<value>\r\n    \t\t\t\t<value>urn:fastnt:demo:bizlocation:001024:054</value>\r\n    \t\t\t</value>\r\n    \t\t</param>\r\n    \t</params>\r\n    </epcisq:Poll>\r\n  </EPCISBody>\r\n</epcisq:EPCISQueryDocument>\r\n"
+										},
+										"url": {
+											"raw": "{{BaseUrl}}/EpcisServices/1.2/Query",
+											"host": [
+												"{{BaseUrl}}"
+											],
+											"path": [
+												"EpcisServices",
+												"1.2",
+												"Query"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "WD_bizLocation",
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Content-Type",
+												"type": "text",
+												"value": "text/xml"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<epcisq:EPCISQueryDocument xmlns:epcisq=\"urn:epcglobal:epcis-query:xsd:1\" schemaVersion=\"1\" creationDate=\"2018-02-07T11:52:42.685Z\">\r\n  <EPCISBody>\r\n    <epcisq:Poll>\r\n    \t<queryName>SimpleEventQuery</queryName>\r\n    \t<params>\r\n    \t\t<param>\r\n    \t\t\t<name>WD_bizLocation</name>\r\n    \t\t\t<value>\r\n    \t\t\t\t<value>urn:fastnt:demo:bizlocation:001024:054</value>\r\n    \t\t\t</value>\r\n    \t\t</param>\r\n    \t</params>\r\n    </epcisq:Poll>\r\n  </EPCISBody>\r\n</epcisq:EPCISQueryDocument>\r\n"
+										},
+										"url": {
+											"raw": "{{BaseUrl}}/EpcisServices/1.2/Query",
+											"host": [
+												"{{BaseUrl}}"
+											],
+											"path": [
+												"EpcisServices",
+												"1.2",
+												"Query"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "EQ_transformationID",
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Content-Type",
+												"value": "text/xml",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<epcisq:EPCISQueryDocument xmlns:epcisq=\"urn:epcglobal:epcis-query:xsd:1\" schemaVersion=\"1\" creationDate=\"2018-02-07T11:52:42.685Z\">\r\n  <EPCISBody>\r\n    <epcisq:Poll>\r\n    \t<queryName>SimpleEventQuery</queryName>\r\n    \t<params>\r\n    \t\t<param>\r\n    \t\t\t<name>EQ_transformationID</name>\r\n    \t\t\t<value>\r\n    \t\t\t\t<value>urn:fastnt:demo:transformation:00001</value>\r\n    \t\t\t</value>\r\n    \t\t</param>\r\n    \t</params>\r\n    </epcisq:Poll>\r\n  </EPCISBody>\r\n</epcisq:EPCISQueryDocument>\r\n"
+										},
+										"url": {
+											"raw": "{{BaseUrl}}/EpcisServices/1.2/Query",
+											"host": [
+												"{{BaseUrl}}"
+											],
+											"path": [
+												"EpcisServices",
+												"1.2",
+												"Query"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "MATCH_anyEPC",
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Content-Type",
+												"value": "text/xml",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<epcisq:EPCISQueryDocument xmlns:epcisq=\"urn:epcglobal:epcis-query:xsd:1\" schemaVersion=\"1\" creationDate=\"2018-02-07T11:52:42.685Z\">\r\n  <EPCISBody>\r\n    <epcisq:Poll>\r\n    \t<queryName>SimpleEventQuery</queryName>\r\n    \t<params>\r\n    \t\t<param>\r\n    \t\t\t<name>MATCH_anyEPC</name>\r\n    \t\t\t<value>\r\n    \t\t\t\t<value>urn:epc:id:sgtin:0037779.013777.4181390463157395501</value>\r\n    \t\t\t</value>\r\n    \t\t</param>\r\n    \t</params>\r\n    </epcisq:Poll>\r\n  </EPCISBody>\r\n</epcisq:EPCISQueryDocument>\r\n"
+										},
+										"url": {
+											"raw": "{{BaseUrl}}/EpcisServices/1.2/Query",
+											"host": [
+												"{{BaseUrl}}"
+											],
+											"path": [
+												"EpcisServices",
+												"1.2",
+												"Query"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "MATCH_parentID",
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Content-Type",
+												"value": "text/xml",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<epcisq:EPCISQueryDocument xmlns:epcisq=\"urn:epcglobal:epcis-query:xsd:1\" schemaVersion=\"1\" creationDate=\"2018-02-07T11:52:42.685Z\">\r\n  <EPCISBody>\r\n    <epcisq:Poll>\r\n    \t<queryName>SimpleEventQuery</queryName>\r\n    \t<params>\r\n    \t\t<param>\r\n    \t\t\t<name>MATCH_parentID</name>\r\n    \t\t\t<value>\r\n    \t\t\t\t<value>urn:epc:id:sscc:4001356.5900000817</value>\r\n    \t\t\t</value>\r\n    \t\t</param>\r\n    \t</params>\r\n    </epcisq:Poll>\r\n  </EPCISBody>\r\n</epcisq:EPCISQueryDocument>\r\n"
+										},
+										"url": {
+											"raw": "{{BaseUrl}}/EpcisServices/1.2/Query",
+											"host": [
+												"{{BaseUrl}}"
+											],
+											"path": [
+												"EpcisServices",
+												"1.2",
+												"Query"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "MATCH_epc",
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Content-Type",
+												"value": "text/xml",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<epcisq:EPCISQueryDocument xmlns:epcisq=\"urn:epcglobal:epcis-query:xsd:1\" schemaVersion=\"1\" creationDate=\"2018-02-07T11:52:42.685Z\">\r\n  <EPCISBody>\r\n    <epcisq:Poll>\r\n    \t<queryName>SimpleEventQuery</queryName>\r\n    \t<params>\r\n    \t\t<param>\r\n    \t\t\t<name>MATCH_epc</name>\r\n    \t\t\t<value>\r\n    \t\t\t\t<value>urn:epc:id:sscc:4001356.5900000818</value>\r\n    \t\t\t</value>\r\n    \t\t</param>\r\n    \t</params>\r\n    </epcisq:Poll>\r\n  </EPCISBody>\r\n</epcisq:EPCISQueryDocument>\r\n"
+										},
+										"url": {
+											"raw": "{{BaseUrl}}/EpcisServices/1.2/Query",
+											"host": [
+												"{{BaseUrl}}"
+											],
+											"path": [
+												"EpcisServices",
+												"1.2",
+												"Query"
+											]
+										}
+									},
+									"response": []
+								}
+							],
+							"description": "One example of every kind of SimpleEventQuery parameters",
+							"_postman_isSubFolder": true
+						},
+						{
+							"name": "Perform a Poll query",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "text/xml"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<epcisq:EPCISQueryDocument xmlns:epcisq=\"urn:epcglobal:epcis-query:xsd:1\" schemaVersion=\"1\" creationDate=\"2018-02-07T11:52:42.685Z\">\n  <EPCISBody>\n    <epcisq:Poll>\n    \t<queryName>SimpleEventQuery</queryName>\n    \t<params />\n    </epcisq:Poll>\n  </EPCISBody>\n</epcisq:EPCISQueryDocument>\n"
+								},
+								"url": {
+									"raw": "{{BaseUrl}}/EpcisServices/1.2/Query",
+									"host": [
+										"{{BaseUrl}}"
+									],
+									"path": [
+										"EpcisServices",
+										"1.2",
+										"Query"
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "Perform a Poll query",
+									"originalRequest": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Content-Type",
+												"value": "text/xml"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<epcisq:EPCISQueryDocument xmlns:epcisq=\"urn:epcglobal:epcis-query:xsd:1\" schemaVersion=\"1\" creationDate=\"2018-02-07T11:52:42.685Z\">\r\n  <EPCISBody>\r\n    <epcisq:Poll>\r\n    \t<queryName>SimpleEventQuery</queryName>\r\n    \t<params>\r\n    \t\t<param>\r\n    \t\t\t<name>eventCountLimit</name>\r\n\t\t\t\t<value>1</value>\r\n    \t\t</param>\r\n    \t</params>\r\n    </epcisq:Poll>\r\n  </EPCISBody>\r\n</epcisq:EPCISQueryDocument>\r\n"
+										},
+										"url": {
+											"raw": "{{BaseUrl}}/Services/1.2/Query",
+											"host": [
+												"{{BaseUrl}}"
+											],
+											"path": [
+												"Services",
+												"1.2",
+												"Query"
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "xml",
+									"header": [
+										{
+											"key": "Date",
+											"value": "Mon, 14 Jan 2019 10:08:36 GMT"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/xml"
+										},
+										{
+											"key": "Transfer-Encoding",
+											"value": "chunked"
+										}
+									],
+									"cookie": [],
+									"body": "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<epcisq:EPCISQueryDocument creationDate=\"2019-01-14T10:08:36.7934758Z\" schemaVersion=\"1\" xmlns:epcisq=\"urn:epcglobal:epcis-query:xsd:1\">\n    <EPCISBody>\n        <epcisq:QueryResults>\n            <queryName>SimpleEventQuery</queryName>\n            <resultsBody>\n                <EventList />\n            </resultsBody>\n        </epcisq:QueryResults>\n    </EPCISBody>\n</epcisq:EPCISQueryDocument>"
+								},
+								{
+									"name": "Perform a Poll query",
+									"originalRequest": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Content-Type",
+												"value": "text/xml"
+											},
+											{
+												"key": "SOAPAction",
+												"value": "http://schemas.xmlsoap.org/wsdl/EpcisQuery/poll"
+											},
+											{
+												"key": "Authorization",
+												"value": "{{Authorization}}"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "<s:Envelope xmlns:s=\"http://schemas.xmlsoap.org/soap/envelope/\">\r\n  <s:Header></s:Header>\r\n  <s:Body>\r\n    <poll xmlns=\"http://schemas.xmlsoap.org/wsdl/\">\r\n    \t<queryName>SimpleEventQuery</queryName>\r\n    \t<queryParams>\r\n    \t\t<queryParam>\r\n    \t\t\t<name>eventCountLimit</name>\r\n    \t\t\t<value>\r\n    \t\t\t\t<value>15</value>\r\n    \t\t\t</value>\r\n    \t\t</queryParam>\r\n    \t</queryParams>\r\n    </poll>\r\n  </s:Body>\r\n</s:Envelope>"
+										},
+										"url": {
+											"raw": "{{BaseUrl}}/{{QueryEndpoint}}",
+											"host": [
+												"{{BaseUrl}}"
+											],
+											"path": [
+												"{{QueryEndpoint}}"
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "xml",
+									"header": [
+										{
+											"key": "Cache-Control",
+											"value": "private",
+											"name": "Cache-Control",
+											"description": "Tells all caching mechanisms from server to client whether they may cache this object. It is measured in seconds"
+										},
+										{
+											"key": "Content-Encoding",
+											"value": "gzip",
+											"name": "Content-Encoding",
+											"description": "The type of encoding used on the data."
+										},
+										{
+											"key": "Content-Length",
+											"value": "944",
+											"name": "Content-Length",
+											"description": "The length of the response body in octets (8-bit bytes)"
+										},
+										{
+											"key": "Content-Type",
+											"value": "text/xml; charset=utf-8",
+											"name": "Content-Type",
+											"description": "The mime type of this content"
+										},
+										{
+											"key": "Date",
+											"value": "Sat, 24 Feb 2018 15:28:45 GMT",
+											"name": "Date",
+											"description": "The date and time that the message was sent"
+										},
+										{
+											"key": "Server",
+											"value": "Microsoft-IIS/10.0",
+											"name": "Server",
+											"description": "A name for the server"
+										},
+										{
+											"key": "Vary",
+											"value": "Accept-Encoding",
+											"name": "Vary",
+											"description": "Tells downstream proxies how to match future request headers to decide whether the cached response can be used rather than requesting a fresh one from the origin server."
+										},
+										{
+											"key": "X-AspNet-Version",
+											"value": "4.0.30319",
+											"name": "X-AspNet-Version",
+											"description": "Custom header"
+										},
+										{
+											"key": "X-Powered-By",
+											"value": "ASP.NET",
+											"name": "X-Powered-By",
+											"description": "Specifies the technology (ASP.NET, PHP, JBoss, e.g.) supporting the web application (version details are often in X-Runtime, X-Version, or X-AspNet-Version)"
+										},
+										{
+											"key": "X-SourceFiles",
+											"value": "=?UTF-8?B?RTpcRGV2ZWxvcHBlbWVudFxHaXRIdWJcZXBjaXNcc3JjXEZhc1RuVC5XZWJcU2VydmljZXNcMS4yXEVwY2lzUXVlcnlc?=",
+											"name": "X-SourceFiles",
+											"description": "Custom header"
+										}
+									],
+									"cookie": [
+										{
+											"expires": "Invalid Date",
+											"httpOnly": true,
+											"domain": "localhost",
+											"path": "/",
+											"secure": false,
+											"value": "udtlscy4tdt5kocudrbjalnq",
+											"key": "ASP.NET_SessionId"
+										},
+										{
+											"expires": "Invalid Date",
+											"httpOnly": true,
+											"domain": "localhost",
+											"path": "/",
+											"secure": false,
+											"value": "fx9n2gaF3y3ei8rHTHflUkS0JreDEi-RHLlh08akmp8_TKvlfyQcW3MeJCij6ClkhrEc-2mkVg8RDf0o7J2CnOup4_pcTtYInmDIb1ri6jQ1",
+											"key": "__RequestVerificationToken"
+										}
+									],
+									"body": "<s:Envelope xmlns:s=\"http://schemas.xmlsoap.org/soap/envelope/\"><s:Body><QueryResults xmlns=\"http://schemas.xmlsoap.org/wsdl/\"><queryName>SimpleEventQuery</queryName><subscriptionID i:nil=\"true\" xmlns:i=\"http://www.w3.org/2001/XMLSchema-instance\"/><eventList><ObjectEvent>\r\n  <eventTime>2017-09-14T14:51:17.000Z</eventTime>\r\n  <recordTime>2018-02-12T16:57:20.000Z</recordTime>\r\n  <eventTimeZoneOffset>+01:00</eventTimeZoneOffset>\r\n  <epcList>\r\n    <epc>urn:epc:id:sscc:4001356.5900000817</epc>\r\n    <epc>urn:epc:id:sscc:4001356.5900000818</epc>\r\n    <epc>urn:epc:id:sscc:4001356.5900000819</epc>\r\n    <epc>urn:epc:id:sscc:4001356.5900000820</epc>\r\n  </epcList>\r\n  <action>ADD</action>\r\n  <bizStep>urn:fastnt:demo:bizstep:demo:packing</bizStep>\r\n  <disposition>urn:epcglobal:cbv:disp:loading</disposition>\r\n  <readPoint>\r\n    <id>urn:fastnt:demo:readpoint:0037000.00729.210,432</id>\r\n  </readPoint>\r\n  <bizLocation>\r\n    <id>urn:fastnt:demo:bizloc:0037000.00729.210</id>\r\n  </bizLocation>\r\n  <extension>\r\n    <ilmd>\r\n      <test p4:id=\"test\" xmlns:p4=\"http://mns.com/epcis/test\" xmlns=\"http://mns.com/epcis/test\" />\r\n      <first xmlns=\"http://mns.com/epcis/test\">first</first>\r\n      <second xmlns=\"http://mns.com/epcis/test\">second</second>\r\n    </ilmd>\r\n  </extension>\r\n</ObjectEvent><ObjectEvent>\r\n  <eventTime>2017-09-14T14:51:17.000Z</eventTime>\r\n  <recordTime>2018-02-24T14:45:48.000Z</recordTime>\r\n  <eventTimeZoneOffset>+01:00</eventTimeZoneOffset>\r\n  <epcList>\r\n    <epc>urn:epc:id:sscc:4001356.5900000817</epc>\r\n    <epc>urn:epc:id:sscc:4001356.5900000818</epc>\r\n    <epc>urn:epc:id:sscc:4001356.5900000819</epc>\r\n    <epc>urn:epc:id:sscc:4001356.5900000820</epc>\r\n  </epcList>\r\n  <action>ADD</action>\r\n  <bizStep>urn:fastnt:demo:bizstep:demo:packing</bizStep>\r\n  <disposition>urn:epcglobal:cbv:disp:loading</disposition>\r\n  <readPoint>\r\n    <id>urn:fastnt:demo:readpoint:0037000.00729.210,432</id>\r\n  </readPoint>\r\n  <bizLocation>\r\n    <id>urn:fastnt:demo:bizloc:0037000.00729.210</id>\r\n  </bizLocation>\r\n  <extension>\r\n    <ilmd>\r\n      <test p4:id=\"test\" xmlns:p4=\"http://mns.com/epcis/test\" xmlns=\"http://mns.com/epcis/test\" />\r\n      <first xmlns=\"http://mns.com/epcis/test\">first</first>\r\n      <second xmlns=\"http://mns.com/epcis/test\">second</second>\r\n    </ilmd>\r\n  </extension>\r\n</ObjectEvent><ObjectEvent>\r\n  <eventTime>2017-09-14T14:51:17.000Z</eventTime>\r\n  <recordTime>2018-02-24T14:49:36.000Z</recordTime>\r\n  <eventTimeZoneOffset>+01:00</eventTimeZoneOffset>\r\n  <epcList>\r\n    <epc>urn:epc:id:sscc:4001356.5900000817</epc>\r\n    <epc>urn:epc:id:sscc:4001356.5900000818</epc>\r\n    <epc>urn:epc:id:sscc:4001356.5900000819</epc>\r\n    <epc>urn:epc:id:sscc:4001356.5900000820</epc>\r\n  </epcList>\r\n  <action>ADD</action>\r\n  <bizStep>urn:fastnt:demo:bizstep:demo:packing</bizStep>\r\n  <disposition>urn:epcglobal:cbv:disp:loading</disposition>\r\n  <readPoint>\r\n    <id>urn:fastnt:demo:readpoint:0037000.00729.210,432</id>\r\n  </readPoint>\r\n  <bizLocation>\r\n    <id>urn:fastnt:demo:bizloc:0037000.00729.210</id>\r\n  </bizLocation>\r\n  <extension>\r\n    <ilmd>\r\n      <test p4:id=\"test\" xmlns:p4=\"http://mns.com/epcis/test\" xmlns=\"http://mns.com/epcis/test\" />\r\n      <first xmlns=\"http://mns.com/epcis/test\">first</first>\r\n      <second xmlns=\"http://mns.com/epcis/test\">second</second>\r\n    </ilmd>\r\n  </extension>\r\n</ObjectEvent><ObjectEvent>\r\n  <eventTime>2017-09-14T14:51:17.000Z</eventTime>\r\n  <recordTime>2018-02-24T14:50:29.000Z</recordTime>\r\n  <eventTimeZoneOffset>+01:00</eventTimeZoneOffset>\r\n  <epcList>\r\n    <epc>urn:epc:id:sscc:4001356.5900000817</epc>\r\n    <epc>urn:epc:id:sscc:4001356.5900000818</epc>\r\n    <epc>urn:epc:id:sscc:4001356.5900000819</epc>\r\n    <epc>urn:epc:id:sscc:4001356.5900000820</epc>\r\n  </epcList>\r\n  <action>ADD</action>\r\n  <bizStep>urn:fastnt:demo:bizstep:demo:packing</bizStep>\r\n  <disposition>urn:epcglobal:cbv:disp:loading</disposition>\r\n  <readPoint>\r\n    <id>urn:fastnt:demo:readpoint:0037000.00729.210,432</id>\r\n  </readPoint>\r\n  <bizLocation>\r\n    <id>urn:fastnt:demo:bizloc:0037000.00729.210</id>\r\n  </bizLocation>\r\n  <extension>\r\n    <ilmd>\r\n      <test p4:id=\"test\" xmlns:p4=\"http://mns.com/epcis/test\" xmlns=\"http://mns.com/epcis/test\" />\r\n      <first xmlns=\"http://mns.com/epcis/test\">first</first>\r\n      <second xmlns=\"http://mns.com/epcis/test\">second</second>\r\n    </ilmd>\r\n  </extension>\r\n</ObjectEvent><AggregationEvent>\r\n  <eventTime>2017-09-14T14:51:17.000Z</eventTime>\r\n  <recordTime>2018-02-24T15:25:01.000Z</recordTime>\r\n  <eventTimeZoneOffset>+01:00</eventTimeZoneOffset>\r\n  <parentID>urn:epc:id:sscc:4001356.5900000817</parentID>\r\n  <childEPCs>\r\n    <epc>urn:epc:id:sscc:4001356.5900000818</epc>\r\n    <epc>urn:epc:id:sscc:4001356.5900000819</epc>\r\n    <epc>urn:epc:id:sscc:4001356.5900000820</epc>\r\n  </childEPCs>\r\n  <action>ADD</action>\r\n  <bizStep>urn:fastnt:demo:bizstep:demo:packing</bizStep>\r\n  <disposition>urn:epcglobal:cbv:disp:loading</disposition>\r\n  <readPoint>\r\n    <id>urn:fastnt:demo:readpoint:0037000.00729.210,432</id>\r\n  </readPoint>\r\n  <bizLocation>\r\n    <id>urn:fastnt:demo:bizloc:0037000.00729.210</id>\r\n  </bizLocation>\r\n</AggregationEvent></eventList></QueryResults></s:Body></s:Envelope>"
+								}
+							]
+						}
+					],
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "Get query names",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/xml"
+							},
+							{
+								"key": "Accept",
+								"value": "application/xml",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<epcisq:EPCISQueryDocument xmlns:epcisq=\"urn:epcglobal:epcis-query:xsd:1\" schemaVersion=\"1\" creationDate=\"2018-02-07T11:52:42.685Z\">\r\n  <EPCISBody>\r\n    <epcisq:GetQueryNames />\r\n  </EPCISBody>\r\n</epcisq:EPCISQueryDocument>\r\n"
+						},
+						"url": {
+							"raw": "{{BaseUrl}}/EpcisServices/1.2/Query",
+							"host": [
+								"{{BaseUrl}}"
+							],
+							"path": [
+								"EpcisServices",
+								"1.2",
+								"Query"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Get query names",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "text/xml"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<epcisq:EPCISQueryDocument xmlns:epcisq=\"urn:epcglobal:epcis-query:xsd:1\" schemaVersion=\"1\" creationDate=\"2018-02-07T11:52:42.685Z\">\r\n  <EPCISBody>\r\n    <epcisq:GetQueryNames />\r\n  </EPCISBody>\r\n</epcisq:EPCISQueryDocument>\r\n"
+								},
+								"url": {
+									"raw": "{{BaseUrl}}/Services/1.2/Query/",
+									"host": [
+										"{{BaseUrl}}"
+									],
+									"path": [
+										"Services",
+										"1.2",
+										"Query",
+										""
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "xml",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Mon, 14 Jan 2019 10:08:20 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/xml"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								}
+							],
+							"cookie": [],
+							"body": "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<epcisq:EPCISQueryDocument creationDate=\"2019-01-14T10:08:21.1836518Z\" schemaVersion=\"1\" xmlns:epcisq=\"urn:epcglobal:epcis-query:xsd:1\">\n    <EPCISBody>\n        <GetQueryNamesResult>\n            <string>SimpleEventQuery</string>\n        </GetQueryNamesResult>\n    </EPCISBody>\n</epcisq:EPCISQueryDocument>"
+						}
+					]
+				},
+				{
+					"name": "Get EPCIS standard version",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "text/xml"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<epcisq:EPCISQueryDocument xmlns:epcisq=\"urn:epcglobal:epcis-query:xsd:1\" schemaVersion=\"1\" creationDate=\"2018-02-07T11:52:42.685Z\">\r\n  <EPCISBody>\r\n    <epcisq:GetStandardVersion />\r\n  </EPCISBody>\r\n</epcisq:EPCISQueryDocument>\r\n"
+						},
+						"url": {
+							"raw": "{{BaseUrl}}/EpcisServices/1.2/Query",
+							"host": [
+								"{{BaseUrl}}"
+							],
+							"path": [
+								"EpcisServices",
+								"1.2",
+								"Query"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Get EPCIS standard version",
+							"originalRequest": {
 								"method": "POST",
 								"header": [
 									{
@@ -1687,69 +1739,69 @@
 									"raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<epcisq:EPCISQueryDocument xmlns:epcisq=\"urn:epcglobal:epcis-query:xsd:1\" schemaVersion=\"1\" creationDate=\"2018-02-07T11:52:42.685Z\">\r\n  <EPCISBody>\r\n    <epcisq:GetStandardVersion />\r\n  </EPCISBody>\r\n</epcisq:EPCISQueryDocument>\r\n"
 								},
 								"url": {
-									"raw": "{{BaseUrl}}/EpcisServices/1.2/Query",
+									"raw": "{{BaseUrl}}/Services/1.2/Query",
 									"host": [
 										"{{BaseUrl}}"
 									],
 									"path": [
-										"EpcisServices",
+										"Services",
 										"1.2",
 										"Query"
 									]
 								}
 							},
-							"response": [
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "xml",
+							"header": [
 								{
-									"name": "Get EPCIS standard version",
-									"originalRequest": {
-										"method": "POST",
-										"header": [
-											{
-												"key": "Content-Type",
-												"value": "text/xml"
-											}
-										],
-										"body": {
-											"mode": "raw",
-											"raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<epcisq:EPCISQueryDocument xmlns:epcisq=\"urn:epcglobal:epcis-query:xsd:1\" schemaVersion=\"1\" creationDate=\"2018-02-07T11:52:42.685Z\">\r\n  <EPCISBody>\r\n    <epcisq:GetStandardVersion />\r\n  </EPCISBody>\r\n</epcisq:EPCISQueryDocument>\r\n"
-										},
-										"url": {
-											"raw": "{{BaseUrl}}/Services/1.2/Query",
-											"host": [
-												"{{BaseUrl}}"
-											],
-											"path": [
-												"Services",
-												"1.2",
-												"Query"
-											]
-										}
-									},
-									"status": "OK",
-									"code": 200,
-									"_postman_previewlanguage": "xml",
-									"header": [
-										{
-											"key": "Date",
-											"value": "Mon, 14 Jan 2019 10:31:38 GMT"
-										},
-										{
-											"key": "Content-Type",
-											"value": "application/xml"
-										},
-										{
-											"key": "Transfer-Encoding",
-											"value": "chunked"
-										}
-									],
-									"cookie": [],
-									"body": "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<epcisq:EPCISQueryDocument creationDate=\"2019-01-14T10:31:39.4428025Z\" schemaVersion=\"1\" xmlns:epcisq=\"urn:epcglobal:epcis-query:xsd:1\">\n    <EPCISBody>\n        <GetStandardVersionResult>1.2</GetStandardVersionResult>\n    </EPCISBody>\n</epcisq:EPCISQueryDocument>"
+									"key": "Date",
+									"value": "Mon, 14 Jan 2019 10:31:38 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/xml"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
 								}
-							]
+							],
+							"cookie": [],
+							"body": "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<epcisq:EPCISQueryDocument creationDate=\"2019-01-14T10:31:39.4428025Z\" schemaVersion=\"1\" xmlns:epcisq=\"urn:epcglobal:epcis-query:xsd:1\">\n    <EPCISBody>\n        <GetStandardVersionResult>1.2</GetStandardVersionResult>\n    </EPCISBody>\n</epcisq:EPCISQueryDocument>"
+						}
+					]
+				},
+				{
+					"name": "Get product vendor version",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "text/xml"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<epcisq:EPCISQueryDocument xmlns:epcisq=\"urn:epcglobal:epcis-query:xsd:1\" schemaVersion=\"1\" creationDate=\"2018-02-07T11:52:42.685Z\">\n  <EPCISBody>\n    <epcisq:GetVendorVersion />\n  </EPCISBody>\n</epcisq:EPCISQueryDocument>\n"
 						},
+						"url": {
+							"raw": "{{BaseUrl}}/EpcisServices/1.2/Query",
+							"host": [
+								"{{BaseUrl}}"
+							],
+							"path": [
+								"EpcisServices",
+								"1.2",
+								"Query"
+							]
+						}
+					},
+					"response": [
 						{
 							"name": "Get product vendor version",
-							"request": {
+							"originalRequest": {
 								"method": "POST",
 								"header": [
 									{
@@ -1759,250 +1811,41 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<epcisq:EPCISQueryDocument xmlns:epcisq=\"urn:epcglobal:epcis-query:xsd:1\" schemaVersion=\"1\" creationDate=\"2018-02-07T11:52:42.685Z\">\n  <EPCISBody>\n    <epcisq:GetVendorVersion />\n  </EPCISBody>\n</epcisq:EPCISQueryDocument>\n"
+									"raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<epcisq:EPCISQueryDocument xmlns:epcisq=\"urn:epcglobal:epcis-query:xsd:1\" schemaVersion=\"1\" creationDate=\"2018-02-07T11:52:42.685Z\">\r\n  <EPCISBody>\r\n    <epcisq:GetVendorVersion />\r\n  </EPCISBody>\r\n</epcisq:EPCISQueryDocument>\r\n"
 								},
 								"url": {
-									"raw": "{{BaseUrl}}/EpcisServices/1.2/Query",
-									"host": [
-										"{{BaseUrl}}"
-									],
-									"path": [
-										"EpcisServices",
-										"1.2",
-										"Query"
-									]
-								}
-							},
-							"response": [
-								{
-									"name": "Get product vendor version",
-									"originalRequest": {
-										"method": "POST",
-										"header": [
-											{
-												"key": "Content-Type",
-												"value": "text/xml"
-											}
-										],
-										"body": {
-											"mode": "raw",
-											"raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<epcisq:EPCISQueryDocument xmlns:epcisq=\"urn:epcglobal:epcis-query:xsd:1\" schemaVersion=\"1\" creationDate=\"2018-02-07T11:52:42.685Z\">\r\n  <EPCISBody>\r\n    <epcisq:GetVendorVersion />\r\n  </EPCISBody>\r\n</epcisq:EPCISQueryDocument>\r\n"
-										},
-										"url": {
-											"raw": "{{BaseUrl}}/Services/1.2/Query",
-											"host": [
-												"{{BaseUrl}}"
-											],
-											"path": [
-												"Services",
-												"1.2",
-												"Query"
-											]
-										}
-									},
-									"status": "OK",
-									"code": 200,
-									"_postman_previewlanguage": "xml",
-									"header": [
-										{
-											"key": "Date",
-											"value": "Mon, 14 Jan 2019 10:07:29 GMT"
-										},
-										{
-											"key": "Content-Type",
-											"value": "application/xml"
-										},
-										{
-											"key": "Transfer-Encoding",
-											"value": "chunked"
-										}
-									],
-									"cookie": [],
-									"body": "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<epcisq:EPCISQueryDocument creationDate=\"2019-01-14T10:07:30.1882079Z\" schemaVersion=\"1\" xmlns:epcisq=\"urn:epcglobal:epcis-query:xsd:1\">\n    <EPCISBody>\n        <GetVendorVersionResult>1.0</GetVendorVersionResult>\n    </EPCISBody>\n</epcisq:EPCISQueryDocument>"
-								}
-							]
-						}
-					],
-					"event": [
-						{
-							"listen": "prerequest",
-							"script": {
-								"id": "16d323ee-8a13-45bd-b1bb-e35bb9bd0805",
-								"type": "text/javascript",
-								"exec": [
-									""
-								]
-							}
-						},
-						{
-							"listen": "test",
-							"script": {
-								"id": "17931040-8158-4ef4-a7cd-c40a6e0aeffc",
-								"type": "text/javascript",
-								"exec": [
-									""
-								]
-							}
-						}
-					],
-					"_postman_isSubFolder": true
-				},
-				{
-					"name": "SOAP",
-					"item": [
-						{
-							"name": "Get Vendor Version",
-							"request": {
-								"method": "POST",
-								"header": [
-									{
-										"key": "Content-Type",
-										"name": "Content-Type",
-										"value": "application/soap+xml",
-										"type": "text"
-									}
-								],
-								"body": {
-									"mode": "raw",
-									"raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:urn=\"urn:epcglobal:epcis-query:xsd:1\">\r\n   <soapenv:Header />\r\n   <soapenv:Body>\r\n      <urn:GetVendorVersion />\r\n   </soapenv:Body>\r\n</soapenv:Envelope>"
-								},
-								"url": {
-									"raw": "{{BaseUrl}}/EpcisServices/1.2/Query",
-									"host": [
-										"{{BaseUrl}}"
-									],
-									"path": [
-										"EpcisServices",
-										"1.2",
-										"Query"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Get EPCIS Standard Version",
-							"request": {
-								"method": "POST",
-								"header": [
-									{
-										"key": "Content-Type",
-										"name": "Content-Type",
-										"value": "application/soap+xml",
-										"description": "SOAP",
-										"type": "text"
-									}
-								],
-								"body": {
-									"mode": "raw",
-									"raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:urn=\"urn:epcglobal:epcis-query:xsd:1\">\r\n   <soapenv:Header />\r\n   <soapenv:Body>\r\n      <urn:GetStandardVersion />\r\n   </soapenv:Body>\r\n</soapenv:Envelope>"
-								},
-								"url": {
-									"raw": "{{BaseUrl}}/EpcisServices/1.2/Query",
-									"host": [
-										"{{BaseUrl}}"
-									],
-									"path": [
-										"EpcisServices",
-										"1.2",
-										"Query"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Get Query Names",
-							"request": {
-								"method": "POST",
-								"header": [
-									{
-										"key": "Content-Type",
-										"name": "Content-Type",
-										"value": "application/soap+xml",
-										"type": "text"
-									}
-								],
-								"body": {
-									"mode": "raw",
-									"raw": "<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:hs=\"urn:epcglobal:epcis-query:xsd:1\">\r\n <soapenv:Body>\r\n   <hs:GetQueryNames />\r\n </soapenv:Body>\r\n</soapenv:Envelope>"
-								},
-								"url": {
-									"raw": "{{BaseUrl}}/EpcisServices/1.2/Query",
-									"host": [
-										"{{BaseUrl}}"
-									],
-									"path": [
-										"EpcisServices",
-										"1.2",
-										"Query"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Get Subscription IDs",
-							"request": {
-								"method": "POST",
-								"header": [
-									{
-										"key": "Content-Type",
-										"name": "Content-Type",
-										"type": "text",
-										"value": "application/soap+xml"
-									}
-								],
-								"body": {
-									"mode": "raw",
-									"raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:urn=\"urn:epcglobal:epcis-query:xsd:1\">\r\n   <soapenv:Header />\r\n   <soapenv:Body>\r\n      <urn:GetSubscriptionIDs>\r\n      \t<queryName>SimpleEventQuery</queryName>\r\n      \t</urn:GetSubscriptionIDs>\r\n   </soapenv:Body>\r\n</soapenv:Envelope>"
-								},
-								"url": {
-									"raw": "{{BaseUrl}}/Services/1.2/QueryService.svc",
+									"raw": "{{BaseUrl}}/Services/1.2/Query",
 									"host": [
 										"{{BaseUrl}}"
 									],
 									"path": [
 										"Services",
 										"1.2",
-										"QueryService.svc"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Poll",
-							"request": {
-								"method": "POST",
-								"header": [
-									{
-										"key": "Content-Type",
-										"name": "Content-Type",
-										"type": "text",
-										"value": "application/soap+xml"
-									}
-								],
-								"body": {
-									"mode": "raw",
-									"raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:urn=\"urn:epcglobal:epcis-query:xsd:1\">\r\n   <soapenv:Header />\r\n   <soapenv:Body>\r\n      <urn:Poll>\r\n         <queryName>SimpleEventQuery</queryName>\r\n         <params>\r\n\t\t\t<param>\r\n\t\t\t\t<name>eventCountLimit</name>\r\n\t\t\t\t<value>10</value>\r\n\t\t\t</param>\r\n         </params>\r\n      </urn:Poll>\r\n   </soapenv:Body>\r\n</soapenv:Envelope>"
-								},
-								"url": {
-									"raw": "{{BaseUrl}}/EpcisServices/1.2/Query",
-									"host": [
-										"{{BaseUrl}}"
-									],
-									"path": [
-										"EpcisServices",
-										"1.2",
 										"Query"
 									]
 								}
 							},
-							"response": []
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "xml",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Mon, 14 Jan 2019 10:07:29 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/xml"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								}
+							],
+							"cookie": [],
+							"body": "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<epcisq:EPCISQueryDocument creationDate=\"2019-01-14T10:07:30.1882079Z\" schemaVersion=\"1\" xmlns:epcisq=\"urn:epcglobal:epcis-query:xsd:1\">\n    <EPCISBody>\n        <GetVendorVersionResult>1.0</GetVendorVersionResult>\n    </EPCISBody>\n</epcisq:EPCISQueryDocument>"
 						}
-					],
-					"_postman_isSubFolder": true
+					]
 				}
 			]
 		},
@@ -2152,6 +1995,31 @@
 							"body": null
 						}
 					]
+				}
+			],
+			"auth": {
+				"type": "noauth"
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "4b2b3ccb-ba36-40a8-b364-65eb7223861c",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "2ab03236-768d-4423-8650-c06ae90b9930",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
 				}
 			]
 		},
