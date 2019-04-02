@@ -4,7 +4,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using Dapper;
 using FasTnT.Domain.Persistence;
-using FasTnT.Model;
 using FasTnT.Model.MasterDatas;
 using MoreLinq;
 using static Dapper.SqlBuilder;
@@ -13,10 +12,10 @@ namespace FasTnT.Persistence.Dapper
 {
     public class PgSqlMasterDataManager : IMasterDataManager
     {
-        private readonly DapperUnitOfWork _unitOfWork;
         private SqlBuilder _query = new SqlBuilder();
-        private Template _sqlTemplate;
-        private QueryParameters _parameters = new QueryParameters();
+        private readonly DapperUnitOfWork _unitOfWork;
+        private readonly Template _sqlTemplate;
+        private readonly QueryParameters _parameters = new QueryParameters();
 
         private int _limit = 0;
 
@@ -26,12 +25,13 @@ namespace FasTnT.Persistence.Dapper
             _sqlTemplate = _query.AddTemplate(SqlRequests.MasterDataQuery);
         }
 
-        public async Task Store(EpcisMasterdataDocument masterDataDocument)
+        public async Task Store(Guid requestId, IEnumerable<EpcisMasterData> masterDataList)
         {
-            foreach (var masterData in masterDataDocument.MasterDataList)
+            foreach (var masterData in masterDataList)
             {
                 await _unitOfWork.Execute(SqlRequests.MasterDataDelete, masterData);
                 await _unitOfWork.Execute(SqlRequests.MasterDataInsert, masterData);
+
                 foreach (var attribute in masterData.Attributes)
                 {
                     var output = new List<MasterDataFieldEntity>();
@@ -42,7 +42,7 @@ namespace FasTnT.Persistence.Dapper
                 }
             }
 
-            var hierarchies = masterDataDocument.MasterDataList.SelectMany(x => x.Children.Select(c => new EpcisMasterDataHierarchy { Type = x.Type, ChildrenId = c.ChildrenId, ParentId = x.Id }));
+            var hierarchies = masterDataList.SelectMany(x => x.Children.Select(c => new EpcisMasterDataHierarchy { Type = x.Type, ChildrenId = c.ChildrenId, ParentId = x.Id }));
             await _unitOfWork.Execute(SqlRequests.MasterDataHierarchyInsert, hierarchies);
         }
 

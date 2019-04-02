@@ -16,7 +16,7 @@ namespace FasTnT.Persistence.Dapper
 
         public PgSqlEventStore(DapperUnitOfWork unitOfWork) => _unitOfWork = unitOfWork;
 
-        public async Task Store(Guid requestId, EpcisEvent[] events)
+        public async Task Store(Guid requestId, IEnumerable<EpcisEvent> events)
         {
             var entities = events.Select(e => e.Map<EpcisEvent, EpcisEventEntity>(r => r.RequestId = requestId)).ToArray();
 

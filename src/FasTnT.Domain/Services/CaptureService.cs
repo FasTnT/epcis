@@ -12,17 +12,17 @@ namespace FasTnT.Domain.Services
 
         public CaptureService(IUnitOfWork unitOfWork) => _unitOfWork = unitOfWork;
 
-        public async Task Capture(EpcisEventDocument captureDocument)
+        public async Task Capture(CaptureRequest captureDocument)
         {
             captureDocument.EventList.ForEach(x => x.Epcs.ForEach(e => UriValidator.Validate(e.Id)));
 
             await _unitOfWork.Execute(async tx =>
             {
                 var headerId = await tx.RequestStore.Store(captureDocument.Header);
+
+                await tx.MasterDataManager.Store(headerId, captureDocument.MasterDataList);
                 await tx.EventStore.Store(headerId, captureDocument.EventList);
             });
         }
-
-        public async Task Capture(EpcisMasterdataDocument masterData) => await _unitOfWork.Execute(async tx => await tx.MasterDataManager.Store(masterData));
     }
 }
