@@ -289,7 +289,7 @@ namespace FasTnT.Persistence.Dapper {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to SELECT pr.request_id FROM subscriptions.pendingrequest pr JOIN subscriptions.subscription s ON s.id = pr.subscriptionid WHERE s.subscription_id = @SubscriptionId;.
+        ///   Looks up a localized string similar to SELECT pr.request_id FROM subscriptions.pendingrequest pr JOIN subscriptions.subscription s ON s.id = pr.subscription_id WHERE s.subscription_id = @SubscriptionId;.
         /// </summary>
         internal static string SubscriptionListPendingRequestIds {
             get {

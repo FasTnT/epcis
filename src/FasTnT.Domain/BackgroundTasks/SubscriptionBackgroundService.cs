@@ -18,9 +18,9 @@ namespace FasTnT.Domain.BackgroundTasks
 
         private readonly IServiceProvider _services;
         private volatile object _monitor = new object();
-        private ConcurrentDictionary<Subscription, DateTime> _scheduledExecutions = new ConcurrentDictionary<Subscription, DateTime>();
-        private ConcurrentDictionary<string, IList<Subscription>> _triggeredSubscriptions = new ConcurrentDictionary<string, IList<Subscription>>();
-        private ConcurrentQueue<string> _triggeredValues = new ConcurrentQueue<string>();
+        private readonly ConcurrentDictionary<Subscription, DateTime> _scheduledExecutions = new ConcurrentDictionary<Subscription, DateTime>();
+        private readonly ConcurrentDictionary<string, IList<Subscription>> _triggeredSubscriptions = new ConcurrentDictionary<string, IList<Subscription>>();
+        private readonly ConcurrentQueue<string> _triggeredValues = new ConcurrentQueue<string>();
 
         public SubscriptionBackgroundService(IServiceProvider services)
         {
@@ -29,7 +29,7 @@ namespace FasTnT.Domain.BackgroundTasks
 
         public async Task Run(CancellationToken cancellationToken)
         {
-            await Initialize(cancellationToken);
+            await Initialize();
             cancellationToken.ThrowIfCancellationRequested();
 
             while (!cancellationToken.IsCancellationRequested)
@@ -73,7 +73,7 @@ namespace FasTnT.Domain.BackgroundTasks
         }
 
         //REVIEW: should this class be responsible to get all subscriptions at startup? (LAA)
-        private async Task Initialize(CancellationToken stoppingToken)
+        private async Task Initialize()
         {
             using (var scope = _services.CreateScope())
             {
