@@ -27,7 +27,7 @@ namespace FasTnT.Persistence.Dapper
         {
             var subscriptions = (await _unitOfWork.Query<dynamic>(SqlRequests.SubscriptionsList)).Select(x => new SubscriptionEntity
             {
-                Id = x.Id,
+                Id = x.id,
                 Active = x.active,
                 Destination = x.destination,
                 QueryName = x.query_name,
@@ -78,7 +78,23 @@ namespace FasTnT.Persistence.Dapper
 
         public async Task Store(Subscription subscription)
         {
-            var entity = subscription.Map<Subscription, SubscriptionEntity>(s => s.Id = Guid.NewGuid());
+            var entity = new
+            {
+                Id = Guid.NewGuid(),
+                Active = true,
+                subscription.SubscriptionId,
+                subscription.Trigger,
+                subscription.InitialRecordTime,
+                subscription.ReportIfEmpty,
+                subscription.Schedule.Second,
+                subscription.Schedule.Hour,
+                subscription.Schedule.Minute,
+                subscription.Schedule.Month,
+                subscription.Schedule.DayOfMonth,
+                subscription.Schedule.DayOfWeek,
+                subscription.Destination,
+                subscription.QueryName
+            };
             var parameters = new List<object>();
             var values = new List<object>();
 
