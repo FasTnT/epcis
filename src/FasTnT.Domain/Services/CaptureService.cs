@@ -14,7 +14,7 @@ namespace FasTnT.Domain.Services
 
         public async Task Capture(CaptureRequest captureDocument)
         {
-            captureDocument.EventList.ForEach(x => x.Epcs.ForEach(e => UriValidator.Validate(e.Id)));
+            captureDocument.EventList.ForEach(EpcisEventValidator.Validate);
 
             await _unitOfWork.Execute(async tx =>
             {
