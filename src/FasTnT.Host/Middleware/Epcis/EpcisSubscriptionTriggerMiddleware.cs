@@ -1,6 +1,5 @@
 ﻿using FasTnT.Domain.Services;
 using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Linq;
@@ -14,7 +13,7 @@ namespace FasTnT.Host
         private readonly RequestDelegate _next;
         private readonly string _path;
 
-        public EpcisSubscriptionTriggerMiddleware(ILogger<EpcisSubscriptionTriggerMiddleware> logger, RequestDelegate next, string path)
+        public EpcisSubscriptionTriggerMiddleware(RequestDelegate next, string path)
         {
             _next = next;
             _path = $"{path.TrimEnd('/')}/";

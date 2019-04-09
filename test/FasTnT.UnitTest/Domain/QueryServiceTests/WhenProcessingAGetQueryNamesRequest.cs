@@ -1,5 +1,4 @@
-﻿using FasTnT.Model.Queries;
-using FasTnT.Model.Responses;
+﻿using FasTnT.Model.Responses;
 using FasTnT.UnitTest.Common;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Linq;

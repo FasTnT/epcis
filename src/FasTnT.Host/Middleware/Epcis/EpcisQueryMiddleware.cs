@@ -1,5 +1,4 @@
-﻿using Microsoft.Extensions.Logging;
-using FasTnT.Domain.Services;
+﻿using FasTnT.Domain.Services;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using FasTnT.Model.Queries;
@@ -11,25 +10,27 @@ namespace FasTnT.Host
 {
     internal class EpcisQueryMiddleware : EpcisMiddleware<EpcisQuery>
     {
-        public EpcisQueryMiddleware(ILogger<EpcisQueryMiddleware> logger, RequestDelegate next, string path)
-            : base(logger, next, path) { }
+        public EpcisQueryMiddleware(RequestDelegate next, string path) : base(next, path) { }
 
         public override async Task Process(EpcisQuery parameter)
         {
-            if (parameter is GetQueryNames getQueryNames)
-                await Execute(async s => await s.GetQueryNames());
-            else if (parameter is GetSubscriptionIds getSubscriptionIds)
-                await Execute(async s => await s.GetSubscriptionId(getSubscriptionIds));
-            else if (parameter is Poll poll)
-                await Execute(async s => await s.Poll(poll));
-            else if (parameter is GetStandardVersion getStandardVersion)
-                await Execute(async s => await s.GetStandardVersion());
-            else if (parameter is GetVendorVersion getVendorVersion)
-                await Execute(async s => await s.GetVendorVersion());
-            else if (parameter is Subscription subscription)
-                await Execute(async s => await s.Subscribe(subscription));
-            else if (parameter is UnsubscribeRequest unsubscribeRequest)
-                await Execute(async s => await s.Unsubscribe(unsubscribeRequest));
+            switch (parameter)
+            {
+                case GetQueryNames getQueryNames:
+                    await Execute(async s => await s.GetQueryNames()); break;
+                case GetSubscriptionIds getSubscriptionIds:
+                    await Execute(async s => await s.GetSubscriptionId(getSubscriptionIds)); break;
+                case Poll poll:
+                    await Execute(async s => await s.Poll(poll)); break;
+                case GetStandardVersion getStandardVersion:
+                    await Execute(async s => await s.GetStandardVersion()); break;
+                case GetVendorVersion getVendorVersion:
+                    await Execute(async s => await s.GetVendorVersion()); break;
+                case Subscription subscription:
+                    await Execute(async s => await s.Subscribe(subscription)); break;
+                case UnsubscribeRequest unsubscribeRequest:
+                    await Execute(async s => await s.Unsubscribe(unsubscribeRequest)); break;
+            }
         }
 
         private async Task Execute(Func<QueryService, Task<IEpcisResponse>> action) => await Execute<QueryService>(async s => await action(s));

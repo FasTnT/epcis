@@ -1,5 +1,4 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using System;
@@ -15,7 +14,7 @@ namespace FasTnT.Host
         private IServiceProvider _serviceProvider;
         private HttpContext _httpContext;
 
-        public EpcisMiddleware(ILogger logger, RequestDelegate next, string path)
+        public EpcisMiddleware(RequestDelegate next, string path)
         {
             _next = next;
             _path = path;

@@ -1,4 +1,5 @@
 using FasTnT.Formatters;
+using FasTnT.Model.Exceptions;
 using System;
 using System.Linq;
 
@@ -19,7 +20,7 @@ namespace FasTnT.Domain
 
             return factory != null 
                 ? factory.GetFormatter<T>()
-                : throw new ArgumentException($"No formatter found for content-type '{contentType}'");
+                : throw new ContentTypeException($"No formatter found for content-type '{contentType}'");
         }
     }
 }

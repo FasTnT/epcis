@@ -1,5 +1,4 @@
 ﻿using FasTnT.Model.Events.Enums;
-using System;
 
 namespace FasTnT.Model
 {

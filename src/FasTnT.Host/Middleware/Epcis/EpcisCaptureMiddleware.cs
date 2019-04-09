@@ -1,5 +1,4 @@
-﻿using Microsoft.Extensions.Logging;
-using FasTnT.Domain.Services;
+﻿using FasTnT.Domain.Services;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using FasTnT.Model;
@@ -8,8 +7,7 @@ namespace FasTnT.Host
 {
     internal class EpcisCaptureMiddleware : EpcisMiddleware<Request>
     {
-        public EpcisCaptureMiddleware(ILogger<EpcisCaptureMiddleware> logger, RequestDelegate next, string path)
-            : base(logger, next, path) { }
+        public EpcisCaptureMiddleware(RequestDelegate next, string path) : base( next, path) { }
 
         public override async Task Process(Request request)
         {

@@ -3,6 +3,7 @@ using FasTnT.Formatters;
 using FasTnT.Model.Responses;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Primitives;
 using System.Linq;
 
 namespace FasTnT.Host
@@ -25,14 +26,6 @@ namespace FasTnT.Host
         }
 
         private static string GetContentType(HttpContext context)
-        {
-            if (context.Request.Headers.ContainsKey("Accept"))
-            {
-                var acceptValue = context.Request.Headers["Accept"].First();
-                if (acceptValue != "*/*") return acceptValue;
-            }
-
-            return context.Request.ContentType;
-        }
+            => (context.Request.Headers.TryGetValue("Accept", out StringValues accept) ? accept.FirstOrDefault(x => x != "*/*") : null) ?? context.Request.ContentType;
     }
 }

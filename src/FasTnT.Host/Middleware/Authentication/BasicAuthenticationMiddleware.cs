@@ -1,6 +1,5 @@
 ﻿using FasTnT.Domain.Persistence;
 using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Linq;
@@ -12,22 +11,24 @@ namespace FasTnT.Host.Middleware.Authentication
 {
     public class BasicAuthenticationMiddleware
     {
-        private readonly ILogger<BasicAuthenticationMiddleware> _logger;
+        const string AuthorizationHeaderKey = "Authorization";
+        const string AuthenticateHeader = "WWW-Authenticate";
+        const string AuthenticationScheme = "Basic";
+
         private readonly RequestDelegate _next;
         private readonly string _realm;
 
-        public BasicAuthenticationMiddleware(ILogger<BasicAuthenticationMiddleware> logger, RequestDelegate next, string realm)
+        public BasicAuthenticationMiddleware(RequestDelegate next, string realm)
         {
-            _logger = logger;
             _next = next;
             _realm = realm;
         }
 
         public async Task Invoke(HttpContext httpContext, IServiceProvider serviceProvider)
         {
-            var authHeader = httpContext.Request.Headers.FirstOrDefault(x => x.Key == "Authorization");
+            var authHeader = httpContext.Request.Headers.FirstOrDefault(x => x.Key == AuthorizationHeaderKey);
 
-            if(!httpContext.Request.Headers.Any(x => x.Key == "Authorization") || !authHeader.Value.FirstOrDefault().StartsWith("Basic "))
+            if(!httpContext.Request.Headers.Any(x => x.Key == AuthorizationHeaderKey) || !authHeader.Value.FirstOrDefault().StartsWith($"{AuthenticationScheme} "))
             {
                 Unauthenticated(httpContext);
             }
@@ -45,7 +46,7 @@ namespace FasTnT.Host.Middleware.Authentication
 
         private (string username, string password) ParseCredentials(string basicAuth)
         {
-            var credentials = Encoding.UTF8.GetString(Convert.FromBase64String(basicAuth.Split(' ', 2).Last())).Split(':');
+            var credentials = Encoding.UTF8.GetString(Convert.FromBase64String(basicAuth.Substring($"{AuthenticationScheme} ".Length))).Split(':');
 
             return (credentials[0], credentials[1]);
         }
@@ -53,7 +54,7 @@ namespace FasTnT.Host.Middleware.Authentication
         private void Unauthenticated(HttpContext httpContext)
         {
             httpContext.Response.StatusCode = 401;
-            httpContext.Response.Headers.Add("WWW-Authenticate", string.Format("Basic realm=\"{0}\"", _realm));
+            httpContext.Response.Headers.Add(AuthenticateHeader, $"{AuthenticationScheme} realm =\"{_realm}\"");
         }
     }
 }
