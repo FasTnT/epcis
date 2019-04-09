@@ -77,7 +77,7 @@ namespace FasTnT.Model.Queries.Implementations
 
             // Set order by filter
             unitOfWork.EventManager.OrderBy(_orderField, _orderDirection);
-            var results = await unitOfWork.EventManager.ToList();
+            var results = await unitOfWork.EventManager.ToList(cancellationToken);
 
             // Check for the maxEventCount parameter
             if(parameters.Any(x => x.Name == "maxEventCount") && results.Count() == parameters.Last(x => x.Name == "maxEventCount").GetValue<int>() + 1)

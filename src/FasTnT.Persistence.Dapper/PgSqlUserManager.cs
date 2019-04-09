@@ -1,6 +1,7 @@
 ﻿using FasTnT.Domain.Persistence;
 using FasTnT.Model.Users;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace FasTnT.Persistence.Dapper
@@ -11,7 +12,7 @@ namespace FasTnT.Persistence.Dapper
 
         public PgSqlUserManager(DapperUnitOfWork unitOfWork) => _unitOfWork = unitOfWork;
 
-        public async Task<User> GetByUsername(string username)
-            => (await _unitOfWork.Query<User>(SqlRequests.UserLoadByName, new { Username = username })).SingleOrDefault();
+        public async Task<User> GetByUsername(string username, CancellationToken cancellationToken)
+            => (await _unitOfWork.Query<User>(SqlRequests.UserLoadByName, new { Username = username }, cancellationToken)).SingleOrDefault();
     }
 }

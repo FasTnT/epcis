@@ -19,14 +19,14 @@ namespace FasTnT.Persistence.Dapper
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<Subscription> GetById(string subscriptionId, CancellationToken cancellationToken = default)
+        public async Task<Subscription> GetById(string subscriptionId, CancellationToken cancellationToken)
         {
-            return (await _unitOfWork.Query<Subscription>($"{SqlRequests.SubscriptionListIds} WHERE s.subscription_id = @Id", new { Id = subscriptionId })).SingleOrDefault();
+            return (await _unitOfWork.Query<Subscription>($"{SqlRequests.SubscriptionListIds} WHERE s.subscription_id = @Id", new { Id = subscriptionId }, cancellationToken)).SingleOrDefault();
         }
 
-        public async Task<IEnumerable<Subscription>> GetAll(bool includeDetails = false, CancellationToken cancellationToken = default)
+        public async Task<IEnumerable<Subscription>> GetAll(bool includeDetails, CancellationToken cancellationToken)
         {
-            var subscriptions = (await _unitOfWork.Query<dynamic>(SqlRequests.SubscriptionsList)).Select(x => new SubscriptionEntity
+            var subscriptions = (await _unitOfWork.Query<dynamic>(SqlRequests.SubscriptionsList, null, cancellationToken)).Select(x => new SubscriptionEntity
             {
                 Id = x.id,
                 Active = x.active,
@@ -53,7 +53,7 @@ namespace FasTnT.Persistence.Dapper
 
         private async Task LoadParameters(SubscriptionEntity[] subscriptions, CancellationToken cancellationToken)
         {
-            var @params = (await _unitOfWork.Query<dynamic>(SqlRequests.SubscriptionListParameters, cancellationToken: cancellationToken))
+            var @params = (await _unitOfWork.Query<dynamic>(SqlRequests.SubscriptionListParameters, null, cancellationToken))
                 .GroupBy(x => (Guid)x.subscription_id)
                 .Select(x => new
                 {

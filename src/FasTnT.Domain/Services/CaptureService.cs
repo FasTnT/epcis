@@ -22,7 +22,7 @@ namespace FasTnT.Domain.Services
                 var headerId = await tx.RequestStore.Store(captureDocument.Header, cancellationToken);
 
                 await tx.MasterDataManager.Store(headerId, captureDocument.MasterDataList, cancellationToken);
-                await tx.EventStore.Store(headerId, captureDocument.EventList);
+                await tx.EventStore.Store(headerId, captureDocument.EventList, cancellationToken);
             });
         }
     }

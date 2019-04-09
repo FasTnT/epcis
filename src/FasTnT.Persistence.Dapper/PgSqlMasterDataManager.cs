@@ -70,12 +70,12 @@ namespace FasTnT.Persistence.Dapper
             if (attributes != null)
             {
                 var query = !attributes.Any() ? SqlRequests.MasterDataAllAttributeQuery : SqlRequests.MasterDataAttributeQuery;
-                var relatedAttribute = await _unitOfWork.Query<MasterDataAttribute>(query, new { Ids = masterData.Select(x => x.Id).ToArray(), Attributes = attributes });
+                var relatedAttribute = await _unitOfWork.Query<MasterDataAttribute>(query, new { Ids = masterData.Select(x => x.Id).ToArray(), Attributes = attributes }, cancellationToken);
                 masterData.ForEach(m => m.Attributes.AddRange(relatedAttribute.Where(a => a.ParentId == m.Id && a.ParentType == m.Type)));
             }
             if (includeChildren)
             {
-                var children = await _unitOfWork.Query<EpcisMasterDataHierarchy>("SELECT type, parent_id, children_id FROM cbv.hierarchy WHERE parent_id = ANY(@Ids);", new { Ids = masterData.Select(x => x.Id).ToArray() });
+                var children = await _unitOfWork.Query<EpcisMasterDataHierarchy>("SELECT type, parent_id, children_id FROM cbv.hierarchy WHERE parent_id = ANY(@Ids);", new { Ids = masterData.Select(x => x.Id).ToArray() }, cancellationToken);
                 masterData.ForEach(m => m.Children.AddRange(children.Where(c => c.ParentId == m.Id && c.Type == m.Type)));
             }
 

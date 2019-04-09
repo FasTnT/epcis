@@ -1,5 +1,4 @@
-﻿using Microsoft.Extensions.Logging;
-using FasTnT.Domain.Services;
+﻿using FasTnT.Domain.Services;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using FasTnT.Model;

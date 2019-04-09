@@ -5,16 +5,17 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace FasTnT.Host
 {
     public static class HttpContextExtensions
     {
-        public static void SetEpcisResponse(this HttpContext context, IEpcisResponse response, CancellationToken cancellationToken)
+        public static async Task SetEpcisResponse(this HttpContext context, IEpcisResponse response, CancellationToken cancellationToken)
         {
             var formatter = GetResponseFormatter(context);
             context.Response.ContentType = formatter.ToContentTypeString();
-            formatter.Write(response, context.Response.Body, cancellationToken);
+            await formatter.Write(response, context.Response.Body, cancellationToken);
         }
 
         private static IResponseFormatter GetResponseFormatter(HttpContext context)

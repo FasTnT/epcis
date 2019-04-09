@@ -18,8 +18,9 @@ namespace FasTnT.Domain.Services
             await _unitOfWork.Execute(async tx =>
             {
                 var headerId = await tx.RequestStore.Store(result.Header, cancellationToken);
-                await tx.CallbackStore.Store(headerId, result.SubscriptionName, QueryCallbackType.Success);
-                await tx.EventStore.Store(headerId, result.EventList);
+
+                await tx.CallbackStore.Store(headerId, result.SubscriptionName, QueryCallbackType.Success, cancellationToken);
+                await tx.EventStore.Store(headerId, result.EventList, cancellationToken);
             });
         }
 
@@ -28,7 +29,8 @@ namespace FasTnT.Domain.Services
             await _unitOfWork.Execute(async tx =>
             {
                 var id = await tx.RequestStore.Store(result.Header, cancellationToken);
-                await tx.CallbackStore.Store(id, result.SubscriptionName, result.CallbackType);
+
+                await tx.CallbackStore.Store(id, result.SubscriptionName, result.CallbackType, cancellationToken);
             });
         }
     }

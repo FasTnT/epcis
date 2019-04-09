@@ -47,8 +47,7 @@ namespace FasTnT.Host
         public async Task Execute<TService>(Func<TService, Task<IEpcisResponse>> action, CancellationToken cancellationToken)
         {
             var result = await action(_serviceProvider.GetService<TService>());
-
-            _httpContext.SetEpcisResponse(result, cancellationToken);
+            await _httpContext.SetEpcisResponse(result, cancellationToken);
         }
     }
 }

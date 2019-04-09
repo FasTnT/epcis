@@ -64,8 +64,8 @@ namespace FasTnT.Persistence.Dapper
             }
         }
 
-        public async Task Execute(string command, object parameters = null, CancellationToken cancellationToken = default) => await _connection.ExecuteAsync(new CommandDefinition(command, parameters, _transaction, cancellationToken: cancellationToken));
-        public async Task<GridReader> FetchMany(string command, object parameters = null, CancellationToken cancellationToken = default) =>  await _connection.QueryMultipleAsync(new CommandDefinition(command, parameters, _transaction, cancellationToken: cancellationToken));
-        public async Task<IEnumerable<T>> Query<T>(string command, object parameters = null, CancellationToken cancellationToken = default) => await _connection.QueryAsync<T>(new CommandDefinition(command, parameters, _transaction, cancellationToken: cancellationToken));
+        public async Task Execute(string command, object parameters, CancellationToken cancellationToken) => await _connection.ExecuteAsync(new CommandDefinition(command, parameters, _transaction, cancellationToken: cancellationToken));
+        public async Task<GridReader> FetchMany(string command, object parameters, CancellationToken cancellationToken) =>  await _connection.QueryMultipleAsync(new CommandDefinition(command, parameters, _transaction, cancellationToken: cancellationToken));
+        public async Task<IEnumerable<T>> Query<T>(string command, object parameters, CancellationToken cancellationToken) => await _connection.QueryAsync<T>(new CommandDefinition(command, parameters, _transaction, cancellationToken: cancellationToken));
     }
 }
