@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace FasTnT.Model
+﻿namespace FasTnT.Model
 {
     public class BusinessTransaction
     {

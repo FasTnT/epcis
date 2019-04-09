@@ -3,6 +3,8 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Xml.Linq;
 using System.Xml.XPath;
 using FasTnT.Formatters.Xml.Requests;
@@ -15,9 +17,9 @@ namespace FasTnT.Formatters.Xml
 {
     public class XmlRequestFormatter : IRequestFormatter
     {
-        public Request Read(Stream input)
+        public async Task<Request> Read(Stream input, CancellationToken cancellationToken)
         {
-            var document = XmlDocumentParser.Instance.Load(input);
+            var document = await XmlDocumentParser.Instance.Load(input, cancellationToken);
 
             if (document.Root.Name == XName.Get("EPCISDocument", EpcisNamespaces.Capture))
             {
@@ -86,12 +88,12 @@ namespace FasTnT.Formatters.Xml
             };
         }
 
-        public void Write(Request entity, Stream output)
+        public async Task Write(Request entity, Stream output, CancellationToken cancellationToken)
         {
             XDocument document = Write((dynamic)entity);
             var bytes = Encoding.UTF8.GetBytes(document.ToString(SaveOptions.DisableFormatting | SaveOptions.OmitDuplicateNamespaces));
 
-            output.Write(bytes, 0, bytes.Length);
+            await output.WriteAsync(bytes, 0, bytes.Length, cancellationToken);
         }
 
         private XDocument Write(CaptureRequest entity)

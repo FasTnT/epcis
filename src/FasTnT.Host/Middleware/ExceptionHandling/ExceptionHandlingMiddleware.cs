@@ -37,7 +37,7 @@ namespace FasTnT.Host.Middleware
                 };
 
                 context.Response.StatusCode = (ex is EpcisException) ? BadRequest : InternalServerError;
-                context.SetEpcisResponse(response);
+                context.SetEpcisResponse(response, context.RequestAborted);
             }
         }
     }

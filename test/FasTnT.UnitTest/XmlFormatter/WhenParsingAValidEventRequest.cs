@@ -27,7 +27,7 @@ namespace FasTnT.UnitTest.XmlFormatter
 
         public override void Act()
         {
-            ParsedFile = RequestParser.Read(InputFile) as CaptureRequest;
+            ParsedFile = RequestParser.Read(InputFile, default).Result as CaptureRequest;
         }
 
         [Assert]

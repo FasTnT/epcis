@@ -4,16 +4,17 @@ using FasTnT.Model.Responses;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using System.Linq;
+using System.Threading;
 
 namespace FasTnT.Host
 {
     public static class HttpContextExtensions
     {
-        public static void SetEpcisResponse(this HttpContext context, IEpcisResponse response)
+        public static void SetEpcisResponse(this HttpContext context, IEpcisResponse response, CancellationToken cancellationToken)
         {
             var formatter = GetResponseFormatter(context);
             context.Response.ContentType = formatter.ToContentTypeString();
-            formatter.Write(response, context.Response.Body);
+            formatter.Write(response, context.Response.Body, cancellationToken);
         }
 
         private static IResponseFormatter GetResponseFormatter(HttpContext context)

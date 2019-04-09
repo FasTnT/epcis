@@ -1,6 +1,8 @@
 ﻿using FasTnT.Model.Responses;
 using System;
 using System.IO;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace FasTnT.Formatters
 {
@@ -28,8 +30,8 @@ namespace FasTnT.Formatters
         }
 
         public abstract string ToContentTypeString();
-        public virtual IEpcisResponse Read(Stream input) => throw new NotImplementedException();
-        public abstract void Write(IEpcisResponse entity, Stream output);
+        public virtual Task<IEpcisResponse> Read(Stream input, CancellationToken cancellationToken) => throw new NotImplementedException();
+        public abstract Task Write(IEpcisResponse entity, Stream output, CancellationToken cancellationToken);
 
         protected abstract T FormatInternal(PollResponse response);
         protected abstract T FormatInternal(GetStandardVersionResponse response);

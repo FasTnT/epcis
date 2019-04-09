@@ -6,30 +6,31 @@ using FasTnT.Model.Queries;
 using FasTnT.Model.Subscriptions;
 using System;
 using FasTnT.Model.Responses;
+using System.Threading;
 
 namespace FasTnT.Host
 {
     internal class EpcisQueryMiddleware : EpcisMiddleware<EpcisQuery>
     {
-        public EpcisQueryMiddleware(ILogger<EpcisQueryMiddleware> logger, RequestDelegate next, string path)
-            : base(logger, next, path) { }
+        public EpcisQueryMiddleware(RequestDelegate next, string path)
+            : base(next, path) { }
 
-        public override async Task Process(EpcisQuery parameter)
+        public override async Task Process(EpcisQuery parameter, CancellationToken cancellationToken)
         {
             if (parameter is GetQueryNames getQueryNames)
-                await Execute(async s => await s.GetQueryNames());
+                await Execute(async s => await s.GetQueryNames(cancellationToken));
             else if (parameter is GetSubscriptionIds getSubscriptionIds)
-                await Execute(async s => await s.GetSubscriptionId(getSubscriptionIds));
+                await Execute(async s => await s.GetSubscriptionId(getSubscriptionIds, cancellationToken));
             else if (parameter is Poll poll)
-                await Execute(async s => await s.Poll(poll));
+                await Execute(async s => await s.Poll(poll, cancellationToken));
             else if (parameter is GetStandardVersion getStandardVersion)
-                await Execute(async s => await s.GetStandardVersion());
+                await Execute(async s => await s.GetStandardVersion(cancellationToken));
             else if (parameter is GetVendorVersion getVendorVersion)
-                await Execute(async s => await s.GetVendorVersion());
+                await Execute(async s => await s.GetVendorVersion(cancellationToken));
             else if (parameter is Subscription subscription)
-                await Execute(async s => await s.Subscribe(subscription));
+                await Execute(async s => await s.Subscribe(subscription, cancellationToken));
             else if (parameter is UnsubscribeRequest unsubscribeRequest)
-                await Execute(async s => await s.Unsubscribe(unsubscribeRequest));
+                await Execute(async s => await s.Unsubscribe(unsubscribeRequest, cancellationToken));
         }
 
         private async Task Execute(Func<QueryService, Task<IEpcisResponse>> action) => await Execute<QueryService>(async s => await action(s));

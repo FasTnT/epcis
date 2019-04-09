@@ -1,10 +1,10 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using System;
 using FasTnT.Model.Responses;
 using FasTnT.Domain;
+using System.Threading;
 
 namespace FasTnT.Host
 {
@@ -15,7 +15,7 @@ namespace FasTnT.Host
         private IServiceProvider _serviceProvider;
         private HttpContext _httpContext;
 
-        public EpcisMiddleware(ILogger logger, RequestDelegate next, string path)
+        public EpcisMiddleware(RequestDelegate next, string path)
         {
             _next = next;
             _path = path;
@@ -30,9 +30,9 @@ namespace FasTnT.Host
 
                 var formatterFactory = serviceProvider.GetService<FormatterProvider>();
                 var contentType = _httpContext.Request.ContentType;
-                var request = formatterFactory.GetFormatter<T>(contentType).Read(httpContext.Request.Body);
+                var request = await formatterFactory.GetFormatter<T>(contentType).Read(httpContext.Request.Body, httpContext.RequestAborted);
 
-                await Process(request);
+                await Process(request, httpContext.RequestAborted);
             }
             else
             {
@@ -40,15 +40,15 @@ namespace FasTnT.Host
             }
         }
 
-        public abstract Task Process(T request);
+        public abstract Task Process(T request, CancellationToken cancellationToken);
 
         public async Task Execute<TService>(Func<TService, Task> action) => await action(_serviceProvider.GetService<TService>());
 
-        public async Task Execute<TService>(Func<TService, Task<IEpcisResponse>> action)
+        public async Task Execute<TService>(Func<TService, Task<IEpcisResponse>> action, CancellationToken cancellationToken)
         {
             var result = await action(_serviceProvider.GetService<TService>());
 
-            _httpContext.SetEpcisResponse(result);
+            _httpContext.SetEpcisResponse(result, cancellationToken);
         }
     }
 }

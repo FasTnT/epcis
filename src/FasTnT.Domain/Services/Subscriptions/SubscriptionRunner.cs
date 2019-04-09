@@ -5,6 +5,7 @@ using FasTnT.Model.Queries.Implementations;
 using FasTnT.Model.Responses;
 using FasTnT.Model.Subscriptions;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace FasTnT.Domain.Services.Subscriptions
@@ -22,22 +23,22 @@ namespace FasTnT.Domain.Services.Subscriptions
             _resultSender = resultSender;
         }
 
-        public async Task Run(Subscription subscription)
+        public async Task Run(Subscription subscription, CancellationToken cancellationToken)
         {
             await _unitOfWork.Execute(async tx =>
             {
                 var query = _epcisQueries.Single(x => x.Name == subscription.QueryName);
                 var response = new PollResponse { QueryName = query.Name, SubscriptionId = subscription.SubscriptionId };
-                var pendingRequests = await tx.SubscriptionManager.GetPendingRequestIds(subscription.SubscriptionId);
+                var pendingRequests = await tx.SubscriptionManager.GetPendingRequestIds(subscription.SubscriptionId, cancellationToken);
 
                 if (pendingRequests.Any())
                 {
                     tx.EventManager.WhereSimpleFieldIn(EpcisField.RequestId, pendingRequests.ToArray());
-                    response.Entities = await query.Execute(subscription.Parameters, tx);
+                    response.Entities = await query.Execute(subscription.Parameters, tx, cancellationToken);
                 }
 
                 await SendSubscriptionResults(subscription, response);
-                await tx.SubscriptionManager.AcknowledgePendingRequests(subscription.SubscriptionId, pendingRequests);
+                await tx.SubscriptionManager.AcknowledgePendingRequests(subscription.SubscriptionId, pendingRequests, cancellationToken);
             });
         }
 
