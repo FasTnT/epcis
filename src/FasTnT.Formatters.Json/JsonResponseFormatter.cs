@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 using fastJSON;
 using FasTnT.Formatters.Json.JsonFormatter;
 using FasTnT.Model;
@@ -13,13 +16,13 @@ namespace FasTnT.Formatters.Json
     {
         public override string ToContentTypeString() => "application/json";
 
-        public override void Write(IEpcisResponse entity, Stream output)
+        public override async Task Write(IEpcisResponse entity, Stream output, CancellationToken cancellationToken)
         {
             if (entity == default(IEpcisResponse)) return;
 
             using(var writer = new StreamWriter(output))
             {
-                writer.Write(Format(entity));
+                await writer.WriteAsync(new ReadOnlyMemory<char>(Encoding.UTF8.GetBytes(Format(entity)).Cast<char>().ToArray()), cancellationToken);
             }
         }
 

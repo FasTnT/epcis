@@ -22,7 +22,7 @@ namespace FasTnT.Model.Utils
         public static T GetByDisplayName<T>(string displayName) where T : Enumeration, new() => GetAll<T>().SingleOrDefault(x => x.DisplayName == displayName) ?? throw new Exception($"Invalid value for {typeof(T).Name} : '{displayName}'");
         public static T GetById<T>(short id) where T : Enumeration, new() => GetAll<T>().SingleOrDefault(x => x.Id == id) ?? throw new Exception($"Invalid ID for {typeof(T).Name} : {id}");
         public int CompareTo(object other) => Id.CompareTo(((Enumeration)other).Id);
-        public override int GetHashCode() => 2108858624 + Id.GetHashCode();
+        public override int GetHashCode() => 2108858624 + GetType().GetHashCode() + Id.GetHashCode();
         public override string ToString() => DisplayName;
         public override bool Equals(object obj) => (obj is Enumeration other) && GetType().Equals(obj.GetType()) && Id.Equals(other.Id);
     }

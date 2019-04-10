@@ -1,10 +1,11 @@
-﻿using System.Threading.Tasks;
+﻿using System.Threading;
+using System.Threading.Tasks;
 
 namespace FasTnT.Domain.Services.Setup
 {
     public interface IDatabaseMigrator
     {
-        Task Migrate();
-        Task Rollback();
+        Task Migrate(CancellationToken cancellationToken);
+        Task Rollback(CancellationToken cancellationToken);
     }
 }

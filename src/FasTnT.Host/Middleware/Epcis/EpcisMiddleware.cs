@@ -4,11 +4,14 @@ using Microsoft.AspNetCore.Http;
 using System;
 using FasTnT.Model.Responses;
 using FasTnT.Domain;
+using System.Threading;
 
 namespace FasTnT.Host
 {
     public abstract class EpcisMiddleware<T>
     {
+        const int OkStatusCode = 200;
+
         private readonly RequestDelegate _next;
         private readonly string _path;
         private IServiceProvider _serviceProvider;
@@ -29,9 +32,9 @@ namespace FasTnT.Host
 
                 var formatterFactory = serviceProvider.GetService<FormatterProvider>();
                 var contentType = _httpContext.Request.ContentType;
-                var request = formatterFactory.GetFormatter<T>(contentType).Read(httpContext.Request.Body);
+                var request = await formatterFactory.GetFormatter<T>(contentType).Read(httpContext.Request.Body, httpContext.RequestAborted);
 
-                await Process(request);
+                await Process(request, httpContext.RequestAborted);
             }
             else
             {
@@ -39,15 +42,14 @@ namespace FasTnT.Host
             }
         }
 
-        public abstract Task Process(T request);
+        public abstract Task Process(T request, CancellationToken cancellationToken);
 
         public async Task Execute<TService>(Func<TService, Task> action) => await action(_serviceProvider.GetService<TService>());
 
         public async Task Execute<TService>(Func<TService, Task<IEpcisResponse>> action)
         {
             var result = await action(_serviceProvider.GetService<TService>());
-
-            _httpContext.SetEpcisResponse(result);
+            await _httpContext.SetEpcisResponse(result, OkStatusCode, default);
         }
     }
 }

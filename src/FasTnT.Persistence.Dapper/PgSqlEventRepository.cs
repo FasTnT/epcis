@@ -9,15 +9,16 @@ using Dapper;
 using static Dapper.SqlBuilder;
 using FasTnT.Domain.Persistence;
 using MoreLinq;
+using System.Threading;
 
 namespace FasTnT.Persistence.Dapper
 {
     public class PgSqlEventRepository : IEventRepository
     {
         private readonly DapperUnitOfWork _unitOfWork;
+        private readonly QueryParameters _parameters = new QueryParameters();
+        private readonly Template _sqlTemplate;
         private SqlBuilder _query = new SqlBuilder();
-        private QueryParameters _parameters = new QueryParameters();
-        private Template _sqlTemplate;
 
         private int _limit = 0;
 
@@ -27,12 +28,12 @@ namespace FasTnT.Persistence.Dapper
             _sqlTemplate = _query.AddTemplate(SqlRequests.EventQuery);
         }
 
-        public async Task<IEnumerable<EpcisEvent>> ToList()
+        public async Task<IEnumerable<EpcisEvent>> ToList(CancellationToken cancellationToken)
         {
             _parameters.SetLimit(_limit > 0 ? _limit : int.MaxValue);
-            var events = await _unitOfWork.Query<EpcisEventEntity>(_sqlTemplate.RawSql, _parameters.Values);
+            var events = await _unitOfWork.Query<EpcisEventEntity>(_sqlTemplate.RawSql, _parameters.Values, cancellationToken);
 
-            using (var reader = await _unitOfWork.FetchMany(SqlRequests.RelatedQuery, new { EventIds = events.Select(x => x.Id).ToArray() }))
+            using (var reader = await _unitOfWork.FetchMany(SqlRequests.RelatedQuery, new { EventIds = events.Select(x => x.Id).ToArray() }, cancellationToken))
             {
                 var epcs = await reader.ReadAsync<EpcEntity>();
                 var fields = await reader.ReadAsync<CustomFieldEntity>();

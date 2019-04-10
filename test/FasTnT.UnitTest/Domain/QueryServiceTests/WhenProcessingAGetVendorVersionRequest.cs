@@ -8,11 +8,11 @@ namespace FasTnT.UnitTest.Domain.QueryServiceTests
     [TestClass]
     public class WhenProcessingAGetVendorVersionRequest : BaseQueryServiceUnitTest
     {
-        static string ExpectedVersion = Constants.ProductVersion;
+        static readonly string ExpectedVersion = Constants.ProductVersion;
 
         public GetVendorVersionResponse Response { get; set; }
 
-        public override void Act() => Response = QueryService.GetVendorVersion().Result;
+        public override void Act() => Response = QueryService.GetVendorVersion(default).Result;
 
         [Assert]
         public void TheResponseShouldNotBeNull() => Assert.IsNotNull(Response);

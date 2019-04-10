@@ -19,7 +19,7 @@ namespace FasTnT.UnitTest.Domain.QueryServiceTests
             Request = new Poll { QueryName = "SimpleMasterDataQuery", Parameters = new QueryParameter[0] };
         }
 
-        public override void Act() => Response = QueryService.Poll(Request).Result;
+        public override void Act() => Response = QueryService.Poll(Request, default).Result;
 
         [Assert]
         public void TheResponseShouldNotBeNull() => Assert.IsNotNull(Response);

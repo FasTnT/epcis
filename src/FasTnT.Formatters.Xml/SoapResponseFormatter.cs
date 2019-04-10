@@ -1,5 +1,7 @@
 ﻿using System.IO;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Xml.Linq;
 using FasTnT.Formatters.Xml.Responses;
 using FasTnT.Model;
@@ -13,11 +15,11 @@ namespace FasTnT.Formatters.Xml
         private const SaveOptions Options = SaveOptions.DisableFormatting | SaveOptions.OmitDuplicateNamespaces;
         public override string ToContentTypeString() => "application/soap+xml";
 
-        public override void Write(IEpcisResponse entity, Stream output)
+        public override async Task Write(IEpcisResponse entity, Stream output, CancellationToken cancellationToken)
         {
             if (entity == default(IEpcisResponse)) return;
 
-            FormatSoap(Format(entity)).Save(output, Options);
+            await FormatSoap(Format(entity)).SaveAsync(output, Options, cancellationToken);
         }
 
         private XDocument FormatSoap(XElement entity)

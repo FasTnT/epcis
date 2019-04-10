@@ -24,11 +24,11 @@ namespace FasTnT.Host
 
             if (httpContext.Request.Method == "POST" && httpContext.Request.Path.Value.Equals($"{_path}/Migrate", StringComparison.OrdinalIgnoreCase))
             {
-                await unitOfWork.Execute(async uow => await uow.DatabaseManager.Migrate());
+                await unitOfWork.Execute(async uow => await uow.DatabaseManager.Migrate(httpContext.RequestAborted));
             }
             else if (httpContext.Request.Method == "POST" && httpContext.Request.Path.Value.Equals($"{_path}/Rollback", StringComparison.OrdinalIgnoreCase))
             {
-                await unitOfWork.Execute(async uow => await uow.DatabaseManager.Rollback());
+                await unitOfWork.Execute(async uow => await uow.DatabaseManager.Rollback(httpContext.RequestAborted));
             }
             else
             {

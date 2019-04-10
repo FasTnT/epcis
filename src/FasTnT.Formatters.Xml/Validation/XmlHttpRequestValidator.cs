@@ -2,6 +2,8 @@
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Linq;
 using System.Xml.Schema;
@@ -28,9 +30,9 @@ namespace FasTnT.Formatters.Xml.Validation
             _schema.Compile();
         }
 
-        public XDocument Load(Stream input)
+        public async Task<XDocument> Load(Stream input, CancellationToken cancellationToken)
         {
-            var document = XDocument.Load(input);
+            var document = await XDocument.LoadAsync(input, LoadOptions.None, cancellationToken);
             document.Validate(_schema, (e, t) => { if (t.Exception != null) throw new EpcisException(ExceptionType.ValidationException, t.Exception.Message); });
 
             return document;

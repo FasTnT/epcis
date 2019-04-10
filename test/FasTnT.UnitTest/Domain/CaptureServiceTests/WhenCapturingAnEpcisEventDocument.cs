@@ -19,7 +19,7 @@ namespace FasTnT.UnitTest.Domain.CaptureServiceTests
             Request = new CaptureRequest { Header = new EpcisRequestHeader(), EventList = new EpcisEvent[0] };
         }
 
-        public override void Act() => Task.WaitAll(CaptureService.Capture(Request));
+        public override void Act() => Task.WaitAll(CaptureService.Capture(Request, default));
 
         [Assert]
         public void ItShouldHaveBeginTheUnitOfWorkTransaction() => A.CallTo(() => UnitOfWork.BeginTransaction()).MustHaveHappened();

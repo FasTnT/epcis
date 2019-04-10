@@ -37,10 +37,16 @@ namespace FasTnT.Host.Middleware.Authentication
                 var unitOfWork = serviceProvider.GetService<IUnitOfWork>();
                 var userContext = serviceProvider.GetService<UserContext>();
                 var (username, password) = ParseCredentials(authHeader.Value.First());
-                var user = await unitOfWork.UserManager.GetByUsername(username);
+                var user = await unitOfWork.UserManager.GetByUsername(username, httpContext.RequestAborted);
 
-                if (userContext.Authenticate(user, password)) await _next(httpContext);
-                else Unauthenticated(httpContext);
+                if (userContext.Authenticate(user, password))
+                {
+                    await _next(httpContext);
+                }
+                else
+                {
+                    Unauthenticated(httpContext);
+                }
             }
         }
 

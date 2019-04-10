@@ -8,6 +8,7 @@ using FasTnT.Model.Responses;
 using FasTnT.Model.Subscriptions;
 using System;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace FasTnT.Domain.Services
@@ -25,12 +26,16 @@ namespace FasTnT.Domain.Services
             _backgroundService = backgroundService;
         }
 
-        public Task<GetQueryNamesResponse> GetQueryNames() => Task.Run(() => new GetQueryNamesResponse { QueryNames = _queries.Select(x => x.Name) });
-        public Task<GetStandardVersionResponse> GetStandardVersion() => Task.Run(() => new GetStandardVersionResponse { Version = Constants.StandardVersion });
-        public Task<GetVendorVersionResponse> GetVendorVersion() => Task.Run(() => new GetVendorVersionResponse { Version = Constants.ProductVersion });
-        public async Task<GetSubscriptionIdsResult> GetSubscriptionId(GetSubscriptionIds query) => new GetSubscriptionIdsResult { SubscriptionIds = (await _unitOfWork.SubscriptionManager.GetAll()).Where(s => s.QueryName == query.QueryName).Select(x => x.SubscriptionId) };
+        public Task<GetQueryNamesResponse> GetQueryNames(CancellationToken cancellationToken) => Task.Run(() => new GetQueryNamesResponse { QueryNames = _queries.Select(x => x.Name) }, cancellationToken);
+        public Task<GetStandardVersionResponse> GetStandardVersion(CancellationToken cancellationToken) => Task.Run(() => new GetStandardVersionResponse { Version = Constants.StandardVersion }, cancellationToken);
+        public Task<GetVendorVersionResponse> GetVendorVersion(CancellationToken cancellationToken) => Task.Run(() => new GetVendorVersionResponse { Version = Constants.ProductVersion }, cancellationToken);
+        public async Task<GetSubscriptionIdsResult> GetSubscriptionId(GetSubscriptionIds query, CancellationToken cancellationToken)
+        {
+            var subscriptions = await _unitOfWork.SubscriptionManager.GetAll(false, cancellationToken: cancellationToken);
+            return new GetSubscriptionIdsResult { SubscriptionIds = subscriptions.Where(s => s.QueryName == query.QueryName).Select(x => x.SubscriptionId) };
+        }
 
-        public async Task<PollResponse> Poll(Poll query)
+        public async Task<PollResponse> Poll(Poll query, CancellationToken cancellationToken)
         {
             var epcisQuery = _queries.SingleOrDefault(x => x.Name == query.QueryName);
 
@@ -45,7 +50,7 @@ namespace FasTnT.Domain.Services
                 {
                     epcisQuery.ValidateParameters(query.Parameters);
 
-                    var results = await epcisQuery.Execute(query.Parameters, _unitOfWork);
+                    var results = await epcisQuery.Execute(query.Parameters, _unitOfWork, cancellationToken);
                     return new PollResponse { QueryName = query.QueryName, Entities = results };
                 }
                 catch (Exception ex)
@@ -55,7 +60,7 @@ namespace FasTnT.Domain.Services
             }
         }
 
-        public async Task Subscribe(Subscription request)
+        public async Task Subscribe(Subscription request, CancellationToken cancellationToken)
         {
             EnsureDestinationIsValidURI(request);
             EnsureQueryAllowsSubscription(request);
@@ -64,20 +69,20 @@ namespace FasTnT.Domain.Services
 
             await _unitOfWork.Execute(async tx =>
             {
-                await EnsureSubscriptionDoesNotExist(tx, request);
-                await tx.SubscriptionManager.Store(request);
+                await EnsureSubscriptionDoesNotExist(tx, request, cancellationToken);
+                await tx.SubscriptionManager.Store(request, cancellationToken);
                 _backgroundService.Register(request);
             });
         }
 
-        public async Task Unsubscribe(UnsubscribeRequest query)
+        public async Task Unsubscribe(UnsubscribeRequest query, CancellationToken cancellationToken)
         {
             await _unitOfWork.Execute(async tx =>
             {
-                var subscription = await tx.SubscriptionManager.GetById(query.SubscriptionId);
+                var subscription = await tx.SubscriptionManager.GetById(query.SubscriptionId, cancellationToken);
                 if (subscription == null) throw new EpcisException(ExceptionType.NoSuchNameException, $"Subscription with ID '{query.SubscriptionId}' does not exist.");
 
-                await tx.SubscriptionManager.Delete(subscription.SubscriptionId);
+                await tx.SubscriptionManager.Delete(subscription.SubscriptionId, cancellationToken);
                 _backgroundService.Remove(subscription);
             });
         }
@@ -85,9 +90,9 @@ namespace FasTnT.Domain.Services
         private void EnsureDestinationHasEndSlash(Subscription request) => request.Destination = $"{request.Destination.TrimEnd('/')}/";
         private void EnsureDestinationIsValidURI(Subscription request) => UriValidator.Validate(request.Destination, true);
 
-        private async static Task EnsureSubscriptionDoesNotExist(IUnitOfWork transaction, Subscription request)
+        private async static Task EnsureSubscriptionDoesNotExist(IUnitOfWork transaction, Subscription request, CancellationToken cancellationToken)
         {
-            var subscription = await transaction.SubscriptionManager.GetById(request.SubscriptionId);
+            var subscription = await transaction.SubscriptionManager.GetById(request.SubscriptionId, cancellationToken);
             if (subscription != null) throw new EpcisException(ExceptionType.SubscribeNotPermittedException, $"Subscription '{request.QueryName}' already exist.");
         }
 

@@ -1,6 +1,7 @@
 ﻿using FasTnT.Formatters;
 using FasTnT.Model.Responses;
 using System.Net;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace FasTnT.Domain.Services.Subscriptions
@@ -13,7 +14,7 @@ namespace FasTnT.Domain.Services.Subscriptions
         {
             _formatterFactory = formatterFactory;
         }
-        public async Task Send(string destination, IEpcisResponse epcisResponse, string contentType = "application/xml")
+        public async Task Send(string destination, IEpcisResponse epcisResponse, string contentType, CancellationToken cancellationToken)
         {
             var responseFormatter = _formatterFactory.GetFormatter<IEpcisResponse>(contentType) as IResponseFormatter;
             var request = WebRequest.Create($"{destination}{GetCallbackUrl(epcisResponse)}");
@@ -22,10 +23,11 @@ namespace FasTnT.Domain.Services.Subscriptions
 
             using (var stream = await request.GetRequestStreamAsync())
             {
-                responseFormatter.Write(epcisResponse, stream);
+                await responseFormatter.Write(epcisResponse, stream, cancellationToken);
             }
 
             var response = await request.GetResponseAsync();
+            // TODO: use response
         }
 
         private string GetCallbackUrl(IEpcisResponse response)

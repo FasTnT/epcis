@@ -25,14 +25,14 @@ namespace FasTnT.UnitTest.Domain.SubscriptionServiceTests
             Request = new UnsubscribeRequest { SubscriptionId = "TestSubscription" };
 
             A.CallTo(() => UnitOfWork.SubscriptionManager).Returns(SubscriptionManager);
-            A.CallTo(() => SubscriptionManager.GetById("TestSubscription")).Returns(Task.FromResult(default(Subscription)));
+            A.CallTo(() => SubscriptionManager.GetById("TestSubscription", default)).Returns(Task.FromResult(default(Subscription)));
         }
 
         public override void Act()
         {
             try
             {
-                Task.WaitAll(QueryService.Unsubscribe(Request));
+                Task.WaitAll(QueryService.Unsubscribe(Request, default));
             }
             catch (Exception ex)
             {

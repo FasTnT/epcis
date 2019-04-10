@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace FasTnT.Model.Queries.Implementations
@@ -29,7 +30,7 @@ namespace FasTnT.Model.Queries.Implementations
             }
         }
 
-        public async Task<IEnumerable<IEntity>> Execute(IEnumerable<QueryParameter> parameters, IUnitOfWork unitOfWork)
+        public async Task<IEnumerable<IEntity>> Execute(IEnumerable<QueryParameter> parameters, IUnitOfWork unitOfWork, CancellationToken cancellationToken)
         {
             parameters = parameters ?? new QueryParameter[0];
 
@@ -76,7 +77,7 @@ namespace FasTnT.Model.Queries.Implementations
 
             // Set order by filter
             unitOfWork.EventManager.OrderBy(_orderField, _orderDirection);
-            var results = await unitOfWork.EventManager.ToList();
+            var results = await unitOfWork.EventManager.ToList(cancellationToken);
 
             // Check for the maxEventCount parameter
             if(parameters.Any(x => x.Name == "maxEventCount") && results.Count() == parameters.Last(x => x.Name == "maxEventCount").GetValue<int>() + 1)

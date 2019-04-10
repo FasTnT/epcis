@@ -1,6 +1,8 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Xml.Linq;
 using FasTnT.Formatters.Xml.Responses;
 using FasTnT.Model;
@@ -14,11 +16,11 @@ namespace FasTnT.Formatters.Xml
         private const SaveOptions Options = SaveOptions.DisableFormatting | SaveOptions.OmitDuplicateNamespaces;
         public override string ToContentTypeString() => "application/xml";
 
-        public override void Write(IEpcisResponse entity, Stream output)
+        public override async Task Write(IEpcisResponse entity, Stream output, CancellationToken cancellationToken)
         {
             if (entity == default(IEpcisResponse)) return;
 
-            Format(entity).Save(output, Options);
+            await Format(entity).SaveAsync(output, Options, cancellationToken);
         }
 
         protected override XDocument FormatInternal(PollResponse response)

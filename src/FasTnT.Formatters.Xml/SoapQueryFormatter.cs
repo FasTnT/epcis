@@ -1,6 +1,8 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Xml.Linq;
 using FasTnT.Formatters.Xml.Requests;
 using FasTnT.Model.Queries;
@@ -9,10 +11,10 @@ namespace FasTnT.Formatters.Xml
 {
     internal class SoapQueryFormatter : IQueryFormatter
     {
-        static string SoapEnvelopNamespace = "http://schemas.xmlsoap.org/soap/envelope/";
-        public EpcisQuery Read(Stream input)
+        static readonly string SoapEnvelopNamespace = "http://schemas.xmlsoap.org/soap/envelope/";
+        public async Task<EpcisQuery> Read(Stream input, CancellationToken cancellationToken)
         {
-            var document = XDocument.Load(input);
+            var document = await XDocument.LoadAsync(input, LoadOptions.None, cancellationToken);
             var body = document.Element(XName.Get("Envelope", SoapEnvelopNamespace))?.Element(XName.Get("Body", SoapEnvelopNamespace));
 
             if(body == null || !body.HasElements)
@@ -63,6 +65,6 @@ namespace FasTnT.Formatters.Xml
             throw new Exception($"Invalid SOAP request: empty Body.");
         }
 
-        public void Write(EpcisQuery entity, Stream output) => throw new NotImplementedException();
+        public Task Write(EpcisQuery entity, Stream output, CancellationToken cancellationToken) => throw new NotImplementedException();
     }
 }

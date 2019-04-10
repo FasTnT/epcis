@@ -17,7 +17,7 @@ namespace FasTnT.Domain.BackgroundTasks
         public static int DelayTimeoutInMs { get; set; }
 
         private readonly IServiceProvider _services;
-        private volatile object _monitor = new object();
+        private readonly object _monitor = new object();
         private readonly ConcurrentDictionary<Subscription, DateTime> _scheduledExecutions = new ConcurrentDictionary<Subscription, DateTime>();
         private readonly ConcurrentDictionary<string, IList<Subscription>> _triggeredSubscriptions = new ConcurrentDictionary<string, IList<Subscription>>();
         private readonly ConcurrentQueue<string> _triggeredValues = new ConcurrentQueue<string>();
@@ -29,7 +29,7 @@ namespace FasTnT.Domain.BackgroundTasks
 
         public async Task Run(CancellationToken cancellationToken)
         {
-            await Initialize();
+            await Initialize(cancellationToken);
             cancellationToken.ThrowIfCancellationRequested();
 
             while (!cancellationToken.IsCancellationRequested)
@@ -46,7 +46,7 @@ namespace FasTnT.Domain.BackgroundTasks
                     // Get all subscriptions scheduled by a trigger
                     while (_triggeredValues.TryDequeue(out string trigger)) triggeredSubscriptions.AddRange(_triggeredSubscriptions.TryGetValue(trigger, out IList<Subscription> sub) ? sub : new Subscription[0]);
 
-                    await Execute(triggeredSubscriptions);
+                    await Execute(triggeredSubscriptions, cancellationToken);
                 }
                 catch(Exception e)
                 {
@@ -59,7 +59,7 @@ namespace FasTnT.Domain.BackgroundTasks
             }
         }
 
-        private async Task Execute(IEnumerable<Subscription> subscriptions)
+        private async Task Execute(IEnumerable<Subscription> subscriptions, CancellationToken cancellationToken)
         {
             using (var scope = _services.CreateScope())
             {
@@ -67,18 +67,18 @@ namespace FasTnT.Domain.BackgroundTasks
 
                 foreach(var subscription in subscriptions)
                 {
-                    await subscriptionRunner.Run(subscription);
+                    await subscriptionRunner.Run(subscription, cancellationToken);
                 }
             }
         }
 
         //REVIEW: should this class be responsible to get all subscriptions at startup? (LAA)
-        private async Task Initialize()
+        private async Task Initialize(CancellationToken cancellationToken)
         {
             using (var scope = _services.CreateScope())
             {
                 var unitOfWork = scope.ServiceProvider.GetService<IUnitOfWork>();
-                var subscriptions = await unitOfWork.SubscriptionManager.GetAll(true);
+                var subscriptions = await unitOfWork.SubscriptionManager.GetAll(true, cancellationToken);
 
                 subscriptions.ForEach(Register);
             }

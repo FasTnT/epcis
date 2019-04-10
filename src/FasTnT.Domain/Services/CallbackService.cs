@@ -2,6 +2,7 @@
 using FasTnT.Domain.Persistence;
 using FasTnT.Model;
 using FasTnT.Model.Events.Enums;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace FasTnT.Domain.Services
@@ -12,22 +13,24 @@ namespace FasTnT.Domain.Services
 
         public CallbackService(IUnitOfWork unitOfWork) => _unitOfWork = unitOfWork;
 
-        public async Task Process(EpcisQueryCallbackDocument result)
+        public async Task Process(EpcisQueryCallbackDocument result, CancellationToken cancellationToken)
         {
             await _unitOfWork.Execute(async tx =>
             {
-                var headerId = await tx.RequestStore.Store(result.Header);
-                await tx.CallbackStore.Store(headerId, result.SubscriptionName, QueryCallbackType.Success);
-                await tx.EventStore.Store(headerId, result.EventList);
+                var headerId = await tx.RequestStore.Store(result.Header, cancellationToken);
+
+                await tx.CallbackStore.Store(headerId, result.SubscriptionName, QueryCallbackType.Success, cancellationToken);
+                await tx.EventStore.Store(headerId, result.EventList, cancellationToken);
             });
         }
 
-        public async Task ProcessException(EpcisQueryCallbackException result)
+        public async Task ProcessException(EpcisQueryCallbackException result, CancellationToken cancellationToken)
         {
             await _unitOfWork.Execute(async tx =>
             {
-                var id = await tx.RequestStore.Store(result.Header);
-                await tx.CallbackStore.Store(id, result.SubscriptionName, result.CallbackType);
+                var id = await tx.RequestStore.Store(result.Header, cancellationToken);
+
+                await tx.CallbackStore.Store(id, result.SubscriptionName, result.CallbackType, cancellationToken);
             });
         }
     }

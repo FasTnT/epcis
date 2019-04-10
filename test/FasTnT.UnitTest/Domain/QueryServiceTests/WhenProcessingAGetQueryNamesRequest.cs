@@ -10,7 +10,7 @@ namespace FasTnT.UnitTest.Domain.QueryServiceTests
     {
         public GetQueryNamesResponse Response { get; set; }
 
-        public override void Act() => Response = QueryService.GetQueryNames().Result;
+        public override void Act() => Response = QueryService.GetQueryNames(default).Result;
 
         [Assert]
         public void TheResponseShouldNotBeNull() => Assert.IsNotNull(Response);

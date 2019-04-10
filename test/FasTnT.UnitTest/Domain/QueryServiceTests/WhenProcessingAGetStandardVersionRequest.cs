@@ -11,7 +11,7 @@ namespace FasTnT.UnitTest.Domain.QueryServiceTests
 
         public GetStandardVersionResponse Response { get; set; }
 
-        public override void Act() => Response = QueryService.GetStandardVersion().Result;
+        public override void Act() => Response = QueryService.GetStandardVersion(default).Result;
 
         [Assert]
         public void TheResponseShouldNotBeNull() => Assert.IsNotNull(Response);

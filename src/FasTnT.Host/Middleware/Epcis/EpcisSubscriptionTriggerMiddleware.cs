@@ -26,7 +26,7 @@ namespace FasTnT.Host
                 var service = serviceProvider.GetService<SubscriptionService>();
                 var triggerName = httpContext.Request.Path.Value.Split('/').Last();
 
-                await service.Process(new TriggerSubscriptionRequest { Trigger = triggerName });
+                await service.Process(new TriggerSubscriptionRequest { Trigger = triggerName }, httpContext.RequestAborted);
             }
             else
             {

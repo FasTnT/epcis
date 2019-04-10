@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using fastJSON;
 using FasTnT.Model;
 
@@ -9,13 +11,13 @@ namespace FasTnT.Formatters.Json
 {
     public class JsonRequestFormatter : IRequestFormatter
     {
-        public void Write(Request entity, Stream output) => throw new NotImplementedException();
+        public Task Write(Request entity, Stream output, CancellationToken cancellationToken) => throw new NotImplementedException();
 
-        public Request Read(Stream input)
+        public async Task<Request> Read(Stream input, CancellationToken cancellationToken)
         {
             using (var reader = new StreamReader(input))
             {
-                return ParseInternal(JSON.Parse(reader.ReadToEnd()) as IDictionary<string, object>);
+                return ParseInternal(JSON.Parse(await reader.ReadToEndAsync()) as IDictionary<string, object>);
             };
         }
 

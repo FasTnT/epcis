@@ -26,14 +26,14 @@ namespace FasTnT.UnitTest.Domain.SubscriptionServiceTests
             Request = new Subscription { SubscriptionId = "TestSubscription", Destination = "http://test.com/callback", QueryName = EpcisQueries.First(x => x.AllowSubscription).Name };
 
             A.CallTo(() => UnitOfWork.SubscriptionManager).Returns(SubscriptionManager);
-            A.CallTo(() => SubscriptionManager.GetById("TestSubscription")).Returns(Task.FromResult(new Subscription()));
+            A.CallTo(() => SubscriptionManager.GetById("TestSubscription", default)).Returns(Task.FromResult(new Subscription()));
         }
 
         public override void Act()
         {
             try
             {
-                Task.WaitAll(QueryService.Subscribe(Request));
+                Task.WaitAll(QueryService.Subscribe(Request, default));
             }
             catch (Exception ex)
             {
