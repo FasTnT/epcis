@@ -1,6 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Logging;
 using System;
 using System.Threading.Tasks;
 using FasTnT.Domain.Persistence;
@@ -10,13 +9,11 @@ namespace FasTnT.Host
 {
     internal class EpcisMigrationMiddleware
     {
-        private readonly ILogger<EpcisMigrationMiddleware> _logger;
         private readonly RequestDelegate _next;
         private readonly string _path;
 
-        public EpcisMigrationMiddleware(ILogger<EpcisMigrationMiddleware> logger, RequestDelegate next, string path)
+        public EpcisMigrationMiddleware(RequestDelegate next, string path)
         {
-            _logger = logger;
             _next = next;
             _path = path;
         }

@@ -8,7 +8,7 @@ namespace FasTnT.Host
 {
     internal class EpcisCaptureMiddleware : EpcisMiddleware<Request>
     {
-        public EpcisCaptureMiddleware(RequestDelegate next, string path) : base(next, path) { }
+        public EpcisCaptureMiddleware(RequestDelegate next, string path) : base( next, path) { }
 
         public override async Task Process(Request request, CancellationToken cancellationToken)
         {
