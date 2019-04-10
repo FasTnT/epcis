@@ -28,7 +28,10 @@ namespace FasTnT.Host.Middleware
             }
             catch(Exception ex)
             {
-                if(ex is ContentTypeException) context.Request.Headers["Accept"] = XmlFormatterFactory.ContentTypes[0];
+                if (ex is ContentTypeException)
+                {
+                    context.Request.Headers["Accept"] = XmlFormatterFactory.ContentTypes[0];
+                }
 
                 _logger.LogError($"[{context.TraceIdentifier}] Request failed with reason '{ex.Message}'");
                 var epcisException = ex as EpcisException;
@@ -39,8 +42,7 @@ namespace FasTnT.Host.Middleware
                     Reason = ex.Message
                 };
 
-                context.Response.StatusCode = (ex is EpcisException) ? BadRequest : InternalServerError;
-                context.SetEpcisResponse(response, context.RequestAborted);
+                await context.SetEpcisResponse(response, (ex is EpcisException) ? BadRequest : InternalServerError, context.RequestAborted);
             }
         }
     }

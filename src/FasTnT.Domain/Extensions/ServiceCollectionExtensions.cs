@@ -17,13 +17,13 @@ namespace FasTnT.Domain.Extensions
             var queries = Assembly.GetAssembly(typeof(IEpcisQuery)).ExportedTypes.Where(x => x.GetInterfaces().Any(i => i == typeof(IEpcisQuery))).Select(x => Activator.CreateInstance(x)).Cast<IEpcisQuery>().ToArray();
             services.AddSingleton(typeof(IEpcisQuery[]), queries);
 
-            services.AddScoped(typeof(CaptureService));
-            services.AddScoped(typeof(QueryService));
-            services.AddScoped(typeof(SubscriptionService));
-            services.AddScoped(typeof(CallbackService));
-            services.AddScoped(typeof(UserContext));
-            services.AddScoped(typeof(ISubscriptionResultSender), typeof(HttpSubscriptionResultSender));
-            services.AddScoped(typeof(SubscriptionRunner));
+            services.AddScoped<CaptureService>();
+            services.AddScoped<QueryService>();
+            services.AddScoped<SubscriptionService>();
+            services.AddScoped<CallbackService>();
+            services.AddScoped<UserContext>();
+            services.AddScoped<ISubscriptionResultSender, HttpSubscriptionResultSender>();
+            services.AddScoped<SubscriptionRunner>();
             services.AddSingleton<ISubscriptionBackgroundService, SubscriptionBackgroundService>();
         }
     }

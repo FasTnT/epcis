@@ -12,10 +12,12 @@ namespace FasTnT.Host
 {
     public static class HttpContextExtensions
     {
-        public static async Task SetEpcisResponse(this HttpContext context, IEpcisResponse response, CancellationToken cancellationToken)
+        public static async Task SetEpcisResponse(this HttpContext context, IEpcisResponse response, int statusCode, CancellationToken cancellationToken)
         {
             var formatter = GetResponseFormatter(context);
+
             context.Response.ContentType = formatter.ToContentTypeString();
+            context.Response.StatusCode = statusCode;
             await formatter.Write(response, context.Response.Body, cancellationToken);
         }
 

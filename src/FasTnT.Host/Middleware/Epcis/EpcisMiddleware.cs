@@ -10,6 +10,8 @@ namespace FasTnT.Host
 {
     public abstract class EpcisMiddleware<T>
     {
+        const int OkStatusCode = 200;
+
         private readonly RequestDelegate _next;
         private readonly string _path;
         private IServiceProvider _serviceProvider;
@@ -44,10 +46,10 @@ namespace FasTnT.Host
 
         public async Task Execute<TService>(Func<TService, Task> action) => await action(_serviceProvider.GetService<TService>());
 
-        public async Task Execute<TService>(Func<TService, Task<IEpcisResponse>> action, CancellationToken cancellationToken)
+        public async Task Execute<TService>(Func<TService, Task<IEpcisResponse>> action)
         {
             var result = await action(_serviceProvider.GetService<TService>());
-            await _httpContext.SetEpcisResponse(result, cancellationToken);
+            await _httpContext.SetEpcisResponse(result, OkStatusCode, default);
         }
     }
 }

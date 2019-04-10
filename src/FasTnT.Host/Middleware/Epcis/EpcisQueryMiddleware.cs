@@ -34,7 +34,7 @@ namespace FasTnT.Host
             }
         }
 
-        private async Task Execute(Func<QueryService, Task<IEpcisResponse>> action, CancellationToken cancellationToken) => await Execute<QueryService>(async s => await action(s), cancellationToken);
+        private async Task Execute(Func<QueryService, Task<IEpcisResponse>> action) => await Execute<QueryService>(async s => await action(s));
         private async Task Execute(Func<QueryService, Task> action) => await Execute<QueryService>(async s => await action(s));
     }
 }
