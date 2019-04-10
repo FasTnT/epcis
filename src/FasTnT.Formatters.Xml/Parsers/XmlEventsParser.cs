@@ -60,6 +60,8 @@ namespace FasTnT.Formatters.Xml.Requests
                         node.ParseQuantityListInto(epcisEvent, EpcType.OutputQuantity); break;
                     case "childQuantityList":
                         node.ParseQuantityListInto(epcisEvent, EpcType.ChildQuantity); break;
+                    case "quantityList":
+                        node.ParseQuantityListInto(epcisEvent, EpcType.Quantity); break;
                     case "outputEPCList":
                         node.ParseEpcListInto(EpcType.OutputEpc, epcisEvent); break;
                     case "epcClass":

@@ -1,6 +1,5 @@
 ﻿using FasTnT.Domain.Persistence;
 using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Linq;
@@ -12,13 +11,11 @@ namespace FasTnT.Host.Middleware.Authentication
 {
     public class BasicAuthenticationMiddleware
     {
-        private readonly ILogger<BasicAuthenticationMiddleware> _logger;
         private readonly RequestDelegate _next;
         private readonly string _realm;
 
-        public BasicAuthenticationMiddleware(ILogger<BasicAuthenticationMiddleware> logger, RequestDelegate next, string realm)
+        public BasicAuthenticationMiddleware(RequestDelegate next, string realm)
         {
-            _logger = logger;
             _next = next;
             _realm = realm;
         }
@@ -36,10 +33,16 @@ namespace FasTnT.Host.Middleware.Authentication
                 var unitOfWork = serviceProvider.GetService<IUnitOfWork>();
                 var userContext = serviceProvider.GetService<UserContext>();
                 var (username, password) = ParseCredentials(authHeader.Value.First());
-                var user = await unitOfWork.UserManager.GetByUsername(username);
+                var user = await unitOfWork.UserManager.GetByUsername(username, httpContext.RequestAborted);
 
-                if (userContext.Authenticate(user, password)) await _next(httpContext);
-                else Unauthenticated(httpContext);
+                if (userContext.Authenticate(user, password))
+                {
+                    await _next(httpContext);
+                }
+                else
+                {
+                    Unauthenticated(httpContext);
+                }
             }
         }
 
