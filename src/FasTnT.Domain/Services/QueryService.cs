@@ -93,7 +93,7 @@ namespace FasTnT.Domain.Services
         private async static Task EnsureSubscriptionDoesNotExist(IUnitOfWork transaction, Subscription request, CancellationToken cancellationToken)
         {
             var subscription = await transaction.SubscriptionManager.GetById(request.SubscriptionId, cancellationToken);
-            if (subscription != null) throw new EpcisException(ExceptionType.SubscribeNotPermittedException, $"Subscription '{request.QueryName}' already exist.");
+            if (subscription != null) throw new EpcisException(ExceptionType.SubscribeNotPermittedException, $"Subscription '{request.SubscriptionId}' already exist.");
         }
 
         private void EnsureQueryAllowsSubscription(Subscription subscribe)
