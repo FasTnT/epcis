@@ -1,6 +1,8 @@
 ﻿using FasTnT.Formatters;
 using FasTnT.Model.Responses;
+using System;
 using System.Net;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -17,9 +19,10 @@ namespace FasTnT.Domain.Services.Subscriptions
         public async Task Send(string destination, IEpcisResponse epcisResponse, string contentType, CancellationToken cancellationToken)
         {
             var responseFormatter = _formatterFactory.GetFormatter<IEpcisResponse>(contentType) as IResponseFormatter;
-            var request = WebRequest.Create($"{destination}{GetCallbackUrl(epcisResponse)}");
+            var request = WebRequest.CreateHttp($"{destination}{GetCallbackUrl(epcisResponse)}");
             request.Method = "POST";
             request.ContentType = responseFormatter.ToContentTypeString();
+            TrySetAuthorization(request);
 
             using (var stream = await request.GetRequestStreamAsync())
             {
@@ -28,6 +31,14 @@ namespace FasTnT.Domain.Services.Subscriptions
 
             var response = await request.GetResponseAsync();
             // TODO: use response
+        }
+
+        private void TrySetAuthorization(HttpWebRequest request)
+        {
+            if (!string.IsNullOrEmpty(request.RequestUri.UserInfo))
+            {
+                request.Headers.Add("Authorization", $"Basic {Convert.ToBase64String(Encoding.UTF8.GetBytes(WebUtility.UrlDecode(request.RequestUri.UserInfo)))}");
+            }
         }
 
         private string GetCallbackUrl(IEpcisResponse response)
