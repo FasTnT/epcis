@@ -53,7 +53,7 @@ namespace FasTnT.Domain.Services
                     var results = await epcisQuery.Execute(query.Parameters, _unitOfWork, cancellationToken);
                     return new PollResponse { QueryName = query.QueryName, Entities = results };
                 }
-                catch (Exception ex)
+                catch (Exception ex) when (!(ex is EpcisException))
                 {
                     throw new EpcisException(ExceptionType.QueryParameterException, ex.Message);
                 }

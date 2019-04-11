@@ -43,7 +43,7 @@ namespace FasTnT.Formatters.Xml.Requests
                 switch (node.Name.LocalName)
                 {
                     case "eventTime":
-                        epcisEvent.EventTime = DateTime.Parse(node.Value, CultureInfo.InvariantCulture); break;
+                        epcisEvent.EventTime = DateTime.Parse(node.Value, CultureInfo.InvariantCulture, DateTimeStyles.AdjustToUniversal); break;
                     case "eventTimeZoneOffset":
                         epcisEvent.EventTimeZoneOffset = new TimeZoneOffset { Representation = node.Value }; break;
                     case "action":
