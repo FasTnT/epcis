@@ -93,7 +93,7 @@ namespace FasTnT.Formatters.Xml
 
         public static ErrorDeclaration ToErrorDeclaration(this XElement element, EpcisEvent Event)
         {
-            foreach (var innerElement in element.Elements().Where(x => !new[] { "id", "corrective" }.Contains(x.Name.LocalName)))
+            foreach (var innerElement in element.Elements().Where(x => !new[] { "id", "corrective", "declarationTime", "reason", "correctiveEventIDs" }.Contains(x.Name.LocalName)))
             {
                 Event.CustomFields.Add(XmlEventsParser.ParseCustomField(innerElement, Event, FieldType.ErrorDeclarationExtension));
             }
