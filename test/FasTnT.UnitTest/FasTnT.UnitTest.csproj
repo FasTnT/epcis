@@ -20,6 +20,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="XmlFormatter\files\requests\xml\invalid_event_1.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="XmlFormatter\files\requests\xml\valid_event_masterdata_1.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="XmlFormatter\files\requests\xml\valid_event_1.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
