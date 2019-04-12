@@ -39,6 +39,8 @@ namespace FasTnT.Persistence.Dapper
                 var fields = await reader.ReadAsync<CustomFieldEntity>();
                 var transactions = await reader.ReadAsync<BusinessTransactionEntity>();
                 var sourceDests = await reader.ReadAsync<SourceDestinationEntity>();
+                var errorDeclaration = await reader.ReadAsync<ErrorDeclarationEntity>();
+                var correctiveEventIds = await reader.ReadAsync<CorrectiveEventIdEntity>();
 
                 foreach (var evt in events)
                 {
@@ -46,6 +48,12 @@ namespace FasTnT.Persistence.Dapper
                     evt.CustomFields = CreateHierarchy(fields.Where(x => x.EventId == evt.Id));
                     evt.BusinessTransactions = transactions.Where(x => x.EventId == evt.Id).ToList<BusinessTransaction>();
                     evt.SourceDestinationList = sourceDests.Where(x => x.EventId == evt.Id).ToList<SourceDestination>();
+                    evt.ErrorDeclaration = errorDeclaration.SingleOrDefault(x => x.EventId == evt.Id);
+
+                    if (evt.ErrorDeclaration != null)
+                    {
+                        evt.ErrorDeclaration.CorrectiveEventIds = correctiveEventIds.Where(x => x.EventId == evt.Id).ToList<CorrectiveEventId>();
+                    }
                 }
             }
 

@@ -1,6 +1,7 @@
 ﻿using FasTnT.Model;
 using FasTnT.Model.Events.Enums;
 using MoreLinq;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -46,9 +47,17 @@ namespace FasTnT.Formatters.Xml.Responses
             element.Add(new XElement("eventTime", @event.EventTime.ToString(DateTimeFormat, CultureInfo.InvariantCulture)));
             element.Add(new XElement("recordTime", @event.CaptureTime.ToString(DateTimeFormat)));
             element.Add(new XElement("eventTimeZoneOffset", @event.EventTimeZoneOffset.Representation));
+            if (@event.ErrorDeclaration != null) AddErrorDeclaration(@event.ErrorDeclaration, element);
             if (!string.IsNullOrEmpty(@event.EventId)) element.Add(new XElement("eventID", @event.EventId));
 
             return element;
+        }
+
+        private void AddErrorDeclaration(ErrorDeclaration eventError, XElement element)
+        {
+            var correctiveEventIds = eventError.CorrectiveEventIds.Any() ? new XElement("correctiveEventIDs", eventError.CorrectiveEventIds.Select(x => new XElement("correctiveEventId", x.CorrectiveId))) : null;
+            var errorDeclaration = new XElement("errorDeclaration", new XElement("declarationTime", eventError.DeclarationTime), new XElement("reason", eventError.Reason), correctiveEventIds);
+            element.Add(new XElement("baseExtension", errorDeclaration));
         }
 
         public void EpcList(EpcisEvent evt, XContainer element)

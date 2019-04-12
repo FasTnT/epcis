@@ -95,6 +95,7 @@ namespace FasTnT.Formatters.Xml.Requests
                     case "recordTime": // We don't process record time as it will be overrided in any case..
                         break;
                     case "extension":
+                    case "baseExtension":
                         ParseExtensionElement(node, epcisEvent); break;
                     default:
                         epcisEvent.CustomFields.Add(ParseCustomField(node, epcisEvent, FieldType.EventExtension)); break;
