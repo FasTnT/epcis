@@ -6,7 +6,7 @@
 
   <ItemGroup>
     <PackageReference Include="fastJSON" Version="2.2.2" />
-    <PackageReference Include="morelinq" Version="3.1.0" />
+    <PackageReference Include="morelinq" Version="3.1.1" />
   </ItemGroup>
 
   <ItemGroup>
