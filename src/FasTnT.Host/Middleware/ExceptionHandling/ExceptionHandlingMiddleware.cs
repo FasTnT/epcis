@@ -13,11 +13,13 @@ namespace FasTnT.Host.Middleware
         const int BadRequest = 400, InternalServerError = 500;
         private readonly RequestDelegate _next;
         private readonly ILogger _logger;
+        private readonly bool _developmentMode;
 
-        public ExceptionHandlingMiddleware(RequestDelegate next, ILogger<ExceptionHandlingMiddleware> logger)
+        public ExceptionHandlingMiddleware(RequestDelegate next, ILogger<ExceptionHandlingMiddleware> logger, bool developmentMode)
         {
             _next = next;
             _logger = logger;
+            _developmentMode = developmentMode;
         } 
 
         public async Task Invoke(HttpContext context)
@@ -39,11 +41,13 @@ namespace FasTnT.Host.Middleware
                 {
                     Exception = (epcisException?.ExceptionType ?? ExceptionType.ImplementationException).DisplayName,
                     Severity = epcisException?.Severity ?? ExceptionSeverity.Error,
-                    Reason = ex.Message
+                    Reason = GetMessage(ex)
                 };
 
                 await context.SetEpcisResponse(response, (ex is EpcisException) ? BadRequest : InternalServerError, context.RequestAborted);
             }
         }
+
+        private string GetMessage(Exception ex) => ex is EpcisException || _developmentMode ? ex.Message : "An unexpected error occured.";
     }
 }

@@ -48,14 +48,14 @@ namespace FasTnT.Host
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
             SubscriptionBackgroundService.DelayTimeoutInMs = Configuration.GetSection("Settings").GetValue("SubscriptionWaitTimeout", 5000);
+            var isDevelopment = env.IsDevelopment();
 
-            if (env.IsDevelopment())
+            if (isDevelopment)
             {
-                app.UseDeveloperExceptionPage()
-                   .UseEpcisMigrationEndpoint($"{EpcisServicePath}/Database");
+                app.UseEpcisMigrationEndpoint($"{EpcisServicePath}/Database");
             }
 
-            app.UseExceptionHandlingMiddleware()
+            app.UseExceptionHandlingMiddleware(isDevelopment)
                .UseWhen(context => context.Request.Path.StartsWithSegments(EpcisServicePath), x => {
                     x.UseBasicAuthentication("FasTnT")
                      .UseEpcisCaptureEndpoint($"{EpcisServicePath}/Capture")
