@@ -47,7 +47,7 @@ namespace FasTnT.Host
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
-            SubscriptionBackgroundService.DelayTimeoutInMs = Configuration.GetSection("Settings").GetValue("SubscriptionWaitTimeout", 5000);
+            Constants.SubscriptionTaskDelayTimeoutInMs = Configuration.GetSection("Settings").GetValue("SubscriptionWaitTimeout", 5000);
             var isDevelopment = env.IsDevelopment();
 
             if (isDevelopment)
