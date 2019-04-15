@@ -31,7 +31,7 @@ namespace FasTnT.Persistence.Dapper
         public async Task<IEnumerable<EpcisEvent>> ToList(CancellationToken cancellationToken)
         {
             _parameters.SetLimit(_limit > 0 ? _limit : int.MaxValue);
-            var events = await _unitOfWork.Query<EpcisEventEntity>(_sqlTemplate.RawSql, _parameters.Values, cancellationToken);
+            var events = await _unitOfWork.Query<EpcisEventEntity, ErrorDeclarationEntity>(_sqlTemplate.RawSql, _parameters.Values, (evt, ed) => evt.ErrorDeclaration = ed, "declaration_time", cancellationToken);
 
             using (var reader = await _unitOfWork.FetchMany(SqlRequests.RelatedQuery, new { EventIds = events.Select(x => x.Id).ToArray() }, cancellationToken))
             {
@@ -39,7 +39,6 @@ namespace FasTnT.Persistence.Dapper
                 var fields = await reader.ReadAsync<CustomFieldEntity>();
                 var transactions = await reader.ReadAsync<BusinessTransactionEntity>();
                 var sourceDests = await reader.ReadAsync<SourceDestinationEntity>();
-                var errorDeclaration = await reader.ReadAsync<ErrorDeclarationEntity>();
                 var correctiveEventIds = await reader.ReadAsync<CorrectiveEventIdEntity>();
 
                 foreach (var evt in events)
@@ -48,7 +47,6 @@ namespace FasTnT.Persistence.Dapper
                     evt.CustomFields = CreateHierarchy(fields.Where(x => x.EventId == evt.Id));
                     evt.BusinessTransactions = transactions.Where(x => x.EventId == evt.Id).ToList<BusinessTransaction>();
                     evt.SourceDestinationList = sourceDests.Where(x => x.EventId == evt.Id).ToList<SourceDestination>();
-                    evt.ErrorDeclaration = errorDeclaration.SingleOrDefault(x => x.EventId == evt.Id);
 
                     if (evt.ErrorDeclaration != null)
                     {

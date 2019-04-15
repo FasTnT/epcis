@@ -125,14 +125,13 @@
     <value>H4sIAAAAAAAAC3u/e79LkH+AQrCzh6uvo4Knm4JrhGdwSLBCcmJOTlJicraCs2Ows6OLqzUvdnXFpUnFyUWZBSWZ+XnFcMVcOAxNKiOkJLUgOZOgOYmlKZklhBSVFqcWoZvkFurnHOLp74fLA3qlBSmJJanxKILWAEVYcAElAQAA</value>
   </data>
   <data name="EventQuery" xml:space="preserve">
-    <value>SELECT request.record_time as capture_time, event.id, event_type as type, event.record_time as event_time, action, read_point, event_timezone_offset, disposition, business_location, business_step, transformation_id, event_id FROM epcis.event JOIN epcis.request on request.id = event.request_id /**where**/ /**orderby**/ LIMIT @limit</value>
+    <value>SELECT request.record_time as capture_time, event.id, event_type as type, event.record_time as event_time, action, read_point, event_timezone_offset, disposition, business_location, business_step, transformation_id, event.event_id, declaration_time, reason FROM epcis.event JOIN epcis.request on request.id = event.request_id LEFT JOIN epcis.error_declaration ed ON event.id = ed.event_id /**where**/ /**orderby**/ LIMIT @limit</value>
   </data>
   <data name="RelatedQuery" xml:space="preserve">
     <value>SELECT event_id, epc as id, type, is_quantity, quantity, unit_of_measure FROM epcis.epc WHERE event_id = ANY(@EventIds);
 SELECT event_id, field_id as id, parent_id, namespace, name, type, text_value, numeric_value, date_value FROM epcis.custom_field WHERE event_id = ANY(@EventIds);
 SELECT event_id, transaction_type as type, transaction_id as id FROM epcis.business_transaction WHERE event_id = ANY(@EventIds);
 SELECT event_id, type, source_dest_id as id, direction FROM epcis.source_destination WHERE event_id = ANY(@EventIds);
-SELECT event_id, declaration_time, reason FROM epcis.error_declaration WHERE event_id = ANY(@EventIds);
 SELECT event_id, corrective_eventid as corrective_id FROM epcis.error_declaration_eventid WHERE event_id = ANY(@EventIds);</value>
   </data>
   <data name="StoreBusinessTransaction" xml:space="preserve">
