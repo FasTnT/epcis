@@ -7,6 +7,7 @@ using FasTnT.Model.Queries.Implementations;
 using FasTnT.Model.Responses;
 using FasTnT.Model.Subscriptions;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -45,7 +46,7 @@ namespace FasTnT.Domain.Services
             }
             else
             {
-                query.Parameters = query.Parameters.Where(x => !x.Values.All(string.IsNullOrEmpty));
+                query.Parameters = QueryParameterFormatter.Format(query.Parameters);
                 try
                 {
                     epcisQuery.ValidateParameters(query.Parameters);
@@ -65,7 +66,7 @@ namespace FasTnT.Domain.Services
             EnsureDestinationIsValidURI(request);
             EnsureQueryAllowsSubscription(request);
             EnsureDestinationHasEndSlash(request);
-            request.Parameters = request.Parameters.Where(x => !x.Values.All(string.IsNullOrEmpty));
+            request.Parameters = QueryParameterFormatter.Format(request.Parameters);
 
             await _unitOfWork.Execute(async tx =>
             {
@@ -101,5 +102,17 @@ namespace FasTnT.Domain.Services
             var query = _queries.SingleOrDefault(x => x.Name == subscribe.QueryName);
             if (query == null || !query.AllowSubscription) throw new EpcisException(ExceptionType.SubscribeNotPermittedException, $"Query '{subscribe.QueryName}' does not exist or doesn't allow subscription");
         }
+    }
+
+    public class QueryParameterFormatter
+    {
+        public static IEnumerable<QueryParameter> Format(IEnumerable<QueryParameter> parameters)
+            => parameters.GroupBy(x => x.Name)
+                         .Select(g => new QueryParameter
+                         {
+                             Name = g.Key,
+                             Values = g.SelectMany(x => x.Values).Where(x => !string.IsNullOrWhiteSpace(x)).ToArray()
+                         })
+                         .Where(x => x.Values.Any());
     }
 }
