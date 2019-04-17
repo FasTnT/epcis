@@ -8,8 +8,6 @@ using FasTnT.Host.BackgroundTasks;
 using FasTnT.Domain.Extensions;
 using FasTnT.Formatters;
 using FasTnT.Formatters.Xml;
-using FasTnT.Domain.BackgroundTasks;
-using FasTnT.Host.Middleware.Authentication;
 using FasTnT.Domain;
 using FasTnT.Formatters.Json;
 
