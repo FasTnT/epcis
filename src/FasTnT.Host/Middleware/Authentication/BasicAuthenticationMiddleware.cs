@@ -28,7 +28,7 @@ namespace FasTnT.Host.Middleware.Authentication
         {
             var authHeader = httpContext.Request.Headers.FirstOrDefault(x => x.Key == AuthorizationHeaderKey);
 
-            if(!httpContext.Request.Headers.Any(x => x.Key == AuthorizationHeaderKey) || !authHeader.Value.FirstOrDefault().StartsWith($"{AuthenticationScheme} "))
+            if(string.IsNullOrEmpty(authHeader.Key) || !authHeader.Value.FirstOrDefault().StartsWith($"{AuthenticationScheme} "))
             {
                 Unauthenticated(httpContext);
             }

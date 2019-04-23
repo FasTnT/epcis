@@ -31,7 +31,7 @@ namespace FasTnT.Domain.Services
         public Task<GetVendorVersionResponse> GetVendorVersion(CancellationToken cancellationToken) => Task.Run(() => new GetVendorVersionResponse { Version = Constants.ProductVersion }, cancellationToken);
         public async Task<GetSubscriptionIdsResult> GetSubscriptionId(GetSubscriptionIds query, CancellationToken cancellationToken)
         {
-            var subscriptions = await _unitOfWork.SubscriptionManager.GetAll(false, cancellationToken: cancellationToken);
+            var subscriptions = await _unitOfWork.SubscriptionManager.GetAll(false, cancellationToken);
             return new GetSubscriptionIdsResult { SubscriptionIds = subscriptions.Where(s => s.QueryName == query.QueryName).Select(x => x.SubscriptionId) };
         }
 
@@ -45,7 +45,7 @@ namespace FasTnT.Domain.Services
             }
             else
             {
-                query.Parameters = query.Parameters.Where(x => !x.Values.All(string.IsNullOrEmpty));
+                query.Parameters = QueryParameterFormatter.Format(query.Parameters);
                 try
                 {
                     epcisQuery.ValidateParameters(query.Parameters);
@@ -62,17 +62,28 @@ namespace FasTnT.Domain.Services
 
         public async Task Subscribe(Subscription request, CancellationToken cancellationToken)
         {
-            EnsureDestinationIsValidURI(request);
-            EnsureQueryAllowsSubscription(request);
-            EnsureDestinationHasEndSlash(request);
-            request.Parameters = request.Parameters.Where(x => !x.Values.All(string.IsNullOrEmpty));
+            var epcisQuery = _queries.SingleOrDefault(x => x.Name == request.QueryName);
 
-            await _unitOfWork.Execute(async tx =>
+            if (epcisQuery == null)
             {
-                await EnsureSubscriptionDoesNotExist(tx, request, cancellationToken);
-                await tx.SubscriptionManager.Store(request, cancellationToken);
-                _backgroundService.Register(request);
-            });
+                throw new Exception($"Unknown query: '{request.QueryName}'");
+            }
+            else
+            {
+                EnsureDestinationIsValidURI(request);
+                EnsureQueryAllowsSubscription(epcisQuery);
+                EnsureDestinationHasEndSlash(request);
+
+                request.Parameters = QueryParameterFormatter.Format(request.Parameters);
+                epcisQuery.ValidateParameters(request.Parameters, true);
+
+                await _unitOfWork.Execute(async tx =>
+                {
+                    await EnsureSubscriptionDoesNotExist(tx, request, cancellationToken);
+                    await tx.SubscriptionManager.Store(request, cancellationToken);
+                    _backgroundService.Register(request);
+                });
+            }
         }
 
         public async Task Unsubscribe(UnsubscribeRequest query, CancellationToken cancellationToken)
@@ -96,10 +107,9 @@ namespace FasTnT.Domain.Services
             if (subscription != null) throw new EpcisException(ExceptionType.SubscribeNotPermittedException, $"Subscription '{request.SubscriptionId}' already exist.");
         }
 
-        private void EnsureQueryAllowsSubscription(Subscription subscribe)
+        private void EnsureQueryAllowsSubscription(IEpcisQuery query)
         {
-            var query = _queries.SingleOrDefault(x => x.Name == subscribe.QueryName);
-            if (query == null || !query.AllowSubscription) throw new EpcisException(ExceptionType.SubscribeNotPermittedException, $"Query '{subscribe.QueryName}' does not exist or doesn't allow subscription");
+            if (query == null || !query.AllowSubscription) throw new EpcisException(ExceptionType.SubscribeNotPermittedException, $"Query '{query?.Name}' does not exist or doesn't allow subscription");
         }
     }
 }
