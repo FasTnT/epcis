@@ -75,7 +75,7 @@ namespace FasTnT.Domain.Services
                 EnsureDestinationHasEndSlash(request);
 
                 request.Parameters = QueryParameterFormatter.Format(request.Parameters);
-                epcisQuery.ValidateParameters(request.Parameters);
+                epcisQuery.ValidateParameters(request.Parameters, true);
 
                 await _unitOfWork.Execute(async tx =>
                 {

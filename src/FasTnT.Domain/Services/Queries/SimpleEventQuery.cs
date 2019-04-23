@@ -24,7 +24,18 @@ namespace FasTnT.Model.Queries.Implementations
 
         public void ValidateParameters(IEnumerable<QueryParameter> parameters, bool subscription = false)
         {
-            if(parameters.Any(x => x.Name == "maxEventCount") && parameters.Any(x => x.Name == "eventCountLimit"))
+            var specificNames = new[] { "eventType", "orderBy", "orderDirection" };
+            var allowedPrefixes = new[] { "EQ_", "GE_", "LE_", "GT", "LT", "EXISTS_", "EQATTR_", "HASATTR_" };
+
+            foreach (var parameter in parameters)
+            {
+                if (specificNames.Contains(parameter.Name) || allowedPrefixes.Any(p => parameter.Name.StartsWith(p))) continue;
+                if (!subscription && (parameter.Name == "maxEventCount" || parameter.Name == "eventCountLimit")) continue;
+
+                throw new EpcisException(ExceptionType.QueryParameterException, $"Parameter '{parameter.Name}' is unknown or not allowed in this context.");
+            }
+
+            if (parameters.Any(x => x.Name == "maxEventCount") && parameters.Any(x => x.Name == "eventCountLimit"))
             {
                 throw new EpcisException(ExceptionType.QueryParameterException, "maxEventCount and eventCountLimit parameters are mutually exclusive.");
             }
