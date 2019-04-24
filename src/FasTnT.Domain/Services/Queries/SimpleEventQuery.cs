@@ -16,6 +16,10 @@ namespace FasTnT.Model.Queries.Implementations
 {
     public class SimpleEventQuery : IEpcisQuery
     {
+        private static readonly string[] _specificNames = new[] { "eventType", "orderBy", "orderDirection" };
+        private static readonly string[] _anyValuePrefixes = new[] { "EQ_", "EXISTS_", "EQATTR_", "HASATTR_" };
+        private static readonly string[] _comparisonPrefixes = new[] { "GE_", "LE_", "GT", "LT" };
+
         public string Name => "SimpleEventQuery";
         public bool AllowSubscription => true;
 
@@ -24,13 +28,11 @@ namespace FasTnT.Model.Queries.Implementations
 
         public void ValidateParameters(IEnumerable<QueryParameter> parameters, bool subscription = false)
         {
-            var specificNames = new[] { "eventType", "orderBy", "orderDirection" };
-            var allowedPrefixes = new[] { "EQ_", "GE_", "LE_", "GT", "LT", "EXISTS_", "EQATTR_", "HASATTR_" };
-
             foreach (var parameter in parameters)
             {
-                if (specificNames.Contains(parameter.Name) || allowedPrefixes.Any(p => parameter.Name.StartsWith(p))) continue;
-                if (!subscription && (parameter.Name == "maxEventCount" || parameter.Name == "eventCountLimit")) continue;
+                if (_specificNames.Contains(parameter.Name) || _anyValuePrefixes.Any(p => parameter.Name.StartsWith(p))) continue;
+                if (_comparisonPrefixes.Any(p => parameter.Name.StartsWith(p) && parameter.ContainsSingleValueOfType(new[] { typeof(DateTime), typeof(double) }))) continue;
+                if (!subscription && new[] { "maxEventCount", "eventCountLimit" }.Contains(parameter.Name) && parameter.ContainsSingleValueOfType(typeof(double))) continue;
 
                 throw new EpcisException(ExceptionType.QueryParameterException, $"Parameter '{parameter.Name}' is unknown or not allowed in this context.");
             }

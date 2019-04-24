@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace FasTnT.Domain.BackgroundTasks
 {
-    public class SubscriptionBackgroundService : ISubscriptionBackgroundService
+    public sealed class SubscriptionBackgroundService : ISubscriptionBackgroundService
     {
         private readonly IServiceProvider _services;
         private readonly object _monitor = new object();
