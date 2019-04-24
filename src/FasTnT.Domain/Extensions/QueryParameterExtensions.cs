@@ -25,6 +25,11 @@ namespace FasTnT.Model.Extensions
                 throw new Exception($"Unknow value type: '{typeof(T).Name}'");
         }
 
+        public static bool ContainsSingleValueOfType(this QueryParameter parameter, params Type[] types)
+        {
+            return parameter.Values.Length == 1 && types.Contains(parameter.GetSingleValue().GetType());
+        }
+
         public static object GetSingleValue(this QueryParameter parameter)
         {
             var singleParameter = parameter.Values.Single();
