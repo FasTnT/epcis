@@ -34,7 +34,7 @@ namespace FasTnT.Model.Queries.Implementations
                 if (_comparisonPrefixes.Any(p => parameter.Name.StartsWith(p) && parameter.ContainsSingleValueOfType(new[] { typeof(DateTime), typeof(double) }))) continue;
                 if (!subscription && new[] { "maxEventCount", "eventCountLimit" }.Contains(parameter.Name) && parameter.ContainsSingleValueOfType(typeof(double))) continue;
 
-                throw new EpcisException(ExceptionType.QueryParameterException, $"Parameter '{parameter.Name}' is unknown or not allowed in this context.");
+                throw new EpcisException(ExceptionType.QueryParameterException, $"Parameter '{parameter.Name}' is unknown, has invalid value or not allowed in this context.");
             }
 
             if (parameters.Any(x => x.Name == "maxEventCount") && parameters.Any(x => x.Name == "eventCountLimit"))
