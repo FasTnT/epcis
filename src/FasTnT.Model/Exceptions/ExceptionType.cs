@@ -10,7 +10,11 @@ namespace FasTnT.Model.Exceptions
         public static ExceptionType QueryTooLargeException = new ExceptionType(3, nameof(QueryTooLargeException));
         public static ExceptionType QueryParameterException = new ExceptionType(4, nameof(QueryParameterException));
         public static ExceptionType ValidationException = new ExceptionType(5, nameof(ValidationException));
-        public static ExceptionType SubscriptionControlsException = new ExceptionType(4, nameof(SubscriptionControlsException));
+        public static ExceptionType SubscriptionControlsException = new ExceptionType(6, nameof(SubscriptionControlsException));
+        public static ExceptionType NoSuchSubscriptionException = new ExceptionType(7, nameof(NoSuchSubscriptionException));
+        public static ExceptionType DuplicateSubscriptionException = new ExceptionType(8, nameof(DuplicateSubscriptionException));
+        public static ExceptionType QueryTooComplexException = new ExceptionType(9, nameof(QueryTooComplexException));
+        public static ExceptionType InvalidURIException = new ExceptionType(10, nameof(InvalidURIException));
 
         public ExceptionType() { }
         public ExceptionType(short id, string displayName) : base(id, displayName) { }
