@@ -10,12 +10,7 @@ namespace FasTnT.Model.Events.Enums
         public static EventType Transformation = new EventType(3, "TransformationEvent");
         public static EventType Quantity = new EventType(4, "QuantityEvent");
 
-        public EventType()
-        {
-        }
-
-        public EventType(short id, string displayName) : base(id, displayName)
-        {
-        }
+        public EventType() { }
+        public EventType(short id, string displayName) : base(id, displayName) { }
     }
 }
