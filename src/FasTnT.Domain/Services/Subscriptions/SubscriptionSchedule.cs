@@ -1,5 +1,6 @@
 ﻿using FasTnT.Model.Subscriptions;
 using System;
+using System.Linq;
 
 namespace FasTnT.Domain.Services.Subscriptions
 {
@@ -17,6 +18,7 @@ namespace FasTnT.Domain.Services.Subscriptions
             _dayOfWeek = ScheduleEntry.Parse(subscription.Schedule?.DayOfWeek, 1, 7);
         }
 
+
         public virtual DateTime GetNextOccurence(DateTime startDate)
         {
             var tentative = startDate.AddSeconds(1); // Parse from the next second
@@ -33,6 +35,19 @@ namespace FasTnT.Domain.Services.Subscriptions
             }
 
             return tentative;
+        }
+
+        public static bool IsValid(Subscription request)
+        {
+            try
+            {
+                new SubscriptionSchedule(request);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
         }
     }
 }

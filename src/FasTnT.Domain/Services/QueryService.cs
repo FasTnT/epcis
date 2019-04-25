@@ -70,9 +70,8 @@ namespace FasTnT.Domain.Services
             }
             else
             {
-                EnsureDestinationIsValidURI(request);
                 EnsureQueryAllowsSubscription(epcisQuery);
-                EnsureDestinationHasEndSlash(request);
+                SubscriptionValidator.Validate(request);
 
                 request.Parameters = QueryParameterFormatter.Format(request.Parameters);
                 epcisQuery.ValidateParameters(request.Parameters, true);
@@ -97,9 +96,6 @@ namespace FasTnT.Domain.Services
                 _backgroundService.Remove(subscription);
             });
         }
-
-        private void EnsureDestinationHasEndSlash(Subscription request) => request.Destination = $"{request.Destination.TrimEnd('/')}/";
-        private void EnsureDestinationIsValidURI(Subscription request) => UriValidator.Validate(request.Destination, true);
 
         private async static Task EnsureSubscriptionDoesNotExist(IUnitOfWork transaction, Subscription request, CancellationToken cancellationToken)
         {
