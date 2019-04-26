@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 namespace FasTnT.UnitTest.Domain.SubscriptionServiceTests
 {
     [TestClass]
-    public class WhenProcessingASubscriptionRequestForAQueryThatDoesntAllowSubscription : BaseQueryServiceUnitTest
+    public class WhenProcessingASubscriptionRequestGivenBothTriggerAndScheduleAreOmitted : BaseQueryServiceUnitTest
     {
         public ISubscriptionManager SubscriptionManager { get; set; }
         public Subscription Request { get; set; }
@@ -23,10 +23,9 @@ namespace FasTnT.UnitTest.Domain.SubscriptionServiceTests
             base.Arrange();
 
             SubscriptionManager = A.Fake<ISubscriptionManager>();
-            Request = new Subscription { SubscriptionId = "TestSubscription", Trigger = "trigger", Destination = "http://test.com/callback", QueryName = EpcisQueries.First(x => !x.AllowSubscription).Name };
+            Request = new Subscription { SubscriptionId = "TestSubscription", Destination = "http://test.com/callback", QueryName = EpcisQueries.First(x => x.AllowSubscription).Name };
 
             A.CallTo(() => UnitOfWork.SubscriptionManager).Returns(SubscriptionManager);
-            A.CallTo(() => SubscriptionManager.GetById("TestSubscription", default)).Returns(Task.FromResult(default(Subscription)));
         }
 
         public override void Act()
@@ -35,7 +34,7 @@ namespace FasTnT.UnitTest.Domain.SubscriptionServiceTests
             {
                 Task.WaitAll(QueryService.Subscribe(Request, default));
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Catched = (ex is AggregateException) ? ex.InnerException : ex;
             }
@@ -48,13 +47,10 @@ namespace FasTnT.UnitTest.Domain.SubscriptionServiceTests
         public void TheExceptionShouldBeEpcisException() => Assert.IsInstanceOfType(Catched, typeof(EpcisException));
 
         [Assert]
-        public void TheExceptionTypeShouldBeNoSubscribeNotPermittedException() => Assert.AreEqual(ExceptionType.SubscribeNotPermittedException, ((EpcisException)Catched).ExceptionType);
+        public void TheExceptionTypeShouldBeNoSubscribeNotPermittedException() => Assert.AreEqual(ExceptionType.SubscriptionControlsException, ((EpcisException)Catched).ExceptionType);
 
         [Assert]
         public void ItShouldNotHaveBeginTheUnitOfWorkTransaction() => A.CallTo(() => UnitOfWork.BeginTransaction()).MustNotHaveHappened();
-
-        [Assert]
-        public void ItShouldNotHaveCommitTheTransaction() => A.CallTo(() => UnitOfWork.Commit()).MustNotHaveHappened();
 
         [Assert]
         public void ItShouldNotCallTheSubscriptionManagerProperty() => A.CallTo(() => UnitOfWork.SubscriptionManager).MustNotHaveHappened();
