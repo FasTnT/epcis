@@ -1,5 +1,6 @@
 ﻿using FakeItEasy;
 using FasTnT.Domain.Persistence;
+using FasTnT.Model.Exceptions;
 using FasTnT.Model.Subscriptions;
 using FasTnT.UnitTest.Common;
 using FasTnT.UnitTest.Domain.QueryServiceTests;
@@ -22,7 +23,7 @@ namespace FasTnT.UnitTest.Domain.SubscriptionServiceTests
             base.Arrange();
 
             SubscriptionManager = A.Fake<ISubscriptionManager>();
-            Request = new Subscription { SubscriptionId = "TestSubscription", Destination = "NotAValidUri", QueryName = EpcisQueries.First(x => !x.AllowSubscription).Name };
+            Request = new Subscription { SubscriptionId = "TestSubscription", Trigger = "trigger", Destination = "NotAValidUri", QueryName = EpcisQueries.First(x => x.AllowSubscription).Name };
 
             A.CallTo(() => UnitOfWork.SubscriptionManager).Returns(SubscriptionManager);
             A.CallTo(() => SubscriptionManager.GetById("TestSubscription", default)).Returns(Task.FromResult(default(Subscription)));
@@ -42,6 +43,12 @@ namespace FasTnT.UnitTest.Domain.SubscriptionServiceTests
 
         [Assert]
         public void ItShouldThrowAnException() => Assert.IsNotNull(Catched);
+
+        [Assert]
+        public void TheExceptionShouldBeEpcisException() => Assert.IsInstanceOfType(Catched, typeof(EpcisException));
+
+        [Assert]
+        public void TheExceptionTypeShouldBeNoSubscribeNotPermittedException() => Assert.AreEqual(ExceptionType.InvalidURIException, ((EpcisException)Catched).ExceptionType);
 
         [Assert]
         public void ItShouldNotHaveBeginTheUnitOfWorkTransaction() => A.CallTo(() => UnitOfWork.BeginTransaction()).MustNotHaveHappened();

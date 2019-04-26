@@ -36,14 +36,14 @@ namespace FasTnT.Formatters.Xml
 
         private static QuerySchedule ParseQuerySchedule(XElement element)
         {
-            return new QuerySchedule
+            return element == default ? null : new QuerySchedule
             {
-                Second = element?.Element("second")?.Value,
-                Minute = element?.Element("minute")?.Value,
-                Hour = element?.Element("hour")?.Value,
-                Month = element?.Element("month")?.Value,
-                DayOfMonth = element?.Element("dayOfMonth")?.Value,
-                DayOfWeek = element?.Element("dayOfWeek")?.Value
+                Second = element.Element("second")?.Value,
+                Minute = element.Element("minute")?.Value,
+                Hour = element.Element("hour")?.Value,
+                Month = element.Element("month")?.Value,
+                DayOfMonth = element.Element("dayOfMonth")?.Value,
+                DayOfWeek = element.Element("dayOfWeek")?.Value
             };
         }
     }
