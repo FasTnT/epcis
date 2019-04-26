@@ -15,7 +15,6 @@ namespace FasTnT.Model.Events.Enums
         public static EpcType ChildQuantity = new EpcType(8, "childQuantity");
 
         public EpcType() {}
-
         public EpcType(short id, string displayName) : base(id, displayName) {}
     }
 }

@@ -8,12 +8,7 @@ namespace FasTnT.Model.Events.Enums
         public static EventAction Observe = new EventAction(1, "OBSERVE");
         public static EventAction Delete = new EventAction(2, "DELETE");
 
-        public EventAction()
-        {
-        }
-
-        private EventAction(short id, string displayName) : base(id, displayName)
-        {
-        }
+        public EventAction() { }
+        private EventAction(short id, string displayName) : base(id, displayName) { }
     }
 }
