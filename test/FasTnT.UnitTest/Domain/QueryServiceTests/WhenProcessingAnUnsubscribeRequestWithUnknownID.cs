@@ -47,7 +47,7 @@ namespace FasTnT.UnitTest.Domain.SubscriptionServiceTests
         public void TheExceptionShouldBeEpcisException() => Assert.IsInstanceOfType(Catched, typeof(EpcisException));
 
         [Assert]
-        public void TheExceptionTypeShouldBeNoSuchNameException() => Assert.AreEqual(ExceptionType.NoSuchNameException, ((EpcisException)Catched).ExceptionType);
+        public void TheExceptionTypeShouldBeNoSuchNameException() => Assert.AreEqual(ExceptionType.NoSuchSubscriptionException, ((EpcisException)Catched).ExceptionType);
 
         [Assert]
         public void ItShouldCallTheSubscriptionManagerProperty() => A.CallTo(() => UnitOfWork.SubscriptionManager).MustHaveHappened();
