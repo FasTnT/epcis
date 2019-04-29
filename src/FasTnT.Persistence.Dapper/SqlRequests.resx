@@ -153,7 +153,7 @@ SELECT event_id, corrective_eventid as corrective_id FROM epcis.error_declaratio
     <value>INSERT INTO epcis.event(id, request_id, record_time, action, event_type, event_timezone_offset, business_location, business_step, disposition, read_point, transformation_id, event_id) VALUES(@Id, @RequestId, @EventTime, @Action, @Type, @EventTimeZoneOffset, @BusinessLocation, @BusinessStep, @Disposition, @ReadPoint, @TransformationId, @EventId);</value>
   </data>
   <data name="StoreRequest" xml:space="preserve">
-    <value>INSERT INTO epcis.request(id, document_time, record_time) VALUES(@Id, @DocumentTime, @RecordTime);</value>
+    <value>INSERT INTO epcis.request(id, document_time, record_time, user_id) VALUES(@Id, @DocumentTime, @RecordTime, @UserId);</value>
   </data>
   <data name="StoreSourceDestination" xml:space="preserve">
     <value>INSERT INTO epcis.source_destination(event_id, type, source_dest_id, direction) VALUES (@EventId, @Type, @Id, @Direction);</value>
