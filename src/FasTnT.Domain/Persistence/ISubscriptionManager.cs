@@ -14,5 +14,6 @@ namespace FasTnT.Domain.Persistence
         Task Delete(string subscriptionId, CancellationToken cancellationToken);
         Task<IEnumerable<Guid>> GetPendingRequestIds(string subscriptionId, CancellationToken cancellationToken);
         Task AcknowledgePendingRequests(string subscriptionId, IEnumerable<Guid> requestIds, CancellationToken cancellationToken);
+        Task RegisterSubscriptionTrigger(string subscriptionId, SubscriptionResult subscriptionResult, string reason, CancellationToken cancellationToken);
     }
 }

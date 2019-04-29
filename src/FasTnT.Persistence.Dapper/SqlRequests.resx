@@ -1,17 +1,17 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
-  <!-- 
-    Microsoft ResX Schema 
-    
+  <!--
+    Microsoft ResX Schema
+
     Version 2.0
-    
-    The primary goals of this format is to allow a simple XML format 
-    that is mostly human readable. The generation and parsing of the 
-    various data types are done through the TypeConverter classes 
+
+    The primary goals of this format is to allow a simple XML format
+    that is mostly human readable. The generation and parsing of the
+    various data types are done through the TypeConverter classes
     associated with the data types.
-    
+
     Example:
-    
+
     ... ado.net/XML headers & schema ...
     <resheader name="resmimetype">text/microsoft-resx</resheader>
     <resheader name="version">2.0</resheader>
@@ -26,36 +26,36 @@
         <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
         <comment>This is a comment</comment>
     </data>
-                
-    There are any number of "resheader" rows that contain simple 
+
+    There are any number of "resheader" rows that contain simple
     name/value pairs.
-    
-    Each data row contains a name, and value. The row also contains a 
-    type or mimetype. Type corresponds to a .NET class that support 
-    text/value conversion through the TypeConverter architecture. 
-    Classes that don't support this are serialized and stored with the 
+
+    Each data row contains a name, and value. The row also contains a
+    type or mimetype. Type corresponds to a .NET class that support
+    text/value conversion through the TypeConverter architecture.
+    Classes that don't support this are serialized and stored with the
     mimetype set.
-    
-    The mimetype is used for serialized objects, and tells the 
-    ResXResourceReader how to depersist the object. This is currently not 
+
+    The mimetype is used for serialized objects, and tells the
+    ResXResourceReader how to depersist the object. This is currently not
     extensible. For a given mimetype the value must be set accordingly:
-    
-    Note - application/x-microsoft.net.object.binary.base64 is the format 
-    that the ResXResourceWriter will generate, however the reader can 
+
+    Note - application/x-microsoft.net.object.binary.base64 is the format
+    that the ResXResourceWriter will generate, however the reader can
     read any of the formats listed below.
-    
+
     mimetype: application/x-microsoft.net.object.binary.base64
-    value   : The object must be serialized with 
+    value   : The object must be serialized with
             : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
             : and then encoded with base64 encoding.
-    
+
     mimetype: application/x-microsoft.net.object.soap.base64
-    value   : The object must be serialized with 
+    value   : The object must be serialized with
             : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
             : and then encoded with base64 encoding.
 
     mimetype: application/x-microsoft.net.object.bytearray.base64
-    value   : The object must be serialized into a byte array 
+    value   : The object must be serialized into a byte array
             : using a System.ComponentModel.TypeConverter
             : and then encoded with base64 encoding.
     -->
@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="CreateDatabaseZipped" xml:space="preserve">
-    <value>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</value>
+    <value>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</value>
     <comment>GZIP script of the SQL database schema and tables. (try http://www.txtwizard.net/compression for decompression)</comment>
   </data>
   <data name="DropDatabaseZipped" xml:space="preserve">
@@ -162,7 +162,7 @@ SELECT event_id, corrective_eventid as corrective_id FROM epcis.error_declaratio
     <value>INSERT INTO subscriptions.subscription(id, subscription_id, trigger, initial_record_time, report_if_empty, destination, query_name,  active, schedule_seconds, schedule_minutes, schedule_hours, schedule_month, schedule_day_of_month, schedule_day_of_week) VALUES(@Id, @SubscriptionId, @Trigger, @InitialRecordTime, @ReportIfEmpty, @Destination, @QueryName, @Active, @Second, @Minute, @Hour, @Month, @DayOfMonth, @DayOfWeek);</value>
   </data>
   <data name="SubscriptionAcknowledgePendingRequests" xml:space="preserve">
-    <value>DELETE FROM subscriptions.pendingrequest WHERE subscription_id = (SELECT id FROM subscriptions.subscription WHERE subscription_id = @SubscriptionId) AND request_id = ANY(@RequestId);</value>
+    <value>DELETE FROM subscriptions.pendingrequest WHERE subscription_id = (SELECT id FROM subscriptions.subscription WHERE subscription_id = @SubscriptionId) AND request_id = ANY(@RequestId)</value>
   </data>
   <data name="SubscriptionDelete" xml:space="preserve">
     <value>DELETE from subscriptions.subscription WHERE subscription_id = @Id;</value>
@@ -171,19 +171,22 @@ SELECT event_id, corrective_eventid as corrective_id FROM epcis.error_declaratio
     <value>SELECT s.id, s.subscription_id, s.query_name, s.active FROM subscriptions.subscription s</value>
   </data>
   <data name="SubscriptionListPendingRequestIds" xml:space="preserve">
-    <value>SELECT pr.request_id FROM subscriptions.pendingrequest pr JOIN subscriptions.subscription s ON s.id = pr.subscription_id WHERE s.subscription_id = @SubscriptionId;</value>
+    <value>SELECT pr.request_id FROM subscriptions.pendingrequest pr JOIN subscriptions.subscription s ON s.id = pr.subscription_id WHERE s.subscription_id = @SubscriptionId</value>
   </data>
   <data name="SubscriptionsList" xml:space="preserve">
-    <value>SELECT s.id, s.destination, s.subscription_id, s.query_name, s.active, s.trigger, s.report_if_empty, s.schedule_minutes, s.schedule_seconds, s.schedule_hours, s.schedule_month, s.schedule_day_of_month, s.schedule_day_of_week FROM subscriptions.subscription s;</value>
+    <value>SELECT s.id, s.destination, s.subscription_id, s.query_name, s.active, s.trigger, s.report_if_empty, s.schedule_minutes, s.schedule_seconds, s.schedule_hours, s.schedule_month, s.schedule_day_of_month, s.schedule_day_of_week FROM subscriptions.subscription s</value>
   </data>
   <data name="SubscriptionStoreParameter" xml:space="preserve">
-    <value>INSERT INTO subscriptions.parameter(id, subscription_id, name) VALUES(@Id, @SubscriptionId, @Name);</value>
+    <value>INSERT INTO subscriptions.parameter(id, subscription_id, name) VALUES(@Id, @SubscriptionId, @Name)</value>
   </data>
   <data name="SubscriptionStoreParameterValue" xml:space="preserve">
     <value>INSERT INTO subscriptions.parameter_value(id, parameter_id, value) VALUES(@Id, @ParameterId, @Value);</value>
   </data>
   <data name="SubscriptionListParameters" xml:space="preserve">
-    <value>SELECT p.subscription_id, p.name, pv.value FROM subscriptions.parameter p INNER JOIN subscriptions.parameter_value pv ON pv.parameter_id = p.id;</value>
+    <value>SELECT p.subscription_id, p.name, pv.value FROM subscriptions.parameter p INNER JOIN subscriptions.parameter_value pv ON pv.parameter_id = p.id</value>
+  </data>
+  <data name="SubscriptionStoreTrigger" xml:space="preserve">
+    <value>INSERT INTO subscriptions.trigger(id, subscription_id, trigger_time, status, reason) VALUES(@Id, (SELECT id FROM subscriptions.subscription WHERE subscription_id = @SubscriptionId), NOW(), @Status, @Reason);</value>
   </data>
   <data name="MasterDataAttributeInsert" xml:space="preserve">
     <value>INSERT INTO cbv.attribute(masterdata_id, masterdata_type, id, value) VALUES(@ParentId, @ParentType, @Id, @Value) ON CONFLICT ON CONSTRAINT pk_cbv_masterdata_attribute DO UPDATE SET value = @Value;</value>
@@ -195,7 +198,7 @@ SELECT event_id, corrective_eventid as corrective_id FROM epcis.error_declaratio
     <value>SELECT md.type, md.id FROM cbv.masterdata md /**where**/ ORDER BY md.last_update DESC LIMIT @limit</value>
   </data>
   <data name="UserLoadByName" xml:space="preserve">
-    <value>SELECT id, username, password FROM users.user WHERE username = @Username;</value>
+    <value>SELECT id, username, password FROM users.user WHERE username = @Username</value>
   </data>
   <data name="MasterDataHierarchyInsert" xml:space="preserve">
     <value>INSERT INTO cbv.hierarchy(type, parent_id, children_id) VALUES(@Type, @ParentId, @ChildrenId);</value>
@@ -207,10 +210,10 @@ SELECT event_id, corrective_eventid as corrective_id FROM epcis.error_declaratio
     <value>DELETE FROM cbv.attribute_field WHERE masterdata_type = @Type AND masterdata_id = @Id; DELETE FROM cbv.hierarchy WHERE type = @Type AND (parent_id = @Id OR children_id = @Id); DELETE FROM cbv.attribute WHERE masterdata_id = @Id AND masterdata_type = @Type; DELETE FROM cbv.masterdata WHERE id = @Id AND type = @Type;</value>
   </data>
   <data name="MasterDataAttributeQuery" xml:space="preserve">
-    <value>SELECT masterdata_type AS parent_type, masterdata_id AS parent_id, id, value FROM cbv.attribute WHERE masterdata_id = ANY(@Ids) AND id = ANY(@Attributes);</value>
+    <value>SELECT masterdata_type AS parent_type, masterdata_id AS parent_id, id, value FROM cbv.attribute WHERE masterdata_id = ANY(@Ids) AND id = ANY(@Attributes)</value>
   </data>
   <data name="MasterDataAllAttributeQuery" xml:space="preserve">
-    <value>SELECT masterdata_type AS parent_type, masterdata_id AS parent_id, id, value FROM cbv.attribute WHERE masterdata_id = ANY(@Ids);</value>
+    <value>SELECT masterdata_type AS parent_type, masterdata_id AS parent_id, id, value FROM cbv.attribute WHERE masterdata_id = ANY(@Ids)</value>
   </data>
   <data name="StoreQueryCallback" xml:space="preserve">
     <value>INSERT INTO callback.query_callback(id, request_id, subscription_id, callback_type) VALUES(@Id, @RequestId, @SubscriptionId, @CallbackType);</value>

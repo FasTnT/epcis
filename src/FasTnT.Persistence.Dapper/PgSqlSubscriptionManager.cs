@@ -21,7 +21,7 @@ namespace FasTnT.Persistence.Dapper
 
         public async Task<Subscription> GetById(string subscriptionId, CancellationToken cancellationToken)
         {
-            return (await _unitOfWork.Query<Subscription>($"{SqlRequests.SubscriptionListIds} WHERE s.subscription_id = @Id", new { Id = subscriptionId }, cancellationToken)).SingleOrDefault();
+            return (await _unitOfWork.Query<Subscription>($"{SqlRequests.SubscriptionsList} WHERE s.subscription_id = @Id", new { Id = subscriptionId }, cancellationToken)).SingleOrDefault();
         }
 
         public async Task<IEnumerable<Subscription>> GetAll(bool includeDetails, CancellationToken cancellationToken)
@@ -77,6 +77,9 @@ namespace FasTnT.Persistence.Dapper
         public async Task AcknowledgePendingRequests(string subscriptionId, IEnumerable<Guid> requestIds, CancellationToken cancellationToken) 
             => await _unitOfWork.Execute(SqlRequests.SubscriptionAcknowledgePendingRequests, new { SubscriptionId = subscriptionId, RequestId = requestIds }, cancellationToken);
 
+        public async Task RegisterSubscriptionTrigger(string subscriptionId, SubscriptionResult subscriptionResult, string reason, CancellationToken cancellationToken)
+            => await _unitOfWork.Execute(SqlRequests.SubscriptionStoreTrigger, new { Id = Guid.NewGuid(), subscriptionId, Status = subscriptionResult, reason }, cancellationToken);
+
         public async Task Store(Subscription subscription, CancellationToken cancellationToken)
         {
             var entity = new
@@ -87,12 +90,12 @@ namespace FasTnT.Persistence.Dapper
                 subscription.Trigger,
                 subscription.InitialRecordTime,
                 subscription.ReportIfEmpty,
-                subscription.Schedule.Second,
-                subscription.Schedule.Hour,
-                subscription.Schedule.Minute,
-                subscription.Schedule.Month,
-                subscription.Schedule.DayOfMonth,
-                subscription.Schedule.DayOfWeek,
+                subscription.Schedule?.Second,
+                subscription.Schedule?.Hour,
+                subscription.Schedule?.Minute,
+                subscription.Schedule?.Month,
+                subscription.Schedule?.DayOfMonth,
+                subscription.Schedule?.DayOfWeek,
                 subscription.Destination,
                 subscription.QueryName
             };

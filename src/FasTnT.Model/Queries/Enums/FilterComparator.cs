@@ -10,12 +10,7 @@ namespace FasTnT.Model.Queries.Enums
         public static FilterComparator LessOrEqual = new FilterComparator(3, "LE");
         public static FilterComparator Equal = new FilterComparator(4,  "EQ");
 
-        public FilterComparator()
-        {
-        }
-
-        public FilterComparator(short id, string displayName) : base(id, displayName)
-        {
-        }
+        public FilterComparator() { }
+        public FilterComparator(short id, string displayName) : base(id, displayName) { }
     }
 }

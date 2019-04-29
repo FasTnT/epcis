@@ -1,6 +1,7 @@
 ﻿using Dapper;
 using FasTnT.Domain.Persistence;
 using FasTnT.Model.Events.Enums;
+using FasTnT.Model.Subscriptions;
 using FasTnT.Persistence.Dapper.DapperConfiguration;
 using Microsoft.Extensions.DependencyInjection;
 using Npgsql;
@@ -22,6 +23,7 @@ namespace FasTnT.Persistence.Dapper
             SqlMapper.AddTypeHandler(EnumerationHandler<SourceDestinationType>.Default);
             SqlMapper.AddTypeHandler(EnumerationHandler<EpcType>.Default);
             SqlMapper.AddTypeHandler(EnumerationHandler<QueryCallbackType>.Default);
+            SqlMapper.AddTypeHandler(EnumerationHandler<SubscriptionResult>.Default);
             DefaultTypeMap.MatchNamesWithUnderscores = true;
 
             services.AddScoped(typeof(IDbConnection), ctx => new NpgsqlConnection(connectionString));

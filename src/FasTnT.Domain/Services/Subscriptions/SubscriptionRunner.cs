@@ -4,6 +4,7 @@ using FasTnT.Model.Events.Enums;
 using FasTnT.Model.Queries.Implementations;
 using FasTnT.Model.Responses;
 using FasTnT.Model.Subscriptions;
+using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -29,16 +30,25 @@ namespace FasTnT.Domain.Services.Subscriptions
             {
                 var query = _epcisQueries.Single(x => x.Name == subscription.QueryName);
                 var response = new PollResponse { QueryName = query.Name, SubscriptionId = subscription.SubscriptionId };
-                var pendingRequests = await tx.SubscriptionManager.GetPendingRequestIds(subscription.SubscriptionId, cancellationToken);
-
-                if (pendingRequests.Any())
+                try
                 {
-                    tx.EventManager.WhereSimpleFieldIn(EpcisField.RequestId, pendingRequests.ToArray());
-                    response.Entities = await query.Execute(subscription.Parameters, tx, cancellationToken);
-                }
 
-                await SendSubscriptionResults(subscription, response);
-                await tx.SubscriptionManager.AcknowledgePendingRequests(subscription.SubscriptionId, pendingRequests, cancellationToken);
+                    var pendingRequests = await tx.SubscriptionManager.GetPendingRequestIds(subscription.SubscriptionId, cancellationToken);
+
+                    if (pendingRequests.Any())
+                    {
+                        tx.EventManager.WhereSimpleFieldIn(EpcisField.RequestId, pendingRequests.ToArray());
+                        response.Entities = await query.Execute(subscription.Parameters, tx, cancellationToken);
+                    }
+
+                    await SendSubscriptionResults(subscription, response);
+                    await tx.SubscriptionManager.AcknowledgePendingRequests(subscription.SubscriptionId, pendingRequests, cancellationToken);
+                    await tx.SubscriptionManager.RegisterSubscriptionTrigger(subscription.SubscriptionId, SubscriptionResult.Success, default, cancellationToken);
+                }
+                catch (Exception ex)
+                {
+                    await tx.SubscriptionManager.RegisterSubscriptionTrigger(subscription.SubscriptionId, SubscriptionResult.Failed, ex.Message, cancellationToken);
+                }
             });
         }
 
