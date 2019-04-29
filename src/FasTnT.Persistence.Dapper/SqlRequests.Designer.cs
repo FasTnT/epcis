@@ -287,6 +287,15 @@ namespace FasTnT.Persistence.Dapper {
                 return ResourceManager.GetString("SubscriptionListParameters", resourceCulture);
             }
         }
+
+        /// <summary>
+        ///   Looks up a localized string similar to INSERT INTO subscriptions.trigger(subscription_id, trigger_time, status, reason) VALUES((SELECT id FROM subscriptions.subscription WHERE subscription_id = @SubscriptionId), NOW(), @Status, @Reason);.
+        /// </summary>
+        internal static string SubscriptionStoreTrigger {
+            get {
+                return ResourceManager.GetString("SubscriptionStoreTrigger", resourceCulture);
+            }
+        }
         
         /// <summary>
         ///   Looks up a localized string similar to SELECT pr.request_id FROM subscriptions.pendingrequest pr JOIN subscriptions.subscription s ON s.id = pr.subscription_id WHERE s.subscription_id = @SubscriptionId;.
