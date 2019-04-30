@@ -350,5 +350,23 @@ namespace FasTnT.Persistence.Dapper {
                 return ResourceManager.GetString("UserLoadByName", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to SELECT id, username, password FROM users.user WHERE username = @Username;.
+        /// </summary>
+        internal static string StoreStandardHeader {
+            get {
+                return ResourceManager.GetString("StoreStandardHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to SELECT id, username, password FROM users.user WHERE username = @Username;.
+        /// </summary>
+        internal static string StoreStandardHeaderContactInformations {
+            get {
+                return ResourceManager.GetString("StoreStandardHeaderContactInformations", resourceCulture);
+            }
+        }
     }
 }

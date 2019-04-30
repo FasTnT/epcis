@@ -1,7 +1,10 @@
-﻿namespace FasTnT.Model
+﻿using FasTnT.Model.Events.Enums;
+
+namespace FasTnT.Model.Events
 {
     public class ContactInformation
     {
+        public ContactInformationType Type { get; set; }
         public string Identifier { get; set; }
         public string Contact { get; set; }
         public string EmailAddress { get; set; }
