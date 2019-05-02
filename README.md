@@ -31,7 +31,7 @@ The API is secured using HTTP Basic authentication. The default username:passwor
 
 **Queries** endpoint supports XML and SOAP requests. Note that it will not return the wsdl on a `GET` request. SOAP requests *must* contain a `content-type` header with value set to either `application/soap+xml` or `text/soap+xml`.
 
-See the `documents\EPCIS_Samples.postman_collection.json` file for more informations and requests examples.
+The file `documents\EPCIS_Samples.postman_collection.json` contains XML requests examples to be run in [PostMan](https://www.getpostman.com/), and the file `EPCglobal-epcis-query-1-2-soapui-project` contains a project with SOAP example requests to be run in [SoapUI](https://www.soapui.org/open-source.html).
 
 ### Others endpoints:
 
@@ -70,4 +70,4 @@ This project is licensed under the Apache 2.0 license - see the LICENSE file for
 
 Contact: fastnt@pm.me
 
-_Last update: april 2019_
+_Last update: may 2019_
