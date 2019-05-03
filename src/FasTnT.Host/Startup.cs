@@ -27,7 +27,7 @@ namespace FasTnT.Host
 
             if (env.IsDevelopment())
             {
-                builder.AddUserSecrets<Startup>();
+                builder.AddUserSecrets(GetType().Assembly);
             }
 
             Configuration = builder.Build();

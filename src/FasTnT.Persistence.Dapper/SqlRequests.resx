@@ -63,7 +63,7 @@
     <comment>GZIP script of the SQL database schema and tables. (try http://www.txtwizard.net/compression for decompression)</comment>
   </data>
   <data name="DropDatabaseZipped" xml:space="preserve">
-    <value>H4sIAAAAAAAAC3u/e79LkH+AQrCzh6uvo4Knm4JrhGdwSLBCcVJKhoKzY7Czo4urNS92NcmJOTlJicnZhNQVlyYVJxdlFpRk5ucVwxVz4TA0qYyQktSC5EyC5iSWpmSWEFJUWpxahG6SW6ifc4invx8uD+iVFqQklqTGowhaAwB53SYHSQEAAA==</value>
+    <value>H4sIAAAAAAAAC3u/e79LkH+AQrCzh6uvo4Knm4JrhGdwSLBCcVJKhoKzY7Czo4urNS8XdkXJiTk5SYnJ2QQVFpcmFScXZRaUZObnFRM2NqmMoJrUguRMwiaVFqcWIVQBAOPdp4/tAAAA</value>
   </data>
   <data name="EventQuery" xml:space="preserve">
     <value>SELECT request.record_time as capture_time, event.id, event_type as type, event.record_time as event_time, action, read_point, event_timezone_offset, disposition, business_location, business_step, transformation_id, event.event_id, declaration_time, reason FROM epcis.event JOIN epcis.request on request.id = event.request_id LEFT JOIN epcis.error_declaration ed ON event.id = ed.event_id /**where**/ /**orderby**/ LIMIT @limit</value>
