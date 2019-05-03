@@ -3,7 +3,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Linq;
 using System.Net;
 
-namespace FasTnT.IntegrationTests.API.EpcisEndpoints.v1_2.Database
+namespace FasTnT.IntegrationTests.API.DatabaseEndpoints
 {
     [TestClass]
     public class WhenCallingDatabaseEndpointRollback : BaseIntegrationTest

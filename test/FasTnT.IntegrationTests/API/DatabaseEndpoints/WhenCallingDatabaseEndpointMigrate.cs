@@ -4,7 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 
-namespace FasTnT.IntegrationTests.API.EpcisEndpoints.v1_2.Database
+namespace FasTnT.IntegrationTests.API.DatabaseEndpoints
 {
     [TestClass]
     public class WhenCallingDatabaseEndpointMigrate : BaseIntegrationTest
