@@ -16,7 +16,7 @@ namespace FasTnT.Domain
 
         public IFormatter<T> GetFormatter<T>(string contentType)
         {
-            var factory = _formatters.FirstOrDefault(x => x.AllowedContentTypes.Contains(contentType, StringComparer.OrdinalIgnoreCase));
+            var factory = _formatters.FirstOrDefault(x => x.AllowedContentTypes.Contains(contentType.Split(';').First(), StringComparer.OrdinalIgnoreCase));
 
             return factory != null 
                 ? factory.GetFormatter<T>()
