@@ -2,15 +2,22 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Linq;
 using System.Net;
+using System.Threading.Tasks;
 
 namespace FasTnT.IntegrationTests.API.EpcisEndpoints.v1_2.Database
 {
     [TestClass]
-    public class WhenCallingDatabaseEndpointRollback : BaseIntegrationTest
+    public class WhenCallingDatabaseEndpointMigrate : BaseIntegrationTest
     {
+        public override void Arrange()
+        {
+            base.Arrange();
+            Task.WaitAll(Client.PostAsync("/EpcisServices/1.2/Database/Rollback", null));
+        }
+
         public override void Act()
         {
-            Result = Client.PostAsync("/EpcisServices/1.2/Database/Rollback", null).Result;
+            Result = Client.PostAsync("/EpcisServices/1.2/Database/Migrate", null).Result;
         }
 
         [Assert]
@@ -26,10 +33,10 @@ namespace FasTnT.IntegrationTests.API.EpcisEndpoints.v1_2.Database
         }
 
         [Assert]
-        public void TheDatabaseShouldNotContainFasTnTSchema()
+        public void TheDatabaseShouldContainAllFasTnTSchemas()
         {
             var schemaNames = GetDatabaseSchemaNames();
-            Assert.IsTrue(!schemaNames.Any(x => new[] { "users", "epcis", "cbv", "subscriptions", "callback" }.Contains(x)), "A schema from FasTnT exists and should not.");
+            Assert.IsTrue(new[] { "users", "epcis", "cbv", "subscriptions", "callback" }.All(x => schemaNames.Any(s => s == x)), "A FasTnT schema has not been created");
         }
 
         private string[] GetDatabaseSchemaNames()
