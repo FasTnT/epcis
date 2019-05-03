@@ -1,64 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
-  <!--
-    Microsoft ResX Schema
-
-    Version 2.0
-
-    The primary goals of this format is to allow a simple XML format
-    that is mostly human readable. The generation and parsing of the
-    various data types are done through the TypeConverter classes
-    associated with the data types.
-
-    Example:
-
-    ... ado.net/XML headers & schema ...
-    <resheader name="resmimetype">text/microsoft-resx</resheader>
-    <resheader name="version">2.0</resheader>
-    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
-    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
-    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
-    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
-    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
-        <value>[base64 mime encoded serialized .NET Framework object]</value>
-    </data>
-    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
-        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
-        <comment>This is a comment</comment>
-    </data>
-
-    There are any number of "resheader" rows that contain simple
-    name/value pairs.
-
-    Each data row contains a name, and value. The row also contains a
-    type or mimetype. Type corresponds to a .NET class that support
-    text/value conversion through the TypeConverter architecture.
-    Classes that don't support this are serialized and stored with the
-    mimetype set.
-
-    The mimetype is used for serialized objects, and tells the
-    ResXResourceReader how to depersist the object. This is currently not
-    extensible. For a given mimetype the value must be set accordingly:
-
-    Note - application/x-microsoft.net.object.binary.base64 is the format
-    that the ResXResourceWriter will generate, however the reader can
-    read any of the formats listed below.
-
-    mimetype: application/x-microsoft.net.object.binary.base64
-    value   : The object must be serialized with
-            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
-            : and then encoded with base64 encoding.
-
-    mimetype: application/x-microsoft.net.object.soap.base64
-    value   : The object must be serialized with
-            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
-            : and then encoded with base64 encoding.
-
-    mimetype: application/x-microsoft.net.object.bytearray.base64
-    value   : The object must be serialized into a byte array
-            : using a System.ComponentModel.TypeConverter
-            : and then encoded with base64 encoding.
-    -->
   <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
     <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
     <xsd:element name="root" msdata:IsDataSet="true">
@@ -118,11 +59,11 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="CreateDatabaseZipped" xml:space="preserve">
-    <value>H4sIAAAAAAAAC81b23LiSBJ9HkfwDxUObxh2McHFbjfjmAchCrfGWGIksMf7opAlYRQtEK2Le7y/tg/7SfsLmyWVhO7IIG+3o5tuS1lZWedkZWVWFf/9938uLtBCwqKEJPYLvmcarIiZOaa/IW6CeGGO8J+cNJeQ5+i2cxOKzJnRFOdJdMhno9lA8GNoyPPgg8jwi+m07T8lAhtlrSN1pdiK6uo2elXsN2Pz0rzqthArTKekh+2LrCquYlovnVNNXyqe6Z6mNG0Vx/lu2VqOpl63P3iXLlt/MRzQoGuytUGusdYdV1lv0XfDXVme6z9B/7I2etQOjfGEWUzn/ivypnm+mLPnv/7q6n+5bbSxvjdbrUA5K/DSXGQ4fo5OZ3cyQeAUzUTunhGf0B1+Qk1Dy4p633xJOQJswXN/LDBqhg9ajVbjkZt/QU2BG0voNzRhphJu3TQaQCyesVwlYvWtapQT60t0bP2bB6CUcqtZqrfWN67sw1UFxRB9FXis3uod2PsQUmuDJ4737Ki2sXUNa0Pe5HhP/3O58+TSSgHKMltE017I9Vcfy7etvkPdWSumaWzcFIIFM6p/9a5ZYDiypm+BDcXVNfRsWaaubLKoLxXT0XMx2FlcNwylfkehD3k+0ruCVgAkOEiEd/BwN74iIqgE9UvZWi4d3S0XPsYHnz3H2OiOI5sWSBCDj1cFcXB7uBrNcLaWYxxni60rmry1CGIH63BtZeMsLXut1D3TfdoqRPDTyZ2MHzA/Dz7nTzN8iiaCiLlbPmi186cWEvEEi5hncXb671MvYlgYpHlK+W5W5CinL4+bmRnvo7M08uuc2RiKHkhISluKmdFC4ngsSfJUYJk5J/AplkLD2nEz8pHNqAqwziUwF2H/VXV8G6UA+84chKQKGMekA/85Hui4yg9lDp7xEsOWkpceX/LJXkZjXXwwqXmcqp7jWmt5aeimVoFLX468g2CovwDg6STYpm3p+10+4GwVtQ7qC3KLd3tQyapJ8jb5VTG9gzqiZkLqaRsqVaNZ3rOpI5LMGA54BV2cILGhAiWZQK6DsgtpLtxPODwdF/plyFW+/8U0/AC3g88K3gZSH0w15JjfPGXjGu5bJsMMJKLXkAWYNIvfGC7kUvJaVxzPznOSPeVeLqVQIxVSCUAUrLgz9gew51iereqQnTuusam61NYU+mN91xP6NQNmZSK7Ll8bJGEhslgeQ4rD8eXLeqQalgSSVeVSmNX3I+ajbVs2gKqaAGdFQmPS7y+xFeewjLycm8wwCqjJZyLT+mcgIsjvjSqLMxSWvr+96mGj+hFmBVHEkKw84AAcrnj9yZpTFXYqnkdnZSrSTWPSZTtV7Oihyj6V+vxaSia876wVsocHi7yy2y6oaTU7Xo0KU9D9kP1FE4Yte1uS3Hzg1uX2qwwYyzuM0wUwDbkHTETCneK6tvHsueFe166fehadmL6aCK3FrIOT3uKgkSFKjrBNUpaAuJ1GqA0DzHrB0vSVRxpl14q7RCJYlOtPhJDk7K3RmxJ1FimRYOvcpOVSms/wbaKm+jAX+qVuD9+Z/dPUfEeWoXXMknfOkMBfCudJMDFSjh1zq0J/PdnjsCtDtxVbXb01TpqNk5qWnZM63cJXpq4MUwN9NanLchLhkKQgwD0aSjtuSKtxAn/yUY9wv4cPkWOm3D/xGD1w+LE0fYiZ0WAkP3r4+iERW4gSpGJR/6WWQT2ib91VCzESAhVBECKfvyAk4Slkdai8eZc0Iz8TUbhP+Ql53PI/4WBQ4HN0q51Au9qJ6V91Ej2oHd/Ef/SKe0Kr8N3vAsdHBiI1fCzwqKnG1QIDq12fiOHH1Bb/RRDXQ/PJX2rv32nnVFGDJIiUPkEE7GdThsVosuD9rTsoaZa27qzi0ziyudlqiHi+EHkJzUXu9haLaMrwtwvmFhzT3L4430wgFp2dNUb4liPgwWIkYulLjqMUucaN34p04rv0TQPDOM/OfK8bi8Is6hk8jXrZ0oRAAxAlPR3GkgScZSSWGeNY1KCa8tszEzAZcTyc5c8zyhon+E/wWlAyEwUWjxci3oMcoE7ycmkxkliRmxGsK50kxw9W4US5bIlOiHbiv5We89VwdJvZ1jZeyKbqIVcIwqwBzrog9lc8ZQyr8a1lw9xYyvp6W7gRFtvtqWGocN5jv8k1Lexkq/1VLz4idm2PDtVRV7rmmbrsAEAbzck9pd5zTJ3StDY2sFLXoQm4sevQoylv/vaktXFXdQywJj3UrO+6/vVwbantiPgcrHaLJT1rw3ssqeeHpPrJOAIrDng3DPFdQSRHpGiSVAwJKcQisyrAtfyahCtqm6ys0tDFS6ni2Op3SRaIMay3MAK6zNSHe3C0Uor+Tjb/fVGmv9dZyzfRUiZWY8IXLaIgPpAS/HetPwp8faMBQMnrWRV8vPzOTByIlUz7CK84HXjNYL+zB938zK5O84VjAwxV895NfJByPafo1KRwi7/C3CmaN9TQavMlHFWCiP8/mUH2Gm+/9DbB1YmSaiLZfbCbmhiJAzUFGXNYV4SuQJ5FtcU5LS7OKTzSHPW6Xf+XBwHw58C/CGtTzNxBPi5MSH2JzkbC+OnMlxpjdsqImFZWUHAn0STlJ1gPoKaKphL0Hr8AxGHGZjhoDrkZqV2CnxRdxXr+JgqP5ApT0DQsm2jRCPakFJFKMflkKgizqAX5oRULeI9QGtQyftOORa8WemCmcPsJAlGiuw4R4/Ej/As+EXZJSjRiB3hJ+ChRwlGZm0ZACYgVVHKKpmXCInhRMupFdVyqjMtrnC7ikrduCcCYYWEHQnhE2YKuivPSicEy0+mIYe8qnblAnHlW1K/lxVwo1QkqjPDX993YrLPGo+ct1I7S65rJDajkACrFvGSTI1fI0ojGbeAqs4voIMlVFqURn0F5lwbhMAeyj3byYm8rDB3dNjoXRr/Df8/bwaVeGiti5DapLDDhx5lML0ELf8+nC6YeZ1EPLGJub0V86x/L12NW72iz+mBW7NJYPWb1jzZrEJoF3gbbVrVZNjjaskuw7I8FA4fV8yewiewGHGfSpT8L4kbtvm4SmBN+K4JspgbfC4msOVeXg8+D68vhhaYMlheXyrN6MVS71xd6f/g87OndgdK/BjPPFQ22Fsh/GJadjC/Z/nX3+urz8Lo/YSfDUe8aY3Y8ZHpXo+FVb/zpejIZfh5c9sfDyRXGn4bXw8EnPOhNmCt8vn+0MfsD2eh7Hr+FhrRu/gfI0bDGpTMAAA==</value>
+    <value>H4sIAAAAAAAAC81bW3ObSBZ+tqv0H7pc3rK0a6t8jaNxzQNCLYeJAh6Q7Mm+UAhaFhUEChdnPH9tH/Yn7V/Y09Ag7sISrowrUWI4ffr0933dffqi//3nv2dnaKZgWUEK/wl/4Tq8jLkpZr8hYYxEaYrwH4IyVVDgEde7i02m3HCCyyz69LPT7SD4MQ0UBPBBbcTZZHIaPqUGtrYiSF9qrqb7xEUvmvtq2s/dm/Me4qXJhNawflZ1zdcs57l/ZJCFFlj+Uc7TWvO8H45rlHi6OL+8epMvlzybHngghurYyDdXxPO11Rr9MP2lE/jhE/SXY5OkHBrhMTebTMNX9E33ZDblT375xSd/+qfIdn50e73IOS+JylTmBHGKjh4+qxSBI/QgC184+Sv6jL+irmkUTYPvoaWaADYThd9nGHXjB71Or/MkTD+hriSMFPQrGnMTBffuOh0gFj/wQiNiyVo364kNLfou+R4AKLXcGo4erIjtqyFcTVCM0deBx+al3oB9CCGLNnriBXNPd821bzo2fVOinsuP9eIppZUBVGS2iqatkJOXEMvXNdmg7q00yzJtP4dgRY+6vHlTLzA91SBrYEPziYHmjmMRzS6ivtAsj5RisIm4bRhqdcegj3neU11RKQASBJLgHT3ctK+KCGbBdKk6i4VH/HrjfTQ4DzzTJp6nWg5Y0ID3dwXj4Hp3N4bprR3P3C8Wl2iGunYoYjv78F3N9haOu9La7ukhbQ1G8KPxZxU/YnEafU6/PuAjNJZkLNyLUamNnnpIxmMsY5HHxe6/zb2MYWJQpjnnm15R4py93K9nFtTHemmi65LeGJvuSEjOW46Z4UwRRKwo6kTiuakgiTmW4sBO02GUI1twFWFdSmApwuGr5vh2agEOxRwNSQ0wTllH+tkf6LTLd2UOnokKx9eSl29f9slWRlNVvDOpZZzqgec7K3VhEstowGVoR9/BYEieAfB8Euyysuz9Jh/w1preBvUVucWbFVQza9K8TX3RrGCniliYkHq6ps7cGE4wtwiiyYzpgSrY5ASJDTOoyQRKBcrPlKn0ZSzgyahSlzFX5fpLefgJsoPPBmoDq3emGnLM74Fm+6b/WsgwI4vkNWQBFsvibdOHXEpdEc0L3DKRbFnulVIKa6RKKgGIihn3gf8J7HlO4OoEsnPPN+2mU21LQ3+q7naGfsOEXpnJruvnBkWayTxWR5DiCGL9tJ64himBZlWlFBb9/Yz+6LqOC6DqFsDZkNCU9duX2Jq3W0Zez02hGRXUlDNRKP13ICLK780mkzMsLEO9vZC4UPsI85IsY0hWHnEEjlA9/xTDaQo7My+jszEV+aIp67qdKn742GSfSp+/1JIJ7/srje7hwSSvbbYLWprN9nejQxf032V/0YJmq8GaJjfvuHW5/qYCxuoG4/wCmA25O3REyp3m+645D/x4r2tTTzuTTspfS4S2EtbOSW/1oFEgSk2wzVKWgfg0j9ApNLCogoUVOk88qr6TlkRmsKj3nxlCsr23RTVl1ll0iQRb5xZbLuX5jN9m1lTvJqGDthW+Cftvs+bbcxnaRi95Yw+J9FLZT6KOkRN2SlaVej3cItilSVzN1ZevncNu57ClaeewTVmEzvSlaRngryV3RU4SHLIURLgnTTlNB9LrHMKfctQT3L/AhyxwE+HfeIQeBfxUmz6kwuhwSjh6hP4hEZvJCqRiSf21kcF6hKz9ZQ9xCgIX0SBEPw8QUvAEsjpUX/ycFqM/Y1n6ktMJfdwLP+FgUBJLfOv9yLveT/lf9jM16P0wxH9dVNeElvG73yRBTAJEevxYElFXT7sFBpabOhEnjlgs4YtoXI/Dp39ZvP9klTNHHZogMvokGbB/mHA8RuOZGG7dwZJm4RJvme7GSczdXkfG05ksKmgqC/f3WEYTTryfcfcgTGv97H23gFh0fNwZ4nuBggeTkYyVTyVCqZLGXViKVhJK+q6DoZ3Hx6HqRrL0kNQMSmMqW1gw0ABEWaVDW7KA85zCcyOcGjWYp/Ly3BhCRoIIZ/nTgrPOIf4DVAtOHmSJx6OZjLcgB6jTvFyZDRVeFh4o1o1OktMHq3CiXDdFZ0z76d9qz/laOLotbGubz3RTdZcrBHHWAGddMPY3PGWMV+Nrx4W+sVDJal25EZba7WmhqXDe476qLU3sdKv9hVQfEftuwJrq6UtiBBZRPQDINrzSU+otx9Q5TyvThpm6DU/AjduGH0N7DbcnHdtfttHAlvywsH4Q8m13b7ntiHQfbHaLJd9r43ssuee7pPrZcQRmHFA3NPFNg0iJSVUnaTgk5BBLwmoA1+JbFq6kbHZllYcuvZSqHlvDKukEMYL5FlrAppn2cI+OVmrR39iWv6/K9LeKtX4TLRdiMyZC0yoK0g2pwX9T+r3AJ7YBAGWvZzXQeP2dmTQQS5XVEV9x2vGawXaxR9X8BKmH+U66+CKwo8P2mvwzW3u0/5ZpkAdZKG1ynImyZCN8lmSjJywdPWHoKFN0cX4e/vIogdoF4J9yM8HcZ8jgpDFdkaDjoTT6ehxajTA/4WTMcnFYomViQHTBAtEDprk0uwa8p0+AcDzHmx6awmxOs93ox81WUO3nH7L0RC+9REXjRJstMyCenCO6tsg+mUjSQ1KC/rAcF8Qj1XaDgmxOU3rvoUduAvdlQLqZ6vrUTMRP8C9IIq6SJvU0DhBJ/CiT9DObu05ECZhV5P6aYRQ6Eqgo20+SzD+X+JcVzqf92XuaFGDM8bBmlZ5QcQnQRLxsIcBzk8mQ4z832qWH87y5pn+rT/9jq36Uk8a/vu2OX5urArZDz+KoveCX3bLINqDRrJItsueYWjmghSPacPSp0cJtbiy3rNfAog8rGtvQXGMJl/OIW8XVwQtcAy9fscD9bngfu6ngCSwo/Gq1G2ZlGvTICrbr3HpP1W/DExkqGir+7Qu3gyz1WThKqD/ITXUZ+3Led+d7G3mw9vLpgG4nNyITArMaP2DxlTBb1S3qqYhYZ/VXk0FWmmlVv15of6pww2dex/Z6Sa/cbrMK1dVEPLnNyQKAWcoT2Ni5SY79YvG8gDJCSLxl851iN9w+Cgi2R1wfsaGOXoHSOul5tOyyKRwCQtZ6mr0Q3osTiPNTdCINf4P/npxGl8FZxpASXZfZgoLCbKNQS1Qi3Cs8h1D3i+gCIuLu72V8H17naCesi73DuoSwUpcN2wnrcu+wruKwQHKw3dlaZFd7R3YNkf0+4+CSw/QrxER3kfYL6TrsBemgNl9TisKJv01DN+Gj7xMl0Zzoi6uPV7fXgzNDu1qcXWtz/Wygn9+ekcvBfHBBzq+0y1sI80QzYEuK/ofj+fHomr+8Pb+9+Ti4vRzz48Hw4hZjfjTgLm6Gg5uL0Yfb8Xjw8er6cjQY32D8YXA7uPqAry7G3A0+2d7aVPyRbfL9oF/jQHp3/wdj37qr3TUAAA==</value>
     <comment>GZIP script of the SQL database schema and tables. (try http://www.txtwizard.net/compression for decompression)</comment>
   </data>
   <data name="DropDatabaseZipped" xml:space="preserve">
-    <value>H4sIAAAAAAAAC3u/e79LkH+AQrCzh6uvo4Knm4JrhGdwSLBCcmJOTlJicraCs2Ows6OLqzUvF3aFxaVJxclFmQUlmfl5xQRVJyeVEVSTWpCcSdik0uLUIoQqAAPHx+jIAAAA</value>
+    <value>H4sIAAAAAAAAC3u/e79LkH+AQrCzh6uvo4Knm4JrhGdwSLBCcVJKhoKzY7Czo4urNS8XdkXJiTk5SYnJ2QQVFpcmFScXZRaUZObnFRM2NqmMoJrUguRMwiaVFqcWIVQBAOPdp4/tAAAA</value>
   </data>
   <data name="EventQuery" xml:space="preserve">
     <value>SELECT request.record_time as capture_time, event.id, event_type as type, event.record_time as event_time, action, read_point, event_timezone_offset, disposition, business_location, business_step, transformation_id, event.event_id, declaration_time, reason FROM epcis.event JOIN epcis.request on request.id = event.request_id LEFT JOIN epcis.error_declaration ed ON event.id = ed.event_id /**where**/ /**orderby**/ LIMIT @limit</value>
@@ -217,5 +158,11 @@ SELECT event_id, corrective_eventid as corrective_id FROM epcis.error_declaratio
   </data>
   <data name="StoreQueryCallback" xml:space="preserve">
     <value>INSERT INTO callback.query_callback(id, request_id, subscription_id, callback_type) VALUES(@Id, @RequestId, @SubscriptionId, @CallbackType);</value>
+  </data>
+  <data name="StoreStandardHeader" xml:space="preserve">
+    <value>INSERT INTO sbdh.standardheader(id, version, standard, type_version, identifier, type, creation_datetime) VALUES(@Id, @Version, @Standard, @TypeVersion, @InstanceIdentifier, @Type, @CreationDateTime);</value>
+  </data>
+  <data name="StoreStandardHeaderContactInformations" xml:space="preserve">
+    <value>INSERT INTO sbdh.contactinformation(id, header_id, type, identifier, contact, email, fax_number, phone_number, type_identifier) VALUES(@Id, @HeaderId, @Type, @Identifier, @Contact, @EmailAddress, @FaxNumber, @TelephoneNumber, @ContactTypeIdentifier);</value>
   </data>
 </root>

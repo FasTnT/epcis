@@ -1,4 +1,5 @@
 ﻿using FasTnT.Model;
+using FasTnT.Model.Events;
 using FasTnT.Model.MasterDatas;
 using FasTnT.Model.Subscriptions;
 using MoreLinq;
@@ -11,14 +12,18 @@ namespace FasTnT.Persistence.Dapper
 {
     public static class ModelMapper
     {
-        static IDictionary<Type, PropertyInfo[]> properties = new Dictionary<Type, PropertyInfo[]>();
-        static Type[] types = new[] { typeof(Epc), typeof(EpcisEvent), typeof(ErrorDeclaration), typeof(SourceDestination), typeof(BusinessTransaction), typeof(CorrectiveEventId), typeof(CustomField), typeof(EpcisRequestHeader), typeof(MasterDataField), typeof(Subscription) };
+        static IDictionary<Type, PropertyInfo[]> Properties = new Dictionary<Type, PropertyInfo[]>();
+        static readonly Type[] Types = new[] 
+        {
+            typeof(Epc), typeof(EpcisEvent), typeof(ErrorDeclaration), typeof(SourceDestination), typeof(BusinessTransaction), typeof(CorrectiveEventId), typeof(CustomField),
+            typeof(EpcisRequestHeader), typeof(MasterDataField), typeof(Subscription), typeof(StandardBusinessHeader), typeof(ContactInformation)
+        };
 
-        static ModelMapper() => types.ForEach(t => properties.Add(t, t.GetProperties().ToArray()));
+        static ModelMapper() => Types.ForEach(t => Properties.Add(t, t.GetProperties().ToArray()));
 
         public static T Map<TU, T>(this TU source, Action<T> propertySetting = null) where T : TU, new()
         {
-            if (!properties.TryGetValue(typeof(TU), out var tprops)) throw new Exception($"Unknown type to be mapped: '{typeof(TU).Name}'");
+            if (!Properties.TryGetValue(typeof(TU), out var tprops)) throw new Exception($"Unknown type to be mapped: '{typeof(TU).Name}'");
 
             var target = new T();
             tprops.ForEach(prop =>

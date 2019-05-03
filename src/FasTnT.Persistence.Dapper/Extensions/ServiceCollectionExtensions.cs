@@ -13,6 +13,7 @@ namespace FasTnT.Persistence.Dapper
     {
         public static void AddEpcisPersistence(this IServiceCollection services, string connectionString)
         {
+            DefaultTypeMap.MatchNamesWithUnderscores = true;
             SqlMapper.AddTypeHandler(TimezoneOffsetHandler.Default);
             SqlMapper.AddTypeHandler(ArrayOfEnumerationHandler<EventType>.Default);
             SqlMapper.AddTypeHandler(ArrayOfEnumerationHandler<EventAction>.Default);
@@ -24,7 +25,7 @@ namespace FasTnT.Persistence.Dapper
             SqlMapper.AddTypeHandler(EnumerationHandler<EpcType>.Default);
             SqlMapper.AddTypeHandler(EnumerationHandler<QueryCallbackType>.Default);
             SqlMapper.AddTypeHandler(EnumerationHandler<SubscriptionResult>.Default);
-            DefaultTypeMap.MatchNamesWithUnderscores = true;
+            SqlMapper.AddTypeHandler(EnumerationHandler<ContactInformationType>.Default);
 
             services.AddScoped(typeof(IDbConnection), ctx => new NpgsqlConnection(connectionString));
             services.AddScoped(typeof(IUnitOfWork), typeof(DapperUnitOfWork));
