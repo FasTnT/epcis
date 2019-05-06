@@ -28,7 +28,7 @@ namespace FasTnT.Persistence.Dapper
         private static readonly Mapping SimpleFields = new Mapping
         {
             { EpcisField.Action, "event.action" },
-            { EpcisField.BusinessLocation, "evnet.business_location" },
+            { EpcisField.BusinessLocation, "event.business_location" },
             { EpcisField.BusinessStep, "event.business_step" },
             { EpcisField.CaptureTime, "event.record_time" },
             { EpcisField.Disposition, "event.disposition" },
