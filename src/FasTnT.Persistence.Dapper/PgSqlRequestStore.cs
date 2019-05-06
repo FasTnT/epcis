@@ -27,7 +27,7 @@ namespace FasTnT.Persistence.Dapper
 
         private async Task StoreStandardBusinessHeader(EpcisRequestHeader request, RequestHeaderEntity epcisRequest, CancellationToken cancellationToken)
         {
-            if (request == null) return;
+            if (request.StandardBusinessHeader == null) return;
 
             var header = ModelMapper.Map<StandardBusinessHeader, StandardBusinessHeaderEntity>(request.StandardBusinessHeader, r => r.Id = epcisRequest.Id);
             var contactInformations = request.StandardBusinessHeader.ContactInformations.Select((x, i) => ModelMapper.Map<ContactInformation, ContactInformationEntity>(x, r => { r.HeaderId = header.Id; r.Id = i; }));
