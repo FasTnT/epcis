@@ -17,8 +17,8 @@ namespace FasTnT.Model.Queries.Implementations
     public class SimpleEventQuery : IEpcisQuery
     {
         private static readonly string[] _specificNames = new[] { "eventType", "orderBy", "orderDirection" };
-        private static readonly string[] _anyValuePrefixes = new[] { "EQ_", "EXISTS_", "EQATTR_", "HASATTR_" };
-        private static readonly string[] _comparisonPrefixes = new[] { "GE_", "LE_", "GT", "LT" };
+        private static readonly string[] _anyValuePrefixes = new[] { "EQ_", "EXISTS_", "EQATTR_", "HASATTR_", "WD_" };
+        private static readonly string[] _comparisonPrefixes = new[] { "GE_", "LE_", "GT_", "LT_" };
 
         public string Name => "SimpleEventQuery";
         public bool AllowSubscription => true;
@@ -28,6 +28,8 @@ namespace FasTnT.Model.Queries.Implementations
 
         public void ValidateParameters(IEnumerable<QueryParameter> parameters, bool subscription = false)
         {
+            parameters = parameters ?? new QueryParameter[0];
+
             foreach (var parameter in parameters)
             {
                 if (_specificNames.Contains(parameter.Name) || _anyValuePrefixes.Any(p => parameter.Name.StartsWith(p))) continue;
@@ -87,9 +89,9 @@ namespace FasTnT.Model.Queries.Implementations
 
                 else throw new NotImplementedException($"Query parameter unexpected or not implemented: '{parameter.Name}'");
             }
+            
+            unitOfWork.EventManager.OrderBy(_orderField, _orderDirection); // Set order by filter
 
-            // Set order by filter
-            unitOfWork.EventManager.OrderBy(_orderField, _orderDirection);
             var results = await unitOfWork.EventManager.ToList(cancellationToken);
 
             // Check for the maxEventCount parameter
