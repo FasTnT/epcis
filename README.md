@@ -63,6 +63,12 @@ The file `documents\EPCIS_Samples.postman_collection.json` contains examples of 
   - Subscribe to an EPCIS request 
   - Unsubscribe from EPCIS repository
   - Trigger subscriptions that register to specific trigger name
+  
+# Authors
+
+External contributions on FasTnT EPCIS repository are welcome from anyone. Many thanks to the people who already shown interest or contributed to this project ([@grudolf](https://github.com/grudolf), [@jnoruzi](https://github.com/jnoruzi) and many others).
+
+FasTnT EPCIS is primarily maintained by Louis-Axel Ambroise.
 
 # License
 
