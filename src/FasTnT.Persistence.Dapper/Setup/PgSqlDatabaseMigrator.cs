@@ -16,23 +16,14 @@ namespace FasTnT.Persistence.Dapper.Setup
             _unitOfWork = unitOfWork;
         }
 
-        public async Task Migrate(CancellationToken cancellationToken)
-        {
-            using (var msi = new MemoryStream(Convert.FromBase64String(SqlRequests.CreateDatabaseZipped)))
-            using (var gs = new GZipStream(msi, CompressionMode.Decompress))
-            using (var sr = new StreamReader(gs))
-            {
-                await _unitOfWork.Execute(await sr.ReadToEndAsync(), null, cancellationToken);
-            }
-        }
+        public async Task Migrate(CancellationToken cancellationToken) => await _unitOfWork.Execute(await UnzipCommand(SqlRequests.CreateDatabaseZipped), null, cancellationToken);
+        public async Task Rollback(CancellationToken cancellationToken) => await _unitOfWork.Execute(await UnzipCommand(SqlRequests.DropDatabaseZipped), null, cancellationToken);
 
-        public async Task Rollback(CancellationToken cancellationToken)
+        private async Task<string> UnzipCommand(string zippedCommand)
         {
-            using (var msi = new MemoryStream(Convert.FromBase64String(SqlRequests.DropDatabaseZipped)))
-            using (var gs = new GZipStream(msi, CompressionMode.Decompress))
-            using (var sr = new StreamReader(gs))
+            using (var reader = new StreamReader(new GZipStream(new MemoryStream(Convert.FromBase64String(zippedCommand)), CompressionMode.Decompress)))
             {
-                await _unitOfWork.Execute(await sr.ReadToEndAsync(), null, cancellationToken);
+                return await reader.ReadToEndAsync();
             }
         }
     }

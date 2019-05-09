@@ -1,8 +1,9 @@
-using FasTnT.Host;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.Configuration;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Npgsql;
+using System;
 using System.Net.Http;
 
 namespace FasTnT.IntegrationTests
@@ -19,6 +20,9 @@ namespace FasTnT.IntegrationTests
         {
             var builder = new WebHostBuilder().UseEnvironment("Development").UseStartup<TestStartup>();
             Configuration = new ConfigurationBuilder().AddUserSecrets<TestStartup>().Build();
+
+            EnsureConnectionStringIsSpecified(context);
+
             TestServer = new TestServer(builder);
             Client = TestServer.CreateClient();
         }
@@ -29,12 +33,36 @@ namespace FasTnT.IntegrationTests
             if (Client != null) Client.Dispose();
             if (TestServer != null) TestServer.Dispose();
         }
-    }
 
-    public class TestStartup : Startup
-    {
-        public TestStartup(IHostingEnvironment env) : base(env)
+        private static void EnsureConnectionStringIsSpecified(TestContext context)
         {
+            var connectionString = Configuration.GetConnectionString("FasTnT.Database");
+
+            if (string.IsNullOrWhiteSpace(connectionString))
+            {
+                context.WriteLine("No connection string is setup for integration tests. Stopping execution.");
+                throw new Exception("No connection string is setup for integration tests. Stopping execution.");
+            }
+            else if (!CanConnectToDatabase(connectionString))
+            {
+                context.WriteLine("Invalid connection string is setup for integration tests. Stopping execution.");
+                throw new Exception("Invalid connection string is setup for integration tests. Stopping execution.");
+            }
+        }
+
+        private static bool CanConnectToDatabase(string connectionString)
+        {
+            try
+            {
+                var connection = new NpgsqlConnection(connectionString);
+                connection.Open();
+
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
         }
     }
 }

@@ -6,7 +6,8 @@ using System.Net;
 namespace FasTnT.IntegrationTests.API.DatabaseEndpoints
 {
     [TestClass]
-    public class WhenCallingDatabaseEndpointRollback : BaseIntegrationTest
+    [TestCategory("IntegrationTests")]
+    public class WhenCallingDatabaseEndpointRollback : BaseMigratedIntegrationTest
     {
         public override void Act()
         {
@@ -14,27 +15,18 @@ namespace FasTnT.IntegrationTests.API.DatabaseEndpoints
         }
 
         [Assert]
-        public void ItShouldReturnHttp200OK()
-        {
-            Assert.AreEqual(HttpStatusCode.OK, Result.StatusCode);
-        }
+        public void ItShouldReturnHttp200OK() => Assert.AreEqual(HttpStatusCode.OK, Result.StatusCode);
 
         [Assert]
-        public void ItShouldNotReturnAnyContent()
-        {
-            Assert.AreEqual(string.Empty, Result.Content.ReadAsStringAsync().Result);
-        }
+        public void ItShouldNotReturnAnyContent() => Assert.AreEqual(string.Empty, Result.Content.ReadAsStringAsync().Result);
 
         [Assert]
         public void TheDatabaseShouldNotContainFasTnTSchema()
         {
             var schemaNames = GetDatabaseSchemaNames();
-            Assert.IsTrue(!schemaNames.Any(x => new[] { "users", "epcis", "cbv", "subscriptions", "callback" }.Contains(x)), "A schema from FasTnT exists and should not.");
+            Assert.IsTrue(!schemaNames.Any(x => new[] { "users", "epcis", "cbv", "subscriptions", "callback", "sbdh" }.Contains(x)), "A schema from FasTnT exists and should not.");
         }
 
-        private string[] GetDatabaseSchemaNames()
-        {
-            return Query("SELECT schema_name FROM information_schema.schemata").ToArray();
-        }
+        private string[] GetDatabaseSchemaNames() => Query("SELECT schema_name FROM information_schema.schemata").ToArray();
     }
 }
