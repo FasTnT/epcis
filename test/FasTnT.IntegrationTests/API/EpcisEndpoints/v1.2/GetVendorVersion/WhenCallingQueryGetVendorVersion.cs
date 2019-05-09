@@ -5,27 +5,22 @@ using System.IO;
 using System.Net;
 using System.Net.Http;
 using System.Text;
-using System.Threading.Tasks;
 using System.Xml.Linq;
 
 namespace FasTnT.IntegrationTests.API.EpcisEndpoints.v1_2.GetVendorVersion
 {
     [TestClass]
-    public class WhenCallingQueryGetVendorVersion : BaseIntegrationTest
+    [TestCategory("IntegrationTests")]
+    public class WhenCallingQueryGetVendorVersion : BaseMigratedIntegrationTest
     {
         public override void Act()
         {
-            Task.WaitAll(Client.PostAsync("/EpcisServices/1.2/Database/Migrate", null));
-
             Client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Basic", "YWRtaW46UEBzc3cwcmQ=");
             Result = Client.PostAsync("/EpcisServices/1.2/Query", new StringContent(File.ReadAllText("Requests/GetVendorVersion.xml"), Encoding.UTF8, "application/xml")).Result;
         }
 
         [Assert]
-        public void ItShouldReturnHttp200OK()
-        {
-            Assert.AreEqual(HttpStatusCode.OK, Result.StatusCode);
-        }
+        public void ItShouldReturnHttp200OK() => Assert.AreEqual(HttpStatusCode.OK, Result.StatusCode);
 
         [Assert]
         public void ItShouldReturnANotNullContent()

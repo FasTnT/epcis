@@ -1,0 +1,13 @@
+﻿using FasTnT.IntegrationTests.Common;
+
+namespace FasTnT.IntegrationTests.Common
+{
+    public abstract class BaseMigratedIntegrationTest : BaseIntegrationTest
+    {
+        public override void Arrange()
+        {
+            base.Arrange();
+            MigrateDatabase();
+        }
+    }
+}
