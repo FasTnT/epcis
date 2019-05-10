@@ -8,14 +8,14 @@ namespace FasTnT.Formatters
 {
     public static class FormatterFactoryExtensions
     {
-        private static ModelDictionary _formatters = new ModelDictionary
+        private static readonly ModelDictionary _formatters = new ModelDictionary
         {
             { typeof(Request), factory => factory.RequestFormatter },
             { typeof(EpcisQuery), factory => factory.QueryFormatter },
             { typeof(IEpcisResponse), factory => factory.ResponseFormatter }
         };
 
-        public static IFormatter<T> GetFormatter<T>(this IFormatterFactory factory)
+        public static IFormatter<T> GetFormatter<T>(this IFormatterFactory factory) where T : IEpcisPayload
         {
             return _formatters.ContainsKey(typeof(T)) 
                 ? _formatters[typeof(T)](factory) as IFormatter<T>

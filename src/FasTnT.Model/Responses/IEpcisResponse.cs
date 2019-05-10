@@ -1,6 +1,6 @@
 ﻿namespace FasTnT.Model.Responses
 {
-    public interface IEpcisResponse
+    public interface IEpcisResponse : IEpcisPayload
     {
     }
 }

@@ -5,10 +5,11 @@ using System;
 using FasTnT.Model.Responses;
 using FasTnT.Domain;
 using System.Threading;
+using FasTnT.Model;
 
 namespace FasTnT.Host
 {
-    public abstract class EpcisMiddleware<T>
+    public abstract class EpcisMiddleware<T> where T : IEpcisPayload
     {
         const int OkStatusCode = 200;
 
@@ -25,16 +26,12 @@ namespace FasTnT.Host
 
         public async Task Invoke(HttpContext httpContext, IServiceProvider serviceProvider)
         {
-            if (httpContext.Request.Method == "POST" && httpContext.Request.Path.StartsWithSegments(_path))
+            if (HttpMethods.IsPost(httpContext.Request.Method) && httpContext.Request.Path.StartsWithSegments(_path))
             {
-                _serviceProvider = serviceProvider;
                 _httpContext = httpContext;
+                _serviceProvider = serviceProvider;
 
-                var formatterFactory = serviceProvider.GetService<FormatterProvider>();
-                var contentType = _httpContext.Request.ContentType;
-                var request = await formatterFactory.GetFormatter<T>(contentType).Read(httpContext.Request.Body, httpContext.RequestAborted);
-
-                await Process(request, httpContext.RequestAborted);
+                await DispatchRequest(httpContext, serviceProvider);
             }
             else
             {
@@ -42,8 +39,15 @@ namespace FasTnT.Host
             }
         }
 
-        public abstract Task Process(T request, CancellationToken cancellationToken);
+        private async Task DispatchRequest(HttpContext httpContext, IServiceProvider serviceProvider)
+        {
+            var formatterFactory = serviceProvider.GetService<FormatterProvider>();
+            var request = await formatterFactory.GetFormatter<T>(_httpContext.Request.ContentType).Read(httpContext.Request.Body, httpContext.RequestAborted);
 
+            await Process(request, httpContext.RequestAborted);
+        }
+
+        public abstract Task Process(T request, CancellationToken cancellationToken);
         public async Task Execute<TService>(Func<TService, Task> action) => await action(_serviceProvider.GetService<TService>());
 
         public async Task Execute<TService>(Func<TService, Task<IEpcisResponse>> action)
