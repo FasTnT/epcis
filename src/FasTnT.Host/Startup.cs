@@ -10,6 +10,7 @@ using FasTnT.Formatters;
 using FasTnT.Formatters.Xml;
 using FasTnT.Domain;
 using FasTnT.Formatters.Json;
+using Microsoft.AspNetCore.Mvc;
 
 namespace FasTnT.Host
 {
@@ -40,7 +41,7 @@ namespace FasTnT.Host
             services.AddSingleton<Microsoft.Extensions.Hosting.IHostedService, BackgroundService>();
             services.AddSingleton(new FormatterProvider(new IFormatterFactory[]{ new JsonFormatterFactory(), new XmlFormatterFactory(), new SoapFormatterFactory() }));
 
-            services.AddMvc();
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
@@ -59,7 +60,8 @@ namespace FasTnT.Host
                      .UseEpcisCaptureEndpoint($"{EpcisServicePath}/Capture")
                      .UseEpcisQueryEndpoint($"{EpcisServicePath}/Query")
                      .UseEpcisSubscriptionTrigger($"{EpcisServicePath}/Subscription/Trigger");
-                });
+                })
+               .UseMvc();
         }
     }
 }
