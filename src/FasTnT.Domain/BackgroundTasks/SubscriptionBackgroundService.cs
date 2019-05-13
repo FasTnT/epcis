@@ -12,15 +12,13 @@ using System.Threading.Tasks;
 
 namespace FasTnT.Domain.BackgroundTasks
 {
-    public class SubscriptionBackgroundService : ISubscriptionBackgroundService
+    public sealed class SubscriptionBackgroundService : ISubscriptionBackgroundService
     {
-        public static int DelayTimeoutInMs { get; set; }
-
         private readonly IServiceProvider _services;
-        private volatile object _monitor = new object();
-        private ConcurrentDictionary<Subscription, DateTime> _scheduledExecutions = new ConcurrentDictionary<Subscription, DateTime>();
-        private ConcurrentDictionary<string, IList<Subscription>> _triggeredSubscriptions = new ConcurrentDictionary<string, IList<Subscription>>();
-        private ConcurrentQueue<string> _triggeredValues = new ConcurrentQueue<string>();
+        private readonly object _monitor = new object();
+        private readonly ConcurrentDictionary<Subscription, DateTime> _scheduledExecutions = new ConcurrentDictionary<Subscription, DateTime>();
+        private readonly ConcurrentDictionary<string, IList<Subscription>> _triggeredSubscriptions = new ConcurrentDictionary<string, IList<Subscription>>();
+        private readonly ConcurrentQueue<string> _triggeredValues = new ConcurrentQueue<string>();
 
         public SubscriptionBackgroundService(IServiceProvider services)
         {
@@ -46,11 +44,7 @@ namespace FasTnT.Domain.BackgroundTasks
                     // Get all subscriptions scheduled by a trigger
                     while (_triggeredValues.TryDequeue(out string trigger)) triggeredSubscriptions.AddRange(_triggeredSubscriptions.TryGetValue(trigger, out IList<Subscription> sub) ? sub : new Subscription[0]);
 
-                    await Execute(triggeredSubscriptions);
-                }
-                catch(Exception e)
-                {
-                    Console.WriteLine($"BACKGROUND TASK ERROR: {e.Message}");
+                    await Execute(triggeredSubscriptions, cancellationToken);
                 }
                 finally
                 {
@@ -59,7 +53,7 @@ namespace FasTnT.Domain.BackgroundTasks
             }
         }
 
-        private async Task Execute(IEnumerable<Subscription> subscriptions)
+        private async Task Execute(IEnumerable<Subscription> subscriptions, CancellationToken cancellationToken)
         {
             using (var scope = _services.CreateScope())
             {
@@ -67,20 +61,33 @@ namespace FasTnT.Domain.BackgroundTasks
 
                 foreach(var subscription in subscriptions)
                 {
-                    await subscriptionRunner.Run(subscription);
+                    await subscriptionRunner.Run(subscription, cancellationToken);
                 }
             }
         }
 
         //REVIEW: should this class be responsible to get all subscriptions at startup? (LAA)
-        private async Task Initialize(CancellationToken stoppingToken)
+        private async Task Initialize(CancellationToken cancellationToken)
         {
-            using (var scope = _services.CreateScope())
-            {
-                var unitOfWork = scope.ServiceProvider.GetService<IUnitOfWork>();
-                var subscriptions = await unitOfWork.SubscriptionManager.GetAll(true);
+            var initialized = false;
 
-                subscriptions.ForEach(Register);
+            while (!initialized)
+            {
+                try
+                {
+                    using (var scope = _services.CreateScope())
+                    {
+                        var unitOfWork = scope.ServiceProvider.GetService<IUnitOfWork>();
+                        var subscriptions = await unitOfWork.SubscriptionManager.GetAll(true, cancellationToken);
+
+                        subscriptions.ForEach(Register);
+                        initialized = true;
+                    }
+                }
+                catch
+                {
+                    await Task.Delay(TimeSpan.FromMilliseconds(Constants.SubscriptionTaskDelayTimeoutInMs), cancellationToken);
+                }
             }
         }
 
@@ -137,7 +144,7 @@ namespace FasTnT.Domain.BackgroundTasks
         {
             lock (_monitor)
             {
-                var nextExecution = _scheduledExecutions.Any() ? _scheduledExecutions.Values.Min() : DateTime.UtcNow.AddMilliseconds(DelayTimeoutInMs);
+                var nextExecution = _scheduledExecutions.Any() ? _scheduledExecutions.Values.Min() : DateTime.UtcNow.AddMilliseconds(Constants.SubscriptionTaskDelayTimeoutInMs);
                 var timeUntilTrigger = nextExecution - DateTime.UtcNow;
 
                 if (timeUntilTrigger > TimeSpan.Zero) Monitor.Wait(_monitor, timeUntilTrigger);

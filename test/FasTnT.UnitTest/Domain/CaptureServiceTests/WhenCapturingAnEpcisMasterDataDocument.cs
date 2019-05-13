@@ -11,16 +11,16 @@ namespace FasTnT.UnitTest.Domain.CaptureServiceTests
     [TestClass]
     public class WhenCapturingAnEpcisMasterDataDocument : BaseCaptureServiceUnitTest
     {
-        public EpcisMasterdataDocument Request { get; set; }
+        public CaptureRequest Request { get; set; }
 
         public override void Arrange()
         {
             base.Arrange();
 
-            Request = new EpcisMasterdataDocument { MasterDataList = new EpcisMasterData[0] };
+            Request = new CaptureRequest { MasterDataList = new EpcisMasterData[0] };
         }
 
-        public override void Act() => Task.WaitAll(CaptureService.Capture(Request));
+        public override void Act() => Task.WaitAll(CaptureService.Capture(Request, default));
 
         [Assert]
         public void ItShouldHaveBeginTheUnitOfWorkTransaction() => A.CallTo(() => UnitOfWork.BeginTransaction()).MustHaveHappened();

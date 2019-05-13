@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
+	<LangVersion>7.1</LangVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="fastJSON" Version="2.2.2" />
+    <PackageReference Include="morelinq" Version="3.1.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\FasTnT.Formatters\FasTnT.Formatters.csproj" />
+    <ProjectReference Include="..\FasTnT.Model\FasTnT.Model.csproj" />
+  </ItemGroup>
+
+</Project>

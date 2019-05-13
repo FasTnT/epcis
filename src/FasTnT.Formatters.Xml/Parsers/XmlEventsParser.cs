@@ -9,18 +9,14 @@ using System.Xml.Linq;
 
 namespace FasTnT.Formatters.Xml.Requests
 {
-    public class XmlEventsParser
+    public static class XmlEventsParser
     { 
-        private int _customCounter = 0;
-
-        internal EpcisEvent[] ParseEvents(params XElement[] eventList)
+        static internal EpcisEvent[] ParseEvents(params XElement[] eventList)
         {
             var events = new List<EpcisEvent>(eventList.Length);
 
             foreach(var node in eventList)
             {
-                _customCounter = 0;
-
                 if(node.Name.LocalName == "extension")
                 {
                     var transformationEvent = ParseEvents(node.Elements().Single()).SingleOrDefault();
@@ -35,7 +31,7 @@ namespace FasTnT.Formatters.Xml.Requests
             return events.ToArray();
         }
 
-        private EpcisEvent ParseAttributes(XElement root, EpcisEvent epcisEvent)
+        private static EpcisEvent ParseAttributes(XElement root, EpcisEvent epcisEvent)
         {
             foreach(var node in root.Elements())
             {
@@ -47,7 +43,7 @@ namespace FasTnT.Formatters.Xml.Requests
                 switch (node.Name.LocalName)
                 {
                     case "eventTime":
-                        epcisEvent.EventTime = DateTime.Parse(node.Value, CultureInfo.InvariantCulture); break;
+                        epcisEvent.EventTime = DateTime.Parse(node.Value, CultureInfo.InvariantCulture, DateTimeStyles.AdjustToUniversal); break;
                     case "eventTimeZoneOffset":
                         epcisEvent.EventTimeZoneOffset = new TimeZoneOffset { Representation = node.Value }; break;
                     case "action":
@@ -57,11 +53,15 @@ namespace FasTnT.Formatters.Xml.Requests
                     case "childEPCs":
                         node.ParseChildEpcListInto(epcisEvent); break;
                     case "inputQuantityList":
-                        node.ParseQuantityListInto(epcisEvent, true); break;
+                        node.ParseQuantityListInto(epcisEvent, EpcType.InputQuantity); break;
                     case "inputEPCList":
                         node.ParseEpcListInto(EpcType.InputEpc, epcisEvent); break;
                     case "outputQuantityList":
-                        node.ParseQuantityListInto(epcisEvent, false); break;
+                        node.ParseQuantityListInto(epcisEvent, EpcType.OutputQuantity); break;
+                    case "childQuantityList":
+                        node.ParseQuantityListInto(epcisEvent, EpcType.ChildQuantity); break;
+                    case "quantityList":
+                        node.ParseQuantityListInto(epcisEvent, EpcType.Quantity); break;
                     case "outputEPCList":
                         node.ParseEpcListInto(EpcType.OutputEpc, epcisEvent); break;
                     case "epcClass":
@@ -75,15 +75,15 @@ namespace FasTnT.Formatters.Xml.Requests
                     case "eventID":
                         epcisEvent.EventId = node.Value; break;
                     case "errorDeclaration":
-                        epcisEvent.ErrorDeclaration = node.ToErrorDeclaration(epcisEvent, this); break;
+                        epcisEvent.ErrorDeclaration = node.ToErrorDeclaration(epcisEvent); break;
                     case "transformationId":
                         epcisEvent.TransformationId = node.Value; break;
                     case "bizLocation":
-                        node.ParseBusinessLocation(epcisEvent, this); break;
+                        node.ParseBusinessLocation(epcisEvent); break;
                     case "bizTransactionList":
                         epcisEvent.BusinessTransactions = node.ToBusinessTransactions(); break;
                     case "readPoint":
-                        node.ParseReadPoint(epcisEvent, this); break;
+                        node.ParseReadPoint(epcisEvent); break;
                     case "sourceList":
                         node.ParseSourceInto(epcisEvent.SourceDestinationList); break;
                     case "destinationList":
@@ -95,6 +95,7 @@ namespace FasTnT.Formatters.Xml.Requests
                     case "recordTime": // We don't process record time as it will be overrided in any case..
                         break;
                     case "extension":
+                    case "baseExtension":
                         ParseExtensionElement(node, epcisEvent); break;
                     default:
                         epcisEvent.CustomFields.Add(ParseCustomField(node, epcisEvent, FieldType.EventExtension)); break;
@@ -104,7 +105,7 @@ namespace FasTnT.Formatters.Xml.Requests
             return epcisEvent;
         }
 
-        private void ParseExtensionElement(XElement innerElement, EpcisEvent epcisEvent)
+        private static void ParseExtensionElement(XElement innerElement, EpcisEvent epcisEvent)
         {
             if (innerElement.Name.Namespace == XNamespace.None || innerElement.Name.Namespace == XNamespace.Xmlns || innerElement.Name.NamespaceName == EpcisNamespaces.Capture)
                 epcisEvent = ParseAttributes(innerElement, epcisEvent);
@@ -112,7 +113,7 @@ namespace FasTnT.Formatters.Xml.Requests
                 epcisEvent.CustomFields.Add(ParseCustomField(innerElement, epcisEvent, FieldType.EventExtension));
         }
 
-        private void ParseIlmd(XElement element, EpcisEvent epcisEvent)
+        private static void ParseIlmd(XElement element, EpcisEvent epcisEvent)
         {
             foreach (var children in element.Elements())
             {
@@ -120,11 +121,10 @@ namespace FasTnT.Formatters.Xml.Requests
             }
         }
 
-        internal CustomField ParseCustomField(XElement element, EpcisEvent epcisEvent, FieldType type)
+        internal static CustomField ParseCustomField(XElement element, EpcisEvent epcisEvent, FieldType type)
         {
             var field = new CustomField
             {
-                Id = _customCounter++,
                 Type = type,
                 Name = element.Name.LocalName,
                 Namespace = element.Name.NamespaceName,
@@ -138,8 +138,7 @@ namespace FasTnT.Formatters.Xml.Requests
                 foreach (var children in element.Elements())
                 {
                     var childrenField = ParseCustomField(children, epcisEvent, type);
-                    childrenField.ParentId = field.Id;
-                    epcisEvent.CustomFields.Add(childrenField);
+                    field.Children.Add(childrenField);
                 }
             }
 
@@ -147,8 +146,6 @@ namespace FasTnT.Formatters.Xml.Requests
             {
                 var attributeField = new CustomField
                 {
-                    Id = _customCounter++,
-                    ParentId = field.Id,
                     Type = FieldType.Attribute,
                     Name = attribute.Name.LocalName,
                     Namespace = attribute.Name.Namespace.NamespaceName,
@@ -157,7 +154,7 @@ namespace FasTnT.Formatters.Xml.Requests
                     DateValue = element.HasElements ? null : DateTime.TryParse(element.Value, out DateTime dateVal) ? dateVal : default(DateTime?),
                 };
 
-                epcisEvent.CustomFields.Add(attributeField);
+                field.Children.Add(attributeField);
             }
 
             return field;

@@ -5,6 +5,8 @@ namespace FasTnT.Model
 {
     public class TimeZoneOffset
     {
+        public static TimeZoneOffset Default = new TimeZoneOffset();
+
         public string Representation { get { return ComputeRepresentation(Value); } set { Value = ComputeValue(value); } }
         public short Value { get; set; }
 
@@ -20,7 +22,6 @@ namespace FasTnT.Model
         private static short ComputeValue(string value)
         {
             var sign = (value[0] == '-') ? -1 : +1;
-            var representation = value.TrimStart('-', '+');
             var parts = value.Split(':');
 
             return (short)(sign * (Math.Abs(int.Parse(parts[0], CultureInfo.InvariantCulture)) * 60 + int.Parse(parts[1], CultureInfo.InvariantCulture)));

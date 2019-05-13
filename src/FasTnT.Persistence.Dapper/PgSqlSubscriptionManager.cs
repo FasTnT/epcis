@@ -5,6 +5,7 @@ using MoreLinq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace FasTnT.Persistence.Dapper
@@ -18,14 +19,14 @@ namespace FasTnT.Persistence.Dapper
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<Subscription> GetById(string subscriptionId)
+        public async Task<Subscription> GetById(string subscriptionId, CancellationToken cancellationToken)
         {
-            return (await _unitOfWork.Query<Subscription>($"{SqlRequests.SubscriptionListIds} WHERE s.subscription_id = @Id", new { Id = subscriptionId })).SingleOrDefault();
+            return (await _unitOfWork.Query<Subscription>($"{SqlRequests.SubscriptionsList} WHERE s.subscription_id = @Id", new { Id = subscriptionId }, cancellationToken)).SingleOrDefault();
         }
 
-        public async Task<IEnumerable<Subscription>> GetAll(bool includeDetails = false)
+        public async Task<IEnumerable<Subscription>> GetAll(bool includeDetails, CancellationToken cancellationToken)
         {
-            var subscriptions = (await _unitOfWork.Query<dynamic>(SqlRequests.SubscriptionsList)).Select(x => new Subscription
+            var subscriptions = (await _unitOfWork.Query<dynamic>(SqlRequests.SubscriptionsList, null, cancellationToken)).Select(x => new SubscriptionEntity
             {
                 Id = x.id,
                 Active = x.active,
@@ -45,14 +46,14 @@ namespace FasTnT.Persistence.Dapper
                 }
             }).ToArray();
 
-            if (includeDetails) await LoadParameters(subscriptions);
+            if (includeDetails) await LoadParameters(subscriptions, cancellationToken);
 
             return subscriptions;
         }
 
-        private async Task LoadParameters(Subscription[] subscriptions)
+        private async Task LoadParameters(SubscriptionEntity[] subscriptions, CancellationToken cancellationToken)
         {
-            var @params = (await _unitOfWork.Query<dynamic>(SqlRequests.SubscriptionListParameters))
+            var @params = (await _unitOfWork.Query<dynamic>(SqlRequests.SubscriptionListParameters, null, cancellationToken))
                 .GroupBy(x => (Guid)x.subscription_id)
                 .Select(x => new
                 {
@@ -67,17 +68,37 @@ namespace FasTnT.Persistence.Dapper
             subscriptions.ForEach(s => s.Parameters = @params.SingleOrDefault(p => p.SubscriptionId == s.Id)?.Parameters);
         }
 
-        public async Task Delete(Guid id)
-            => await _unitOfWork.Execute(SqlRequests.SubscriptionDelete, new { Id = id });
+        public async Task Delete(string subscriptionId, CancellationToken cancellationToken)
+            => await _unitOfWork.Execute(SqlRequests.SubscriptionDelete, new { Id = subscriptionId }, cancellationToken);
 
-        public async Task<IEnumerable<Guid>> GetPendingRequestIds(Guid subscriptionId) 
-            => await _unitOfWork.Query<Guid>(SqlRequests.SubscriptionListPendingRequestIds, new { SubscriptionId = subscriptionId });
+        public async Task<IEnumerable<Guid>> GetPendingRequestIds(string subscriptionId, CancellationToken cancellationToken) 
+            => await _unitOfWork.Query<Guid>(SqlRequests.SubscriptionListPendingRequestIds, new { SubscriptionId = subscriptionId }, cancellationToken);
 
-        public async Task AcknowledgePendingRequests(Guid subscriptionId, IEnumerable<Guid> requestIds) 
-            => await _unitOfWork.Execute(SqlRequests.SubscriptionAcknowledgePendingRequests, new { SubscriptionId = subscriptionId, RequestId = requestIds });
+        public async Task AcknowledgePendingRequests(string subscriptionId, IEnumerable<Guid> requestIds, CancellationToken cancellationToken) 
+            => await _unitOfWork.Execute(SqlRequests.SubscriptionAcknowledgePendingRequests, new { SubscriptionId = subscriptionId, RequestId = requestIds }, cancellationToken);
 
-        public async Task Store(Subscription subscription)
+        public async Task RegisterSubscriptionTrigger(string subscriptionId, SubscriptionResult subscriptionResult, string reason, CancellationToken cancellationToken)
+            => await _unitOfWork.Execute(SqlRequests.SubscriptionStoreTrigger, new { Id = Guid.NewGuid(), subscriptionId, Status = subscriptionResult, reason }, cancellationToken);
+
+        public async Task Store(Subscription subscription, CancellationToken cancellationToken)
         {
+            var entity = new
+            {
+                Id = Guid.NewGuid(),
+                Active = true,
+                subscription.SubscriptionId,
+                subscription.Trigger,
+                subscription.InitialRecordTime,
+                subscription.ReportIfEmpty,
+                subscription.Schedule?.Second,
+                subscription.Schedule?.Hour,
+                subscription.Schedule?.Minute,
+                subscription.Schedule?.Month,
+                subscription.Schedule?.DayOfMonth,
+                subscription.Schedule?.DayOfWeek,
+                subscription.Destination,
+                subscription.QueryName
+            };
             var parameters = new List<object>();
             var values = new List<object>();
 
@@ -85,34 +106,13 @@ namespace FasTnT.Persistence.Dapper
             {
                 var id = Guid.NewGuid();
 
-                parameters.Add(new { Id = id, SubscriptionId = subscription.Id, parameter.Name });
+                parameters.Add(new { Id = id, SubscriptionId = entity.Id, parameter.Name });
                 parameter.Values.ForEach(value => values.Add(new { Id = Guid.NewGuid(), ParameterId = id, Value = value }));
             });
 
-            await _unitOfWork.Execute(SqlRequests.SubscriptionStore, GetPgSqlSubscription(subscription));
-            await _unitOfWork.Execute(SqlRequests.SubscriptionStoreParameter, parameters);
-            await _unitOfWork.Execute(SqlRequests.SubscriptionStoreParameterValue, values);
-        }
-
-        private object GetPgSqlSubscription(Subscription subscription)
-        {
-            return new
-            {
-                subscription.Id,
-                subscription.SubscriptionId,
-                subscription.QueryName,
-                subscription.ReportIfEmpty,
-                subscription.Trigger,
-                subscription.InitialRecordTime,
-                subscription.Destination,
-                subscription.Active,
-                subscription.Schedule.Second,
-                subscription.Schedule.Minute,
-                subscription.Schedule.Hour,
-                subscription.Schedule.Month,
-                subscription.Schedule.DayOfMonth,
-                subscription.Schedule.DayOfWeek
-            };
+            await _unitOfWork.Execute(SqlRequests.SubscriptionStore, entity, cancellationToken);
+            await _unitOfWork.Execute(SqlRequests.SubscriptionStoreParameter, parameters, cancellationToken);
+            await _unitOfWork.Execute(SqlRequests.SubscriptionStoreParameterValue, values, cancellationToken);
         }
     }
 }

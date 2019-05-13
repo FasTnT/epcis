@@ -1,6 +1,6 @@
 ﻿namespace FasTnT.Model.Queries
 {
-    public abstract class EpcisQuery
+    public abstract class EpcisQuery : IEpcisPayload
     {
     }
 }

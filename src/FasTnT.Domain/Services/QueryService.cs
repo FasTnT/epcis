@@ -8,6 +8,7 @@ using FasTnT.Model.Responses;
 using FasTnT.Model.Subscriptions;
 using System;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace FasTnT.Domain.Services
@@ -25,74 +26,78 @@ namespace FasTnT.Domain.Services
             _backgroundService = backgroundService;
         }
 
-        public Task<GetQueryNamesResponse> Process(GetQueryNames query) => Task.Run(() => new GetQueryNamesResponse { QueryNames = _queries.Select(x => x.Name) });
-        public Task<GetStandardVersionResponse> Process(GetStandardVersion query) => Task.Run(() => new GetStandardVersionResponse { Version = Constants.StandardVersion });
-        public Task<GetVendorVersionResponse> Process(GetVendorVersion query) => Task.Run(() => new GetVendorVersionResponse { Version = Constants.ProductVersion });
-        public async Task<GetSubscriptionIdsResult> Process(GetSubscriptionIds query) => new GetSubscriptionIdsResult { SubscriptionIds = (await _unitOfWork.SubscriptionManager.GetAll()).Where(s => s.QueryName == query.QueryName).Select(x => x.SubscriptionId) };
+        public Task<GetQueryNamesResponse> GetQueryNames(CancellationToken cancellationToken) => Task.Run(() => new GetQueryNamesResponse { QueryNames = _queries.Select(x => x.Name) }, cancellationToken);
+        public Task<GetStandardVersionResponse> GetStandardVersion(CancellationToken cancellationToken) => Task.Run(() => new GetStandardVersionResponse { Version = Constants.StandardVersion }, cancellationToken);
+        public Task<GetVendorVersionResponse> GetVendorVersion(CancellationToken cancellationToken) => Task.Run(() => new GetVendorVersionResponse { Version = Constants.ProductVersion }, cancellationToken);
+        public async Task<GetSubscriptionIdsResult> GetSubscriptionId(GetSubscriptionIds query, CancellationToken cancellationToken)
+        {
+            var subscriptions = await _unitOfWork.SubscriptionManager.GetAll(false, cancellationToken);
+            return new GetSubscriptionIdsResult { SubscriptionIds = subscriptions.Where(s => s.QueryName == query.QueryName).Select(x => x.SubscriptionId) };
+        }
 
-        public async Task<PollResponse> Process(Poll query)
+        public async Task<PollResponse> Poll(Poll query, CancellationToken cancellationToken)
         {
             var epcisQuery = _queries.SingleOrDefault(x => x.Name == query.QueryName);
-
-            if (epcisQuery == null)
+            EnsureQueryExists(epcisQuery, query.QueryName);
+            
+            query.Parameters = QueryParameterFormatter.Format(query.Parameters);
+            try
             {
-                throw new Exception($"Unknown query: '{query.QueryName}'");
+                epcisQuery.ValidateParameters(query.Parameters);
+
+                var results = await epcisQuery.Execute(query.Parameters, _unitOfWork, cancellationToken);
+                return new PollResponse { QueryName = query.QueryName, Entities = results };
             }
-            else
+            catch (Exception ex) when (!(ex is EpcisException))
             {
-                try
-                {
-                    epcisQuery.ValidateParameters(query.Parameters);
-
-                    var results = await epcisQuery.Execute(query.Parameters, _unitOfWork);
-                    return new PollResponse { QueryName = query.QueryName, Entities = results };
-                }
-                catch (Exception ex)
-                {
-                    throw new EpcisException(ExceptionType.QueryParameterException, ex.Message);
-                }
+                throw new EpcisException(ExceptionType.QueryParameterException, ex.Message);
             }
         }
 
-        public async Task Process(Subscription request)
+        public async Task Subscribe(Subscription request, CancellationToken cancellationToken)
         {
-            EnsureDestinationIsValidURI(request);
-            EnsureQueryAllowsSubscription(request);
-            EnsureDestinationHasEndSlash(request);
+            var epcisQuery = _queries.SingleOrDefault(x => x.Name == request.QueryName);
+            EnsureQueryExists(epcisQuery, request.QueryName);
+            EnsureQueryAllowsSubscription(epcisQuery);
+            SubscriptionValidator.Validate(request);
+
+            request.Parameters = QueryParameterFormatter.Format(request.Parameters);
+            epcisQuery.ValidateParameters(request.Parameters, true);
 
             await _unitOfWork.Execute(async tx =>
             {
-                await EnsureSubscriptionDoesNotExist(tx, request);
-                await tx.SubscriptionManager.Store(request);
+                await EnsureSubscriptionDoesNotExist(tx, request, cancellationToken);
+                await tx.SubscriptionManager.Store(request, cancellationToken);
                 _backgroundService.Register(request);
             });
         }
 
-        private void EnsureDestinationHasEndSlash(Subscription request) => request.Destination = $"{request.Destination.TrimEnd('/')}/";
-
-        public async Task Process(UnsubscribeRequest query)
+        public async Task Unsubscribe(UnsubscribeRequest query, CancellationToken cancellationToken)
         {
             await _unitOfWork.Execute(async tx =>
             {
-                var subscription = await tx.SubscriptionManager.GetById(query.SubscriptionId);
-                if (subscription == null) throw new EpcisException(ExceptionType.NoSuchNameException, $"Subscription with ID '{query.SubscriptionId}' does not exist.");
+                var subscription = await tx.SubscriptionManager.GetById(query.SubscriptionId, cancellationToken);
+                if (subscription == null) throw new EpcisException(ExceptionType.NoSuchSubscriptionException, $"Subscription with ID '{query.SubscriptionId}' does not exist.");
 
-                await tx.SubscriptionManager.Delete(subscription.Id);
+                await tx.SubscriptionManager.Delete(subscription.SubscriptionId, cancellationToken);
                 _backgroundService.Remove(subscription);
             });
         }
-        
-        private async static Task EnsureSubscriptionDoesNotExist(IUnitOfWork transaction, Subscription request)
+
+        private void EnsureQueryExists(IEpcisQuery epcisQuery, string queryName)
         {
-            var subscription = await transaction.SubscriptionManager.GetById(request.SubscriptionId);
-            if (subscription != null) throw new EpcisException(ExceptionType.SubscribeNotPermittedException, $"Subscription '{request.QueryName}' already exist.");
+            if(epcisQuery == null) throw new EpcisException(ExceptionType.NoSuchNameException, $"Unknown query: '{queryName}'");
         }
 
-        private void EnsureQueryAllowsSubscription(Subscription subscribe)
+        private async static Task EnsureSubscriptionDoesNotExist(IUnitOfWork transaction, Subscription request, CancellationToken cancellationToken)
         {
-            var query = _queries.SingleOrDefault(x => x.Name == subscribe.QueryName);
-            if (query == null || !query.AllowSubscription) throw new EpcisException(ExceptionType.SubscribeNotPermittedException, $"Query '{subscribe.QueryName}' does not exist or doesn't allow subscription");
+            var subscription = await transaction.SubscriptionManager.GetById(request.SubscriptionId, cancellationToken);
+            if (subscription != null) throw new EpcisException(ExceptionType.DuplicateSubscriptionException, $"Subscription '{request.SubscriptionId}' already exist.");
         }
-        private void EnsureDestinationIsValidURI(Subscription request) => UriValidator.Validate(request.Destination, true);
+
+        private void EnsureQueryAllowsSubscription(IEpcisQuery query)
+        {
+            if (query == null || !query.AllowSubscription) throw new EpcisException(ExceptionType.SubscribeNotPermittedException, $"Query '{query?.Name}' does not exist or doesn't allow subscription");
+        }
     }
 }

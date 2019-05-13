@@ -15,23 +15,31 @@ namespace FasTnT.Model.Extensions
 
             if(typeof(T) == typeof(DateTime))
                 return (T) Convert.ChangeType(DateTime.Parse(parameter.Values.Single()), typeof(T));
-            if (typeof(T) == typeof(int))
+            else if (typeof(T) == typeof(int))
                 return (T)Convert.ChangeType(int.Parse(parameter.Values.Single()), typeof(T));
-            if (typeof(T) == typeof(double))
+            else if (typeof(T) == typeof(double))
                 return (T)Convert.ChangeType(double.Parse(parameter.Values.Single()), typeof(T));
-            if (typeof(T) == typeof(bool))
+            else if (typeof(T) == typeof(bool))
                 return (T)Convert.ChangeType(bool.Parse(parameter.Values.Single()), typeof(T));
+            else
+                throw new Exception($"Unknow value type: '{typeof(T).Name}'");
+        }
 
-            throw new Exception($"Unknow value type: '{typeof(T).Name}'");
+        public static bool ContainsSingleValueOfType(this QueryParameter parameter, params Type[] types)
+        {
+            return parameter.Values.Length == 1 && types.Contains(parameter.GetSingleValue().GetType());
         }
 
         public static object GetSingleValue(this QueryParameter parameter)
         {
             var singleParameter = parameter.Values.Single();
 
-            if (DateTime.TryParse(singleParameter, out DateTime dateParsed)) return dateParsed;
-            if (double.TryParse(singleParameter, out double numericParsed)) return numericParsed;
-            else return singleParameter;
+            if (DateTime.TryParse(singleParameter, out DateTime dateParsed))
+                return dateParsed;
+            if (double.TryParse(singleParameter, out double numericParsed))
+                return numericParsed;
+            else
+                return singleParameter;
         }
     }
 }

@@ -9,12 +9,17 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace FasTnT.Model.Queries.Implementations
 {
     public class SimpleEventQuery : IEpcisQuery
     {
+        private static readonly string[] _specificNames = new[] { "eventType", "orderBy", "orderDirection" };
+        private static readonly string[] _anyValuePrefixes = new[] { "EQ_", "EXISTS_", "EQATTR_", "HASATTR_", "WD_" };
+        private static readonly string[] _comparisonPrefixes = new[] { "GE_", "LE_", "GT_", "LT_" };
+
         public string Name => "SimpleEventQuery";
         public bool AllowSubscription => true;
 
@@ -23,13 +28,24 @@ namespace FasTnT.Model.Queries.Implementations
 
         public void ValidateParameters(IEnumerable<QueryParameter> parameters, bool subscription = false)
         {
-            if(parameters.Any(x => x.Name == "maxEventCount") && parameters.Any(x => x.Name == "eventCountLimit"))
+            parameters = parameters ?? new QueryParameter[0];
+
+            foreach (var parameter in parameters)
+            {
+                if (_specificNames.Contains(parameter.Name) || _anyValuePrefixes.Any(p => parameter.Name.StartsWith(p))) continue;
+                if (_comparisonPrefixes.Any(p => parameter.Name.StartsWith(p) && parameter.ContainsSingleValueOfType(new[] { typeof(DateTime), typeof(double) }))) continue;
+                if (!subscription && new[] { "maxEventCount", "eventCountLimit" }.Contains(parameter.Name) && parameter.ContainsSingleValueOfType(typeof(double))) continue;
+
+                throw new EpcisException(ExceptionType.QueryParameterException, $"Parameter '{parameter.Name}' is unknown, has invalid value or not allowed in this context.");
+            }
+
+            if (parameters.Any(x => x.Name == "maxEventCount") && parameters.Any(x => x.Name == "eventCountLimit"))
             {
                 throw new EpcisException(ExceptionType.QueryParameterException, "maxEventCount and eventCountLimit parameters are mutually exclusive.");
             }
         }
 
-        public async Task<IEnumerable<IEntity>> Execute(IEnumerable<QueryParameter> parameters, IUnitOfWork unitOfWork)
+        public async Task<IEnumerable<IEntity>> Execute(IEnumerable<QueryParameter> parameters, IUnitOfWork unitOfWork, CancellationToken cancellationToken)
         {
             parameters = parameters ?? new QueryParameter[0];
 
@@ -73,10 +89,10 @@ namespace FasTnT.Model.Queries.Implementations
 
                 else throw new NotImplementedException($"Query parameter unexpected or not implemented: '{parameter.Name}'");
             }
+            
+            unitOfWork.EventManager.OrderBy(_orderField, _orderDirection); // Set order by filter
 
-            // Set order by filter
-            unitOfWork.EventManager.OrderBy(_orderField, _orderDirection);
-            var results = await unitOfWork.EventManager.ToList();
+            var results = await unitOfWork.EventManager.ToList(cancellationToken);
 
             // Check for the maxEventCount parameter
             if(parameters.Any(x => x.Name == "maxEventCount") && results.Count() == parameters.Last(x => x.Name == "maxEventCount").GetValue<int>() + 1)

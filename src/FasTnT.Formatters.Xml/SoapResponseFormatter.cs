@@ -1,6 +1,7 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Xml.Linq;
 using FasTnT.Formatters.Xml.Responses;
 using FasTnT.Model;
@@ -9,32 +10,30 @@ using FasTnT.Model.Responses;
 
 namespace FasTnT.Formatters.Xml
 {
-    internal class SoapResponseFormatter : IResponseFormatter
+    internal class SoapResponseFormatter : BaseResponseFormatter<XElement>
     {
         private const SaveOptions Options = SaveOptions.DisableFormatting | SaveOptions.OmitDuplicateNamespaces;
-        public IEpcisResponse Read(Stream input) => throw new NotImplementedException();
+        public override string ToContentTypeString() => "application/soap+xml";
 
-        public void Write(IEpcisResponse entity, Stream output)
+        public override async Task Write(IEpcisResponse entity, Stream output, CancellationToken cancellationToken)
         {
-            if (entity != default(IEpcisResponse))
-            {
-                FormatSoap((dynamic)entity).Save(output, Options);
-            }
+            if (entity == default(IEpcisResponse)) return;
+
+            await FormatSoap(Format(entity)).SaveAsync(output, Options, cancellationToken);
         }
 
-        private XDocument FormatSoap(dynamic entity)
+        private XDocument FormatSoap(XElement entity)
         {
             var document = new XDocument(new XElement(XName.Get("Envelope", "http://schemas.xmlsoap.org/soap/envelope/"), 
                 new XAttribute(XNamespace.Xmlns + "soapenv", "http://schemas.xmlsoap.org/soap/envelope/"),
                 new XAttribute(XNamespace.Xmlns + "epcisq", "urn:epcglobal:epcis-query:xsd:1")
             )); 
-            document.Root.Add(new XElement(XName.Get("Body", "http://schemas.xmlsoap.org/soap/envelope/"), Format(entity)));
+            document.Root.Add(new XElement(XName.Get("Body", "http://schemas.xmlsoap.org/soap/envelope/"), entity));
 
             return document;
         }
 
-        public string ToContentTypeString() => "application/soap+xml";
-        public XElement Format(PollResponse response)
+        protected override XElement FormatInternal(PollResponse response)
         {
             var resultName = "EventList";
             var typeOfResponse = response.Entities.GetType().GenericTypeArguments[0];
@@ -51,29 +50,19 @@ namespace FasTnT.Formatters.Xml
             return evt;
         }
 
-        public XElement Format(GetVendorVersionResponse response)
-        {
-            return new XElement(XName.Get("GetVendorVersionResult", EpcisNamespaces.Query), response.Version);
-        }
+        protected override XElement FormatInternal(GetVendorVersionResponse response)
+            => new XElement(XName.Get("GetVendorVersionResult", EpcisNamespaces.Query), response.Version);
 
-        public XElement Format(GetStandardVersionResponse response)
-        {
-            return new XElement(XName.Get("GetStandardVersionResult", EpcisNamespaces.Query), response.Version);
-        }
+        protected override XElement FormatInternal(GetStandardVersionResponse response)
+            => new XElement(XName.Get("GetStandardVersionResult", EpcisNamespaces.Query), response.Version);
 
-        public XElement Format(GetQueryNamesResponse response)
-        {
-            return new XElement(XName.Get("GetQueryNamesResult", EpcisNamespaces.Query), response.QueryNames.Select(x => new XElement("string", x)));
-        }
+        protected override XElement FormatInternal(GetQueryNamesResponse response)
+            => new XElement(XName.Get("GetQueryNamesResult", EpcisNamespaces.Query), response.QueryNames.Select(x => new XElement("string", x)));
 
-        public XElement Format(GetSubscriptionIdsResult response)
-        {
-            return new XElement(XName.Get("GetSubscriptionIDsResult", EpcisNamespaces.Query), response.SubscriptionIds?.Select(x => new XElement("string", x)));
-        }
+        protected override XElement FormatInternal(GetSubscriptionIdsResult response)
+            => new XElement(XName.Get("GetSubscriptionIDsResult", EpcisNamespaces.Query), response.SubscriptionIds?.Select(x => new XElement("string", x)));
 
-        public XElement Format(ExceptionResponse response)
-        {
-            return new XElement(response.Exception, !string.IsNullOrEmpty(response.Reason) ? new XElement("reason", response.Reason) : null, (response.Severity != null) ? new XElement("severity", response.Severity.DisplayName) : null);
-        }
+        protected override XElement FormatInternal(ExceptionResponse response)
+            => new XElement(response.Exception, !string.IsNullOrEmpty(response.Reason) ? new XElement("reason", response.Reason) : null, (response.Severity != null) ? new XElement("severity", response.Severity.DisplayName) : null);
     }
 }

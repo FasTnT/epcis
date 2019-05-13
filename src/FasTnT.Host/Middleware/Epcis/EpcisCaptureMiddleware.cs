@@ -1,26 +1,29 @@
-﻿using Microsoft.Extensions.Logging;
-using FasTnT.Domain.Services;
+﻿using FasTnT.Domain.Services;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using FasTnT.Model;
+using System.Threading;
 
 namespace FasTnT.Host
 {
     internal class EpcisCaptureMiddleware : EpcisMiddleware<Request>
     {
-        public EpcisCaptureMiddleware(ILogger<EpcisCaptureMiddleware> logger, RequestDelegate next, string path)
-            : base(logger, next, path) { }
+        public EpcisCaptureMiddleware(RequestDelegate next, string path) : base( next, path) { }
 
-        public override async Task Process(Request request)
+        public override async Task Process(Request request, CancellationToken cancellationToken)
         {
-            if (request is EpcisEventDocument eventDocument)
-                await Execute<CaptureService>(async s => await s.Capture(eventDocument));
-            else if (request is EpcisMasterdataDocument masterDataDocument)
-                await Execute<CaptureService>(async s => await s.Capture(masterDataDocument));
-            else if (request is EpcisQueryCallbackDocument queryCallbackDocument)
-                await Execute<CallbackService>(async s => await s.Process(queryCallbackDocument));
-            else if (request is EpcisQueryCallbackException queryCallbackException)
-                await Execute<CallbackService>(async s => await s.ProcessException(queryCallbackException));
+            switch (request)
+            {
+                case CaptureRequest captureRequest:
+                    await Execute<CaptureService>(async s => await s.Capture(captureRequest, cancellationToken));
+                    break;
+                case EpcisQueryCallbackDocument queryCallbackDocument:
+                    await Execute<CallbackService>(async s => await s.Process(queryCallbackDocument, cancellationToken));
+                    break;
+                case EpcisQueryCallbackException queryCallbackException:
+                    await Execute<CallbackService>(async s => await s.ProcessException(queryCallbackException, cancellationToken));
+                    break;
+            }
         }
     }
 }

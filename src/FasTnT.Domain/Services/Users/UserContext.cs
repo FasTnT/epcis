@@ -8,15 +8,12 @@ namespace FasTnT.Domain.Services.Users
 {
     public class UserContext
     {
-        static SHA256 Sha256 = SHA256.Create();
+        private static readonly SHA256 Sha256 = SHA256.Create();
         public User Current { get; private set; }
 
         public bool Authenticate(User user, string password)
         {
-            if (user != null && VerifyPassword(user, password))
-            {
-                Current = user;
-            }
+            if (user != null && VerifyPassword(user, password)) Current = user;
 
             return Current != null;
         }

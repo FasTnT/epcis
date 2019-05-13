@@ -1,12 +1,14 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.2</TargetFramework>
+	  <LangVersion>7.1</LangVersion>
+    <UserSecretsId>3cd5d359-c751-46f7-9418-c0f887a89bc7</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.All" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="2.2.0" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="3.0.0-preview4.19216.2" />
     <PackageReference Include="Microsoft.Extensions.Logging" Version="2.2.0" />
   </ItemGroup>
 
@@ -16,6 +18,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\FasTnT.Domain\FasTnT.Domain.csproj" />
+    <ProjectReference Include="..\FasTnT.Formatters.Json\FasTnT.Formatters.Json.csproj" />
     <ProjectReference Include="..\FasTnT.Formatters.Xml\FasTnT.Formatters.Xml.csproj" />
     <ProjectReference Include="..\FasTnT.Persistence.Dapper\FasTnT.Persistence.Dapper.csproj" />
   </ItemGroup>

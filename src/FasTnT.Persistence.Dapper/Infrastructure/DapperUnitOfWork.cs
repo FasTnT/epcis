@@ -5,6 +5,7 @@ using FasTnT.Persistence.Dapper.Setup;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Threading;
 using System.Threading.Tasks;
 using static Dapper.SqlMapper;
 
@@ -63,8 +64,11 @@ namespace FasTnT.Persistence.Dapper
             }
         }
 
-        public async Task Execute(string command, object parameters = null) => await _connection.ExecuteAsync(command, parameters, _transaction);
-        public async Task<GridReader> FetchMany(string command, object parameters = null) =>  await _connection.QueryMultipleAsync(command, parameters, _transaction);
-        public async Task<IEnumerable<T>> Query<T>(string command, object parameters = null) => await _connection.QueryAsync<T>(command, parameters, _transaction);
+        public async Task Execute(string command, object parameters, CancellationToken cancellationToken) => await _connection.ExecuteAsync(new CommandDefinition(command, parameters, _transaction, cancellationToken: cancellationToken));
+        public async Task<GridReader> FetchMany(string command, object parameters, CancellationToken cancellationToken) =>  await _connection.QueryMultipleAsync(new CommandDefinition(command, parameters, _transaction, cancellationToken: cancellationToken));
+        public async Task<IEnumerable<T>> Query<T>(string command, object parameters, CancellationToken cancellationToken) => await _connection.QueryAsync<T>(new CommandDefinition(command, parameters, _transaction, cancellationToken: cancellationToken));
+        public async Task<IEnumerable<T>> Query<T, TRel>(string command, object parameters, Action<T, TRel> action, string splitOn, CancellationToken cancellationToken) => await _connection.QueryAsync(new CommandDefinition(command, parameters, _transaction, cancellationToken: cancellationToken), Map(action), splitOn);
+
+        private Func<T, TRel, T> Map<T, TRel>(Action<T, TRel> action) => (entity, related) => { action(entity, related); return entity; };
     }
 }

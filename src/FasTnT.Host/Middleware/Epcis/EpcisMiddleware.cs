@@ -1,21 +1,24 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using System;
-using FasTnT.Host.Infrastructure;
 using FasTnT.Model.Responses;
+using FasTnT.Domain;
+using System.Threading;
+using FasTnT.Model;
 
 namespace FasTnT.Host
 {
-    public abstract class EpcisMiddleware<T>
+    public abstract class EpcisMiddleware<T> where T : IEpcisPayload
     {
+        const int OkStatusCode = 200;
+
         private readonly RequestDelegate _next;
         private readonly string _path;
         private IServiceProvider _serviceProvider;
         private HttpContext _httpContext;
 
-        public EpcisMiddleware(ILogger logger, RequestDelegate next, string path)
+        public EpcisMiddleware(RequestDelegate next, string path)
         {
             _next = next;
             _path = path;
@@ -23,13 +26,12 @@ namespace FasTnT.Host
 
         public async Task Invoke(HttpContext httpContext, IServiceProvider serviceProvider)
         {
-            if (httpContext.Request.Method == "POST" && httpContext.Request.Path.StartsWithSegments(_path))
+            if (HttpMethods.IsPost(httpContext.Request.Method) && httpContext.Request.Path.StartsWithSegments(_path))
             {
-                _serviceProvider = serviceProvider;
                 _httpContext = httpContext;
+                _serviceProvider = serviceProvider;
 
-                var request = HttpFormatterFactory.Instance.GetFormatter<T>(_httpContext).Read(httpContext.Request.Body);
-                await Process(request);
+                await DispatchRequest(httpContext, serviceProvider);
             }
             else
             {
@@ -37,16 +39,21 @@ namespace FasTnT.Host
             }
         }
 
-        public abstract Task Process(T request);
+        private async Task DispatchRequest(HttpContext httpContext, IServiceProvider serviceProvider)
+        {
+            var formatterFactory = serviceProvider.GetService<FormatterProvider>();
+            var request = await formatterFactory.GetFormatter<T>(_httpContext.Request.ContentType).Read(httpContext.Request.Body, httpContext.RequestAborted);
 
-        public async Task Execute<TService>(Func<TService, Task> action)
-            => await action(_serviceProvider.GetService<TService>());
+            await Process(request, httpContext.RequestAborted);
+        }
+
+        public abstract Task Process(T request, CancellationToken cancellationToken);
+        public async Task Execute<TService>(Func<TService, Task> action) => await action(_serviceProvider.GetService<TService>());
 
         public async Task Execute<TService>(Func<TService, Task<IEpcisResponse>> action)
         {
             var result = await action(_serviceProvider.GetService<TService>());
-
-            _httpContext.SetEpcisResponse(result);
+            await _httpContext.SetEpcisResponse(result, OkStatusCode, default);
         }
     }
 }

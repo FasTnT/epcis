@@ -17,7 +17,7 @@ namespace FasTnT.UnitTest.XmlFormatter
         public IRequestFormatter RequestParser { get; set; }
         public Stream InputFile { get; set; }
         public Request ParsedFile { get; set; }
-        public EpcisEventDocument ParsedEvents => ParsedFile as EpcisEventDocument;
+        public CaptureRequest ParsedEvents => ParsedFile as CaptureRequest;
 
         public override void Arrange()
         {
@@ -27,7 +27,7 @@ namespace FasTnT.UnitTest.XmlFormatter
 
         public override void Act()
         {
-            ParsedFile = RequestParser.Read(InputFile) as EpcisEventDocument;
+            ParsedFile = RequestParser.Read(InputFile, default).Result as CaptureRequest;
         }
 
         [Assert]
@@ -47,7 +47,7 @@ namespace FasTnT.UnitTest.XmlFormatter
         [Assert]
         public void TheParsedDocumentShouldBeAnEpcisEventDocument()
         {
-            Assert.IsInstanceOfType(ParsedFile, typeof(EpcisEventDocument));
+            Assert.IsInstanceOfType(ParsedFile, typeof(CaptureRequest));
         }
 
         [Assert]

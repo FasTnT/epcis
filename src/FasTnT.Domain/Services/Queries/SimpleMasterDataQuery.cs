@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace FasTnT.Model.Queries.Implementations
@@ -17,7 +18,7 @@ namespace FasTnT.Model.Queries.Implementations
 
         public void ValidateParameters(IEnumerable<QueryParameter> parameters, bool subscription = false) { }
 
-        public async Task<IEnumerable<IEntity>> Execute(IEnumerable<QueryParameter> parameters, IUnitOfWork unitOfWork)
+        public async Task<IEnumerable<IEntity>> Execute(IEnumerable<QueryParameter> parameters, IUnitOfWork unitOfWork, CancellationToken cancellationToken)
         {
             var attributeNames = new List<string>();
             bool includeAttributes = false, includeChilren = false;
@@ -35,7 +36,7 @@ namespace FasTnT.Model.Queries.Implementations
                 else if (Regex.IsMatch(parameter.Name, "^EQATTR_")) throw new NotImplementedException("Parameter 'EQATTR_*' is not implemented yet.");
             }
 
-            var results = await unitOfWork.MasterDataManager.ToList(includeAttributes ? attributeNames.ToArray() : null, includeChilren);
+            var results = await unitOfWork.MasterDataManager.ToList(includeAttributes ? attributeNames.ToArray() : null, includeChilren, cancellationToken);
 
             // Check for the maxElementCount parameter
             if (parameters.Any(x => x.Name == "maxElementCount") && results.Count() == parameters.Last(x => x.Name == "maxElementCount").GetValue<int>() + 1)

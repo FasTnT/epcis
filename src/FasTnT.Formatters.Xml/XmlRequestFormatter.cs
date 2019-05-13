@@ -3,6 +3,8 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Xml.Linq;
 using System.Xml.XPath;
 using FasTnT.Formatters.Xml.Requests;
@@ -15,37 +17,36 @@ namespace FasTnT.Formatters.Xml
 {
     public class XmlRequestFormatter : IRequestFormatter
     {
-        public Request Read(Stream input)
+        public async Task<Request> Read(Stream input, CancellationToken cancellationToken)
         {
-            var eventParser = new XmlEventsParser();
-            var masterdataParser = new XmlMasterDataParser();
-            var document = XmlDocumentParser.Instance.Load(input);
+            var document = await XmlDocumentParser.Instance.Load(input, cancellationToken);
 
             if (document.Root.Name == XName.Get("EPCISDocument", EpcisNamespaces.Capture))
             {
-                return new EpcisEventDocument
+                return new CaptureRequest
                 {
                     Header = ParseHeader(document.Root),
-                    EventList = eventParser.ParseEvents(document.Root.XPathSelectElement("EPCISBody/EventList").Elements().ToArray())
+                    EventList = XmlEventsParser.ParseEvents(document.Root.XPathSelectElement("EPCISBody/EventList").Elements().ToArray()),
+                    MasterDataList = XmlMasterDataParser.ParseMasterDatas(document.Root.XPathSelectElement("EPCISHeader/extension/EPCISMasterData/VocabularyList")?.Elements()?.ToArray() ?? new XElement[0]),
                 };
             }
             else if (document.Root.Name == XName.Get("EPCISQueryDocument", EpcisNamespaces.Query)) // Subscription result
             {
-                return ParseCallback(document, eventParser);
+                return ParseCallback(document);
             }
             else if (document.Root.Name == XName.Get("EPCISMasterDataDocument", EpcisNamespaces.MasterData))
             {
-                return new EpcisMasterdataDocument
+                return new CaptureRequest
                 {
                     Header = ParseHeader(document.Root),
-                    MasterDataList = masterdataParser.ParseMasterDatas(document.Root.Element("EPCISBody").Element("VocabularyList").Elements("Vocabulary"))
+                    MasterDataList = XmlMasterDataParser.ParseMasterDatas(document.Root.Element("EPCISBody").Element("VocabularyList").Elements("Vocabulary"))
                 };
             }
 
             throw new Exception($"Document with root '{document.Root.Name.ToString()}' is not expected here.");
         }
 
-        private Request ParseCallback(XDocument document, XmlEventsParser eventParser)
+        private Request ParseCallback(XDocument document)
         {
             switch (document.Root.Element("EPCISBody").Elements().First().Name.LocalName)
             {
@@ -70,7 +71,7 @@ namespace FasTnT.Formatters.Xml
                     {
                         Header = ParseHeader(document.Root),
                         SubscriptionName = document.Root.Element("EPCISBody").Element(XName.Get("QueryResults", EpcisNamespaces.Query)).Element("subscriptionID").Value,
-                        EventList = eventParser.ParseEvents(document.Root.Element("EPCISBody").Element(XName.Get("QueryResults", EpcisNamespaces.Query)).Element("resultsBody").Element("EventList").Elements().ToArray())
+                        EventList = XmlEventsParser.ParseEvents(document.Root.Element("EPCISBody").Element(XName.Get("QueryResults", EpcisNamespaces.Query)).Element("resultsBody").Element("EventList").Elements().ToArray())
                     };
             }
 
@@ -81,26 +82,27 @@ namespace FasTnT.Formatters.Xml
         {
             return new EpcisRequestHeader
             {
+                StandardBusinessHeader = XmlHeaderParser.Parse(root.XPathSelectElement("EPCISHeader/sbdh:StandardBusinessDocumentHeader", EpcisNamespaces.Manager)),
                 DocumentTime = DateTime.Parse(root.Attribute("creationDate").Value, CultureInfo.InvariantCulture),
                 SchemaVersion = root.Attribute("schemaVersion").Value
             };
         }
 
-        public void Write(Request entity, Stream output)
+        public async Task Write(Request entity, Stream output, CancellationToken cancellationToken)
         {
             XDocument document = Write((dynamic)entity);
             var bytes = Encoding.UTF8.GetBytes(document.ToString(SaveOptions.DisableFormatting | SaveOptions.OmitDuplicateNamespaces));
 
-            output.Write(bytes, 0, bytes.Length);
+            await output.WriteAsync(bytes, 0, bytes.Length, cancellationToken);
         }
 
-        private XDocument Write(EpcisEventDocument entity)
+        private XDocument Write(CaptureRequest entity)
         {
             return new XDocument(
                 XName.Get("EPCISDocument", EpcisNamespaces.Capture),
                 new XAttribute("creationDate", entity.Header.DocumentTime.ToString("yyyy-MM-ddThh:MM:ssZ")),
                 new XAttribute("schemaVersion", entity.Header.SchemaVersion),
-                new XElement("EPCISBody", new XElement("EventList", entity.EventList.Select(XmlEventFormatter.Format)))
+                new XElement("EPCISBody", new XElement("EventList", entity.EventList.Select(new XmlEventFormatter().Format)))
             );
         }
     }

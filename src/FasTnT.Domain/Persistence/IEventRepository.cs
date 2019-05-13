@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using FasTnT.Model;
 using FasTnT.Model.Events.Enums;
@@ -26,6 +27,6 @@ namespace FasTnT.Domain.Persistence
         void WhereMasterdataHasAttribute(EpcisField attribute, string[] values);
         void WhereMasterdataAttributeValueIn(EpcisField attribute, string v, string[] values);
 
-        Task<IEnumerable<EpcisEvent>> ToList();
+        Task<IEnumerable<EpcisEvent>> ToList(CancellationToken cancellationToken);
     }
 }

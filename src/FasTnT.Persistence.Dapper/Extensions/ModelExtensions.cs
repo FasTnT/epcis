@@ -1,61 +1,50 @@
 ﻿using FasTnT.Model.Events.Enums;
 using FasTnT.Model.Queries.Enums;
+using FasTnT.Model.Utils;
 using System;
+using Mapping = System.Collections.Generic.Dictionary<FasTnT.Model.Utils.Enumeration, string>;
 
 namespace FasTnT.Persistence.Dapper
 {
     public static class ModelExtensions
     {
-        const string GreaterThan = ">";
-        const string GreaterThanOrEqual = ">=";
-        const string LessThan = "<";
-        const string LessThanOrEqual = "<=";
-        const string Equal = "=";
-        const string Ascending = "ASC";
-        const string Descending = "DESC";
-
-        public static string ToSql(this FilterComparator filterOperator)
+        private static readonly Mapping FilterOperators = new Mapping{
+            { FilterComparator.Equal, "=" },
+            { FilterComparator.GreaterOrEqual, ">=" },
+            { FilterComparator.GreaterThan, ">" },
+            { FilterComparator.LessOrEqual, "<=" },
+            { FilterComparator.LessThan, "<" },
+        };
+        private static readonly Mapping SortOperators = new Mapping
         {
-            if (filterOperator.Equals(FilterComparator.Equal)) return Equal;
-            if (filterOperator.Equals(FilterComparator.GreaterOrEqual)) return GreaterThanOrEqual;
-            if (filterOperator.Equals(FilterComparator.GreaterThan)) return GreaterThan;
-            if (filterOperator.Equals(FilterComparator.LessOrEqual)) return LessThanOrEqual;
-            if (filterOperator.Equals(FilterComparator.LessThan)) return LessThan;
-
-            throw new Exception($"Unknown filterOperator: '{filterOperator?.DisplayName}'");
-        }
-
-        public static string ToPgSql(this OrderDirection direction)
+            { OrderDirection.Ascending, "ASC" },
+            { OrderDirection.Descending, "DESC" }
+        };
+        private static readonly Mapping CbvTypes = new Mapping
         {
-            if (direction.Equals(OrderDirection.Ascending)) return Ascending;
-            if (direction.Equals(OrderDirection.Descending)) return Descending;
-
-            throw new Exception($"Unknown simple EPCIS event field: '{direction.DisplayName}'");
-        }
-
-        public static string ToPgSql(this EpcisField field)
+            { EpcisField.BusinessLocation, "urn:epcglobal:epcis:vtype:BusinessLocation" },
+            { EpcisField.ReadPoint, "urn:epcglobal:epcis:vtype:ReadPoint" }
+        };
+        private static readonly Mapping SimpleFields = new Mapping
         {
-            if (field.Equals(EpcisField.Action)) return "event.action";
-            if (field.Equals(EpcisField.BusinessLocation)) return "event.business_location";
-            if (field.Equals(EpcisField.BusinessStep)) return "event.business_step";
-            if (field.Equals(EpcisField.CaptureTime)) return "event.record_time";
-            if (field.Equals(EpcisField.Disposition)) return "event.disposition";
-            if (field.Equals(EpcisField.EventId)) return "event.id";
-            if (field.Equals(EpcisField.RecordTime)) return "request.record_time";
-            if (field.Equals(EpcisField.EventType)) return "event.event_type";
-            if (field.Equals(EpcisField.ReadPoint)) return "event.read_point";
-            if (field.Equals(EpcisField.RequestId)) return "request.id";
-            if (field.Equals(EpcisField.TransformationId)) return "event.transformation_id";
+            { EpcisField.Action, "event.action" },
+            { EpcisField.BusinessLocation, "event.business_location" },
+            { EpcisField.BusinessStep, "event.business_step" },
+            { EpcisField.CaptureTime, "event.record_time" },
+            { EpcisField.Disposition, "event.disposition" },
+            { EpcisField.EventId, "event.id" },
+            { EpcisField.RecordTime, "request.record_time" },
+            { EpcisField.EventType, "event.event_type" },
+            { EpcisField.ReadPoint, "event.read_point" },
+            { EpcisField.RequestId, "request.id" },
+            { EpcisField.TransformationId, "event.transformation_id" }
+        };
 
-            throw new Exception($"Unknown simple EPCIS event field: '{field.DisplayName}'");
-        }
+        public static string ToSql(this FilterComparator op) => GetValue(op, FilterOperators) ?? throw new Exception($"Unknown filterOperator: '{op?.DisplayName}'");
+        public static string ToPgSql(this OrderDirection direction) => GetValue(direction, SortOperators) ?? throw new Exception($"Unknown simple EPCIS event field: '{direction.DisplayName}'");
+        public static string ToPgSql(this EpcisField field) => GetValue(field, SimpleFields) ?? throw new Exception($"Unknown simple EPCIS event field: '{field.DisplayName}'");
+        public static string ToCbvType(this EpcisField field) => GetValue(field, CbvTypes) ?? throw new Exception($"Cannot convert to CBV type: '{field.DisplayName}'");
 
-        public static string ToCbvType(this EpcisField field)
-        {
-            if (field.Equals(EpcisField.BusinessLocation)) return "urn:epcglobal:epcis:vtype:BusinessLocation";
-            if (field.Equals(EpcisField.ReadPoint)) return "urn:epcglobal:epcis:vtype:ReadPoint";
-
-            throw new Exception($"Cannot convert to CBV type: '{field.DisplayName}'");
-        }
+        private static string GetValue(Enumeration value, Mapping mapping) => mapping.TryGetValue(value, out string result) ? result : null;
     }
 }

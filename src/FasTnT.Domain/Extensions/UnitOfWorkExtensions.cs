@@ -11,7 +11,6 @@ namespace FasTnT.Domain.Extensions
             try
             {
                 unitOfWork.BeginTransaction();
-
                 await action(unitOfWork);
                 unitOfWork.Commit();
             }

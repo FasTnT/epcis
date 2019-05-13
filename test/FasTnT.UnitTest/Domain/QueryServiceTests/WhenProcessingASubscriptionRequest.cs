@@ -21,13 +21,13 @@ namespace FasTnT.UnitTest.Domain.SubscriptionServiceTests
             base.Arrange();
 
             SubscriptionManager = A.Fake<ISubscriptionManager>();
-            Request = new Subscription { SubscriptionId = "TestSubscription", Destination = "http://test.com/callback", QueryName = EpcisQueries.First(x => x.AllowSubscription).Name };
+            Request = new Subscription { SubscriptionId = "TestSubscription", Trigger = "trigger", Destination = "http://test.com/callback", QueryName = EpcisQueries.First(x => x.AllowSubscription).Name };
 
             A.CallTo(() => UnitOfWork.SubscriptionManager).Returns(SubscriptionManager);
-            A.CallTo(() => SubscriptionManager.GetById("TestSubscription")).Returns(Task.FromResult(default(Subscription)));
+            A.CallTo(() => SubscriptionManager.GetById("TestSubscription", default)).Returns(Task.FromResult(default(Subscription)));
         }
 
-        public override void Act() => Task.WaitAll(QueryService.Process(Request));
+        public override void Act() => Task.WaitAll(QueryService.Subscribe(Request, default));
 
         [Assert]
         public void ItShouldHaveBeginTheUnitOfWorkTransaction() => A.CallTo(() => UnitOfWork.BeginTransaction()).MustHaveHappened();
@@ -58,14 +58,14 @@ namespace FasTnT.UnitTest.Domain.SubscriptionServiceTests
             Request = new Subscription { SubscriptionId = "TestSubscription", Destination = "invalid_url", QueryName = EpcisQueries.First(x => x.AllowSubscription).Name };
 
             A.CallTo(() => UnitOfWork.SubscriptionManager).Returns(SubscriptionManager);
-            A.CallTo(() => SubscriptionManager.GetById("TestSubscription")).Returns(Task.FromResult(default(Subscription)));
+            A.CallTo(() => SubscriptionManager.GetById("TestSubscription", default)).Returns(Task.FromResult(default(Subscription)));
         }
 
         public override void Act()
         {
             try
             {
-                Task.WaitAll(QueryService.Process(Request));
+                Task.WaitAll(QueryService.Subscribe(Request, default));
             }
             catch (Exception ex)
             {

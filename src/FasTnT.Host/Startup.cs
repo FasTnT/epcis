@@ -8,47 +8,58 @@ using FasTnT.Host.BackgroundTasks;
 using FasTnT.Domain.Extensions;
 using FasTnT.Formatters;
 using FasTnT.Formatters.Xml;
-using Microsoft.Extensions.Logging;
-using FasTnT.Domain.BackgroundTasks;
-using FasTnT.Host.Middleware.Authentication;
+using FasTnT.Domain;
+using FasTnT.Formatters.Json;
 
 namespace FasTnT.Host
 {
     public class Startup
     {
-        public static string Prefix = "/EpcisServices/1.2";
+        public static string EpcisServicePath = "/EpcisServices/1.2";
         public IConfiguration Configuration { get; }
-        public ILoggerFactory LogFactory { get; }
 
-        public Startup(IConfiguration configuration, ILoggerFactory logFactory)
+        public Startup(IHostingEnvironment env)
         {
-            Configuration = configuration;
-            LogFactory = logFactory;
+            var builder = new ConfigurationBuilder()
+                .SetBasePath(env.ContentRootPath)
+                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+                .AddEnvironmentVariables();
+
+            if (env.IsDevelopment())
+            {
+                builder.AddUserSecrets(GetType().Assembly);
+            }
+
+            Configuration = builder.Build();
         }
 
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddEpcisDomain();
             services.AddEpcisPersistence(Configuration.GetConnectionString("FasTnT.Database"));
-            services.AddScoped(typeof(IResponseFormatter), typeof(XmlResponseFormatter)); // Use XML as default formatter for subscriptions.
             services.AddSingleton<Microsoft.Extensions.Hosting.IHostedService, BackgroundService>();
+            services.AddSingleton(new FormatterProvider(new IFormatterFactory[]{ new JsonFormatterFactory(), new XmlFormatterFactory(), new SoapFormatterFactory() }));
+
+            services.AddMvc();
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
-            if (env.IsDevelopment())
+            Constants.SubscriptionTaskDelayTimeoutInMs = Configuration.GetSection("Settings").GetValue("SubscriptionWaitTimeout", 5000);
+            var isDevelopment = env.IsDevelopment();
+
+            if (isDevelopment)
             {
-                app.UseDeveloperExceptionPage();
+                app.UseEpcisMigrationEndpoint($"{EpcisServicePath}/Database");
             }
 
-            SubscriptionBackgroundService.DelayTimeoutInMs = Configuration.GetSection("Settings").GetValue("SubscriptionWaitTimeout", 5000);
-
-            app.UseExceptionHandlingMiddleware()
-                .UseBasicAuthentication("FasTnT")
-                .UseEpcisCaptureEndpoint($"{Prefix}/Capture")
-                .UseEpcisQueryEndpoint($"{Prefix}/Query")
-                .UseEpcisSubscriptionTrigger($"{Prefix}/Subscription/Trigger")
-                .UseEpcisMigrationEndpoint($"{Prefix}/Database", env.IsDevelopment());
+            app.UseExceptionHandlingMiddleware(isDevelopment)
+               .UseWhen(context => context.Request.Path.StartsWithSegments(EpcisServicePath), x => {
+                    x.UseBasicAuthentication("FasTnT")
+                     .UseEpcisCaptureEndpoint($"{EpcisServicePath}/Capture")
+                     .UseEpcisQueryEndpoint($"{EpcisServicePath}/Query")
+                     .UseEpcisSubscriptionTrigger($"{EpcisServicePath}/Subscription/Trigger");
+                });
         }
     }
 }

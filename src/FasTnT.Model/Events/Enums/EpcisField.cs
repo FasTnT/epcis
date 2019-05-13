@@ -16,12 +16,7 @@ namespace FasTnT.Model.Events.Enums
         public static EpcisField RequestId = new EpcisField(9, "requestID");
         public static EpcisField TransformationId = new EpcisField(10, "transformationID");
 
-        public EpcisField()
-        {
-        }
-
-        public EpcisField(short id, string displayName) : base(id, displayName)
-        {
-        }
+        public EpcisField() { }
+        public EpcisField(short id, string displayName) : base(id, displayName) { }
     }
 }

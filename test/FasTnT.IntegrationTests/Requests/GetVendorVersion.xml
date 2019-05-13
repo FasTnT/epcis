@@ -1,0 +1,6 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<epcisq:EPCISQueryDocument xmlns:epcisq="urn:epcglobal:epcis-query:xsd:1" schemaVersion="1" creationDate="2018-02-07T11:52:42.685Z">
+  <EPCISBody>
+    <epcisq:GetVendorVersion />
+  </EPCISBody>
+</epcisq:EPCISQueryDocument>
