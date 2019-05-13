@@ -117,11 +117,11 @@ namespace FasTnT.Domain.BackgroundTasks
             {
                 if (string.IsNullOrEmpty(subscription.Trigger))
                 {
-                    _scheduledExecutions.TryRemove(_scheduledExecutions.SingleOrDefault(x => x.Key.SubscriptionId == subscription.SubscriptionId).Key, out DateTime value);
+                    _scheduledExecutions.TryRemove(_scheduledExecutions.FirstOrDefault(x => x.Key.SubscriptionId == subscription.SubscriptionId).Key, out DateTime value);
                 }
                 else
                 {
-                    _triggeredSubscriptions[subscription.Trigger].Remove(_triggeredSubscriptions[subscription.Trigger].SingleOrDefault(x => x.SubscriptionId == subscription.SubscriptionId));
+                    _triggeredSubscriptions[subscription.Trigger].Remove(_triggeredSubscriptions[subscription.Trigger].FirstOrDefault(x => x.SubscriptionId == subscription.SubscriptionId));
                 }
             });
         }
