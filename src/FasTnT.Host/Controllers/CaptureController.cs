@@ -5,7 +5,10 @@ using System.Threading.Tasks;
 
 namespace FasTnT.Host.Controllers
 {
-    [Route("capture")]
+    [ApiVersion("1.0", Deprecated = true)]
+    [ApiVersion("1.2")]
+    [ApiVersion("2.0")]
+    [Route("{v:apiVersion}/capture")]
     [ApiController]
     public class CaptureController : ControllerBase
     {

@@ -1,31 +1,41 @@
 ﻿using FasTnT.Domain.Services;
-using FasTnT.Model.Events.Enums;
 using FasTnT.Model.Queries;
 using FasTnT.Model.Subscriptions;
-using FasTnT.Model.Utils;
 using Microsoft.AspNetCore.Mvc;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace FasTnT.Host.Controllers
 {
-    [Route("queries")]
+    [ApiVersion("1.0", Deprecated = true)]
+    [ApiVersion("1.2")]
+    [ApiVersion("2.0")]
+    [Route("{v:apiVersion}/queries")]
     [ApiController]
     public class QueryController : Controller
     {
+        private const string QueryName = "SimpleEventQuery";
         private readonly QueryService _queryService;
 
         public QueryController(QueryService queryService) => _queryService = queryService;
 
         [HttpGet("")]
-        public async Task<object> Queries(CancellationToken cancellationToken) 
-            => await _queryService.GetQueryNames(cancellationToken);
+        public async Task<object> Queries(CancellationToken cancellationToken)
+        {
+            var parameters = default(QueryParameter);//ODataRequestParser.ParseFromQueryString(Request.QueryString);
+            if (parameters == null)
+            {
+                return await _queryService.GetQueryNames(cancellationToken);
+            }
+            else
+            {
+                return await _queryService.Poll(new Poll { QueryName = QueryName }, cancellationToken);
+            }
+        }
 
-        // TODO: get query parameters from OData query string
         [HttpGet("{queryName}/events")]
         public async Task<object> Poll(string queryName, CancellationToken cancellationToken) 
-            => await _queryService.Poll(new Poll { QueryName = queryName, Parameters = new QueryParameter[0] }, cancellationToken);
+            => await _queryService.Poll(new Poll { QueryName = queryName }, cancellationToken);
 
         [HttpGet("{queryName}/subscriptions")]
         public async Task ListSubscriptions(string queryName, CancellationToken cancellationToken) 
@@ -34,44 +44,5 @@ namespace FasTnT.Host.Controllers
         [HttpDelete("{queryName}/subscriptions/{subscriptionId}")]
         public async Task Unsubscribe(string queryName, string subscriptionId, CancellationToken cancellationToken) 
             => await _queryService.Unsubscribe(new UnsubscribeRequest { SubscriptionId = subscriptionId }, cancellationToken);
-    }
-
-    [Route("events")]
-    [ApiController]
-    public class EventsController : Controller
-    {
-        private readonly QueryService _queryService;
-
-        public EventsController(QueryService queryService) => _queryService = queryService;
-
-        [HttpGet("")]
-        public string[] ListEventTypes() => Enumeration.GetAll<EventType>().Select(x => x.DisplayName).ToArray();
-
-        [HttpGet("all")]
-        public async Task<object> ListAllEventTypes(CancellationToken cancellationToken) 
-            => await _queryService.Poll(new Poll { QueryName = "SimpleEventQuery" }, cancellationToken);
-
-        [HttpGet("{eventType}")]
-        public async Task<object> ListEventsOfType(string eventType, CancellationToken cancellationToken)
-        {
-            var parameters = new[]
-            {
-                new QueryParameter{ Name = "eventType", Values = new []{ eventType } }
-            };
-
-            return await _queryService.Poll(new Poll { QueryName = "SimpleEventQuery", Parameters = parameters }, cancellationToken);
-        }
-
-        [HttpGet("{eventType}/{eventId}")]
-        public async Task<object> GetEventById(string eventType, string eventId, CancellationToken cancellationToken)
-        {
-            var parameters = new[]
-            {
-                new QueryParameter{ Name = "eventType", Values = new []{ eventType } },
-                new QueryParameter{ Name = "EQ_eventID", Values = new []{ eventId } }
-            };
-
-            return await _queryService.Poll(new Poll { QueryName = "SimpleEventQuery", Parameters = parameters }, cancellationToken);
-        }
     }
 }
