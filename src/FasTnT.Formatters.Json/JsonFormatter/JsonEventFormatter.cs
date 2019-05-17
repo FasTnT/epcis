@@ -37,6 +37,8 @@ namespace FasTnT.Formatters.Json.JsonFormatter
             var epcs = evt.Epcs;
             var list = epcs.Where(x => x.Type == EpcType.List).Select(x => x.Id);
             var qtyList = epcs.Where(x => x.Type == EpcType.Quantity).Select(FormatQuantity);
+            var parentId = epcs.Where(x => x.Type == EpcType.ParentId).Select(x => x.Id).SingleOrDefault();
+            var childEpcs = epcs.Where(x => x.Type == EpcType.ChildEpc).Select(x => x.Id);
             var inputEpc = epcs.Where(x => x.Type == EpcType.InputEpc).Select(x => x.Id);
             var inputQty = epcs.Where(x => x.Type == EpcType.InputQuantity).Select(FormatQuantity);
             var outputEpc = epcs.Where(x => x.Type == EpcType.OutputEpc).Select(x => x.Id);
@@ -46,6 +48,8 @@ namespace FasTnT.Formatters.Json.JsonFormatter
 
             if (list.Any()) dictionary.Add("epcList", list);
             if (qtyList.Any()) dictionary.Add("quantityList", qtyList);
+            if (parentId != null) dictionary.Add("parentID", parentId);
+            if (childEpcs.Any()) dictionary.Add("childEPCs", childEpcs);
             if (inputEpc.Any()) dictionary.Add("inputEpcList", inputEpc);
             if (inputQty.Any()) dictionary.Add("inputQuantityList", inputQty);
             if (outputEpc.Any()) dictionary.Add("outputEpcList", outputEpc);
