@@ -24,8 +24,11 @@ namespace FasTnT.Formatters.Json.JsonFormatter
             AddIfNotNull(evt, dictionary, "action", x => x.Action, x => x.Action.DisplayName);
             AddIfNotNull(evt, dictionary, "bizStep", x => x.BusinessStep);
             AddIfNotNull(evt, dictionary, "disposition", x => x.Disposition);
+            AddIfNotNull(evt, dictionary, "eventID", x => x.EventId);
+            AddIfNotNull(evt, dictionary, "transformationId", x => x.TransformationId);
             AddIfNotNull(evt, dictionary, "readPoint", x => x.ReadPoint);
             AddIfNotNull(evt, dictionary, "bizLocation", x => x.BusinessLocation);
+            // TODO: errorDeclaration, bizTransaction
             AddSourceDestinationList(evt, dictionary);
             AddCustomFields(evt.CustomFields, dictionary);
 
@@ -86,6 +89,8 @@ namespace FasTnT.Formatters.Json.JsonFormatter
 
         private void AddCustomFields(IEnumerable<CustomField> fields, Dictionary<string, object> dictionary)
         {
+            var ilmd = new Dictionary<string, object>();
+
             foreach (var field in fields)
             {
                 var customField = new Dictionary<string, object>
@@ -100,7 +105,19 @@ namespace FasTnT.Formatters.Json.JsonFormatter
                 }
                 AddCustomFields(field.Children.Where(x => x.Type != FieldType.Attribute), customField);
 
-                dictionary.Add(field.Name, customField);
+                if (field.Type == FieldType.Ilmd)
+                {
+                    ilmd.Add(field.Name, customField);
+                }
+                else
+                {
+                    dictionary.Add(field.Name, customField);
+                }
+            }
+
+            if (ilmd.Keys.Any())
+            {
+                dictionary.Add("ilmd", ilmd);
             }
         }
 
