@@ -32,7 +32,7 @@ namespace FasTnT.UnitTest.Domain.CaptureServiceTests
         {
             try
             {
-                Task.WaitAll(CaptureService.Capture(Request, default));
+                Task.WaitAll(CaptureService.CaptureDocument(Request, default));
             }
             catch(AggregateException ex)
             {
