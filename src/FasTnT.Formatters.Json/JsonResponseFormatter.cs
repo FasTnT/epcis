@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using fastJSON;
@@ -22,7 +21,7 @@ namespace FasTnT.Formatters.Json
 
             using(var writer = new StreamWriter(output))
             {
-                await writer.WriteAsync(new ReadOnlyMemory<char>(Encoding.UTF8.GetBytes(Format(entity)).Cast<char>().ToArray()), cancellationToken);
+                await writer.WriteAsync(new ReadOnlyMemory<char>(Format(entity).ToArray()), cancellationToken);
             }
         }
 
