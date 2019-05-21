@@ -28,7 +28,8 @@ namespace FasTnT.Formatters.Json.JsonFormatter
             AddIfNotNull(evt, dictionary, "transformationId", x => x.TransformationId);
             AddIfNotNull(evt, dictionary, "readPoint", x => x.ReadPoint);
             AddIfNotNull(evt, dictionary, "bizLocation", x => x.BusinessLocation);
-            // TODO: errorDeclaration, bizTransaction
+            AddIfNotNull(evt, dictionary, "errorDeclaration", x => x.ErrorDeclaration, x => FormatErrorDeclaration(x));
+            AddBusinessTransactions(evt, dictionary);
             AddSourceDestinationList(evt, dictionary);
             AddCustomFields(evt.CustomFields, dictionary);
 
@@ -87,6 +88,17 @@ namespace FasTnT.Formatters.Json.JsonFormatter
             if (dests.Any()) dictionary.Add("destinationList", dests);
         }
 
+        private void AddBusinessTransactions(EpcisEvent evt, IDictionary<string, object> dictionary)
+        {
+            if (evt.BusinessTransactions == null || !evt.BusinessTransactions.Any()) return;
+
+            dictionary.Add("bizTransactionList", evt.BusinessTransactions.Select(x => new Dictionary<string, string>
+            {
+                { "type", x.Type },
+                { "bizTransaction", x.Id }
+            }));
+        }
+
         private void AddCustomFields(IEnumerable<CustomField> fields, Dictionary<string, object> dictionary)
         {
             var ilmd = new Dictionary<string, object>();
@@ -121,7 +133,17 @@ namespace FasTnT.Formatters.Json.JsonFormatter
             }
         }
 
-        private void AddIfNotNull(EpcisEvent evt, IDictionary<string, object> formatted, string key, Func<EpcisEvent, object> selector, Func<EpcisEvent, string> value = null)
+        private object FormatErrorDeclaration(EpcisEvent evt)
+        {
+            return new Dictionary<string, object>
+            {
+                { "declarationTime", evt.ErrorDeclaration.DeclarationTime },
+                { "reason", evt.ErrorDeclaration.Reason },
+                { "correctiveEventIDs", evt.ErrorDeclaration.CorrectiveEventIds.Select(x => x.CorrectiveId) }
+            };
+        }
+
+        private void AddIfNotNull(EpcisEvent evt, IDictionary<string, object> formatted, string key, Func<EpcisEvent, object> selector, Func<EpcisEvent, object> value = null)
         {
             if(selector(evt) != null)
             {
