@@ -1,9 +1,7 @@
 ﻿using FasTnT.Domain.Services;
-using FasTnT.Model.Events.Enums;
 using FasTnT.Model.Queries;
-using FasTnT.Model.Utils;
 using Microsoft.AspNetCore.Mvc;
-using System.Linq;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -22,7 +20,8 @@ namespace FasTnT.Host.Controllers
         public EventsController(QueryService queryService) => _queryService = queryService;
 
         [HttpGet("")]
-        public string[] ListEventTypes() => Enumeration.GetAll<EventType>().Select(x => x.DisplayName).ToArray();
+        public async Task<IEnumerable<string>> ListEventTypes(CancellationToken cancellationToken) 
+            => (await _queryService.GetEventTypes(cancellationToken)).EventTypes;
 
         [HttpGet("all")]
         public async Task<object> ListAllEventTypes(CancellationToken cancellationToken) 

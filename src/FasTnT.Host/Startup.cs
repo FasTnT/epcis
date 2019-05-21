@@ -37,12 +37,13 @@ namespace FasTnT.Host
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddEpcisDomain();
-            services.AddEpcisPersistence(Configuration.GetConnectionString("FasTnT.Database"));
-            services.AddSingleton<Microsoft.Extensions.Hosting.IHostedService, BackgroundService>();
-            services.AddSingleton(new FormatterProvider(new IFormatterFactory[]{ new JsonFormatterFactory(), new XmlFormatterFactory(), new SoapFormatterFactory() }));
+            services.AddEpcisDomain()
+                    .AddEpcisPersistence(Configuration.GetConnectionString("FasTnT.Database"))
+                    .AddSingleton<Microsoft.Extensions.Hosting.IHostedService, BackgroundService>()
+                    .AddSingleton(new FormatterProvider(new IFormatterFactory[]{ new JsonFormatterFactory(), new XmlFormatterFactory(), new SoapFormatterFactory() }));
 
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            services.AddMvc(o => o.InputFormatters.Insert(0, new RequestBodyFormatter()))
+                    .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
             services.AddApiVersioning();
         }
 
@@ -57,11 +58,11 @@ namespace FasTnT.Host
             }
 
             app.UseExceptionHandlingMiddleware(isDevelopment)
-               .UseWhen(context => context.Request.Path.StartsWithSegments(EpcisServicePath), x => {
-                    x.UseBasicAuthentication("FasTnT")
-                     .UseEpcisCaptureEndpoint($"{EpcisServicePath}/Capture")
-                     .UseEpcisQueryEndpoint($"{EpcisServicePath}/Query")
-                     .UseEpcisSubscriptionTrigger($"{EpcisServicePath}/Subscription/Trigger");
+               .UseWhen(context => context.Request.Path.StartsWithSegments(EpcisServicePath), opt => {
+                    opt.UseBasicAuthentication("FasTnT")
+                       .UseEpcisCaptureEndpoint($"{EpcisServicePath}/Capture")
+                       .UseEpcisQueryEndpoint($"{EpcisServicePath}/Query")
+                       .UseEpcisSubscriptionTrigger($"{EpcisServicePath}/Subscription/Trigger");
                 })
                .UseMvc(r => r.MapRoute("version", "{v:apiVersion}"));
         }

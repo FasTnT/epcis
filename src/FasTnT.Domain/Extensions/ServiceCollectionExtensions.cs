@@ -12,7 +12,7 @@ namespace FasTnT.Domain.Extensions
 {
     public static class ServiceCollectionExtensions
     {
-        public static void AddEpcisDomain(this IServiceCollection services)
+        public static IServiceCollection AddEpcisDomain(this IServiceCollection services)
         {
             var queries = Assembly.GetAssembly(typeof(IEpcisQuery)).ExportedTypes.Where(x => x.GetInterfaces().Any(i => i == typeof(IEpcisQuery))).Select(x => Activator.CreateInstance(x)).Cast<IEpcisQuery>().ToArray();
             services.AddSingleton(typeof(IEpcisQuery[]), queries);
@@ -25,6 +25,8 @@ namespace FasTnT.Domain.Extensions
             services.AddScoped<ISubscriptionResultSender, HttpSubscriptionResultSender>();
             services.AddScoped<SubscriptionRunner>();
             services.AddSingleton<ISubscriptionBackgroundService, SubscriptionBackgroundService>();
+
+            return services;
         }
     }
 }

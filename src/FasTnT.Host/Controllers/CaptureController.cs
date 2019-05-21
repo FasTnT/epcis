@@ -1,4 +1,5 @@
 ﻿using FasTnT.Domain.Services;
+using FasTnT.Model;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading;
 using System.Threading.Tasks;
@@ -16,9 +17,7 @@ namespace FasTnT.Host.Controllers
 
         public CaptureController(CaptureService captureService) => _captureService = captureService;
 
-        // TODO: parse request body
         [HttpPost]
-        public async Task Post(CancellationToken cancellationToken) 
-            => await _captureService.Capture(null, cancellationToken);
+        public async Task Post(CaptureRequest request, CancellationToken cancellationToken) => await _captureService.Capture(request, cancellationToken);
     }
 }
