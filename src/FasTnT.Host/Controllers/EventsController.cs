@@ -2,6 +2,7 @@
 using FasTnT.Model.Queries;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -28,24 +29,21 @@ namespace FasTnT.Host.Controllers
             => await _queryService.Poll(new Poll { QueryName = QueryName }, cancellationToken);
 
         [HttpGet("{eventType}")]
-        public async Task<object> ListEventsOfType(string eventType, CancellationToken cancellationToken)
+        public async Task<object> ListEventsOfType(string eventType, IEnumerable<QueryParameter> parameters, CancellationToken cancellationToken)
         {
-            var parameters = new[]
-            {
-                new QueryParameter{ Name = "eventType", Values = new []{ eventType } }
-            };
+            parameters = Enumerable.Append(parameters, new QueryParameter{ Name = "eventType", Values = new []{ eventType } });
 
             return await _queryService.Poll(new Poll { QueryName = QueryName, Parameters = parameters }, cancellationToken);
         }
 
         [HttpGet("{eventType}/{eventId}")]
-        public async Task<object> GetEventById(string eventType, string eventId, CancellationToken cancellationToken)
+        public async Task<object> GetEventById(string eventType, string eventId, IEnumerable<QueryParameter> parameters, CancellationToken cancellationToken)
         {
-            var parameters = new[]
+            parameters = Enumerable.Concat(parameters, new[] 
             {
                 new QueryParameter{ Name = "eventType", Values = new []{ eventType } },
                 new QueryParameter{ Name = "EQ_eventID", Values = new []{ eventId } }
-            };
+            });
 
             return await _queryService.Poll(new Poll { QueryName = QueryName, Parameters = parameters }, cancellationToken);
         }

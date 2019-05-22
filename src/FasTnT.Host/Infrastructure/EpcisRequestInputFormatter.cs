@@ -10,12 +10,7 @@ namespace FasTnT.Host.Infrastructure
 {
     public class EpcisRequestInputFormatter : InputFormatter
     {
-        public EpcisRequestInputFormatter()
-        {
-            SupportedMediaTypes.Add(new MediaTypeHeaderValue("application/json"));
-            SupportedMediaTypes.Add(new MediaTypeHeaderValue("application/xml"));
-        }
-
+        public EpcisRequestInputFormatter() => SupportedMediaTypes.Add(new MediaTypeHeaderValue("application/json"));
         protected override bool CanReadType(Type type) => type == typeof(CaptureRequest);
 
         public override async Task<InputFormatterResult> ReadRequestBodyAsync(InputFormatterContext context)

@@ -27,19 +27,7 @@ namespace FasTnT.Formatters.Json
 
         protected override string FormatInternal(PollResponse response)
         {
-            var dict = new Dictionary<string, object>
-            {
-                { "@context", "https://id.gs1.org/epcis-context.jsonld" },
-                { "isA", "EPCISDocument" },
-                { "creationDate", DateTime.UtcNow },
-                { "schemaVersion", "1.2" },
-                { "format", "application/ld+json" },
-                { "epcisBody", new Dictionary<string, object>
-                    {
-                        { "eventList", response.Entities.Select(x => new JsonEventFormatter().FormatEvent((EpcisEvent)x)) }
-                    }
-                }
-            };
+            var dict = response.Entities.Select(x => new JsonEventFormatter().FormatEvent((EpcisEvent)x));
 
             return JSON.ToJSON(dict);
         }
@@ -49,23 +37,14 @@ namespace FasTnT.Formatters.Json
 
         protected override string FormatInternal(ExceptionResponse response)
         {
-            return JSON.ToJSON(new Dictionary<string, object>
-            {
-                { "@Context", "test" },
-                { "isA", response.Exception },
-                { "creationDate", DateTime.UtcNow },
-                { "schemaVersion", "1"},
-                { "format", "application/ld+json" },
-                { "Body", new Dictionary<string, object>{
-                        { "@Type", response.Exception },
-                        { "Severity", response.Severity.DisplayName },
-                        { "Reason", response.Reason }
-                    }
-                }
+            return JSON.ToJSON(new Dictionary<string, object> { 
+                { "exception", response.Exception },
+                { "severity", response.Severity.DisplayName },
+                { "message", response.Reason }
             });
         }
 
-        protected override string FormatInternal(GetSubscriptionIdsResult response) => throw new NotImplementedException();
-        protected override string FormatInternal(GetQueryNamesResponse response) => throw new NotImplementedException();
+        protected override string FormatInternal(GetSubscriptionIdsResult response) => JSON.ToJSON(response.SubscriptionIds);
+        protected override string FormatInternal(GetQueryNamesResponse response) => JSON.ToJSON(response.QueryNames);
     }
 }

@@ -45,6 +45,7 @@ namespace FasTnT.Host
 
             services.AddMvc(o => 
                     {
+                        o.InputFormatters.Insert(0, new QueryParameterInputFormatter());
                         o.InputFormatters.Insert(0, new EpcisRequestInputFormatter());
                         o.OutputFormatters.Insert(0, new EpcisResponseOutputFormatter());
                     })

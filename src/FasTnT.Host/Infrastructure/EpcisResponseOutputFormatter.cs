@@ -10,12 +10,7 @@ namespace FasTnT.Host.Infrastructure
 {
     public class EpcisResponseOutputFormatter : OutputFormatter
     {
-        public EpcisResponseOutputFormatter()
-        {
-            SupportedMediaTypes.Add(new MediaTypeHeaderValue("application/json"));
-            SupportedMediaTypes.Add(new MediaTypeHeaderValue("application/xml"));
-        }
-
+        public EpcisResponseOutputFormatter() => SupportedMediaTypes.Add(new MediaTypeHeaderValue("application/json"));
         protected override bool CanWriteType(Type type) => typeof(IEpcisResponse).IsAssignableFrom(type);
 
         public override async Task WriteResponseBodyAsync(OutputFormatterWriteContext context)
