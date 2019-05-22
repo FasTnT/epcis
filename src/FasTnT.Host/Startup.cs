@@ -40,9 +40,13 @@ namespace FasTnT.Host
             services.AddEpcisDomain()
                     .AddEpcisPersistence(Configuration.GetConnectionString("FasTnT.Database"))
                     .AddSingleton<Microsoft.Extensions.Hosting.IHostedService, BackgroundService>()
-                    .AddSingleton(new FormatterProvider(new IFormatterFactory[]{ new JsonFormatterFactory(), new XmlFormatterFactory(), new SoapFormatterFactory() }));
+                    .AddSingleton(new FormatterProvider(new IFormatterFactory[] { new JsonFormatterFactory(), new XmlFormatterFactory(), new SoapFormatterFactory() }));
 
-            services.AddMvc(o => o.InputFormatters.Insert(0, new RequestBodyFormatter()))
+            services.AddMvc(o => 
+                    {
+                        o.InputFormatters.Insert(0, new EpcisRequestInputFormatter());
+                        o.OutputFormatters.Insert(0, new EpcisResponseOutputFormatter());
+                    })
                     .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
             services.AddApiVersioning();
         }

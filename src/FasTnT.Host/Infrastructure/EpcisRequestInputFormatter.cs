@@ -4,18 +4,19 @@ using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.Net.Http.Headers;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
+using System;
 
 namespace FasTnT.Host.Infrastructure
 {
-    public class RequestBodyFormatter : InputFormatter
+    public class EpcisRequestInputFormatter : InputFormatter
     {
-        public RequestBodyFormatter()
+        public EpcisRequestInputFormatter()
         {
             SupportedMediaTypes.Add(new MediaTypeHeaderValue("application/json"));
             SupportedMediaTypes.Add(new MediaTypeHeaderValue("application/xml"));
         }
 
-        public override bool CanRead(InputFormatterContext context) => context?.ModelType == typeof(CaptureRequest);
+        protected override bool CanReadType(Type type) => type == typeof(CaptureRequest);
 
         public override async Task<InputFormatterResult> ReadRequestBodyAsync(InputFormatterContext context)
         {
