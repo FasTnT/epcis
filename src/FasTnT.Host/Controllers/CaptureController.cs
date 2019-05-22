@@ -18,6 +18,6 @@ namespace FasTnT.Host.Controllers
         public CaptureController(CaptureService captureService) => _captureService = captureService;
 
         [HttpPost]
-        public async Task Post(CaptureRequest request, CancellationToken cancellationToken) => await _captureService.Capture(request, cancellationToken);
+        public async Task Post(CaptureRequest request, CancellationToken cancellationToken) => await _captureService.CaptureDocument(request, cancellationToken);
     }
 }
