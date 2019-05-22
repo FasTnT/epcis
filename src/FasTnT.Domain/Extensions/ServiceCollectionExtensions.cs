@@ -20,7 +20,6 @@ namespace FasTnT.Domain.Extensions
             services.AddScoped<CaptureService>();
             services.AddScoped<QueryService>();
             services.AddScoped<SubscriptionService>();
-            services.AddScoped<CallbackService>();
             services.AddScoped<UserContext>();
             services.AddScoped<ISubscriptionResultSender, HttpSubscriptionResultSender>();
             services.AddScoped<SubscriptionRunner>();

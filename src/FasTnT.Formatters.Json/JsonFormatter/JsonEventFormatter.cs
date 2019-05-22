@@ -24,8 +24,12 @@ namespace FasTnT.Formatters.Json.JsonFormatter
             AddIfNotNull(evt, dictionary, "action", x => x.Action, x => x.Action.DisplayName);
             AddIfNotNull(evt, dictionary, "bizStep", x => x.BusinessStep);
             AddIfNotNull(evt, dictionary, "disposition", x => x.Disposition);
+            AddIfNotNull(evt, dictionary, "eventID", x => x.EventId);
+            AddIfNotNull(evt, dictionary, "transformationId", x => x.TransformationId);
             AddIfNotNull(evt, dictionary, "readPoint", x => x.ReadPoint);
             AddIfNotNull(evt, dictionary, "bizLocation", x => x.BusinessLocation);
+            AddIfNotNull(evt, dictionary, "errorDeclaration", x => x.ErrorDeclaration, x => FormatErrorDeclaration(x));
+            AddBusinessTransactions(evt, dictionary);
             AddSourceDestinationList(evt, dictionary);
             AddCustomFields(evt.CustomFields, dictionary);
 
@@ -37,6 +41,8 @@ namespace FasTnT.Formatters.Json.JsonFormatter
             var epcs = evt.Epcs;
             var list = epcs.Where(x => x.Type == EpcType.List).Select(x => x.Id);
             var qtyList = epcs.Where(x => x.Type == EpcType.Quantity).Select(FormatQuantity);
+            var parentId = epcs.Where(x => x.Type == EpcType.ParentId).Select(x => x.Id).SingleOrDefault();
+            var childEpcs = epcs.Where(x => x.Type == EpcType.ChildEpc).Select(x => x.Id);
             var inputEpc = epcs.Where(x => x.Type == EpcType.InputEpc).Select(x => x.Id);
             var inputQty = epcs.Where(x => x.Type == EpcType.InputQuantity).Select(FormatQuantity);
             var outputEpc = epcs.Where(x => x.Type == EpcType.OutputEpc).Select(x => x.Id);
@@ -46,6 +52,8 @@ namespace FasTnT.Formatters.Json.JsonFormatter
 
             if (list.Any()) dictionary.Add("epcList", list);
             if (qtyList.Any()) dictionary.Add("quantityList", qtyList);
+            if (parentId != null) dictionary.Add("parentID", parentId);
+            if (childEpcs.Any()) dictionary.Add("childEPCs", childEpcs);
             if (inputEpc.Any()) dictionary.Add("inputEpcList", inputEpc);
             if (inputQty.Any()) dictionary.Add("inputQuantityList", inputQty);
             if (outputEpc.Any()) dictionary.Add("outputEpcList", outputEpc);
@@ -80,8 +88,21 @@ namespace FasTnT.Formatters.Json.JsonFormatter
             if (dests.Any()) dictionary.Add("destinationList", dests);
         }
 
+        private void AddBusinessTransactions(EpcisEvent evt, IDictionary<string, object> dictionary)
+        {
+            if (evt.BusinessTransactions == null || !evt.BusinessTransactions.Any()) return;
+
+            dictionary.Add("bizTransactionList", evt.BusinessTransactions.Select(x => new Dictionary<string, string>
+            {
+                { "type", x.Type },
+                { "bizTransaction", x.Id }
+            }));
+        }
+
         private void AddCustomFields(IEnumerable<CustomField> fields, Dictionary<string, object> dictionary)
         {
+            var ilmd = new Dictionary<string, object>();
+
             foreach (var field in fields)
             {
                 var customField = new Dictionary<string, object>
@@ -96,11 +117,33 @@ namespace FasTnT.Formatters.Json.JsonFormatter
                 }
                 AddCustomFields(field.Children.Where(x => x.Type != FieldType.Attribute), customField);
 
-                dictionary.Add(field.Name, customField);
+                if (field.Type == FieldType.Ilmd)
+                {
+                    ilmd.Add(field.Name, customField);
+                }
+                else
+                {
+                    dictionary.Add(field.Name, customField);
+                }
+            }
+
+            if (ilmd.Keys.Any())
+            {
+                dictionary.Add("ilmd", ilmd);
             }
         }
 
-        private void AddIfNotNull(EpcisEvent evt, IDictionary<string, object> formatted, string key, Func<EpcisEvent, object> selector, Func<EpcisEvent, string> value = null)
+        private object FormatErrorDeclaration(EpcisEvent evt)
+        {
+            return new Dictionary<string, object>
+            {
+                { "declarationTime", evt.ErrorDeclaration.DeclarationTime },
+                { "reason", evt.ErrorDeclaration.Reason },
+                { "correctiveEventIDs", evt.ErrorDeclaration.CorrectiveEventIds.Select(x => x.CorrectiveId) }
+            };
+        }
+
+        private void AddIfNotNull(EpcisEvent evt, IDictionary<string, object> formatted, string key, Func<EpcisEvent, object> selector, Func<EpcisEvent, object> value = null)
         {
             if(selector(evt) != null)
             {

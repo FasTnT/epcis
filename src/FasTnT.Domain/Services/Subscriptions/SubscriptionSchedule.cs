@@ -1,6 +1,5 @@
 ﻿using FasTnT.Model.Subscriptions;
 using System;
-using System.Linq;
 
 namespace FasTnT.Domain.Services.Subscriptions
 {

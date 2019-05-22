@@ -9,7 +9,7 @@
     <PackageReference Include="Dapper" Version="1.60.6" />
     <PackageReference Include="Dapper.SqlBuilder" Version="1.60.1" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="3.0.0-preview4.19216.2" />
-    <PackageReference Include="Npgsql" Version="4.0.6" />
+    <PackageReference Include="Npgsql" Version="4.0.7" />
   </ItemGroup>
 
   <ItemGroup>

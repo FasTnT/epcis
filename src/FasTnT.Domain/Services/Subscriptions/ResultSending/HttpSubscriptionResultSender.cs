@@ -2,6 +2,7 @@
 using FasTnT.Model.Responses;
 using System;
 using System.Net;
+using System.Net.Http;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -29,8 +30,12 @@ namespace FasTnT.Domain.Services.Subscriptions
                 await responseFormatter.Write(epcisResponse, stream, cancellationToken);
             }
 
-            var response = await request.GetResponseAsync();
-            // TODO: use response
+            var response = await request.GetResponseAsync() as HttpWebResponse;
+
+            if(!new HttpResponseMessage(response.StatusCode).IsSuccessStatusCode)
+            {
+                throw new Exception($"Response does not indicate success status code: {response.StatusCode} ({response.StatusDescription})");
+            }
         }
 
         private void TrySetAuthorization(HttpWebRequest request)

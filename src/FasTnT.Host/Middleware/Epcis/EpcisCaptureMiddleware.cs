@@ -15,13 +15,13 @@ namespace FasTnT.Host
             switch (request)
             {
                 case CaptureRequest captureRequest:
-                    await Execute<CaptureService>(async s => await s.Capture(captureRequest, cancellationToken));
+                    await Execute<CaptureService>(async s => await s.CaptureDocument(captureRequest, cancellationToken));
                     break;
                 case EpcisQueryCallbackDocument queryCallbackDocument:
-                    await Execute<CallbackService>(async s => await s.Process(queryCallbackDocument, cancellationToken));
+                    await Execute<CaptureService>(async s => await s.CaptureCallback(queryCallbackDocument, cancellationToken));
                     break;
                 case EpcisQueryCallbackException queryCallbackException:
-                    await Execute<CallbackService>(async s => await s.ProcessException(queryCallbackException, cancellationToken));
+                    await Execute<CaptureService>(async s => await s.CaptureCallbackException(queryCallbackException, cancellationToken));
                     break;
             }
         }
