@@ -11,7 +11,7 @@ namespace FasTnT.Host.Controllers
     [ApiVersion("1.0", Deprecated = true)]
     [ApiVersion("1.2")]
     [ApiVersion("2.0")]
-    [Route("{v:apiVersion}/events")]
+    [Route("v{v:apiVersion}/events")]
     [ApiController]
     public class EventsController : Controller
     {

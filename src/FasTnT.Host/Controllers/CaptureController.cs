@@ -9,7 +9,7 @@ namespace FasTnT.Host.Controllers
     [ApiVersion("1.0", Deprecated = true)]
     [ApiVersion("1.2")]
     [ApiVersion("2.0")]
-    [Route("{v:apiVersion}/capture")]
+    [Route("v{v:apiVersion}/capture")]
     [ApiController]
     public class CaptureController : ControllerBase
     {

@@ -8,14 +8,13 @@ using System.Threading.Tasks;
 
 namespace FasTnT.Host.Controllers
 {
-    [ApiVersion("1y0", Deprecated = true)]
+    [ApiVersion("1.0", Deprecated = true)]
     [ApiVersion("1.2")]
     [ApiVersion("2.0")]
-    [Route("{v:apiVersion}/queries")]
+    [Route("v{v:apiVersion}/queries")]
     [ApiController]
     public class QueryController : Controller
     {
-        private const string QueryName = "SimpleEventQuery";
         private readonly QueryService _queryService;
 
         public QueryController(QueryService queryService) => _queryService = queryService;

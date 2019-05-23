@@ -70,7 +70,7 @@ namespace FasTnT.Host
                        .UseEpcisQueryEndpoint($"{EpcisServicePath}/Query")
                        .UseEpcisSubscriptionTrigger($"{EpcisServicePath}/Subscription/Trigger");
                 })
-               .UseMvc(r => r.MapRoute("version", "{v:apiVersion}"));
+               .UseMvc();
         }
     }
 }
