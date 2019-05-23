@@ -49,6 +49,7 @@ namespace FasTnT.Host
                         o.InputFormatters.Insert(0, new EpcisRequestInputFormatter());
                         o.OutputFormatters.Insert(0, new EpcisResponseOutputFormatter());
                     })
+                    .AddApplicationPart(typeof(Startup).Assembly)
                     .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
             services.AddApiVersioning();
         }
@@ -64,9 +65,9 @@ namespace FasTnT.Host
             }
 
             app.UseExceptionHandlingMiddleware(isDevelopment)
+               .UseBasicAuthentication("FasTnT")
                .UseWhen(context => context.Request.Path.StartsWithSegments(EpcisServicePath), opt => {
-                    opt.UseBasicAuthentication("FasTnT")
-                       .UseEpcisCaptureEndpoint($"{EpcisServicePath}/Capture")
+                    opt.UseEpcisCaptureEndpoint($"{EpcisServicePath}/Capture")
                        .UseEpcisQueryEndpoint($"{EpcisServicePath}/Query")
                        .UseEpcisSubscriptionTrigger($"{EpcisServicePath}/Subscription/Trigger");
                 })
