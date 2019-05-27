@@ -20,7 +20,7 @@ namespace FasTnT.Formatters.Xml.Responses
         {
             eventBuilder = new Dictionary<EventType, FormatAction[]>
             {
-                { EventType.Object, new FormatAction[]{ EpcList, Action, BizStep, Disposition, ReadPoint, BizLocation, BizTransaction, ExtensionIlmd, SourceDest, AddExtensionField, AddEventExtension } },
+                { EventType.Object, new FormatAction[]{ EpcListMandatory, Action, BizStep, Disposition, ReadPoint, BizLocation, BizTransaction, ExtensionIlmd, SourceDest, AddExtensionField, AddEventExtension } },
                 { EventType.Quantity, new FormatAction[]{ EpcList, Action, BizStep, Disposition, ReadPoint, BizLocation, BizTransaction, SourceDest, AddExtensionField, AddEventExtension } },
                 { EventType.Aggregation, new FormatAction[]{ ParentId, ChildEpcs, Action, BizStep, Disposition, ReadPoint, BizLocation, BizTransaction, SourceDest, AddExtensionField, AddEventExtension } },
                 { EventType.Transaction, new FormatAction[]{ EpcList, Action, BizStep, Disposition, ReadPoint, BizLocation, BizTransaction, SourceDest, AddExtensionField, AddEventExtension } },
@@ -59,7 +59,10 @@ namespace FasTnT.Formatters.Xml.Responses
             element.Add(new XElement("baseExtension", errorDeclaration));
         }
 
-        public void EpcList(EpcisEvent evt, XContainer element)
+        public void EpcListMandatory(EpcisEvent evt, XContainer element) => EpcList(evt, element, true);
+        public void EpcList(EpcisEvent evt, XContainer element) => EpcList(evt, element, false);
+
+        public void EpcList(EpcisEvent evt, XContainer element, bool mandatoryEpcList)
         {
             var epcList = new XElement("epcList", evt.Epcs.Where(x => x.Type == EpcType.List).Select(e => new XElement("epc", e.Id)));
             var inputEpcList = new XElement("inputEPCList", evt.Epcs.Where(x => x.Type == EpcType.InputEpc).Select(e => new XElement("epc", e.Id)));
@@ -68,7 +71,7 @@ namespace FasTnT.Formatters.Xml.Responses
             var outputQuantity = new XElement("outputQuantityList", evt.Epcs.Where(x => x.Type == EpcType.OutputQuantity).Select(FormatQuantity));
             var outputEpcList = new XElement("outputEPCList", evt.Epcs.Where(x => x.Type == EpcType.OutputEpc).Select(e => new XElement("epc", e.Id)));
 
-            if (epcList.HasElements) element.Add(epcList);
+            if (mandatoryEpcList || epcList.HasElements) element.Add(epcList);
             if (inputEpcList.HasElements) element.Add(inputEpcList);
             if (inputQuantity.HasElements) element.Add(inputQuantity);
             if (quantityList.HasElements) AddInExtension(element, quantityList);
