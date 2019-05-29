@@ -9,7 +9,7 @@ using FasTnT.Model.Queries;
 
 namespace FasTnT.Formatters.Xml
 {
-    internal class SoapQueryFormatter : IQueryFormatter
+    public class SoapQueryFormatter : IQueryFormatter
     {
         static readonly string SoapEnvelopNamespace = "http://schemas.xmlsoap.org/soap/envelope/";
         public async Task<EpcisQuery> Read(Stream input, CancellationToken cancellationToken)

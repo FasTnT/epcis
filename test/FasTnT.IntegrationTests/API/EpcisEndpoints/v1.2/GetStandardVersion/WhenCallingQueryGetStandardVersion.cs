@@ -46,7 +46,7 @@ namespace FasTnT.IntegrationTests.API.EpcisEndpoints.v1_2.GetStandardVersion
         {
             var content = Result.Content.ReadAsStringAsync().Result;
             var xmlDocument = XDocument.Parse(content);
-            var standardVersion = xmlDocument.Root.Element("EPCISBody").Element(XName.Get("GetStandardVersionResult", "urn:epcglobal:epcis-query:xsd:1")).Value;
+            var standardVersion = xmlDocument.Root.Element(XName.Get("Body", "http://schemas.xmlsoap.org/soap/envelope/")).Element(XName.Get("GetStandardVersionResult", "urn:epcglobal:epcis-query:xsd:1")).Value;
 
             Assert.AreEqual("1.2", standardVersion);
         }

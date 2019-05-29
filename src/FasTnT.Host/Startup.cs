@@ -6,16 +6,17 @@ using FasTnT.Persistence.Dapper;
 using FasTnT.Host.Middleware;
 using FasTnT.Host.BackgroundTasks;
 using FasTnT.Domain.Extensions;
-using FasTnT.Formatters;
-using FasTnT.Formatters.Xml;
 using FasTnT.Domain;
-using FasTnT.Formatters.Json;
+using Microsoft.Extensions.Hosting;
+using FasTnT.Host.Infrastructure.Binding;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authentication;
+using IHostingEnvironment = Microsoft.AspNetCore.Hosting.IHostingEnvironment;
 
 namespace FasTnT.Host
 {
     public class Startup
     {
-        public static string EpcisServicePath = "/EpcisServices/1.2";
         public IConfiguration Configuration { get; }
 
         public Startup(IHostingEnvironment env)
@@ -36,12 +37,20 @@ namespace FasTnT.Host
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddEpcisDomain();
-            services.AddEpcisPersistence(Configuration.GetConnectionString("FasTnT.Database"));
-            services.AddSingleton<Microsoft.Extensions.Hosting.IHostedService, BackgroundService>();
-            services.AddSingleton(new FormatterProvider(new IFormatterFactory[]{ new JsonFormatterFactory(), new XmlFormatterFactory(), new SoapFormatterFactory() }));
+            services.AddEpcisDomain()
+                    .AddEpcisPersistence(Configuration.GetConnectionString("FasTnT.Database"))
+                    .AddSingleton<IHostedService, SubscriptionService>();
 
-            services.AddMvc();
+            services.AddMvc(o =>
+                        {
+                            o.ModelBinderProviders.Insert(0, new AbstractModelBinderProvider());
+                            o.OutputFormatters.Insert(0, new EpcisResponseOutputFormatter());
+                        })
+                    .AddApplicationPart(typeof(Startup).Assembly)
+                    .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+
+            services.AddAuthentication("BasicAuthentication")
+                .AddScheme<AuthenticationSchemeOptions, BasicAuthenticationHandler>("BasicAuthentication", null);
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
@@ -49,18 +58,9 @@ namespace FasTnT.Host
             Constants.SubscriptionTaskDelayTimeoutInMs = Configuration.GetSection("Settings").GetValue("SubscriptionWaitTimeout", 5000);
             var isDevelopment = env.IsDevelopment();
 
-            if (isDevelopment)
-            {
-                app.UseEpcisMigrationEndpoint($"{EpcisServicePath}/Database");
-            }
-
             app.UseExceptionHandlingMiddleware(isDevelopment)
-               .UseWhen(context => context.Request.Path.StartsWithSegments(EpcisServicePath), x => {
-                    x.UseBasicAuthentication("FasTnT")
-                     .UseEpcisCaptureEndpoint($"{EpcisServicePath}/Capture")
-                     .UseEpcisQueryEndpoint($"{EpcisServicePath}/Query")
-                     .UseEpcisSubscriptionTrigger($"{EpcisServicePath}/Subscription/Trigger");
-                });
+               .UseAuthentication()
+               .UseMvc();
         }
     }
 }

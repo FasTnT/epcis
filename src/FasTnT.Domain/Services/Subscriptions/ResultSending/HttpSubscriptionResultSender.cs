@@ -1,4 +1,4 @@
-﻿using FasTnT.Formatters;
+﻿using FasTnT.Formatters.Xml;
 using FasTnT.Model.Responses;
 using System;
 using System.Net;
@@ -11,15 +11,9 @@ namespace FasTnT.Domain.Services.Subscriptions
 {
     public class HttpSubscriptionResultSender : ISubscriptionResultSender
     {
-        private readonly FormatterProvider _formatterFactory;
-
-        public HttpSubscriptionResultSender(FormatterProvider formatterFactory)
-        {
-            _formatterFactory = formatterFactory;
-        }
         public async Task Send(string destination, IEpcisResponse epcisResponse, string contentType, CancellationToken cancellationToken)
         {
-            var responseFormatter = _formatterFactory.GetFormatter<IEpcisResponse>(contentType) as IResponseFormatter;
+            var responseFormatter = new XmlResponseFormatter();
             var request = WebRequest.CreateHttp($"{destination}{GetCallbackUrl(epcisResponse)}");
             request.Method = "POST";
             request.ContentType = responseFormatter.ToContentTypeString();
