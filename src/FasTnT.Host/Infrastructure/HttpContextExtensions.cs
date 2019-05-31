@@ -1,10 +1,11 @@
-﻿using FasTnT.Domain;
-using FasTnT.Formatters;
+﻿using FasTnT.Formatters;
+using FasTnT.Formatters.Json;
+using FasTnT.Formatters.Xml;
+using FasTnT.Model;
+using FasTnT.Model.Queries;
 using FasTnT.Model.Responses;
 using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Primitives;
-using System.Linq;
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -14,22 +15,37 @@ namespace FasTnT.Host
     {
         public static async Task SetEpcisResponse(this HttpContext context, IEpcisResponse response, int statusCode, CancellationToken cancellationToken)
         {
-            var formatter = GetResponseFormatter(context);
-
-            context.Response.ContentType = formatter.ToContentTypeString();
+            context.Response.ContentType = context.Request.ContentType;
             context.Response.StatusCode = statusCode;
-            await formatter.Write(response, context.Response.Body, cancellationToken);
+
+            await context.GetFormatter().Write(response, context.Response.Body, cancellationToken);
         }
 
-        private static IResponseFormatter GetResponseFormatter(HttpContext context)
+        public static async Task<Request> ParseXmlRequest(this HttpContext context) => await Parse(context, new XmlRequestFormatter());
+        public static async Task<EpcisQuery> ParseSoapQuery(this HttpContext context) => await Parse(context, new SoapQueryFormatter());
+        public static bool IsPost(this HttpContext context) => HttpMethods.IsPost(context.Request.Method);
+        public static bool IsGet(this HttpContext context) => HttpMethods.IsGet(context.Request.Method);
+        public static void SetFormatter(this HttpContext context, IResponseFormatter formatter) => context.Items["Formatter"] = formatter;
+
+        public static IResponseFormatter GetFormatter(this HttpContext context)
         {
-            var contentType = GetContentType(context);
-            var formatterFactory = context.RequestServices.GetService<FormatterProvider>();
-
-            return formatterFactory.GetFormatter<IEpcisResponse>(contentType) as IResponseFormatter;
+            return (context.Items["Formatter"] ?? new JsonResponseFormatter()) as IResponseFormatter;
         }
 
-        private static string GetContentType(HttpContext context)
-            => (context.Request.Headers.TryGetValue("Accept", out StringValues accept) ? accept.FirstOrDefault(x => x != "*/*") : null) ?? context.Request.ContentType;
+        public static async Task<T> Parse<T>(HttpContext context, IFormatter<T> formatter) where T : IEpcisPayload
+        {
+            return await formatter.Read(context.Request.Body, context.RequestAborted);
+        }
+
+        public static bool PathEquals(this HttpContext context, string path)
+        {
+            return context.Request.Path.Value.TrimEnd('/').Equals(path.TrimEnd('/'), StringComparison.OrdinalIgnoreCase);
+        }
+
+
+        public static bool IsXmlContentType(this HttpContext context)
+        {
+            return context.Request.ContentType.Contains("XML", StringComparison.OrdinalIgnoreCase);
+        }
     }
 }

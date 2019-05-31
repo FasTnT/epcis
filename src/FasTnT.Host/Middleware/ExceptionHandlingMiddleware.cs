@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Threading.Tasks;
-using FasTnT.Formatters.Xml;
 using FasTnT.Model.Exceptions;
 using FasTnT.Model.Responses;
 using Microsoft.AspNetCore.Http;
@@ -32,7 +31,7 @@ namespace FasTnT.Host.Middleware
             {
                 if (ex is ContentTypeException)
                 {
-                    context.Request.Headers["Accept"] = XmlFormatterFactory.ContentTypes[0];
+                    context.Request.Headers["Accept"] = "application/xml";
                 }
 
                 _logger.LogError($"[{context.TraceIdentifier}] Request failed with reason '{ex.Message}'");

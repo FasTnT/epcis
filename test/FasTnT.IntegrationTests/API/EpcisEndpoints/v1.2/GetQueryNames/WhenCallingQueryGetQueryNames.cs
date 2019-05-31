@@ -47,7 +47,7 @@ namespace FasTnT.IntegrationTests.API.EpcisEndpoints.v1_2.GetVendorVersion
         {
             var content = Result.Content.ReadAsStringAsync().Result;
             var xmlDocument = XDocument.Parse(content);
-            var availableQueryNames = xmlDocument.Root.Element("EPCISBody").Element(XName.Get("GetQueryNamesResult", "urn:epcglobal:epcis-query:xsd:1")).Elements("string");
+            var availableQueryNames = xmlDocument.Root.Element(XName.Get("Body", "http://schemas.xmlsoap.org/soap/envelope/")).Element(XName.Get("GetQueryNamesResult", "urn:epcglobal:epcis-query:xsd:1")).Elements("string");
 
             Assert.IsTrue(availableQueryNames.Count() >= 2, "The result contains fewer than 2 available query names");
         }
