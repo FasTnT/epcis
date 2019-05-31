@@ -15,7 +15,7 @@ namespace FasTnT.IntegrationTests.API.DatabaseEndpoints
         }
 
         [Assert]
-        public void ItShouldReturnHttp200OK() => Assert.AreEqual(HttpStatusCode.OK, Result.StatusCode);
+        public void ItShouldReturnHttp204NoContent() => Assert.AreEqual(HttpStatusCode.NoContent, Result.StatusCode);
 
         [Assert]
         public void ItShouldNotReturnAnyContent() => Assert.AreEqual(string.Empty, Result.Content.ReadAsStringAsync().Result);

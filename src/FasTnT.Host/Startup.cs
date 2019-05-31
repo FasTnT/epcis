@@ -60,6 +60,7 @@ namespace FasTnT.Host
 
             app.UseExceptionHandlingMiddleware(isDevelopment)
                .UseAuthentication()
+               .UseNoContentStatusCode()
                .UseMvc();
         }
     }
