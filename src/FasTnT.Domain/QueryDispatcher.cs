@@ -1,10 +1,11 @@
-﻿using FasTnT.Model.Queries;
+﻿using FasTnT.Domain.Services;
+using FasTnT.Model.Queries;
 using FasTnT.Model.Responses;
 using FasTnT.Model.Subscriptions;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace FasTnT.Domain.Services
+namespace FasTnT.Domain
 {
     public class QueryDispatcher
     {
@@ -32,6 +33,8 @@ namespace FasTnT.Domain.Services
                     await _service.Subscribe(subscription, cancellationToken); break;
                 case UnsubscribeRequest unsubscribeRequest:
                     await _service.Unsubscribe(unsubscribeRequest, cancellationToken); break;
+                default:
+                    throw new System.ArgumentOutOfRangeException($"Unable to process Query of type '{query.GetType().Name}'");
             }
 
             return response;

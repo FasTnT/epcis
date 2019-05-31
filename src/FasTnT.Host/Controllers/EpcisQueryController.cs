@@ -1,4 +1,4 @@
-﻿using FasTnT.Domain.Services;
+﻿using FasTnT.Domain;
 using FasTnT.Model.Queries;
 using FasTnT.Model.Responses;
 using Microsoft.AspNetCore.Authorization;

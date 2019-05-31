@@ -1,4 +1,4 @@
-﻿using FasTnT.Domain.Services;
+﻿using FasTnT.Domain;
 using FasTnT.Model;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -12,27 +12,12 @@ namespace FasTnT.Host.Controllers
     [Consumes("application/xml", "text/xml", "application/json")]
     public class EpcisCaptureController : Controller
     {
-        private readonly CaptureService _service;
+        private readonly CaptureDispatcher _dispatcher;
 
-        public EpcisCaptureController(CaptureService service) => _service = service;
+        public EpcisCaptureController(CaptureDispatcher service) => _dispatcher = service;
 
         [HttpPost]
-        public async Task<IActionResult> Capture(Request request, CancellationToken cancellationToken)
-        {
-            switch (request)
-            {
-                case CaptureRequest captureRequest:
-                    await _service.CaptureDocument(captureRequest, cancellationToken);
-                    break;
-                case EpcisQueryCallbackDocument queryCallbackDocument:
-                    await _service.CaptureCallback(queryCallbackDocument, cancellationToken);
-                    break;
-                case EpcisQueryCallbackException queryCallbackException:
-                    await _service.CaptureCallbackException(queryCallbackException, cancellationToken);
-                    break;
-            }
-
-            return StatusCode(201);
-        }
+        public async Task Capture(Request request, CancellationToken cancellationToken)
+            => await _dispatcher.DispatchDocument(request, cancellationToken);
     }
 }
