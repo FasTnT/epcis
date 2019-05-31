@@ -1,6 +1,7 @@
-﻿<?xml version="1.0" encoding="UTF-8" ?>
-<epcisq:EPCISQueryDocument xmlns:epcisq="urn:epcglobal:epcis-query:xsd:1" schemaVersion="1" creationDate="2018-02-07T11:52:42.685Z">
-  <EPCISBody>
-    <epcisq:GetStandardVersion />
-  </EPCISBody>
-</epcisq:EPCISQueryDocument>
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:epcglobal:epcis-query:xsd:1">
+  <soapenv:Header />
+  <soapenv:Body>
+    <urn:GetStandardVersion />
+  </soapenv:Body>
+</soapenv:Envelope>

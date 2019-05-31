@@ -11,7 +11,7 @@ namespace FasTnT.Persistence.Dapper
 {
     public static class ServiceCollectionExtensions
     {
-        public static void AddEpcisPersistence(this IServiceCollection services, string connectionString)
+        public static IServiceCollection AddEpcisPersistence(this IServiceCollection services, string connectionString)
         {
             DefaultTypeMap.MatchNamesWithUnderscores = true;
             SqlMapper.AddTypeHandler(TimezoneOffsetHandler.Default);
@@ -29,6 +29,8 @@ namespace FasTnT.Persistence.Dapper
 
             services.AddScoped(typeof(IDbConnection), ctx => new NpgsqlConnection(connectionString));
             services.AddScoped(typeof(IUnitOfWork), typeof(DapperUnitOfWork));
+
+            return services;
         }
     }
 }

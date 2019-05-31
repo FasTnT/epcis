@@ -10,7 +10,7 @@ using FasTnT.Model.Responses;
 
 namespace FasTnT.Formatters.Xml
 {
-    internal class SoapResponseFormatter : BaseResponseFormatter<XElement>
+    public class SoapResponseFormatter : BaseResponseFormatter<XElement>
     {
         private const SaveOptions Options = SaveOptions.DisableFormatting | SaveOptions.OmitDuplicateNamespaces;
         public override string ToContentTypeString() => "application/soap+xml";

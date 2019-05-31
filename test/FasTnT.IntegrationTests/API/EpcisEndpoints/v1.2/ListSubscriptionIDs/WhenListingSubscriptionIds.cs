@@ -43,7 +43,7 @@ namespace FasTnT.IntegrationTests.API.EpcisEndpoints.v1._2.ListSubscriptionIDs
         {
             var content = Result.Content.ReadAsStringAsync().Result;
             var xmlDocument = XDocument.Parse(content);
-            var getSubscriptionResult = xmlDocument.Root.Element("EPCISBody").Element(XName.Get("GetSubscriptionIDsResult", "urn:epcglobal:epcis-query:xsd:1"));
+            var getSubscriptionResult = xmlDocument.Root.Element(XName.Get("Body", "http://schemas.xmlsoap.org/soap/envelope/")).Element(XName.Get("GetSubscriptionIDsResult", "urn:epcglobal:epcis-query:xsd:1"));
 
             Assert.IsNotNull(getSubscriptionResult);
         }
