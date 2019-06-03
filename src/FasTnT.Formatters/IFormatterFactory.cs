@@ -2,7 +2,7 @@
 {
     public interface IFormatterFactory
     {
-        string[] AllowedContentTypes { get; }
+        string ContentType { get; }
         IRequestFormatter RequestFormatter { get; }
         IQueryFormatter QueryFormatter { get; }
         IResponseFormatter ResponseFormatter { get; }
