@@ -6,17 +6,16 @@ using Microsoft.AspNetCore.Mvc;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace FasTnT.Host.Controllers
+namespace FasTnT.Host.Controllers.v1_2
 {
     [Authorize]
+    [SoapFormatter]
     [Route("EpcisServices/1.2/Query")]
-    [Consumes("application/xml", "text/xml")]
-    [Produces("application/xml", "text/xml")]
-    public class EpcisQueryController : Controller
+    public class EpcisQueryService : Controller
     {
         private readonly QueryDispatcher _dispatcher;
 
-        public EpcisQueryController(QueryDispatcher dispatcher) => _dispatcher = dispatcher;
+        public EpcisQueryService(QueryDispatcher dispatcher) => _dispatcher = dispatcher;
 
         [HttpPost]
         public async Task<IEpcisResponse> Query(EpcisQuery query, CancellationToken cancellationToken) 

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net;
 using System.Threading.Tasks;
 using FasTnT.Model.Exceptions;
 using FasTnT.Model.Responses;
@@ -9,7 +10,6 @@ namespace FasTnT.Host.Middleware
 {
     public class ExceptionHandlingMiddleware
     {
-        const int BadRequest = 400, InternalServerError = 500;
         private readonly RequestDelegate _next;
         private readonly ILogger _logger;
         private readonly bool _developmentMode;
@@ -29,11 +29,6 @@ namespace FasTnT.Host.Middleware
             }
             catch(Exception ex)
             {
-                if (ex is ContentTypeException)
-                {
-                    context.Request.Headers["Accept"] = "application/xml";
-                }
-
                 _logger.LogError($"[{context.TraceIdentifier}] Request failed with reason '{ex.Message}'");
                 var epcisException = ex as EpcisException;
                 var response = new ExceptionResponse
@@ -43,7 +38,10 @@ namespace FasTnT.Host.Middleware
                     Reason = GetMessage(ex)
                 };
 
-                await context.SetEpcisResponse(response, (ex is EpcisException) ? BadRequest : InternalServerError, context.RequestAborted);
+                context.Response.ContentType = context.Request.ContentType;
+                context.Response.StatusCode = (int)(ex is EpcisException ? HttpStatusCode.BadRequest : HttpStatusCode.InternalServerError);
+
+                await context.GetFormatter().WriteResponse(response, context.Response.Body, context.RequestAborted);
             }
         }
 

@@ -11,17 +11,17 @@ namespace FasTnT.Domain.Services.Subscriptions
 {
     public class HttpSubscriptionResultSender : ISubscriptionResultSender
     {
-        public async Task Send(string destination, IEpcisResponse epcisResponse, string contentType, CancellationToken cancellationToken)
+        public async Task Send(string destination, IEpcisResponse epcisResponse, CancellationToken cancellationToken)
         {
-            var responseFormatter = new XmlResponseFormatter();
+            var formatter = XmlFormatter.Instance;
             var request = WebRequest.CreateHttp($"{destination}{GetCallbackUrl(epcisResponse)}");
             request.Method = "POST";
-            request.ContentType = responseFormatter.ToContentTypeString();
+            request.ContentType = formatter.ContentType;
             TrySetAuthorization(request);
 
             using (var stream = await request.GetRequestStreamAsync())
             {
-                await responseFormatter.Write(epcisResponse, stream, cancellationToken);
+                await formatter.WriteResponse(epcisResponse, stream, cancellationToken);
             }
 
             var response = await request.GetResponseAsync() as HttpWebResponse;
