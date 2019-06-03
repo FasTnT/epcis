@@ -5,7 +5,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using fastJSON;
-using FasTnT.Formatters.Json.JsonFormatter;
+using FasTnT.Formatters.Json.Formatter;
 using FasTnT.Model;
 using FasTnT.Model.Responses;
 

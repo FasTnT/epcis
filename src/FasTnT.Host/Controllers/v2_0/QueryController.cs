@@ -2,16 +2,13 @@
 using FasTnT.Model.Queries;
 using FasTnT.Model.Subscriptions;
 using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace FasTnT.Host.Controllers
+namespace FasTnT.Host.Controllers.v2_0
 {
-    [ApiVersion("1.0", Deprecated = true)]
-    [ApiVersion("1.2")]
-    [ApiVersion("2.0")]
-    [Route("v{v:apiVersion}/queries")]
+    [Route("v2_0/queries")]
+    [JsonFormatter]
     [ApiController]
     public class QueryController : Controller
     {
@@ -19,12 +16,12 @@ namespace FasTnT.Host.Controllers
 
         public QueryController(QueryService queryService) => _queryService = queryService;
 
-        [HttpGet("")]
+        [HttpGet]
         public async Task<object> Queries(CancellationToken cancellationToken)
             => await _queryService.GetQueryNames(cancellationToken);
 
         [HttpGet("{queryName}/events")]
-        public async Task<object> Poll(string queryName, IEnumerable<QueryParameter> parameters, CancellationToken cancellationToken) 
+        public async Task<object> Poll(string queryName, QueryParameter[] parameters, CancellationToken cancellationToken) 
             => await _queryService.Poll(new Poll { QueryName = queryName, Parameters = parameters }, cancellationToken);
 
         [HttpGet("{queryName}/subscriptions")]

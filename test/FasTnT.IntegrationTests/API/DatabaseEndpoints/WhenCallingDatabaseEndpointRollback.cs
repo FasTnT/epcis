@@ -11,7 +11,7 @@ namespace FasTnT.IntegrationTests.API.DatabaseEndpoints
     {
         public override void Act()
         {
-            Result = Client.PostAsync("/EpcisServices/1.2/Database/Rollback", null).Result;
+            Result = Client.PostAsync("/Setup/Database/Rollback", null).Result;
         }
 
         [Assert]

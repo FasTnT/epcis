@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace FasTnT.Formatters.Json.JsonFormatter
+namespace FasTnT.Formatters.Json.Formatter
 {
     public class JsonEventFormatter
     {

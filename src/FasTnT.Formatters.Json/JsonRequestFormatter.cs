@@ -11,8 +11,6 @@ namespace FasTnT.Formatters.Json
 {
     public class JsonRequestFormatter
     {
-        public Task Write(Request entity, Stream output, CancellationToken cancellationToken) => throw new NotImplementedException();
-
         public async Task<Request> Read(Stream input, CancellationToken cancellationToken)
         {
             using (var reader = new StreamReader(input))

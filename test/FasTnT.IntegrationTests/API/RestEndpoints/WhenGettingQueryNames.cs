@@ -12,7 +12,7 @@ namespace FasTnT.IntegrationTests.API.RestEndpoints
         public override void Act()
         {
             Client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Basic", "YWRtaW46UEBzc3cwcmQ=");
-            Result = Client.GetAsync("/v1.2/queries").Result;
+            Result = Client.GetAsync("/v2_0/queries").Result;
         }
 
         [Assert]

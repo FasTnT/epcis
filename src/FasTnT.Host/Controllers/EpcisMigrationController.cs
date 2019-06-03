@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace FasTnT.Host.Controllers
 {
-    [Route("EpcisServices/1.2/Database")]
+    [Route("Setup/Database")]
     public class EpcisMigrationController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;
@@ -14,15 +14,11 @@ namespace FasTnT.Host.Controllers
         public EpcisMigrationController(IUnitOfWork unitOfWork) => _unitOfWork = unitOfWork;
 
         [HttpPost("Migrate")]
-        public async Task Migrate(CancellationToken cancellationToken)
-        {
-            await _unitOfWork.Execute(u => u.DatabaseManager.Migrate(cancellationToken));
-        }
+        public async Task Migrate(CancellationToken cancellationToken) 
+            => await _unitOfWork.Execute(u => u.DatabaseManager.Migrate(cancellationToken));
 
         [HttpPost("Rollback")]
-        public async Task Rollback(CancellationToken cancellationToken)
-        {
-            await _unitOfWork.Execute(u => u.DatabaseManager.Rollback(cancellationToken));
-        }
+        public async Task Rollback(CancellationToken cancellationToken) 
+            => await _unitOfWork.Execute(u => u.DatabaseManager.Rollback(cancellationToken));
     }
 }

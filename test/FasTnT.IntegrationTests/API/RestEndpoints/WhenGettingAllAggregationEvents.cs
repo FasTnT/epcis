@@ -14,7 +14,7 @@ namespace FasTnT.IntegrationTests.API.RestEndpoints
         public override void Act()
         {
             Client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Basic", "YWRtaW46UEBzc3cwcmQ=");
-            var request = new HttpRequestMessage(HttpMethod.Get, "/v1.2/events/AggregationEvent/all") { Content = new StringContent("", Encoding.UTF8, "application/json") };
+            var request = new HttpRequestMessage(HttpMethod.Get, "/v2_0/events/AggregationEvent/all") { Content = new StringContent("", Encoding.UTF8, "application/json") };
             Result = Client.SendAsync(request).Result;
         }
 

@@ -6,12 +6,10 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace FasTnT.Host.Controllers
+namespace FasTnT.Host.Controllers.v2_0
 {
-    [ApiVersion("1.0", Deprecated = true)]
-    [ApiVersion("1.2")]
-    [ApiVersion("2.0")]
-    [Route("v{v:apiVersion}/events")]
+    [Route("v2_0/events")]
+    [JsonFormatter]
     [ApiController]
     public class EventsController : Controller
     {
@@ -20,7 +18,7 @@ namespace FasTnT.Host.Controllers
 
         public EventsController(QueryService queryService) => _queryService = queryService;
 
-        [HttpGet("")]
+        [HttpGet]
         public async Task<IEnumerable<string>> ListEventTypes(CancellationToken cancellationToken) 
             => (await _queryService.GetEventTypes(cancellationToken)).EventTypes;
 
@@ -29,21 +27,21 @@ namespace FasTnT.Host.Controllers
             => await _queryService.Poll(new Poll { QueryName = QueryName }, cancellationToken);
 
         [HttpGet("{eventType}")]
-        public async Task<object> ListEventsOfType(string eventType, IEnumerable<QueryParameter> parameters, CancellationToken cancellationToken)
+        public async Task<object> ListEventsOfType(string eventType, QueryParameter[] parameters, CancellationToken cancellationToken)
         {
-            parameters = Enumerable.Append(parameters, new QueryParameter{ Name = "eventType", Values = new []{ eventType } });
+            parameters = Enumerable.Append(parameters, new QueryParameter{ Name = "eventType", Values = new []{ eventType } }).ToArray();
 
             return await _queryService.Poll(new Poll { QueryName = QueryName, Parameters = parameters }, cancellationToken);
         }
 
         [HttpGet("{eventType}/{eventId}")]
-        public async Task<object> GetEventById(string eventType, string eventId, IEnumerable<QueryParameter> parameters, CancellationToken cancellationToken)
+        public async Task<object> GetEventById(string eventType, string eventId, QueryParameter[] parameters, CancellationToken cancellationToken)
         {
             parameters = Enumerable.Concat(parameters, new[] 
             {
                 new QueryParameter{ Name = "eventType", Values = new []{ eventType } },
                 new QueryParameter{ Name = "EQ_eventID", Values = new []{ eventId } }
-            });
+            }).ToArray();
 
             return await _queryService.Poll(new Poll { QueryName = QueryName, Parameters = parameters }, cancellationToken);
         }
