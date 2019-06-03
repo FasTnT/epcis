@@ -8,13 +8,13 @@ namespace FasTnT.Host.Controllers
     {
         public bool IsReusable => true;
         public IFilterMetadata CreateInstance(IServiceProvider serviceProvider) => XmlFormatterResourceFilter.Instance;
-    }
 
-    public class XmlFormatterResourceFilter : IResourceFilter
-    {
-        public static IFilterMetadata Instance = new XmlFormatterResourceFilter();
+        private class XmlFormatterResourceFilter : IResourceFilter
+        {
+            public static IFilterMetadata Instance = new XmlFormatterResourceFilter();
 
-        public void OnResourceExecuted(ResourceExecutedContext context) { }
-        public void OnResourceExecuting(ResourceExecutingContext context) => context.HttpContext.SetFormatter(XmlFormatter.Instance);
+            public void OnResourceExecuted(ResourceExecutedContext context) { }
+            public void OnResourceExecuting(ResourceExecutingContext context) => context.HttpContext.SetFormatter(XmlFormatter.Instance);
+        }
     }
 }

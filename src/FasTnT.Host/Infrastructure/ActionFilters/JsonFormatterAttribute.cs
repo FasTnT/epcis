@@ -8,13 +8,13 @@ namespace FasTnT.Host.Controllers
     {
         public bool IsReusable => true;
         public IFilterMetadata CreateInstance(IServiceProvider serviceProvider) => JsonFormatterResourceFilter.Instance;
-    }
 
-    public class JsonFormatterResourceFilter : IResourceFilter
-    {
-        public static IFilterMetadata Instance = new JsonFormatterResourceFilter();
+        private class JsonFormatterResourceFilter : IResourceFilter
+        {
+            public static IFilterMetadata Instance = new JsonFormatterResourceFilter();
 
-        public void OnResourceExecuted(ResourceExecutedContext context) { }
-        public void OnResourceExecuting(ResourceExecutingContext context) => context.HttpContext.SetFormatter(XmlFormatter.Instance);
+            public void OnResourceExecuted(ResourceExecutedContext context) { }
+            public void OnResourceExecuting(ResourceExecutingContext context) => context.HttpContext.SetFormatter(XmlFormatter.Instance);
+        }
     }
 }
