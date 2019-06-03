@@ -13,7 +13,6 @@ namespace FasTnT.Formatters.Xml
     public class SoapResponseFormatter : BaseResponseFormatter<XElement>
     {
         private const SaveOptions Options = SaveOptions.DisableFormatting | SaveOptions.OmitDuplicateNamespaces;
-        public override string ToContentTypeString() => "application/soap+xml";
 
         public override async Task Write(IEpcisResponse entity, Stream output, CancellationToken cancellationToken)
         {

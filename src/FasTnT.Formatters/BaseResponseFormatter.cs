@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace FasTnT.Formatters
 {
-    public abstract class BaseResponseFormatter<T> : IResponseFormatter
+    public abstract class BaseResponseFormatter<T>
     {
         public T Format(IEpcisResponse entity)
         {
@@ -29,8 +29,6 @@ namespace FasTnT.Formatters
             }
         }
 
-        public abstract string ToContentTypeString();
-        public virtual Task<IEpcisResponse> Read(Stream input, CancellationToken cancellationToken) => throw new NotImplementedException();
         public abstract Task Write(IEpcisResponse entity, Stream output, CancellationToken cancellationToken);
 
         protected abstract T FormatInternal(PollResponse response);

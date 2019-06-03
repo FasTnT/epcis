@@ -9,7 +9,7 @@ using FasTnT.Model;
 
 namespace FasTnT.Formatters.Json
 {
-    public class JsonRequestFormatter : IRequestFormatter
+    public class JsonRequestFormatter
     {
         public Task Write(Request entity, Stream output, CancellationToken cancellationToken) => throw new NotImplementedException();
 

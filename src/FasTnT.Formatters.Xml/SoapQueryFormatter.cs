@@ -9,7 +9,7 @@ using FasTnT.Model.Queries;
 
 namespace FasTnT.Formatters.Xml
 {
-    public class SoapQueryFormatter : IQueryFormatter
+    public class SoapQueryFormatter
     {
         static readonly string SoapEnvelopNamespace = "http://schemas.xmlsoap.org/soap/envelope/";
         public async Task<EpcisQuery> Read(Stream input, CancellationToken cancellationToken)
@@ -64,7 +64,5 @@ namespace FasTnT.Formatters.Xml
 
             throw new Exception($"Invalid SOAP request: empty Body.");
         }
-
-        public Task Write(EpcisQuery entity, Stream output, CancellationToken cancellationToken) => throw new NotImplementedException();
     }
 }
