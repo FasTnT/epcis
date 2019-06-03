@@ -6,6 +6,6 @@ namespace FasTnT.Domain.Services.Subscriptions
 {
     public interface ISubscriptionResultSender
     {
-        Task Send(string destination, IEpcisResponse response, string contentType = "application/xml", CancellationToken cancellationToken = default);
+        Task Send(string destination, IEpcisResponse response, CancellationToken cancellationToken = default);
     }
 }

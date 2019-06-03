@@ -11,9 +11,6 @@ using Microsoft.Extensions.Hosting;
 using FasTnT.Host.Infrastructure.Binding;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authentication;
-using FasTnT.Formatters.Json;
-using Microsoft.AspNetCore.Mvc;
-using FasTnT.Host.Infrastructure;
 using IHostingEnvironment = Microsoft.AspNetCore.Hosting.IHostingEnvironment;
 
 namespace FasTnT.Host
@@ -42,18 +39,16 @@ namespace FasTnT.Host
         {
             services.AddEpcisDomain()
                     .AddEpcisPersistence(Configuration.GetConnectionString("FasTnT.Database"))
-                    .AddSingleton<IHostedService, SubscriptionService>()
-                    .AddSingleton(new FormatterProvider(new IFormatterFactory[] { new JsonFormatterFactory(), new XmlFormatterFactory(), new SoapFormatterFactory() }));
+                    .AddSingleton<IHostedService, SubscriptionService>();
 
             services.AddMvc(o =>
-                    {
-                        o.ModelBinderProviders.Insert(0, new AbstractModelBinderProvider());
-                        o.InputFormatters.Insert(0, new QueryParameterInputFormatter());
-                        o.InputFormatters.Insert(0, new EpcisRequestInputFormatter());
-                        o.OutputFormatters.Insert(0, new EpcisResponseOutputFormatter());
-                    })
-                    .AddApplicationPart(typeof(Startup).Assembly).SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
-            services.AddApiVersioning();
+                        {
+                            o.ModelBinderProviders.Insert(0, new EpcisModelBinderProvider());
+                            o.OutputFormatters.Insert(0, new EpcisResponseOutputFormatter());
+                        })
+                    .AddApplicationPart(typeof(Startup).Assembly)
+                    .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+
             services.AddAuthentication("BasicAuthentication")
                 .AddScheme<AuthenticationSchemeOptions, BasicAuthenticationHandler>("BasicAuthentication", null);
         }

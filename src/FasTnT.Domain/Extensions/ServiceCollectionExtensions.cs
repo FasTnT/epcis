@@ -22,6 +22,7 @@ namespace FasTnT.Domain.Extensions
             services.AddScoped<SubscriptionService>();
             services.AddScoped<UserContext>();
             services.AddScoped<QueryDispatcher>();
+            services.AddScoped<CaptureDispatcher>();
             services.AddScoped<ISubscriptionResultSender, HttpSubscriptionResultSender>();
             services.AddScoped<SubscriptionRunner>();
             services.AddSingleton<ISubscriptionBackgroundService, SubscriptionBackgroundService>();

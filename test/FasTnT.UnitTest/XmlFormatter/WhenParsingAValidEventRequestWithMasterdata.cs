@@ -14,20 +14,20 @@ namespace FasTnT.UnitTest.XmlFormatter
     [TestClass]
     public class WhenParsingAValidEventRequestWithMasterdata : BaseUnitTest
     {
-        public IRequestFormatter RequestParser { get; set; }
+        public IFormatter RequestParser { get; set; }
         public Stream InputFile { get; set; }
         public Request ParsedFile { get; set; }
         public CaptureRequest ParsedEvents => ParsedFile as CaptureRequest;
 
         public override void Arrange()
         {
-            RequestParser = new XmlRequestFormatter();
+            RequestParser = Formatters.Xml.XmlFormatter.Instance;
             InputFile = File.OpenRead("XmlFormatter/files/requests/xml/valid_event_masterdata_1.xml");
         }
 
         public override void Act()
         {
-            ParsedFile = RequestParser.Read(InputFile, default).Result as CaptureRequest;
+            ParsedFile = RequestParser.ReadRequest(InputFile, default).Result as CaptureRequest;
         }
 
         [Assert]

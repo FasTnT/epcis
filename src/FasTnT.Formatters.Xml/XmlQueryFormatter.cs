@@ -11,7 +11,7 @@ using FasTnT.Model.Queries;
 
 namespace FasTnT.Formatters.Xml
 {
-    public class XmlQueryFormatter : IQueryFormatter
+    public class XmlQueryFormatter
     {
         public async Task<EpcisQuery> Read(Stream input, CancellationToken cancellationToken)
         {

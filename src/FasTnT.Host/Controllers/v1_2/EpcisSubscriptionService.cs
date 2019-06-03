@@ -5,15 +5,16 @@ using Microsoft.AspNetCore.Mvc;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace FasTnT.Host.Controllers
+namespace FasTnT.Host.Controllers.v1_2
 {
     [Authorize]
+    [XmlFormatter]
     [Route("EpcisServices/1.2/Subscription")]
-    public class EpcisSubscriptionController : Controller
+    public class EpcisSubscriptionService : Controller
     {
         private readonly SubscriptionService _service;
 
-        public EpcisSubscriptionController(SubscriptionService service) => _service = service;
+        public EpcisSubscriptionService(SubscriptionService service) => _service = service;
 
         [HttpGet("trigger/{triggerName}")]
         public async Task TriggerSubscription(string triggerName, CancellationToken cancellationToken)

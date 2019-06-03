@@ -14,7 +14,6 @@ namespace FasTnT.Formatters.Xml
     public class XmlResponseFormatter : BaseResponseFormatter<XDocument>
     {
         private const SaveOptions Options = SaveOptions.DisableFormatting | SaveOptions.OmitDuplicateNamespaces;
-        public override string ToContentTypeString() => "application/xml";
 
         public override async Task Write(IEpcisResponse entity, Stream output, CancellationToken cancellationToken)
         {

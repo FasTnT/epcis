@@ -13,8 +13,6 @@ namespace FasTnT.Formatters.Json
 {
     public class JsonResponseFormatter : BaseResponseFormatter<string>
     {
-        public override string ToContentTypeString() => "application/json";
-
         public override async Task Write(IEpcisResponse entity, Stream output, CancellationToken cancellationToken)
         {
             if (entity == default(IEpcisResponse)) return;

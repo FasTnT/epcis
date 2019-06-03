@@ -14,6 +14,7 @@ namespace FasTnT.Host
 {
     public class BasicAuthenticationHandler : AuthenticationHandler<AuthenticationSchemeOptions>
     {
+        private const string HeaderKey = "Authorization";
         private readonly UserContext _userContext;
         private readonly IUnitOfWork _unitOfWork;
 
@@ -26,14 +27,14 @@ namespace FasTnT.Host
 
         protected override async Task<AuthenticateResult> HandleAuthenticateAsync()
         {
-            if (!Request.Headers.ContainsKey("Authorization"))
+            if (!Request.Headers.ContainsKey(HeaderKey))
             {
-                return AuthenticateResult.Fail("Missing Authorization Header");
+                return AuthenticateResult.Fail($"Missing {HeaderKey} Header");
             }
 
             try
             {
-                var authHeader = AuthenticationHeaderValue.Parse(Request.Headers["Authorization"]);
+                var authHeader = AuthenticationHeaderValue.Parse(Request.Headers[HeaderKey]);
                 var credentialBytes = Convert.FromBase64String(authHeader.Parameter);
                 var credentials = Encoding.UTF8.GetString(credentialBytes).Split(':');
                 var username = credentials[0];
@@ -44,9 +45,9 @@ namespace FasTnT.Host
                 if (_userContext.Authenticate(user, password))
                 {
                     var claims = new[] {
-                    new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-                    new Claim(ClaimTypes.Name, user.UserName),
-                };
+                        new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+                        new Claim(ClaimTypes.Name, user.UserName),
+                    };
                     var principal = new ClaimsPrincipal(new ClaimsIdentity(claims, Scheme.Name));
                     var ticket = new AuthenticationTicket(principal, Scheme.Name);
 
@@ -54,7 +55,7 @@ namespace FasTnT.Host
                 }
                 else
                 {
-                    return AuthenticateResult.Fail("Invalid Authorization Header");
+                    return AuthenticateResult.Fail($"Invalid {HeaderKey} Header");
                 }
             }
             catch(Exception ex)

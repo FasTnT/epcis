@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.2</TargetFramework>
-	  <LangVersion>7.1</LangVersion>
+	  <LangVersion>8</LangVersion>
     <UserSecretsId>3cd5d359-c751-46f7-9418-c0f887a89b00</UserSecretsId>
     <IsPackable>false</IsPackable>
   </PropertyGroup>
@@ -26,7 +26,7 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.All" />
     <PackageReference Include="Microsoft.AspNetCore.TestHost" Version="2.2.0" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.1.0" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.1.1" />
     <PackageReference Include="MSTest.TestAdapter" Version="1.4.0" />
     <PackageReference Include="MSTest.TestFramework" Version="1.4.0" />
     <PackageReference Include="Npgsql" Version="4.0.7" />

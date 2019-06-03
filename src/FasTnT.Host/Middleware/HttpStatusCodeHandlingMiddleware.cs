@@ -5,7 +5,6 @@ namespace FasTnT.Host.Middleware
 {
     public class HttpStatusCodeHandlingMiddleware
     {
-        const int NoContent = 204;
         private readonly RequestDelegate _next;
 
         public HttpStatusCodeHandlingMiddleware(RequestDelegate next) => _next = next;
@@ -14,7 +13,7 @@ namespace FasTnT.Host.Middleware
         {
             await _next(context);
             
-            if(!context.Response.HasStarted) context.Response.StatusCode = NoContent;
+            if(!context.Response.HasStarted && context.Response.StatusCode != 401) context.Response.StatusCode = StatusCodes.Status204NoContent;
         }
     }
 }

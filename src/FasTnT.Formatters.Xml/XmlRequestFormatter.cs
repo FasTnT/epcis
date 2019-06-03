@@ -15,7 +15,7 @@ using FasTnT.Model.Events.Enums;
 
 namespace FasTnT.Formatters.Xml
 {
-    public class XmlRequestFormatter : IRequestFormatter
+    public class XmlRequestFormatter
     {
         public async Task<Request> Read(Stream input, CancellationToken cancellationToken)
         {
