@@ -43,7 +43,7 @@ namespace FasTnT.Host
 
             services.AddMvc(o =>
                         {
-                            o.ModelBinderProviders.Insert(0, new AbstractModelBinderProvider());
+                            o.ModelBinderProviders.Insert(0, new EpcisModelBinderProvider());
                             o.OutputFormatters.Insert(0, new EpcisResponseOutputFormatter());
                         })
                     .AddApplicationPart(typeof(Startup).Assembly)
