@@ -10,6 +10,8 @@ namespace FasTnT.Host.Controllers.v1_2
 {
     [Authorize]
     [XmlFormatter]
+    [Route("v1_0/Capture")]
+    [Route("v1_1/Capture")]
     [Route("v1_2/Capture")]
     public class EpcisCaptureService : Controller
     {
