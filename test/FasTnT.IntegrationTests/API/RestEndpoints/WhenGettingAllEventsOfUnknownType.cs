@@ -1,6 +1,6 @@
-﻿using fastJSON;
-using FasTnT.IntegrationTests.Common;
+﻿using FasTnT.IntegrationTests.Common;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
@@ -23,9 +23,9 @@ namespace FasTnT.IntegrationTests.API.RestEndpoints
         public void ItShouldReturnHttp400BadRequest() => Assert.AreEqual(HttpStatusCode.BadRequest, Result.StatusCode);
 
         [Assert]
-        public void ItShouldReturnAValidJson() => Assert.IsNotNull(JSON.Parse(Result.Content.ReadAsStringAsync().Result));
+        public void ItShouldReturnAValidJson() => Assert.IsNotNull(JsonConvert.DeserializeObject(Result.Content.ReadAsStringAsync().Result));
 
         [Assert]
-        public void ItShouldReturnAnExceptionWith() => Assert.AreEqual("QueryParameterException", (JSON.Parse(Result.Content.ReadAsStringAsync().Result) as IDictionary<string, object>)["exception"]);
+        public void ItShouldReturnAnExceptionWith() => Assert.AreEqual("QueryParameterException", (JsonConvert.DeserializeObject<IDictionary<string, object>>(Result.Content.ReadAsStringAsync().Result))["exception"]);
     }
 }

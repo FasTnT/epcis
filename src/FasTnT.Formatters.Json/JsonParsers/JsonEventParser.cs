@@ -6,17 +6,18 @@ using FasTnT.Model;
 using FasTnT.Model.Events.Enums;
 using FasTnT.Model.Utils;
 using MoreLinq;
+using Newtonsoft.Json.Linq;
 
 namespace FasTnT.Formatters.Json
 {
     public class JsonEventParser
     {
-        public IEnumerable<EpcisEvent> Parse(IList<object> list)
+        public IEnumerable<EpcisEvent> Parse(IEnumerable<JObject> events)
         {
-            return list.Cast<IDictionary<string, object>>().Select(Parse);
+            return events.Select(Parse);
         }
         
-        public EpcisEvent Parse(IDictionary<string, object> eventDict)
+        public EpcisEvent Parse(IDictionary<string, JToken> eventDict)
         {
             var epcisEvent = new EpcisEvent();
             foreach(var key in eventDict.Keys)
@@ -27,7 +28,7 @@ namespace FasTnT.Formatters.Json
                     case "eventTime": epcisEvent.EventTime = DateTime.Parse(eventDict[key].ToString()); break;
                     case "eventTimeZoneOffset": epcisEvent.EventTimeZoneOffset = new TimeZoneOffset { Representation = eventDict[key].ToString() }; break;
                     case "action": epcisEvent.Action = Enumeration.GetByDisplayName<EventAction>(eventDict[key].ToString()); break;
-                    case "epcList": ParseEpcs(epcisEvent, eventDict[key] as string[], EpcType.List); break;
+                    case "epcList": ParseEpcs(epcisEvent, eventDict[key].ToObject<string[]>(), EpcType.List); break;
                     case "childEPCs": ParseChildEpcsInto(eventDict[key] as IList<string>, epcisEvent); break;
                     case "inputQuantityList": ParceQuantityList(epcisEvent, eventDict[key] as IList<object>, EpcType.InputQuantity); break;
                     case "inputEPCList": ParseEpcs(epcisEvent, eventDict[key] as IList<object>, EpcType.InputEpc); break; 

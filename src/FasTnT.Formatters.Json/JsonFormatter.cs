@@ -14,7 +14,7 @@ namespace FasTnT.Formatters.Json
 
         public string ContentType => "application/json";
         public Task<EpcisQuery> ReadQuery(Stream input, CancellationToken cancellationToken) => throw new NotImplementedException();
-        public Task<Request> ReadRequest(Stream input, CancellationToken cancellationToken) => new JsonRequestFormatter().Read(input, cancellationToken);
+        public Task<Request> ReadRequest(Stream input, CancellationToken cancellationToken) => new JsonRequestFormatter().Read(input);
         public Task<IEpcisResponse> ReadResponse(Stream input, CancellationToken cancellationToken) => throw new NotImplementedException();
         public Task WriteQuery(EpcisQuery entity, Stream output, CancellationToken cancellationToken) => throw new NotImplementedException();
         public Task WriteRequest(Request entity, Stream output, CancellationToken cancellationToken) => throw new NotImplementedException();

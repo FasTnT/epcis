@@ -6,13 +6,21 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="fastJSON" Version="2.2.2" />
+    <None Remove="Utils\epcis-schema.json" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="morelinq" Version="3.1.1" />
+    <PackageReference Include="Newtonsoft.Json.Schema" Version="3.0.11" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\FasTnT.Formatters\FasTnT.Formatters.csproj" />
     <ProjectReference Include="..\FasTnT.Model\FasTnT.Model.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Utils\epcis-schema.json" />
   </ItemGroup>
 
 </Project>

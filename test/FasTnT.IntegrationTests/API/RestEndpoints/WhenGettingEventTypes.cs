@@ -1,6 +1,6 @@
-﻿using fastJSON;
-using FasTnT.IntegrationTests.Common;
+﻿using FasTnT.IntegrationTests.Common;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Newtonsoft.Json;
 using System.Net;
 
 namespace FasTnT.IntegrationTests.API.RestEndpoints
@@ -19,9 +19,9 @@ namespace FasTnT.IntegrationTests.API.RestEndpoints
         public void ItShouldReturnHttp200OK() => Assert.AreEqual(HttpStatusCode.OK, Result.StatusCode);
 
         [Assert]
-        public void ItShouldReturnAnArrayOfString() => Assert.IsNotNull(JSON.ToObject<string[]>(Result.Content.ReadAsStringAsync().Result));
+        public void ItShouldReturnAnArrayOfString() => Assert.IsNotNull(JsonConvert.DeserializeObject<string[]>(Result.Content.ReadAsStringAsync().Result));
 
         [Assert]
-        public void ItShouldReturnAllExistingEventTypes() => CollectionAssert.AreEquivalent(new[] { "ObjectEvent", "AggregationEvent", "TransactionEvent", "TransformationEvent", "QuantityEvent" }, JSON.ToObject<string[]>(Result.Content.ReadAsStringAsync().Result));
+        public void ItShouldReturnAllExistingEventTypes() => CollectionAssert.AreEquivalent(new[] { "ObjectEvent", "AggregationEvent", "TransactionEvent", "TransformationEvent", "QuantityEvent" }, JsonConvert.DeserializeObject<string[]>(Result.Content.ReadAsStringAsync().Result));
     }
 }

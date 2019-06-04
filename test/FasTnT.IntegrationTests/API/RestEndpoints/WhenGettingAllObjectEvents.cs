@@ -1,6 +1,6 @@
-﻿using fastJSON;
-using FasTnT.IntegrationTests.Common;
+﻿using FasTnT.IntegrationTests.Common;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Newtonsoft.Json;
 using System.Net;
 using System.Net.Http;
 using System.Text;
@@ -22,6 +22,6 @@ namespace FasTnT.IntegrationTests.API.RestEndpoints
         public void ItShouldReturnHttp200OK() => Assert.AreEqual(HttpStatusCode.OK, Result.StatusCode);
 
         [Assert]
-        public void ItShouldReturnAnArrayOfString() => Assert.IsNotNull(JSON.ToObject<object[]>(Result.Content.ReadAsStringAsync().Result));
+        public void ItShouldReturnAnArrayOfString() => Assert.IsNotNull(JsonConvert.DeserializeObject<object[]>(Result.Content.ReadAsStringAsync().Result));
     }
 }

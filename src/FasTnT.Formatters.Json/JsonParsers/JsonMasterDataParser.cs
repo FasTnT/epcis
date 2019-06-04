@@ -1,17 +1,18 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using FasTnT.Model.MasterDatas;
+using Newtonsoft.Json.Linq;
 
 namespace FasTnT.Formatters.Json
 {
     internal class JsonMasterDataParser
     {
-        public IList<EpcisMasterData> Parse(IList<object> masterdata)
+        public IList<EpcisMasterData> Parse(IEnumerable<JObject> masterdata)
         {
             return masterdata.SelectMany(ParseMasterdata).ToList();
         }
 
-        private IList<EpcisMasterData> ParseMasterdata(object masterdataType)
+        private IList<EpcisMasterData> ParseMasterdata(JObject masterdataType)
         {
             var dict = masterdataType as IDictionary<string, object>;
             var type = dict["type"].ToString();
