@@ -14,33 +14,31 @@ Steps:
 1. Download the source code, and create a new user/database in PostGreSQL for FasTnT ;
 2. Update the connection string: `$ dotnet user-secrets set ConnectionStrings:FasTnT.Database "{your connectionstring}" -p src\FasTnT.Host\FasTnT.Host.csproj` ;
 3. Start the repository with the command `$ dotnet run -p src\FasTnT.Host\FasTnT.Host.csproj` ;
-4. Create the SQL schemas and tables: `curl -X POST http://localhost:54805/EpcisServices/1.2/Database/Migrate` ;
+4. Create the SQL schemas and tables: `curl -X POST http://localhost:54805/Setup/Database/Migrate` ;
 5. That's it! You have a properly working EPCIS 1.2 repository.
 
 ## HTTP Endpoints
 
-### EPCIS endpoints:
+### EPCIS 1.2 endpoints:
 
 The API is secured using HTTP Basic authentication. The default username:password value is `admin:P@ssw0rd`
 
-- Capture: `POST /EpcisServices/1.2/Capture` 
-- Queries : `POST /EpcisServices/1.2/Query`
-- Subscription trigger : `GET /EpcisServices/1.2/Subscription/Trigger/{triggerName}`
+- Capture: `POST /v1_2/Capture` 
+- Queries : `POST /v1_2/Query`
+- Subscription trigger : `GET /v1_2/Subscription/Trigger/{triggerName}`
 
 **Capture** endpoint only supports requests with `content-type: application/xml` or `content-type: text/xml` header and XML payload.
 
-**Queries** endpoint supports XML and SOAP requests. Note that it will not return the wsdl on a `GET` request. SOAP requests *must* contain a `content-type` header with value set to either `application/soap+xml` or `text/soap+xml`.
+**Queries** endpoint supports SOAP over HTTP requests. Note that it will not return the wsdl on a `GET` request. SOAP requests *must* contain a `content-type` header with value set to either `application/xml` or `text/xml`.
 
-The file `documents\EPCIS_Samples.postman_collection.json` contains XML requests examples to be run in [PostMan](https://www.getpostman.com/), and the file `EPCglobal-epcis-query-1-2-soapui-project` contains a project with SOAP example requests to be run in [SoapUI](https://www.soapui.org/open-source.html).
+The file `documents\EPCIS Examples - 1.2.postman_collection.json` contains XML requests examples to be run in [PostMan](https://www.getpostman.com/), and the file `EPCglobal-epcis-query-1-2-soapui-project` contains a project with SOAP example requests to be run in [SoapUI](https://www.soapui.org/open-source.html).
 
 ### Others endpoints:
 
-- Database migration: `POST /EpcisServices/1.2/Database/Migrate`
-- Database rollback: `POST /EpcisServices/1.2/Database/Rollback`
+- Database migration: `POST /Setup/Database/Migrate`
+- Database rollback: `POST /Setup/Database/Rollback`
 
 These database endpoints are only available when the EPCIS server is in Development configuration.
-
-The file `documents\EPCIS_Samples.postman_collection.json` contains examples of HTTP requests that you can perform on FasTnT (import and run it in [PostMan](https://www.getpostman.com/))
 
 ## Implemented Features
 
