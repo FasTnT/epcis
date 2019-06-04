@@ -1,5 +1,4 @@
 ﻿using FasTnT.Model.Queries;
-using System;
 using System.Collections.Generic;
 
 namespace FasTnT.Formatters.Json
@@ -9,7 +8,7 @@ namespace FasTnT.Formatters.Json
         public static IEnumerable<QueryParameter> ParseODataQueryString(string queryString)
         {
             var parameters = new List<QueryParameter>();
-            var queryParts = queryString.TrimStart('?').Split('&');
+            var queryParts = (queryString ?? string.Empty).TrimStart('?').Split('&');
 
             // TODO: parse QueryString
 
