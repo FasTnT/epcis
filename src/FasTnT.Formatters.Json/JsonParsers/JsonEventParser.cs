@@ -29,61 +29,61 @@ namespace FasTnT.Formatters.Json
                     case "eventTimeZoneOffset": epcisEvent.EventTimeZoneOffset = new TimeZoneOffset { Representation = eventDict[key].ToString() }; break;
                     case "action": epcisEvent.Action = Enumeration.GetByDisplayName<EventAction>(eventDict[key].ToString()); break;
                     case "epcList": ParseEpcs(epcisEvent, eventDict[key].ToObject<string[]>(), EpcType.List); break;
-                    case "childEPCs": ParseChildEpcsInto(eventDict[key] as IList<string>, epcisEvent); break;
-                    case "inputQuantityList": ParceQuantityList(epcisEvent, eventDict[key] as IList<object>, EpcType.InputQuantity); break;
-                    case "inputEPCList": ParseEpcs(epcisEvent, eventDict[key] as IList<object>, EpcType.InputEpc); break; 
-                    case "outputQuantityList": ParceQuantityList(epcisEvent, eventDict[key] as IList<object>, EpcType.OutputQuantity); break;
-                    case "outputEPCList": ParseEpcs(epcisEvent, eventDict[key] as IList<object>, EpcType.OutputEpc); break;
-                    case "childQuantityList": ParceQuantityList(epcisEvent, eventDict[key] as IList<object>, EpcType.ChildQuantity); break;
+                    case "childEPCs": ParseChildEpcsInto(eventDict[key].ToObject<string[]>(), epcisEvent); break;
+                    case "inputQuantityList": ParceQuantityList(epcisEvent, eventDict[key].ToObject<JToken[]>(), EpcType.InputQuantity); break;
+                    case "inputEPCList": ParseEpcs(epcisEvent, eventDict[key].ToObject<string[]>(), EpcType.InputEpc); break; 
+                    case "outputQuantityList": ParceQuantityList(epcisEvent, eventDict[key].ToObject<JToken[]>(), EpcType.OutputQuantity); break;
+                    case "outputEPCList": ParseEpcs(epcisEvent, eventDict[key].ToObject<string[]>(), EpcType.OutputEpc); break;
+                    case "childQuantityList": ParceQuantityList(epcisEvent, eventDict[key].ToObject<JToken[]>(), EpcType.ChildQuantity); break;
                     case "epcClass": epcisEvent.Epcs.Add(new Epc { Type = EpcType.Quantity, Id = eventDict[key].ToString(), IsQuantity = true }); break;
                     case "quantity": epcisEvent.Epcs.Single(x => x.Type == EpcType.Quantity).Quantity = float.Parse(eventDict[key].ToString(), CultureInfo.InvariantCulture); break;
-                    case "quantityList": ParseQuantityList(epcisEvent, eventDict[key] as IList<object>); break;
+                    case "quantityList": ParseQuantityList(epcisEvent, eventDict[key].ToObject<JToken[]>()); break;
                     case "bizStep": epcisEvent.BusinessStep = eventDict[key].ToString(); break;
                     case "disposition": epcisEvent.Disposition = eventDict[key].ToString(); break;
                     case "eventID": epcisEvent.EventId = eventDict[key].ToString(); break;
                     case "errorDeclaration": break; // TODO: implement.
                     case "transformationId": epcisEvent.TransformationId = eventDict[key].ToString(); break;
                     case "bizLocation": epcisEvent.BusinessLocation = eventDict[key].ToString(); break;
-                    case "bizTransactionList": ParseBusinessTransactions(epcisEvent, eventDict[key] as IList<object>); break;
+                    case "bizTransactionList": ParseBusinessTransactions(epcisEvent, eventDict[key].ToObject<IList<JToken>>()); break;
                     case "readPoint": epcisEvent.ReadPoint = eventDict[key].ToString(); break;
-                    case "sourceList": ParseSourceDest(epcisEvent, SourceDestinationType.Source, eventDict[key] as IList<object>); break;
-                    case "destinationList": ParseSourceDest(epcisEvent, SourceDestinationType.Destination, eventDict[key] as IList<object>); break;
-                    case "ilmd": ParseIlmd(epcisEvent, eventDict[key] as IDictionary<string, object>); break;
+                    case "sourceList": ParseSourceDest(epcisEvent, SourceDestinationType.Source, eventDict[key].ToObject<JToken[]>()); break;
+                    case "destinationList": ParseSourceDest(epcisEvent, SourceDestinationType.Destination, eventDict[key].ToObject<JToken[]>()); break;
+                    case "ilmd": ParseIlmd(epcisEvent, eventDict[key].ToObject<IDictionary<string, JToken>>()); break;
                     case "parentID": epcisEvent.Epcs.Add(new Epc { Id = eventDict[key].ToString(), Type = EpcType.ParentId }); break;
                     case "recordTime": break; // We don't process record time as it will be overrided in any case..
-                    default: TryParseCustomField(epcisEvent, FieldType.EventExtension, key, eventDict[key] as IDictionary<string, object>); break;
+                    default: TryParseCustomField(epcisEvent, FieldType.EventExtension, key, eventDict[key].ToObject<IDictionary<string, JToken>>()); break;
                 }
             }
 
             return epcisEvent;
         }
 
-        private void ParseIlmd(EpcisEvent epcisEvent, IDictionary<string, object> dict)
+        private void ParseIlmd(EpcisEvent epcisEvent, IDictionary<string, JToken> dict)
         {
             if (dict == null || !dict.Keys.Any()) return;
 
             foreach (var key in dict.Keys)
             {
-                TryParseCustomField(epcisEvent, FieldType.Ilmd, key, dict[key] as IDictionary<string, object>);
+                TryParseCustomField(epcisEvent, FieldType.Ilmd, key, dict[key] as IDictionary<string, JToken>);
             }
         }
 
-        private void ParseBusinessTransactions(EpcisEvent epcisEvent, IList<object> list)
+        private void ParseBusinessTransactions(EpcisEvent epcisEvent, IList<JToken> list)
         {
             if (list == null || !list.Any()) return;
 
-            list.Cast<IDictionary<string, object>>().ForEach(x => epcisEvent.BusinessTransactions.Add(new BusinessTransaction
+            list.Select(x => x.ToObject<IDictionary<string, object>>()).ForEach(x => epcisEvent.BusinessTransactions.Add(new BusinessTransaction
             {
                 Id = x["bizTransaction"].ToString(),
                 Type = x["type"].ToString()
             }));
         }
 
-        private void ParceQuantityList(EpcisEvent epcisEvent, IList<object> list, EpcType type)
+        private void ParceQuantityList(EpcisEvent epcisEvent, IList<JToken> list, EpcType type)
         {
             if (list == null || !list.Any()) return;
 
-            list.Cast<IDictionary<string, object>>().ForEach(qty => epcisEvent.Epcs.Add(new Epc
+            list.Select(x => x.ToObject<IDictionary<string, JObject>>()).ForEach(qty => epcisEvent.Epcs.Add(new Epc
             {
                 Id = qty["epcClass"].ToString(),
                 IsQuantity = true,
@@ -93,11 +93,11 @@ namespace FasTnT.Formatters.Json
             }));
         }
 
-        private void ParseQuantityList(EpcisEvent epcisEvent, IList<object> list)
+        private void ParseQuantityList(EpcisEvent epcisEvent, IList<JToken> list)
         {
             if (list == null || !list.Any()) return;
 
-            list.Cast<IDictionary<string, object>>().ForEach(qty => epcisEvent.Epcs.Add(new Epc
+            list.Select(x => x.ToObject<IDictionary<string, JObject>>()).ForEach(qty => epcisEvent.Epcs.Add(new Epc
             {
                 Id = qty["epcClass"].ToString(),
                 IsQuantity = true,
@@ -107,11 +107,11 @@ namespace FasTnT.Formatters.Json
             }));
         }
 
-        private void ParseSourceDest(EpcisEvent epcisEvent, SourceDestinationType direction, IList<object> dictionary)
+        private void ParseSourceDest(EpcisEvent epcisEvent, SourceDestinationType direction, IList<JToken> dictionary)
         {
             if (dictionary == null || !dictionary.Any()) return;
 
-            dictionary.Cast<IDictionary<string, object>>().ForEach(values => epcisEvent.SourceDestinationList.Add(new SourceDestination
+            dictionary.Select(x => x.ToObject<IDictionary<string, JObject>>()).ForEach(values => epcisEvent.SourceDestinationList.Add(new SourceDestination
             {
                 Type = values["type"].ToString(),
                 Id = values[direction.DisplayName].ToString(),
@@ -119,11 +119,11 @@ namespace FasTnT.Formatters.Json
             }));
         }
 
-        private void ParseEpcs(EpcisEvent epcisEvent, IList<object> epcs, EpcType type)
+        private void ParseEpcs(EpcisEvent epcisEvent, IList<string> epcs, EpcType type)
         {
             if (epcs == null || !epcs.Any()) return;
 
-            epcs.Cast<string>().ForEach(e => epcisEvent.Epcs.Add(new Epc { Id = e, Type = type }));
+            epcs.ForEach(e => epcisEvent.Epcs.Add(new Epc { Id = e, Type = type }));
         }
 
         private void ParseChildEpcsInto(IList<string> list, EpcisEvent epcisEvent)
@@ -131,7 +131,7 @@ namespace FasTnT.Formatters.Json
             list.ForEach(epc => epcisEvent.Epcs.Add(new Epc { Id = epc, Type = EpcType.ChildEpc }));
         }
 
-        private void TryParseCustomField(EpcisEvent epcisEvent, FieldType type, string id, IDictionary<string, object> dictionary)
+        private void TryParseCustomField(EpcisEvent epcisEvent, FieldType type, string id, IDictionary<string, JToken> dictionary)
         {
             if (dictionary == null) throw new Exception($"Element with name '{id}' is not expected here");
 
@@ -161,7 +161,7 @@ namespace FasTnT.Formatters.Json
             epcisEvent.CustomFields.Add(customField);
         }
 
-        private static string GetCustomFieldNamespace(string id, IDictionary<string, object> dictionary)
+        private static string GetCustomFieldNamespace(string id, IDictionary<string, JToken> dictionary)
         {
             var potentialNamespaces = new[] { $"@{id.Split(':')[0]}", $"@xmlns:{id.Split(':')[0]}", "@xmlns" };
 
