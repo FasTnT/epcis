@@ -29,7 +29,7 @@ The API is secured using HTTP Basic authentication. The default username:passwor
 
 **Capture** endpoint only supports requests with `content-type: application/xml` or `content-type: text/xml` header and XML payload.
 
-**Queries** endpoint supports SOAP over HTTP requests. Note that it will not return the wsdl on a `GET` request. SOAP requests *must* contain a `content-type` header with value set to either `application/xml` or `text/xml`.
+**Queries** endpoint supports SOAP requests. Note that it will not return the wsdl on a `GET` request..
 
 The file `documents\EPCIS Examples - 1.2.postman_collection.json` contains XML requests examples to be run in [PostMan](https://www.getpostman.com/), and the file `EPCglobal-epcis-query-1-2-soapui-project` contains a project with SOAP example requests to be run in [SoapUI](https://www.soapui.org/open-source.html).
 
