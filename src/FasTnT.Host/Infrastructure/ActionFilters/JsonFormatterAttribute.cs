@@ -1,4 +1,4 @@
-﻿using FasTnT.Formatters.Xml;
+﻿using FasTnT.Formatters.Json;
 using Microsoft.AspNetCore.Mvc.Filters;
 using System;
 
@@ -14,7 +14,7 @@ namespace FasTnT.Host.Controllers
             public static IFilterMetadata Instance = new JsonFormatterResourceFilter();
 
             public void OnResourceExecuted(ResourceExecutedContext context) { }
-            public void OnResourceExecuting(ResourceExecutingContext context) => context.HttpContext.SetFormatter(XmlFormatter.Instance);
+            public void OnResourceExecuting(ResourceExecutingContext context) => context.HttpContext.SetFormatter(JsonFormatter.Instance);
         }
     }
 }

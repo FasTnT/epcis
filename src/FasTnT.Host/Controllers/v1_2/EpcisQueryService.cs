@@ -10,7 +10,9 @@ namespace FasTnT.Host.Controllers.v1_2
 {
     [Authorize]
     [SoapFormatter]
-    [Route("EpcisServices/1.2/Query")]
+    [Route("v1_0/Query")]
+    [Route("v1_1/Query")]
+    [Route("v1_2/Query")]
     public class EpcisQueryService : Controller
     {
         private readonly QueryDispatcher _dispatcher;

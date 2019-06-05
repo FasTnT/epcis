@@ -13,7 +13,7 @@ namespace FasTnT.Host.Middleware
         {
             await _next(context);
             
-            if(!context.Response.HasStarted && context.Response.StatusCode != 401) context.Response.StatusCode = StatusCodes.Status204NoContent;
+            if(!context.Response.HasStarted && context.Response.StatusCode < 400) context.Response.StatusCode = StatusCodes.Status204NoContent;
         }
     }
 }

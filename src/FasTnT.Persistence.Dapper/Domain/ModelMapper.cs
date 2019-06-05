@@ -24,7 +24,6 @@ namespace FasTnT.Persistence.Dapper
         public static T Map<TU, T>(this TU source, Action<T> propertySetting = null) where T : TU, new()
         {
             if (!Properties.TryGetValue(typeof(TU), out var tprops)) throw new Exception($"Unknown type to be mapped: '{typeof(TU).Name}'");
-
             var target = new T();
             tprops.ForEach(prop =>
             {

@@ -1,0 +1,189 @@
+{
+	"info": {
+		"_postman_id": "b9a006fb-d655-4fc6-a0a8-a67c6b065b7a",
+		"name": "EPCIS Examples - 2.0",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Get Query Names",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{BaseUrl}}/v2_0/queries",
+					"host": [
+						"{{BaseUrl}}"
+					],
+					"path": [
+						"v2_0",
+						"queries"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Perform Poll query",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{BaseUrl}}/v2_0/queries/SimpleEventQuery/events",
+					"host": [
+						"{{BaseUrl}}"
+					],
+					"path": [
+						"v2_0",
+						"queries",
+						"SimpleEventQuery",
+						"events"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Event Types",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{BaseUrl}}/v2_0/events",
+					"host": [
+						"{{BaseUrl}}"
+					],
+					"path": [
+						"v2_0",
+						"events"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "List Object Events",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{BaseUrl}}/v2_0/events/ObjectEvent",
+					"host": [
+						"{{BaseUrl}}"
+					],
+					"path": [
+						"v2_0",
+						"events",
+						"ObjectEvent"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Capture request",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"@context\": \"https://id.gs1.org/epcis-context.jsonld\",\n  \"isA\": \"EPCISDocument\",\n  \"creationDate\": \"2005-07-11T11:30:47+00:00\",\n  \"schemaVersion\": 1.2,\n  \"format\": \"application/ld+json\",\n  \"epcisBody\": {\n    \"eventList\": [\n      {\n        \"isA\": \"ObjectEvent\",\n        \"eventTime\": \"2013-06-08T14:58:56.591+00:00\",\n        \"eventTimeZoneOffset\": \"+02:00\",\n        \"quantityList\": [\n          {\n            \"epcClass\": \"urn:epc:class:lgtin:4012345.012345.998877\",\n            \"quantity\": 200,\n            \"uom\": \"KGM\"\n          }\n        ],\n        \"action\": \"OBSERVE\",\n        \"bizStep\": \"urn:epcglobal:cbv:bizstep:receiving\",\n        \"disposition\": \"urn:epcglobal:cbv:disp:in_progress\",\n        \"readPoint\": \"urn:epc:id:sgln:0614141.00777.0\",\n        \"bizLocation\": \"urn:epc:id:sgln:0614141.00888.0\",\n        \"sourceList\": [\n          {\n            \"type\": \"urn:epcglobal:cbv:sdt:possessing_party\",\n            \"source\": \"urn:epc:id:sgln:4012345.00001.0\"\n          },\n          {\n            \"type\": \"urn:epcglobal:cbv:sdt:location\",\n            \"source\": \"urn:epc:id:sgln:4012345.00225.0\"\n          }\n        ],\n        \"destinationList\": [\n          {\n            \"type\": \"urn:epcglobal:cbv:sdt:owning_party\",\n            \"destination\": \"urn:epc:id:sgln:0614141.00001.0\"\n          },\n          {\n            \"type\": \"urn:epcglobal:cbv:sdt:location\",\n            \"destination\": \"urn:epc:id:sgln:0614141.00777.0\"\n          }\n        ],\n        \"example:myField\": {\n          \"@xmlns:example\": \"http://ns.example.com/epcis\",\n          \"#text\": \"Example of a vendor/user extension\"\n        }\n      }\n    ]\n  }\n}"
+				},
+				"url": {
+					"raw": "{{BaseUrl}}/v2_0/capture",
+					"host": [
+						"{{BaseUrl}}"
+					],
+					"path": [
+						"v2_0",
+						"capture"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "basic",
+		"basic": [
+			{
+				"key": "password",
+				"value": "P@ssw0rd",
+				"type": "string"
+			},
+			{
+				"key": "username",
+				"value": "admin",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "4faea20b-22af-4e03-98f9-c996e6a4785d",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "049dda1b-550a-4bb5-af1b-a7299686c58d",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}

@@ -1,5 +1,4 @@
 using FasTnT.Formatters;
-using FasTnT.Formatters.Xml;
 using FasTnT.Model;
 using FasTnT.Model.Events.Enums;
 using FasTnT.UnitTest.Common;

@@ -32,7 +32,7 @@ namespace FasTnT.Persistence.Dapper
             { EpcisField.BusinessStep, "event.business_step" },
             { EpcisField.CaptureTime, "event.record_time" },
             { EpcisField.Disposition, "event.disposition" },
-            { EpcisField.EventId, "event.id" },
+            { EpcisField.EventId, "event.event_id" },
             { EpcisField.RecordTime, "request.record_time" },
             { EpcisField.EventType, "event.event_type" },
             { EpcisField.ReadPoint, "event.read_point" },

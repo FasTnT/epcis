@@ -54,10 +54,12 @@ namespace FasTnT.IntegrationTests
         {
             try
             {
-                var connection = new NpgsqlConnection(connectionString);
-                connection.Open();
-
-                return true;
+                using (var connection = new NpgsqlConnection(connectionString))
+                {
+                    connection.Open();
+                    connection.Close();
+                    return true;
+                }
             }
             catch
             {

@@ -1,11 +1,13 @@
 ﻿using FasTnT.Domain.BackgroundTasks;
 using FasTnT.Domain.Extensions;
 using FasTnT.Domain.Persistence;
+using FasTnT.Model.Events.Enums;
 using FasTnT.Model.Exceptions;
 using FasTnT.Model.Queries;
 using FasTnT.Model.Queries.Implementations;
 using FasTnT.Model.Responses;
 using FasTnT.Model.Subscriptions;
+using FasTnT.Model.Utils;
 using System;
 using System.Linq;
 using System.Threading;
@@ -26,6 +28,7 @@ namespace FasTnT.Domain.Services
             _backgroundService = backgroundService;
         }
 
+        public Task<GetEventTypesResponse> GetEventTypes(CancellationToken cancellationToken) => Task.Run(() => new GetEventTypesResponse { EventTypes = Enumeration.GetAll<EventType>().Select(x => x.DisplayName) }, cancellationToken);
         public Task<GetQueryNamesResponse> GetQueryNames(CancellationToken cancellationToken) => Task.Run(() => new GetQueryNamesResponse { QueryNames = _queries.Select(x => x.Name) }, cancellationToken);
         public Task<GetStandardVersionResponse> GetStandardVersion(CancellationToken cancellationToken) => Task.Run(() => new GetStandardVersionResponse { Version = Constants.StandardVersion }, cancellationToken);
         public Task<GetVendorVersionResponse> GetVendorVersion(CancellationToken cancellationToken) => Task.Run(() => new GetVendorVersionResponse { Version = Constants.ProductVersion }, cancellationToken);
