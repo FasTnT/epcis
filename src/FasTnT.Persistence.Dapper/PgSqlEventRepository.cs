@@ -71,7 +71,7 @@ namespace FasTnT.Persistence.Dapper
         public void WhereSimpleFieldMatches(EpcisField field, FilterComparator filterOperator, object value) => _query = _query.Where($"{field.ToPgSql()} {filterOperator.ToSql()} {_parameters.Add(value)}");
 
         public void WhereBusinessTransactionValueIn(string txName, string[] txValues)
-            => _query = _query.Where($"EXISTS(SELECT bt.event_id FROM epcis.business_transaction bt WHERE bt.transaction_type = {_parameters.Add(txName)} AND bt.transaction_id = ANY({_parameters.Add(txValues)}))");
+            => _query = _query.Where($"EXISTS(SELECT bt.event_id FROM epcis.business_transaction bt WHERE bt.event_id = event.id AND bt.transaction_type = {_parameters.Add(txName)} AND bt.transaction_id = ANY({_parameters.Add(txValues)}))");
 
         public void WhereSourceDestinationValueIn(string sourceName, SourceDestinationType type, string[] sourceValues)
             => _query = _query.Where($"EXISTS(SELECT sd.event_id FROM epcis.source_destination sd WHERE sd.direction = {type.Id} AND sd.type = {_parameters.Add(sourceName)} AND sd.source_dest_id = ANY({_parameters.Add(sourceValues)}) AND sd.event_id = event.id)");
