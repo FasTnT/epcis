@@ -6,8 +6,10 @@ using FasTnT.Domain.Services;
 using FasTnT.Model.Queries;
 using FasTnT.Model.Queries.Implementations;
 using FasTnT.Model.Responses;
+using FasTnT.Model.Subscriptions;
 using FasTnT.UnitTest.Common;
 using System;
+using System.Threading.Tasks;
 
 namespace FasTnT.UnitTest.Domain.QueryDispatcherTests
 {
@@ -23,7 +25,10 @@ namespace FasTnT.UnitTest.Domain.QueryDispatcherTests
         {
             base.Arrange();
 
-            QueryService = A.Fake<QueryService>(o => o.WithArgumentsForConstructor(() => new QueryService(new[] { new SimpleEventQuery() }, A.Fake<IUnitOfWork>(), A.Fake<ISubscriptionBackgroundService>())));
+            var unitOfWork = A.Fake<IUnitOfWork>();
+            A.CallTo(() => unitOfWork.SubscriptionManager.GetById("unusedSubscriptionName", default)).Returns(Task.FromResult(default(Subscription)));
+
+            QueryService = A.Fake<QueryService>(o => o.WithArgumentsForConstructor(() => new QueryService(new[]  { new SimpleEventQuery() }, unitOfWork, A.Fake<ISubscriptionBackgroundService>())));
             QueryDispatcher = new QueryDispatcher(QueryService);
         }
 
