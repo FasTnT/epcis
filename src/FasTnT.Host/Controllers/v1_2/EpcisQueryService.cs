@@ -1,4 +1,5 @@
 ﻿using FasTnT.Domain;
+using FasTnT.Host.Infrastructure.Attributes;
 using FasTnT.Model.Queries;
 using FasTnT.Model.Responses;
 using Microsoft.AspNetCore.Authorization;
@@ -9,7 +10,7 @@ using System.Threading.Tasks;
 namespace FasTnT.Host.Controllers.v1_2
 {
     [Authorize]
-    [SoapFormatter]
+    [Formatter(Format.Soap)]
     [Route("v1_0/Query")]
     [Route("v1_1/Query")]
     [Route("v1_2/Query")]

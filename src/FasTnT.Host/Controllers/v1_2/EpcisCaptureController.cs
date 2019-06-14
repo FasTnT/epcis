@@ -1,5 +1,5 @@
 ﻿using FasTnT.Domain;
-using FasTnT.Formatters.Xml;
+using FasTnT.Host.Infrastructure.Attributes;
 using FasTnT.Model;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace FasTnT.Host.Controllers.v1_2
 {
     [Authorize]
-    [XmlFormatter]
+    [Formatter(Format.Xml)]
     [Route("v1_0/Capture")]
     [Route("v1_1/Capture")]
     [Route("v1_2/Capture")]
