@@ -1,4 +1,5 @@
 ﻿using FasTnT.Domain;
+using FasTnT.Host.Infrastructure.Attributes;
 using FasTnT.Model;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading;
@@ -7,7 +8,7 @@ using System.Threading.Tasks;
 namespace FasTnT.Host.Controllers.v2_0
 {
     [Route("v2_0/capture")]
-    [JsonFormatter]
+    [Formatter(Format.Json)]
     [ApiController]
     public class CaptureController : ControllerBase
     {
