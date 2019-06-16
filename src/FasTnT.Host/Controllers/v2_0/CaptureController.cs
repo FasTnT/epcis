@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace FasTnT.Host.Controllers.v2_0
 {
-    [Route("v2_0/capture")]
-    [Formatter(Format.Json)]
     [ApiController]
+    [Formatter(Format.Json)]
+    [Route("v2_0/capture")]
     public class CaptureController : ControllerBase
     {
         private readonly CaptureDispatcher _dispatcher;

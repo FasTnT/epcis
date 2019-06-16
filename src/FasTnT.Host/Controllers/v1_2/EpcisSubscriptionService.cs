@@ -10,8 +10,6 @@ namespace FasTnT.Host.Controllers.v1_2
 {
     [Authorize]
     [Formatter(Format.Xml)]
-    [Route("v1_0/Subscription")]
-    [Route("v1_1/Subscription")]
     [Route("v1_2/Subscription")]
     public class EpcisSubscriptionService : Controller
     {
