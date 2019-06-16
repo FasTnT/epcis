@@ -9,9 +9,9 @@ using System.Threading.Tasks;
 
 namespace FasTnT.Host.Controllers.v2_0
 {
+    [ApiController]
     [Route("v2_0/events")]
     [Formatter(Format.Json)]
-    [ApiController]
     public class EventsController : Controller
     {
         private const string QueryName = "SimpleEventQuery";

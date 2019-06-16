@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 
 namespace FasTnT.Host.Controllers.v2_0
 {
-    [Route("v2_0/queries")]
-    [Formatter(Format.Json)]
     [ApiController]
+    [Formatter(Format.Json)]
+    [Route("v2_0/queries")]
     public class QueryController : Controller
     {
         private readonly QueryService _queryService;

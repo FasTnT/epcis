@@ -11,8 +11,6 @@ namespace FasTnT.Host.Controllers.v1_2
 {
     [Authorize]
     [Formatter(Format.Soap)]
-    [Route("v1_0/Query")]
-    [Route("v1_1/Query")]
     [Route("v1_2/Query")]
     public class EpcisQueryService : Controller
     {
