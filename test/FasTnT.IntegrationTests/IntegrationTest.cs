@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.Configuration;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Npgsql;
-using System;
 using System.Net.Http;
 
 namespace FasTnT.IntegrationTests
