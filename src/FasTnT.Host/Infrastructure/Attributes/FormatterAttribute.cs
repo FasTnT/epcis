@@ -16,12 +16,12 @@ namespace FasTnT.Host.Infrastructure.Attributes
 
         private IFormatter GetFormatter(Format type)
         {
-            return type switch
+            switch(type)
             {
-                Format.Json => JsonFormatter.Instance,
-                Format.Soap => SoapFormatter.Instance,
-                Format.Xml => XmlFormatter.Instance,
-                _ => throw new ArgumentOutOfRangeException(type.ToString())
+                case Format.Json: return JsonFormatter.Instance;
+                case Format.Soap: return SoapFormatter.Instance;
+                case Format.Xml: return XmlFormatter.Instance;
+                default: throw new ArgumentOutOfRangeException(type.ToString());
             };
         }
 

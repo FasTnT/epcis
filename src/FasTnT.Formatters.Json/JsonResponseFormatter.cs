@@ -17,8 +17,10 @@ namespace FasTnT.Formatters.Json
         {
             if (entity == default(IEpcisResponse)) return;
 
-            using var writer = new StreamWriter(output);
-            await writer.WriteAsync(new ReadOnlyMemory<char>(Format(entity).ToArray()), cancellationToken);
+            using (var writer = new StreamWriter(output))
+            {
+                await writer.WriteAsync(new ReadOnlyMemory<char>(Format(entity).ToArray()), cancellationToken);
+            }
         }
 
         protected override string FormatInternal(PollResponse response)
