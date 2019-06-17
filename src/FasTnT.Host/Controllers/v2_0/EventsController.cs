@@ -1,4 +1,5 @@
 ﻿using FasTnT.Domain.Services;
+using FasTnT.Host.Infrastructure.Attributes;
 using FasTnT.Model.Queries;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
@@ -8,9 +9,9 @@ using System.Threading.Tasks;
 
 namespace FasTnT.Host.Controllers.v2_0
 {
-    [Route("v2_0/events")]
-    [JsonFormatter]
     [ApiController]
+    [Route("v2_0/events")]
+    [Formatter(Format.Json)]
     public class EventsController : Controller
     {
         private const string QueryName = "SimpleEventQuery";

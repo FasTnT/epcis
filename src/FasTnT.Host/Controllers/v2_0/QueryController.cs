@@ -1,4 +1,5 @@
 ﻿using FasTnT.Domain.Services;
+using FasTnT.Host.Infrastructure.Attributes;
 using FasTnT.Model.Queries;
 using FasTnT.Model.Subscriptions;
 using Microsoft.AspNetCore.Mvc;
@@ -7,9 +8,9 @@ using System.Threading.Tasks;
 
 namespace FasTnT.Host.Controllers.v2_0
 {
-    [Route("v2_0/queries")]
-    [JsonFormatter]
     [ApiController]
+    [Formatter(Format.Json)]
+    [Route("v2_0/queries")]
     public class QueryController : Controller
     {
         private readonly QueryService _queryService;

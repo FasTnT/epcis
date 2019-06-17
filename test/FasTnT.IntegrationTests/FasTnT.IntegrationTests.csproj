@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.2</TargetFramework>
-	  <LangVersion>8</LangVersion>
+	  <LangVersion>7.1</LangVersion>
     <UserSecretsId>3cd5d359-c751-46f7-9418-c0f887a89b00</UserSecretsId>
     <IsPackable>false</IsPackable>
   </PropertyGroup>

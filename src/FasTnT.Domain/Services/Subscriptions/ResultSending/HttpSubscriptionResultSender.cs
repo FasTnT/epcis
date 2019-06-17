@@ -14,38 +14,33 @@ namespace FasTnT.Domain.Services.Subscriptions
         public async Task Send(string destination, IEpcisResponse epcisResponse, CancellationToken cancellationToken)
         {
             var formatter = XmlFormatter.Instance;
-            var request = WebRequest.CreateHttp($"{destination}{GetCallbackUrl(epcisResponse)}");
+            var request = WebRequest.CreateHttp(destination);
             request.Method = "POST";
             request.ContentType = formatter.ContentType;
-            TrySetAuthorization(request);
+            TrySetBasicAuthorization(request);
 
             using (var stream = await request.GetRequestStreamAsync())
             {
                 await formatter.WriteResponse(epcisResponse, stream, cancellationToken);
             }
 
-            var response = await request.GetResponseAsync() as HttpWebResponse;
-
-            if(!new HttpResponseMessage(response.StatusCode).IsSuccessStatusCode)
+            using (var response = await request.GetResponseAsync() as HttpWebResponse)
+            using (var responseMessage = new HttpResponseMessage(response.StatusCode))
             {
-                throw new Exception($"Response does not indicate success status code: {response.StatusCode} ({response.StatusDescription})");
+                if (!responseMessage.IsSuccessStatusCode)
+                {
+                    throw new Exception($"Response does not indicate success status code: {response.StatusCode} ({response.StatusDescription})");
+                }
             }
         }
 
-        private void TrySetAuthorization(HttpWebRequest request)
+        private void TrySetBasicAuthorization(HttpWebRequest request)
         {
             if (!string.IsNullOrEmpty(request.RequestUri.UserInfo))
             {
-                request.Headers.Add("Authorization", $"Basic {Convert.ToBase64String(Encoding.UTF8.GetBytes(WebUtility.UrlDecode(request.RequestUri.UserInfo)))}");
+                var token = Convert.ToBase64String(Encoding.UTF8.GetBytes(WebUtility.UrlDecode(request.RequestUri.UserInfo)));
+                request.Headers.Add("Authorization", $"Basic {token}");
             }
-        }
-
-        private string GetCallbackUrl(IEpcisResponse response)
-        {
-            if(response is PollResponse) return "CallbackResults";
-            if ((response is ExceptionResponse res) && res.Exception == "QueryTooLargeException") return "CallbackQueryTooLargeException";
-
-            return "CallbackImplementationException"; // In every other case.
         }
     }
 }

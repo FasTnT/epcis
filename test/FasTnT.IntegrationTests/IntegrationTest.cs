@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.Configuration;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Npgsql;
-using System;
 using System.Net.Http;
 
 namespace FasTnT.IntegrationTests
@@ -41,12 +40,12 @@ namespace FasTnT.IntegrationTests
             if (string.IsNullOrWhiteSpace(connectionString))
             {
                 context.WriteLine("No connection string is setup for integration tests. Stopping execution.");
-                throw new Exception("No connection string is setup for integration tests. Stopping execution.");
+                throw new AssertInconclusiveException("No connection string is setup for integration tests. Stopping execution.");
             }
             else if (!CanConnectToDatabase(connectionString))
             {
                 context.WriteLine("Invalid connection string is setup for integration tests. Stopping execution.");
-                throw new Exception("Invalid connection string is setup for integration tests. Stopping execution.");
+                throw new AssertInconclusiveException("Invalid connection string is setup for integration tests. Stopping execution.");
             }
         }
 
