@@ -21,7 +21,7 @@ namespace FasTnT.UnitTest.XmlFormatter
         public override void Arrange()
         {
             RequestParser = Formatters.Xml.XmlFormatter.Instance;
-            InputFile = File.OpenRead("XmlFormatter/files/requests/xml/valid_event_masterdata_1.xml");
+            InputFile = File.OpenRead("FormattersTests/XmlFormatter/files/requests/xml/valid_event_masterdata_1.xml");
         }
 
         public override void Act()
