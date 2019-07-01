@@ -47,8 +47,8 @@ namespace FasTnT.Domain.Services
             try
             {
                 epcisQuery.ValidateParameters(query.Parameters);
-
                 var results = await epcisQuery.Execute(query.Parameters, _unitOfWork, cancellationToken);
+
                 return new PollResponse { QueryName = query.QueryName, Entities = results };
             }
             catch (Exception ex) when (!(ex is EpcisException))
@@ -100,7 +100,7 @@ namespace FasTnT.Domain.Services
 
         private void EnsureQueryAllowsSubscription(IEpcisQuery query)
         {
-            if (query == null || !query.AllowSubscription) throw new EpcisException(ExceptionType.SubscribeNotPermittedException, $"Query '{query?.Name}' does not exist or doesn't allow subscription");
+            if (!query.AllowSubscription) throw new EpcisException(ExceptionType.SubscribeNotPermittedException, $"Query '{query?.Name}' does not exist or doesn't allow subscription");
         }
     }
 }

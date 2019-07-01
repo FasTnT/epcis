@@ -11,22 +11,24 @@
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.1.1" />
     <PackageReference Include="MSTest.TestAdapter" Version="1.4.0" />
     <PackageReference Include="MSTest.TestFramework" Version="1.4.0" />
+    <PackageReference Include="Newtonsoft.Json.Schema" Version="3.0.11" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\FasTnT.Domain\FasTnT.Domain.csproj" />
+    <ProjectReference Include="..\..\src\FasTnT.Formatters.Json\FasTnT.Formatters.Json.csproj" />
     <ProjectReference Include="..\..\src\FasTnT.Formatters.Xml\FasTnT.Formatters.Xml.csproj" />
     <ProjectReference Include="..\..\src\FasTnT.Formatters\FasTnT.Formatters.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="XmlFormatter\files\requests\xml\invalid_event_1.xml">
+    <None Update="FormattersTests\XmlFormatter\files\requests\xml\invalid_event_1.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="XmlFormatter\files\requests\xml\valid_event_masterdata_1.xml">
+    <None Update="FormattersTests\XmlFormatter\files\requests\xml\valid_event_masterdata_1.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="XmlFormatter\files\requests\xml\valid_event_1.xml">
+    <None Update="FormattersTests\XmlFormatter\files\requests\xml\valid_event_1.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
