@@ -17,7 +17,7 @@ namespace FasTnT.Model.Queries.Implementations
     public class SimpleEventQuery : IEpcisQuery
     {
         private static readonly string[] _specificNames = new[] { "eventType", "orderBy", "orderDirection" };
-        private static readonly string[] _anyValuePrefixes = new[] { "EQ_", "EXISTS_", "EQATTR_", "HASATTR_", "WD_" };
+        private static readonly string[] _anyValuePrefixes = new[] { "EQ_", "EXISTS_", "EQATTR_", "HASATTR_", "WD_", "MATCH_" };
         private static readonly string[] _comparisonPrefixes = new[] { "GE_", "LE_", "GT_", "LT_" };
 
         public string Name => "SimpleEventQuery";
