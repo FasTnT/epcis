@@ -16,7 +16,7 @@ namespace FasTnT.Model.Queries.Implementations
                 case "parentID": return new[] { EpcType.ParentId };
                 case "inputEPC": return new[] { EpcType.InputEpc };
                 case "outputEPC": return new[] { EpcType.OutputEpc };
-                case "epcClass": return new[] { EpcType.Quantity };
+                case "epcClass": return new[] { EpcType.Quantity, EpcType.ChildQuantity };
                 case "inputEpcClass": return new[] { EpcType.InputQuantity };
                 case "outputEpcClass": return new[] { EpcType.OutputQuantity };
                 case "anyEpcClass": return new[] { EpcType.Quantity, EpcType.InputQuantity, EpcType.OutputQuantity };
