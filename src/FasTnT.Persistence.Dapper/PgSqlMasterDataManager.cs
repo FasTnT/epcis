@@ -44,7 +44,7 @@ namespace FasTnT.Persistence.Dapper
             }
 
             var hierarchies = masterDataList.SelectMany(x => x.Children.Select(c => new EpcisMasterDataHierarchy { Type = x.Type, ChildrenId = c.ChildrenId, ParentId = x.Id }));
-            await _unitOfWork.Execute(SqlRequests.MasterDataHierarchyInsert, hierarchies, cancellationToken);
+            await _unitOfWork.BulkExecute(SqlRequests.MasterDataHierarchyInsert, hierarchies, cancellationToken);
         }
 
         private void ParseFields(IEnumerable<MasterDataField> fields, List<MasterDataFieldEntity> output, int? parentId = null)

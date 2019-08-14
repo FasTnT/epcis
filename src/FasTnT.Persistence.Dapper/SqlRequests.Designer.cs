@@ -19,7 +19,7 @@ namespace FasTnT.Persistence.Dapper {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class SqlRequests {
@@ -29,7 +29,7 @@ namespace FasTnT.Persistence.Dapper {
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        public SqlRequests() {
+        internal SqlRequests() {
         }
         
         /// <summary>
@@ -61,7 +61,7 @@ namespace FasTnT.Persistence.Dapper {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to H4sIAAAAAAAAC81b23KjSBJ9HkfoHyoc3rC0Kyt0sdutccwDRiU3YzVoQLLH+0JgQBbRCNRc3Ov9tX3YT9pf2CwoEHdhCUePolvdhqysrHNOVWVd/L///PfiAi0lLEpIYr/gr0yLFTGzwPQnxE0RLywQ/pOTFhLyXd1xbyKTBXM7w0UWPfLdarcQfAwN+T58ERt+OZt1g6fEwFI2OlLXiqOonu6gV8V5M6yX9lW/g1hhNiM1bF9kVfEU037pnWr6SvFN7zTjaau47g/b0Qo8DfrD0bt8OfqL4YIHXZNtC3nGRnc9ZbNFPwxvbfte8AT927b0uBya4CmznC2CV+RN+3y5YM9//dXT/+V1kWX/aHc6oXNW4KWFyHD8Ap3O72WCwCmai9xXRnxC9/gJtQ0tb+p/DyzlGLAlz/2xxKgdPei0Oq1HbvEFtQVuIqHf0JSZSbhz02oBsXjOcrWI1beqUU1sYNFz9O8+gFLJrWar/ka3PDmAqw6KEfoq8Fi/1Duw [rest of string was truncated]&quot;;.
+        ///   Looks up a localized string similar to H4sIAAAAAAAA/81b3XKjOBa+jp9Cleqt2LuOy/nrtCc1FxjLCdMOZACnp/eGwiDHVNvg8JOe7KvtxTzSvMIehMCAARObbHeq2p2go6Oj7zs6OkfIf//3r9NTNFWwrCCFv8P3XIuXMadi9hcSxkiUVIT/EBRVQYFHXO8mFlG54QQXSfTCz1a7heDHMlEQwEcoI04nky59GgrY+oogY6G7uuETF73o7qtlP7Wv+h3ES5NJOML6STN0X186T71jk8z1YOkf5zStdc/77rhmgaaz/vnFm3S55MnyQAMxNcdGvrUinq+v1ui75S+cwKdP0H8cmyT90AiPuelEpU1hS/tkqvInv/zikz/9LrKd7+1OJ1LOS6Kiypwgquj44bMWInCMHmThnpO/os/4K2pb5rZo8EwltQSwqSj8PsWoHT/otDqtL4J6h9qSMFLQr2jMTRTcuWm1gFj8wAu1iCVrw6omlkr0XPIcACiV3JqOEayI7WsUrjooxugbwGP9Xm/AnkLI [rest of string was truncated]&quot;;.
         /// </summary>
         public static string CreateDatabaseZipped {
             get {
@@ -70,7 +70,7 @@ namespace FasTnT.Persistence.Dapper {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to H4sIAAAAAAAAC3u/e79LkH+AQrCzh6uvo4Knm4JrhGdwSLBCcmJOTlJicraCs2Ows6OLqzUvdnXFpUnFyUWZBSWZ+XnFcMVcOAxNKiOkJLUgOZOgOYmlKZklhBSVFqcWoZvkFurnHOLp74fLA3qlBSmJJanxKILWAEVYcAElAQAA.
+        ///   Looks up a localized string similar to H4sIAAAAAAAAC3u/e79LkH+AQrCzh6uvo4Knm4JrhGdwSLBCcVJKhoKzY7Czo4urNS8XdkXJiTk5SYnJ2QQVFpcmFScXZRaUZObnFRM2NqmMoJrUguRMwiaVFqcWIVQBAOPdp4/tAAAA.
         /// </summary>
         public static string DropDatabaseZipped {
             get {
@@ -88,7 +88,7 @@ namespace FasTnT.Persistence.Dapper {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to SELECT masterdata_type AS parent_type, masterdata_id AS parent_id, id, value FROM cbv.attribute WHERE masterdata_id = ANY(@Ids);.
+        ///   Looks up a localized string similar to SELECT masterdata_type AS parent_type, masterdata_id AS parent_id, id, value FROM cbv.attribute WHERE masterdata_id = ANY(@Ids).
         /// </summary>
         public static string MasterDataAllAttributeQuery {
             get {
@@ -115,7 +115,7 @@ namespace FasTnT.Persistence.Dapper {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to SELECT masterdata_type AS parent_type, masterdata_id AS parent_id, id, value FROM cbv.attribute WHERE masterdata_id = ANY(@Ids) AND id = ANY(@Attributes);.
+        ///   Looks up a localized string similar to SELECT masterdata_type AS parent_type, masterdata_id AS parent_id, id, value FROM cbv.attribute WHERE masterdata_id = ANY(@Ids) AND id = ANY(@Attributes).
         /// </summary>
         public static string MasterDataAttributeQuery {
             get {
@@ -133,7 +133,7 @@ namespace FasTnT.Persistence.Dapper {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to INSERT INTO cbv.hierarchy(type, parent_id, children_id) VALUES(@Type, @ParentId, @ChildrenId);.
+        ///   Looks up a localized string similar to INSERT INTO cbv.hierarchy(type, parent_id, children_id) VALUES(@Type, @ParentId, @ChildrenId) ...;.
         /// </summary>
         public static string MasterDataHierarchyInsert {
             get {
@@ -172,7 +172,7 @@ namespace FasTnT.Persistence.Dapper {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to INSERT INTO epcis.business_transaction(event_id, transaction_type, transaction_id) VALUES (@EventId, @Type, @Id);.
+        ///   Looks up a localized string similar to INSERT INTO epcis.business_transaction(event_id, transaction_type, transaction_id) VALUES (@EventId, @Type, @Id) ...;.
         /// </summary>
         public static string StoreBusinessTransaction {
             get {
@@ -181,7 +181,7 @@ namespace FasTnT.Persistence.Dapper {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to INSERT INTO epcis.custom_field(event_id, field_id, parent_id, namespace, name, type, text_value, numeric_value, date_value) VALUES (@EventId, @Id, @ParentId, @Namespace, @Name, @Type, @TextValue, @NumericValue, @DateValue);.
+        ///   Looks up a localized string similar to INSERT INTO epcis.custom_field(event_id, field_id, parent_id, namespace, name, type, text_value, numeric_value, date_value) VALUES (@EventId, @Id, @ParentId, @Namespace, @Name, @Type, @TextValue, @NumericValue, @DateValue) ...;.
         /// </summary>
         public static string StoreCustomField {
             get {
@@ -190,7 +190,7 @@ namespace FasTnT.Persistence.Dapper {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to INSERT INTO epcis.epc(event_id, epc, type, is_quantity, quantity, unit_of_measure) VALUES (@EventId, @Id, @Type, @IsQuantity, @Quantity, @UnitOfMeasure);.
+        ///   Looks up a localized string similar to INSERT INTO epcis.epc(event_id, epc, type, is_quantity, quantity, unit_of_measure) VALUES (@EventId, @Id, @Type, @IsQuantity, @Quantity, @UnitOfMeasure) ...;.
         /// </summary>
         public static string StoreEpcs {
             get {
@@ -199,7 +199,7 @@ namespace FasTnT.Persistence.Dapper {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to INSERT INTO epcis.error_declaration(event_id, declaration_time, reason) VALUES(@EventId, @DeclarationTime, @Reason);.
+        ///   Looks up a localized string similar to INSERT INTO epcis.error_declaration(event_id, declaration_time, reason) VALUES(@EventId, @DeclarationTime, @Reason) ...;.
         /// </summary>
         public static string StoreErrorDeclaration {
             get {
@@ -208,7 +208,7 @@ namespace FasTnT.Persistence.Dapper {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to INSERT INTO epcis.error_declaration_eventid(event_id, corrective_eventid) VALUES(@EventId, @CorrectiveId);.
+        ///   Looks up a localized string similar to INSERT INTO epcis.error_declaration_eventid(event_id, corrective_eventid) VALUES(@EventId, @CorrectiveId) ...;.
         /// </summary>
         public static string StoreErrorDeclarationIds {
             get {
@@ -217,7 +217,7 @@ namespace FasTnT.Persistence.Dapper {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to INSERT INTO epcis.event(id, request_id, record_time, action, event_type, event_timezone_offset, business_location, business_step, disposition, read_point, transformation_id, event_id) VALUES(@Id, @RequestId, @EventTime, @Action, @Type, @EventTimeZoneOffset, @BusinessLocation, @BusinessStep, @Disposition, @ReadPoint, @TransformationId, @EventId);.
+        ///   Looks up a localized string similar to INSERT INTO epcis.event(id, request_id, record_time, action, event_type, event_timezone_offset, business_location, business_step, disposition, read_point, transformation_id, event_id) VALUES(@Id, @RequestId, @EventTime, @Action, @Type, @EventTimeZoneOffset, @BusinessLocation, @BusinessStep, @Disposition, @ReadPoint, @TransformationId, @EventId) ...;.
         /// </summary>
         public static string StoreEvent {
             get {
@@ -235,7 +235,7 @@ namespace FasTnT.Persistence.Dapper {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to INSERT INTO epcis.request(id, document_time, record_time) VALUES(@Id, @DocumentTime, @RecordTime);.
+        ///   Looks up a localized string similar to INSERT INTO epcis.request(id, document_time, record_time, user_id) VALUES(@Id, @DocumentTime, @RecordTime, @UserId);.
         /// </summary>
         public static string StoreRequest {
             get {
@@ -244,7 +244,7 @@ namespace FasTnT.Persistence.Dapper {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to INSERT INTO epcis.source_destination(event_id, type, source_dest_id, direction) VALUES (@EventId, @Type, @Id, @Direction);.
+        ///   Looks up a localized string similar to INSERT INTO epcis.source_destination(event_id, type, source_dest_id, direction) VALUES (@EventId, @Type, @Id, @Direction) ...;.
         /// </summary>
         public static string StoreSourceDestination {
             get {
@@ -253,7 +253,25 @@ namespace FasTnT.Persistence.Dapper {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to DELETE FROM subscriptions.pendingrequest WHERE subscription_id = (SELECT id FROM subscriptions.subscription WHERE subscription_id = @SubscriptionId) AND request_id = ANY(@RequestId);.
+        ///   Looks up a localized string similar to INSERT INTO sbdh.standardheader(id, version, standard, type_version, identifier, type, creation_datetime) VALUES(@Id, @Version, @Standard, @TypeVersion, @InstanceIdentifier, @Type, @CreationDateTime);.
+        /// </summary>
+        public static string StoreStandardHeader {
+            get {
+                return ResourceManager.GetString("StoreStandardHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to INSERT INTO sbdh.contactinformation(id, header_id, type, identifier, contact, email, fax_number, phone_number, type_identifier) VALUES(@Id, @HeaderId, @Type, @Identifier, @Contact, @EmailAddress, @FaxNumber, @TelephoneNumber, @ContactTypeIdentifier) ...;.
+        /// </summary>
+        public static string StoreStandardHeaderContactInformations {
+            get {
+                return ResourceManager.GetString("StoreStandardHeaderContactInformations", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to DELETE FROM subscriptions.pendingrequest WHERE subscription_id = (SELECT id FROM subscriptions.subscription WHERE subscription_id = @SubscriptionId) AND request_id = ANY(@RequestId).
         /// </summary>
         public static string SubscriptionAcknowledgePendingRequests {
             get {
@@ -280,25 +298,16 @@ namespace FasTnT.Persistence.Dapper {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to SELECT p.subscription_id, p.name, pv.value FROM subscriptions.parameter p INNER JOIN subscriptions.parameter_value pv ON pv.parameter_id = p.id;.
+        ///   Looks up a localized string similar to SELECT p.subscription_id, p.name, pv.value FROM subscriptions.parameter p INNER JOIN subscriptions.parameter_value pv ON pv.parameter_id = p.id.
         /// </summary>
         public static string SubscriptionListParameters {
             get {
                 return ResourceManager.GetString("SubscriptionListParameters", resourceCulture);
             }
         }
-
-        /// <summary>
-        ///   Looks up a localized string similar to INSERT INTO subscriptions.trigger(subscription_id, trigger_time, status, reason) VALUES((SELECT id FROM subscriptions.subscription WHERE subscription_id = @SubscriptionId), NOW(), @Status, @Reason);.
-        /// </summary>
-        public static string SubscriptionStoreTrigger {
-            get {
-                return ResourceManager.GetString("SubscriptionStoreTrigger", resourceCulture);
-            }
-        }
         
         /// <summary>
-        ///   Looks up a localized string similar to SELECT pr.request_id FROM subscriptions.pendingrequest pr JOIN subscriptions.subscription s ON s.id = pr.subscription_id WHERE s.subscription_id = @SubscriptionId;.
+        ///   Looks up a localized string similar to SELECT pr.request_id FROM subscriptions.pendingrequest pr JOIN subscriptions.subscription s ON s.id = pr.subscription_id WHERE s.subscription_id = @SubscriptionId.
         /// </summary>
         public static string SubscriptionListPendingRequestIds {
             get {
@@ -307,7 +316,7 @@ namespace FasTnT.Persistence.Dapper {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to SELECT s.id, s.destination, s.subscription_id, s.query_name, s.active, s.trigger, s.report_if_empty, s.schedule_minutes, s.schedule_seconds, s.schedule_hours, s.schedule_month, s.schedule_day_of_month, s.schedule_day_of_week FROM subscriptions.subscription s;.
+        ///   Looks up a localized string similar to SELECT s.id, s.destination, s.subscription_id, s.query_name, s.active, s.trigger, s.report_if_empty, s.schedule_minutes, s.schedule_seconds, s.schedule_hours, s.schedule_month, s.schedule_day_of_month, s.schedule_day_of_week FROM subscriptions.subscription s.
         /// </summary>
         public static string SubscriptionsList {
             get {
@@ -325,7 +334,7 @@ namespace FasTnT.Persistence.Dapper {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to INSERT INTO subscriptions.parameter(id, subscription_id, name) VALUES(@Id, @SubscriptionId, @Name);.
+        ///   Looks up a localized string similar to INSERT INTO subscriptions.parameter(id, subscription_id, name) VALUES(@Id, @SubscriptionId, @Name).
         /// </summary>
         public static string SubscriptionStoreParameter {
             get {
@@ -343,29 +352,20 @@ namespace FasTnT.Persistence.Dapper {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to SELECT id, username, password FROM users.user WHERE username = @Username;.
+        ///   Looks up a localized string similar to INSERT INTO subscriptions.trigger(id, subscription_id, trigger_time, status, reason) VALUES(@Id, (SELECT id FROM subscriptions.subscription WHERE subscription_id = @SubscriptionId), NOW(), @Status, @Reason);.
+        /// </summary>
+        public static string SubscriptionStoreTrigger {
+            get {
+                return ResourceManager.GetString("SubscriptionStoreTrigger", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to SELECT id, username, password FROM users.user WHERE username = @Username.
         /// </summary>
         public static string UserLoadByName {
             get {
                 return ResourceManager.GetString("UserLoadByName", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to SELECT id, username, password FROM users.user WHERE username = @Username;.
-        /// </summary>
-        public static string StoreStandardHeader {
-            get {
-                return ResourceManager.GetString("StoreStandardHeader", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to SELECT id, username, password FROM users.user WHERE username = @Username;.
-        /// </summary>
-        public static string StoreStandardHeaderContactInformations {
-            get {
-                return ResourceManager.GetString("StoreStandardHeaderContactInformations", resourceCulture);
             }
         }
     }

@@ -44,7 +44,8 @@ Temporary Items
 # Csharp files
 bin
 obj
-*.dll
+src/*.dll
+test/*.dll
 packages
 *.suo
 *.user

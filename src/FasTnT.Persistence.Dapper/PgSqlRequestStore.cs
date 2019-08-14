@@ -33,7 +33,7 @@ namespace FasTnT.Persistence.Dapper
             var contactInformations = request.StandardBusinessHeader.ContactInformations.Select((x, i) => ModelMapper.Map<ContactInformation, ContactInformationEntity>(x, r => { r.HeaderId = header.Id; r.Id = i; }));
 
             await _unitOfWork.Execute(SqlRequests.StoreStandardHeader, header, cancellationToken);
-            await _unitOfWork.Execute(SqlRequests.StoreStandardHeaderContactInformations, contactInformations, cancellationToken);
+            await _unitOfWork.BulkExecute(SqlRequests.StoreStandardHeaderContactInformations, contactInformations, cancellationToken);
         }
     }
 }

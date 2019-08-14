@@ -58,7 +58,7 @@ namespace FasTnT.Persistence.Dapper
             return events;
         }
 
-        private IList<CustomField> CreateHierarchy(IEnumerable<CustomFieldEntity> customFields, int? parentId = null)
+        private List<CustomField> CreateHierarchy(IEnumerable<CustomFieldEntity> customFields, int? parentId = null)
         {
             var elements = customFields.Where(x => x.ParentId == parentId);
             elements.ForEach(x => x.Children = CreateHierarchy(customFields, x.Id));
