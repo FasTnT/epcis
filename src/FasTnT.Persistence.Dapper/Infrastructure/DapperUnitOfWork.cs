@@ -1,4 +1,5 @@
 ﻿using Dapper;
+using Faithlife.Utility.Dapper;
 using FasTnT.Domain.Persistence;
 using FasTnT.Domain.Services.Setup;
 using FasTnT.Persistence.Dapper.Setup;
@@ -64,7 +65,9 @@ namespace FasTnT.Persistence.Dapper
             }
         }
 
-        public async Task Execute(string command, object parameters, CancellationToken cancellationToken) => await _connection.ExecuteAsync(new CommandDefinition(command, parameters, _transaction, cancellationToken: cancellationToken));
+        public async Task Execute(string command, CancellationToken cancellationToken) => await _connection.ExecuteAsync(new CommandDefinition(command, null, _transaction, cancellationToken: cancellationToken));
+        public async Task Execute<T>(string command, T parameters, CancellationToken cancellationToken) => await _connection.ExecuteAsync(new CommandDefinition(command, parameters, _transaction, cancellationToken: cancellationToken));
+        public async Task BulkExecute<T>(string command, IEnumerable<T> parameters, CancellationToken cancellationToken) => await _connection.BulkInsertAsync(command, parameters, _transaction, cancellationToken: cancellationToken);
         public async Task<GridReader> FetchMany(string command, object parameters, CancellationToken cancellationToken) =>  await _connection.QueryMultipleAsync(new CommandDefinition(command, parameters, _transaction, cancellationToken: cancellationToken));
         public async Task<IEnumerable<T>> Query<T>(string command, object parameters, CancellationToken cancellationToken) => await _connection.QueryAsync<T>(new CommandDefinition(command, parameters, _transaction, cancellationToken: cancellationToken));
         public async Task<IEnumerable<T>> Query<T, TRel>(string command, object parameters, Action<T, TRel> action, string splitOn, CancellationToken cancellationToken) => await _connection.QueryAsync(new CommandDefinition(command, parameters, _transaction, cancellationToken: cancellationToken), Map(action), splitOn);

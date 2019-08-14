@@ -1,5 +1,64 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
   <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
     <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
     <xsd:element name="root" msdata:IsDataSet="true">
@@ -76,28 +135,28 @@ SELECT event_id, type, source_dest_id as id, direction FROM epcis.source_destina
 SELECT event_id, corrective_eventid as corrective_id FROM epcis.error_declaration_eventid WHERE event_id = ANY(@EventIds);</value>
   </data>
   <data name="StoreBusinessTransaction" xml:space="preserve">
-    <value>INSERT INTO epcis.business_transaction(event_id, transaction_type, transaction_id) VALUES (@EventId, @Type, @Id);</value>
+    <value>INSERT INTO epcis.business_transaction(event_id, transaction_type, transaction_id) VALUES (@EventId, @Type, @Id) ...;</value>
   </data>
   <data name="StoreCustomField" xml:space="preserve">
-    <value>INSERT INTO epcis.custom_field(event_id, field_id, parent_id, namespace, name, type, text_value, numeric_value, date_value) VALUES (@EventId, @Id, @ParentId, @Namespace, @Name, @Type, @TextValue, @NumericValue, @DateValue);</value>
+    <value>INSERT INTO epcis.custom_field(event_id, field_id, parent_id, namespace, name, type, text_value, numeric_value, date_value) VALUES (@EventId, @Id, @ParentId, @Namespace, @Name, @Type, @TextValue, @NumericValue, @DateValue) ...;</value>
   </data>
   <data name="StoreEpcs" xml:space="preserve">
-    <value>INSERT INTO epcis.epc(event_id, epc, type, is_quantity, quantity, unit_of_measure) VALUES (@EventId, @Id, @Type, @IsQuantity, @Quantity, @UnitOfMeasure);</value>
+    <value>INSERT INTO epcis.epc(event_id, epc, type, is_quantity, quantity, unit_of_measure) VALUES (@EventId, @Id, @Type, @IsQuantity, @Quantity, @UnitOfMeasure) ...;</value>
   </data>
   <data name="StoreErrorDeclaration" xml:space="preserve">
-    <value>INSERT INTO epcis.error_declaration(event_id, declaration_time, reason) VALUES(@EventId, @DeclarationTime, @Reason);</value>
+    <value>INSERT INTO epcis.error_declaration(event_id, declaration_time, reason) VALUES(@EventId, @DeclarationTime, @Reason) ...;</value>
   </data>
   <data name="StoreErrorDeclarationIds" xml:space="preserve">
-    <value>INSERT INTO epcis.error_declaration_eventid(event_id, corrective_eventid) VALUES(@EventId, @CorrectiveId);</value>
+    <value>INSERT INTO epcis.error_declaration_eventid(event_id, corrective_eventid) VALUES(@EventId, @CorrectiveId) ...;</value>
   </data>
   <data name="StoreEvent" xml:space="preserve">
-    <value>INSERT INTO epcis.event(id, request_id, record_time, action, event_type, event_timezone_offset, business_location, business_step, disposition, read_point, transformation_id, event_id) VALUES(@Id, @RequestId, @EventTime, @Action, @Type, @EventTimeZoneOffset, @BusinessLocation, @BusinessStep, @Disposition, @ReadPoint, @TransformationId, @EventId);</value>
+    <value>INSERT INTO epcis.event(id, request_id, record_time, action, event_type, event_timezone_offset, business_location, business_step, disposition, read_point, transformation_id, event_id) VALUES(@Id, @RequestId, @EventTime, @Action, @Type, @EventTimeZoneOffset, @BusinessLocation, @BusinessStep, @Disposition, @ReadPoint, @TransformationId, @EventId) ...;</value>
   </data>
   <data name="StoreRequest" xml:space="preserve">
     <value>INSERT INTO epcis.request(id, document_time, record_time, user_id) VALUES(@Id, @DocumentTime, @RecordTime, @UserId);</value>
   </data>
   <data name="StoreSourceDestination" xml:space="preserve">
-    <value>INSERT INTO epcis.source_destination(event_id, type, source_dest_id, direction) VALUES (@EventId, @Type, @Id, @Direction);</value>
+    <value>INSERT INTO epcis.source_destination(event_id, type, source_dest_id, direction) VALUES (@EventId, @Type, @Id, @Direction) ...;</value>
   </data>
   <data name="SubscriptionStore" xml:space="preserve">
     <value>INSERT INTO subscriptions.subscription(id, subscription_id, trigger, initial_record_time, report_if_empty, destination, query_name,  active, schedule_seconds, schedule_minutes, schedule_hours, schedule_month, schedule_day_of_month, schedule_day_of_week) VALUES(@Id, @SubscriptionId, @Trigger, @InitialRecordTime, @ReportIfEmpty, @Destination, @QueryName, @Active, @Second, @Minute, @Hour, @Month, @DayOfMonth, @DayOfWeek);</value>
@@ -142,7 +201,7 @@ SELECT event_id, corrective_eventid as corrective_id FROM epcis.error_declaratio
     <value>SELECT id, username, password FROM users.user WHERE username = @Username</value>
   </data>
   <data name="MasterDataHierarchyInsert" xml:space="preserve">
-    <value>INSERT INTO cbv.hierarchy(type, parent_id, children_id) VALUES(@Type, @ParentId, @ChildrenId);</value>
+    <value>INSERT INTO cbv.hierarchy(type, parent_id, children_id) VALUES(@Type, @ParentId, @ChildrenId) ...;</value>
   </data>
   <data name="MasterDataAttributeFieldInsert" xml:space="preserve">
     <value>INSERT INTO cbv.attribute_field(internal_id, internal_parent_id, masterdata_id, masterdata_type, parent_id, name, namespace, value) VALUES(@Id, @InternalParentId, @MasterdataId, @MasterdataType, @ParentId, @Name, @Namespace, @Value);</value>
@@ -163,6 +222,6 @@ SELECT event_id, corrective_eventid as corrective_id FROM epcis.error_declaratio
     <value>INSERT INTO sbdh.standardheader(id, version, standard, type_version, identifier, type, creation_datetime) VALUES(@Id, @Version, @Standard, @TypeVersion, @InstanceIdentifier, @Type, @CreationDateTime);</value>
   </data>
   <data name="StoreStandardHeaderContactInformations" xml:space="preserve">
-    <value>INSERT INTO sbdh.contactinformation(id, header_id, type, identifier, contact, email, fax_number, phone_number, type_identifier) VALUES(@Id, @HeaderId, @Type, @Identifier, @Contact, @EmailAddress, @FaxNumber, @TelephoneNumber, @ContactTypeIdentifier);</value>
+    <value>INSERT INTO sbdh.contactinformation(id, header_id, type, identifier, contact, email, fax_number, phone_number, type_identifier) VALUES(@Id, @HeaderId, @Type, @Identifier, @Contact, @EmailAddress, @FaxNumber, @TelephoneNumber, @ContactTypeIdentifier) ...;</value>
   </data>
 </root>

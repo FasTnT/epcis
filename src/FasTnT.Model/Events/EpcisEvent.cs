@@ -19,9 +19,9 @@ namespace FasTnT.Model
         public string Disposition { get; set; }
         public string TransformationId { get; set; }
         public ErrorDeclaration ErrorDeclaration { get; set; }
-        public IList<Epc> Epcs { get; set; } = new List<Epc>();
-        public IList<BusinessTransaction> BusinessTransactions { get; set; } = new List<BusinessTransaction>();
-        public IList<SourceDestination> SourceDestinationList { get; set; } = new List<SourceDestination>();
-        public IList<CustomField> CustomFields { get; set; } = new List<CustomField>();
+        public List<Epc> Epcs { get; set; } = new List<Epc>();
+        public List<BusinessTransaction> BusinessTransactions { get; set; } = new List<BusinessTransaction>();
+        public List<SourceDestination> SourceDestinationList { get; set; } = new List<SourceDestination>();
+        public List<CustomField> CustomFields { get; set; } = new List<CustomField>();
     }
 }

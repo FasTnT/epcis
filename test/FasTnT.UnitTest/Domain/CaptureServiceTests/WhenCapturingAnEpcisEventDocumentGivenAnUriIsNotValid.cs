@@ -4,6 +4,7 @@ using FasTnT.Model;
 using FasTnT.UnitTest.Common;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace FasTnT.UnitTest.Domain.CaptureServiceTests
@@ -22,7 +23,7 @@ namespace FasTnT.UnitTest.Domain.CaptureServiceTests
                 {
                     new EpcisEvent
                     {
-                        Epcs = new Epc[]{ new Epc { Id = "NotAValidUri" } }
+                        Epcs = new Epc[]{ new Epc { Id = "NotAValidUri" } }.ToList()
                     }
                 }
             };

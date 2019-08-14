@@ -30,7 +30,7 @@ namespace FasTnT.Formatters.Xml
                     Id = epc.Element("epcClass").Value,
                     IsQuantity = true,
                     Quantity = float.Parse(epc.Element("quantity").Value, CultureInfo.InvariantCulture),
-                    UnitOfMeasure = epc.Element("uom") != null ? epc.Element("uom").Value : null
+                    UnitOfMeasure = epc.Element("uom")?.Value
                 });
             }
         }
@@ -40,7 +40,7 @@ namespace FasTnT.Formatters.Xml
             foreach (var epc in element.Elements()) destination.Epcs.Add(new Epc { Type = EpcType.ChildEpc, Id = epc.Value });
         }
 
-        public static IList<BusinessTransaction> ToBusinessTransactions(this XElement element)
+        public static List<BusinessTransaction> ToBusinessTransactions(this XElement element)
         {
             return element.Elements("bizTransaction").Select(child => new BusinessTransaction { Type = child.Attribute("type").Value, Id = child.Value }).ToList();
         }
