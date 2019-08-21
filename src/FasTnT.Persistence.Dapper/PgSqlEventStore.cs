@@ -46,19 +46,6 @@ namespace FasTnT.Persistence.Dapper
             await unitOfWork.BulkExecute(SqlRequests.StoreCustomField, fields, cancellationToken);
         }
 
-        private static void ParseFields(IList<CustomField> customFields, Guid eventId, List<CustomFieldEntity> mappedList, int? parentId = null)
-        {
-            if (customFields == null || !customFields.Any()) return;
-
-            foreach(var field in customFields)
-            {
-                var entity = field.Map<CustomField, CustomFieldEntity>(f => { f.EventId = eventId; f.Id = mappedList.Count; f.ParentId = parentId; });
-                mappedList.Add(entity);
-
-                ParseFields(field.Children, eventId, mappedList, entity.Id);
-            }
-        }
-
         private async static Task StoreSourceDestinations(EpcisEventEntity[] events, DapperUnitOfWork unitOfWork, CancellationToken cancellationToken)
         {
             var sourceDest = events.SelectMany(e => e.SourceDestinationList.Select(x => x.Map<SourceDestination, SourceDestinationEntity>(r => r.EventId = e.Id)));
@@ -80,6 +67,19 @@ namespace FasTnT.Persistence.Dapper
 
             await unitOfWork.BulkExecute(SqlRequests.StoreErrorDeclaration, declarations, cancellationToken);
             await unitOfWork.BulkExecute(SqlRequests.StoreErrorDeclarationIds, corrective, cancellationToken);
+        }
+
+        private static void ParseFields(IList<CustomField> customFields, Guid eventId, List<CustomFieldEntity> mappedList, int? parentId = null)
+        {
+            if (customFields == null || !customFields.Any()) return;
+
+            foreach (var field in customFields)
+            {
+                var entity = field.Map<CustomField, CustomFieldEntity>(f => { f.EventId = eventId; f.Id = mappedList.Count; f.ParentId = parentId; });
+                mappedList.Add(entity);
+
+                ParseFields(field.Children, eventId, mappedList, entity.Id);
+            }
         }
     }
 }

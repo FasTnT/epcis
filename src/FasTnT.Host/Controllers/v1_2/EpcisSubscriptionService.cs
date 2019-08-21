@@ -20,7 +20,7 @@ namespace FasTnT.Host.Controllers.v1_2
         [HttpGet("trigger/{triggerName}")]
         public async Task TriggerSubscription(string triggerName, CancellationToken cancellationToken)
         {
-            await _service.Process(new TriggerSubscriptionRequest { Trigger = triggerName }, cancellationToken);   
+            await _service.TriggerSubscription(new TriggerSubscriptionRequest { Trigger = triggerName }, cancellationToken);   
         }
     }
 }

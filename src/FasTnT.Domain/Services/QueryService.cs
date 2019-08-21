@@ -32,12 +32,14 @@ namespace FasTnT.Domain.Services
         public Task<GetQueryNamesResponse> GetQueryNames(CancellationToken cancellationToken) => Task.Run(() => new GetQueryNamesResponse { QueryNames = _queries.Select(x => x.Name) }, cancellationToken);
         public Task<GetStandardVersionResponse> GetStandardVersion(CancellationToken cancellationToken) => Task.Run(() => new GetStandardVersionResponse { Version = Constants.StandardVersion }, cancellationToken);
         public Task<GetVendorVersionResponse> GetVendorVersion(CancellationToken cancellationToken) => Task.Run(() => new GetVendorVersionResponse { Version = Constants.ProductVersion }, cancellationToken);
+
         public async Task<GetSubscriptionIdsResult> GetSubscriptionId(GetSubscriptionIds query, CancellationToken cancellationToken)
         {
             var subscriptions = await _unitOfWork.SubscriptionManager.GetAll(false, cancellationToken);
             return new GetSubscriptionIdsResult { SubscriptionIds = subscriptions.Where(s => s.QueryName == query.QueryName).Select(x => x.SubscriptionId) };
         }
 
+        // TODO: differentiate between QueryParameterException and other exceptions (PgSQL, runtime...)
         public async Task<PollResponse> Poll(Poll query, CancellationToken cancellationToken)
         {
             var epcisQuery = _queries.SingleOrDefault(x => x.Name == query.QueryName);
