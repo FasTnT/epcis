@@ -11,6 +11,6 @@ namespace FasTnT.Domain.Services
 
         public SubscriptionService(ISubscriptionBackgroundService backgroundService) => _backgroundService = backgroundService;
 
-        public Task Process(TriggerSubscriptionRequest query, CancellationToken cancellationToken) => Task.Run(() => _backgroundService.Trigger(query.Trigger), cancellationToken);
+        public Task TriggerSubscription(TriggerSubscriptionRequest query, CancellationToken cancellationToken) => Task.Run(() => _backgroundService.Trigger(query.Trigger), cancellationToken);
     }
 }

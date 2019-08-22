@@ -17,7 +17,6 @@ namespace FasTnT.Domain.Services.Subscriptions
             _dayOfWeek = ScheduleEntry.Parse(subscription.Schedule?.DayOfWeek, 1, 7);
         }
 
-
         public virtual DateTime GetNextOccurence(DateTime startDate)
         {
             var tentative = startDate.AddSeconds(1); // Parse from the next second

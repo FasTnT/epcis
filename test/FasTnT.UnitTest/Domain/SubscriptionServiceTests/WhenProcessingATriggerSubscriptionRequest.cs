@@ -20,7 +20,7 @@ namespace FasTnT.UnitTest.Domain.SubscriptionServiceTests
             Request = new TriggerSubscriptionRequest { Trigger = Trigger };
         }
 
-        public override void Act() => Task.WaitAll(SubscriptionService.Process(Request, default));
+        public override void Act() => Task.WaitAll(SubscriptionService.TriggerSubscription(Request, default));
 
         [Assert]
         public void ItShouldHaveCalledTheSubscriptionServiceTriggerMethod() => A.CallTo(() => SubscriptionBackgroundService.Trigger(A<string>._)).MustHaveHappened();
