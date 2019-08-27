@@ -24,12 +24,12 @@ Steps:
 The API is secured using HTTP Basic authentication. The default username:password value is `admin:P@ssw0rd`
 
 - Capture: `POST /v1_2/Capture` 
-- Queries : `POST /v1_2/Query`
+- Queries : `POST /v1_2/Query` or `POST /v1_2/Query.svc`
 - Subscription trigger : `GET /v1_2/Subscription/Trigger/{triggerName}`
 
 **Capture** endpoint only supports requests with `content-type: application/xml` or `content-type: text/xml` header and XML payload.
 
-**Queries** endpoint supports SOAP requests. Note that it will not return the wsdl on a `GET` request..
+**Queries** endpoint supports XML requests on endpoint `/v1_2/Query` and SOAP requests on endpoint `/v1_2/Query.svc`. Note that it will not return the wsdl on a `GET` request..
 
 The file `documents\EPCIS Examples - 1.2.postman_collection.json` contains XML requests examples to be run in [PostMan](https://www.getpostman.com/), and the file `EPCglobal-epcis-query-1-2-soapui-project` contains a project with SOAP example requests to be run in [SoapUI](https://www.soapui.org/open-source.html).
 
