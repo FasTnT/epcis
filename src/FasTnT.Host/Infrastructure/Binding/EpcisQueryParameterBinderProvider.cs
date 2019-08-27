@@ -13,7 +13,7 @@ namespace FasTnT.Host.Infrastructure.Binding
         {
             if (context == null) throw new ArgumentNullException(nameof(context));
 
-            return context.Metadata.ModelType == typeof(QueryParameter[])
+            return context.Metadata.ModelType == typeof(IEnumerable<QueryParameter>)
                 ? new EpcisQueryParameterModelBinder()
                 : null;
         }

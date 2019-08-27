@@ -3,6 +3,7 @@ using FasTnT.Host.Infrastructure.Attributes;
 using FasTnT.Model.Queries;
 using FasTnT.Model.Subscriptions;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -22,7 +23,7 @@ namespace FasTnT.Host.Controllers.v2_0
             => await _queryService.GetQueryNames(cancellationToken);
 
         [HttpGet("{queryName}/events")]
-        public async Task<object> Poll(string queryName, QueryParameter[] parameters, CancellationToken cancellationToken) 
+        public async Task<object> Poll(string queryName, IEnumerable<QueryParameter> parameters, CancellationToken cancellationToken) 
             => await _queryService.Poll(new Poll { QueryName = queryName, Parameters = parameters }, cancellationToken);
 
         [HttpGet("{queryName}/subscriptions")]
