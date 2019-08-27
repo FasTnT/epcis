@@ -13,7 +13,7 @@ namespace FasTnT.Host.Infrastructure.Binding
         {
             if (context == null) throw new ArgumentNullException(nameof(context));
 
-            return context.Metadata.ModelType == typeof(IEnumerable<QueryParameter>)
+            return context.Metadata.ModelType == typeof(QueryParameter[])
                 ? new EpcisQueryParameterModelBinder()
                 : null;
         }
@@ -24,7 +24,7 @@ namespace FasTnT.Host.Infrastructure.Binding
             {
                 var httpCtx = bindingContext.HttpContext;
                 var queryString = httpCtx.Request.QueryString;
-                var parameters = ODataQueryParameterParser.ParseODataQueryString(queryString.HasValue ? queryString.Value : default);
+                var parameters = QueryStringParameterParser.ParseODataQueryString(queryString.HasValue ? queryString.Value : default);
 
                 await Task.Run(() => bindingContext.Result = ModelBindingResult.Success(parameters));
             }
