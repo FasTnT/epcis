@@ -6,7 +6,7 @@ using System.Net.Http;
 using System.Text;
 using System.Xml.Linq;
 
-namespace FasTnT.IntegrationTests.API.EpcisEndpoints.v1._2.ListSubscriptionIDs
+namespace FasTnT.IntegrationTests.API.EpcisEndpoints.v1_2.Soap.ListSubscriptionIDs
 {
     [TestClass]
     [TestCategory("IntegrationTests")]
@@ -15,7 +15,7 @@ namespace FasTnT.IntegrationTests.API.EpcisEndpoints.v1._2.ListSubscriptionIDs
         public override void Act()
         {
             Client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Basic", "YWRtaW46UEBzc3cwcmQ=");
-            Result = Client.PostAsync("/v1_2/Query", new StringContent(File.ReadAllText("Requests/ListSubscriptionIDs.xml"), Encoding.UTF8, "application/xml")).Result;
+            Result = Client.PostAsync("/v1_2/Query.svc", new StringContent(File.ReadAllText("Requests/Soap/ListSubscriptionIDs.xml"), Encoding.UTF8, "application/xml")).Result;
         }
 
         [Assert]

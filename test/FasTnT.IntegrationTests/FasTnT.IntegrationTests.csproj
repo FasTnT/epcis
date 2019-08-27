@@ -38,16 +38,28 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="Requests\GetQueryNames.xml">
+    <None Update="Requests\Soap\GetQueryNames.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="Requests\GetVendorVersion.xml">
+    <None Update="Requests\Soap\GetVendorVersion.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="Requests\GetStandardVersion.xml">
+    <None Update="Requests\Soap\GetStandardVersion.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="Requests\ListSubscriptionIDs.xml">
+    <None Update="Requests\Soap\ListSubscriptionIDs.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Requests\XML\GetQueryNames.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Requests\XML\GetStandardVersion.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Requests\XML\GetVendorVersion.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Requests\XML\ListSubscriptionIDs.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
