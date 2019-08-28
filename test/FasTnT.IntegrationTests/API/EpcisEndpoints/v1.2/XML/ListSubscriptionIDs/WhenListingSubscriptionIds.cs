@@ -1,5 +1,4 @@
-﻿using FasTnT.Domain;
-using FasTnT.IntegrationTests.Common;
+﻿using FasTnT.IntegrationTests.Common;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.IO;
 using System.Net;
@@ -7,16 +6,16 @@ using System.Net.Http;
 using System.Text;
 using System.Xml.Linq;
 
-namespace FasTnT.IntegrationTests.API.EpcisEndpoints.v1_2.GetVendorVersion
+namespace FasTnT.IntegrationTests.API.EpcisEndpoints.v1_2.XML.ListSubscriptionIDs
 {
     [TestClass]
     [TestCategory("IntegrationTests")]
-    public class WhenCallingQueryGetVendorVersion : BaseMigratedIntegrationTest
+    public class WhenListingSubscriptionIds : BaseMigratedIntegrationTest
     {
         public override void Act()
         {
             Client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Basic", "YWRtaW46UEBzc3cwcmQ=");
-            Result = Client.PostAsync("/v1_2/Query", new StringContent(File.ReadAllText("Requests/GetVendorVersion.xml"), Encoding.UTF8, "application/xml")).Result;
+            Result = Client.PostAsync("/v1_2/Query", new StringContent(File.ReadAllText("Requests/XML/ListSubscriptionIDs.xml"), Encoding.UTF8, "application/xml")).Result;
         }
 
         [Assert]
@@ -40,13 +39,13 @@ namespace FasTnT.IntegrationTests.API.EpcisEndpoints.v1_2.GetVendorVersion
         }
 
         [Assert]
-        public void ItShouldReturnCurrentVendorVersion()
+        public void ItShouldReturnAGetSubscriptionIDsResult()
         {
             var content = Result.Content.ReadAsStringAsync().Result;
             var xmlDocument = XDocument.Parse(content);
-            var standardVersion = xmlDocument.Root.Element(XName.Get("Body", "http://schemas.xmlsoap.org/soap/envelope/")).Element(XName.Get("GetVendorVersionResult", "urn:epcglobal:epcis-query:xsd:1")).Value;
+            var getSubscriptionResult = xmlDocument.Root.Element(XName.Get("EPCISBody")).Element(XName.Get("GetSubscriptionIDsResult", "urn:epcglobal:epcis-query:xsd:1"));
 
-            Assert.AreEqual(Constants.ProductVersion, standardVersion);
+            Assert.IsNotNull(getSubscriptionResult);
         }
     }
 }

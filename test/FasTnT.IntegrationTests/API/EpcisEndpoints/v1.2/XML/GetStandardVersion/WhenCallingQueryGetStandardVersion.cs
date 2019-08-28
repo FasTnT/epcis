@@ -1,22 +1,21 @@
 ﻿using FasTnT.IntegrationTests.Common;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.IO;
-using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Xml.Linq;
 
-namespace FasTnT.IntegrationTests.API.EpcisEndpoints.v1_2.GetVendorVersion
+namespace FasTnT.IntegrationTests.API.EpcisEndpoints.v1_2.XML.GetStandardVersion
 {
     [TestClass]
     [TestCategory("IntegrationTests")]
-    public class WhenCallingQueryGetQueryNames : BaseMigratedIntegrationTest
+    public class WhenCallingQueryGetStandardVersion : BaseMigratedIntegrationTest
     {
         public override void Act()
         {
             Client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Basic", "YWRtaW46UEBzc3cwcmQ=");
-            Result = Client.PostAsync("/v1_2/Query", new StringContent(File.ReadAllText("Requests/GetQueryNames.xml"), Encoding.UTF8, "application/xml")).Result;
+            Result = Client.PostAsync("/v1_2/Query", new StringContent(File.ReadAllText("Requests/XML/GetStandardVersion.xml"), Encoding.UTF8, "application/xml")).Result;
         }
 
         [Assert]
@@ -43,13 +42,13 @@ namespace FasTnT.IntegrationTests.API.EpcisEndpoints.v1_2.GetVendorVersion
         }
 
         [Assert]
-        public void ItShouldReturnAtLeastTwoAvailableQueryNames()
+        public void ItShouldReturnTheStandardVersion1_2()
         {
             var content = Result.Content.ReadAsStringAsync().Result;
             var xmlDocument = XDocument.Parse(content);
-            var availableQueryNames = xmlDocument.Root.Element(XName.Get("Body", "http://schemas.xmlsoap.org/soap/envelope/")).Element(XName.Get("GetQueryNamesResult", "urn:epcglobal:epcis-query:xsd:1")).Elements("string");
+            var standardVersion = xmlDocument.Root.Element(XName.Get("EPCISBody")).Element(XName.Get("GetStandardVersionResult", "urn:epcglobal:epcis-query:xsd:1")).Value;
 
-            Assert.IsTrue(availableQueryNames.Count() >= 2, "The result contains fewer than 2 available query names");
+            Assert.AreEqual("1.2", standardVersion);
         }
     }
 }
