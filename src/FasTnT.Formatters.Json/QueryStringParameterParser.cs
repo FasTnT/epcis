@@ -6,7 +6,7 @@ namespace FasTnT.Formatters.Json
 {
     public static class QueryStringParameterParser
     {
-        public static IEnumerable<QueryParameter> ParseODataQueryString(string queryString)
+        public static IEnumerable<QueryParameter> ParseQueryString(string queryString)
         {
             var queryParts = (queryString ?? string.Empty).TrimStart('?').Split('&').Where(p => p.Contains('=')).ToArray();
             var parameters = new QueryParameter[queryParts.Length];
