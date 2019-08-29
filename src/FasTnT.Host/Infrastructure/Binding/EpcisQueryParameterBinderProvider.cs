@@ -24,7 +24,7 @@ namespace FasTnT.Host.Infrastructure.Binding
             {
                 var httpCtx = bindingContext.HttpContext;
                 var queryString = httpCtx.Request.QueryString;
-                var parameters = ODataQueryParameterParser.ParseODataQueryString(queryString.HasValue ? queryString.Value : default);
+                var parameters = QueryStringParameterParser.ParseQueryString(queryString.HasValue ? queryString.Value : default);
 
                 await Task.Run(() => bindingContext.Result = ModelBindingResult.Success(parameters));
             }
