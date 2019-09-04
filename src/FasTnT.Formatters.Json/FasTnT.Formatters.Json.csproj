@@ -11,7 +11,7 @@
 
   <ItemGroup>
     <PackageReference Include="morelinq" Version="3.2.0" />
-    <PackageReference Include="Newtonsoft.Json.Schema" Version="3.0.11" />
+    <PackageReference Include="NJsonSchema" Version="10.0.23" />
   </ItemGroup>
 
   <ItemGroup>

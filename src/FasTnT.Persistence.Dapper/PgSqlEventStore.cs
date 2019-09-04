@@ -13,7 +13,7 @@ namespace FasTnT.Persistence.Dapper
     public class PgSqlEventStore : IEventStore
     {
         private readonly DapperUnitOfWork _unitOfWork;
-        private readonly IEnumerable<StoreAction> _actions = new StoreAction[]{ StoreEvents, StoreEpcs, StoreCustomFields, StoreSourceDestinations, StoreBusinessTransactions, StoreErrorDeclaration };
+        private readonly StoreAction[] _actions = new StoreAction[]{ StoreEvents, StoreEpcs, StoreCustomFields, StoreSourceDestinations, StoreBusinessTransactions, StoreErrorDeclaration };
 
         public PgSqlEventStore(DapperUnitOfWork unitOfWork) => _unitOfWork = unitOfWork;
 
