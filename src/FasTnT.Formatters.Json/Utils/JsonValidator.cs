@@ -1,7 +1,7 @@
 ﻿using FasTnT.Model.Exceptions;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using Newtonsoft.Json.Schema;
+using NJsonSchema;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -14,7 +14,7 @@ namespace FasTnT.Formatters.Json.Utils
     public class JsonValidator
     {
         public static JsonValidator Instance { get; } = new JsonValidator();
-        private readonly JSchema _schema;
+        private readonly JsonSchema _schema;
 
         private JsonValidator()
         {
@@ -22,26 +22,23 @@ namespace FasTnT.Formatters.Json.Utils
             var schemaFile = assembly.GetManifestResourceNames()
                                     .FirstOrDefault(x => x.EndsWith(".json", StringComparison.OrdinalIgnoreCase));
 
-            _schema = JSchema.Load(new JsonTextReader(new StreamReader(assembly.GetManifestResourceStream(schemaFile))));
+            _schema = JsonSchema.FromJsonAsync(new StreamReader(assembly.GetManifestResourceStream(schemaFile)).ReadToEnd()).Result;
         }
 
         public async Task<IDictionary<string, JToken>> Load(Stream input)
         {
             using (var reader = new StreamReader(input))
             {
-                var validatingReader = new JSchemaValidatingReader(new JsonTextReader(reader))
-                {
-                    Schema = _schema
-                };
-                var serializer = new JsonSerializer();
+                var content = reader.ReadToEnd();
+                var result = _schema.Validate(content);
 
-                try
+                if (result.Any())
                 {
-                    return await Task.FromResult(serializer.Deserialize<IDictionary<string, JToken>>(validatingReader));
+                    throw new EpcisException(ExceptionType.ValidationException, $"{result.First().Kind} at line {result.First().LineNumber} position {result.First().LinePosition}", ExceptionSeverity.Error);
                 }
-                catch(JSchemaValidationException ex)
+                else
                 {
-                    throw new EpcisException(ExceptionType.ValidationException, ex.Message, ExceptionSeverity.Error);
+                    return await Task.FromResult(JsonConvert.DeserializeObject<IDictionary<string, JToken>>(content));
                 }
             }
         }

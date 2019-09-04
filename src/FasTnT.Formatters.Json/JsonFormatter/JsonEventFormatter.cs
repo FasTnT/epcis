@@ -61,14 +61,20 @@ namespace FasTnT.Formatters.Json.Formatter
             if (childQty.Any()) dictionary.Add("childQuantityList", childQty);
         }
 
-        private object FormatQuantity(Epc x)
+        private object FormatQuantity(Epc epc)
         {
-            return new Dictionary<string, object>
+            var dictionary = new Dictionary<string, object>
             {
-                { "epcClass", x.Id },
-                { "quantity", x.Quantity },
-                { "uom", x.UnitOfMeasure }
+                { "epcClass", epc.Id },
+                { "quantity", epc.Quantity }
             };
+
+            if (!string.IsNullOrEmpty(epc.UnitOfMeasure))
+            {
+                dictionary.Add("uom", epc.UnitOfMeasure);
+            }
+
+            return dictionary;
         }
 
         private void AddSourceDestinationList(EpcisEvent evt, Dictionary<string, object> dictionary)
