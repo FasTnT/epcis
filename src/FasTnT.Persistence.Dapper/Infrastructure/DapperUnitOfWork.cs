@@ -6,6 +6,7 @@ using FasTnT.Persistence.Dapper.Setup;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using static Dapper.SqlMapper;
@@ -66,6 +67,8 @@ namespace FasTnT.Persistence.Dapper
         }
 
         public async Task Execute(string command, CancellationToken cancellationToken) => await _connection.ExecuteAsync(new CommandDefinition(command, null, _transaction, cancellationToken: cancellationToken));
+        public async Task<int> Store<T>(string command, T parameters, CancellationToken cancellationToken) => await _connection.QuerySingleAsync<int>(new CommandDefinition(command, parameters, _transaction, cancellationToken: cancellationToken));
+        public async Task<int[]> Store<T>(string command, T[] parameters, CancellationToken cancellationToken) => (await _connection.BulkInsertReturningAsync<T>(command, parameters, _transaction, cancellationToken: cancellationToken)).ToArray();
         public async Task Execute<T>(string command, T parameters, CancellationToken cancellationToken) => await _connection.ExecuteAsync(new CommandDefinition(command, parameters, _transaction, cancellationToken: cancellationToken));
         public async Task BulkExecute<T>(string command, IEnumerable<T> parameters, CancellationToken cancellationToken) => await _connection.BulkInsertAsync(command, parameters, _transaction, cancellationToken: cancellationToken);
         public async Task<GridReader> FetchMany(string command, object parameters, CancellationToken cancellationToken) =>  await _connection.QueryMultipleAsync(new CommandDefinition(command, parameters, _transaction, cancellationToken: cancellationToken));

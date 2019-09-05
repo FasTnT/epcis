@@ -26,7 +26,7 @@ namespace FasTnT.Persistence.Dapper
             _sqlTemplate = _query.AddTemplate(SqlRequests.MasterDataQuery);
         }
 
-        public async Task Store(Guid requestId, IEnumerable<EpcisMasterData> masterDataList, CancellationToken cancellationToken)
+        public async Task Store(int requestId, IEnumerable<EpcisMasterData> masterDataList, CancellationToken cancellationToken)
         {
             foreach (var masterData in masterDataList)
             {

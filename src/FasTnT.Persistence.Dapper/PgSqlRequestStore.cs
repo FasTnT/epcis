@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using FasTnT.Domain.Persistence;
@@ -15,11 +14,10 @@ namespace FasTnT.Persistence.Dapper
 
         public PgSqlRequestStore(DapperUnitOfWork unitOfWork) => _unitOfWork = unitOfWork;
 
-        public async Task<Guid> Store(EpcisRequestHeader request, User user, CancellationToken cancellationToken)
+        public async Task<int> Store(EpcisRequestHeader request, User user, CancellationToken cancellationToken)
         {
-            var epcisRequest = ModelMapper.Map<EpcisRequestHeader, RequestHeaderEntity>(request, r => { r.Id = Guid.NewGuid(); r.UserId = user?.Id; });
-
-            await _unitOfWork.Execute(SqlRequests.StoreRequest, epcisRequest, cancellationToken);
+            var epcisRequest = ModelMapper.Map<EpcisRequestHeader, RequestHeaderEntity>(request, r => { r.UserId = user?.Id; });
+            epcisRequest.Id = await _unitOfWork.Store(SqlRequests.StoreRequest, epcisRequest, cancellationToken);
             await StoreStandardBusinessHeader(request, epcisRequest, cancellationToken);
 
             return epcisRequest.Id;

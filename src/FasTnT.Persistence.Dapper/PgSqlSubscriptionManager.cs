@@ -54,7 +54,7 @@ namespace FasTnT.Persistence.Dapper
         private async Task LoadParameters(SubscriptionEntity[] subscriptions, CancellationToken cancellationToken)
         {
             var @params = (await _unitOfWork.Query<dynamic>(SqlRequests.SubscriptionListParameters, null, cancellationToken))
-                .GroupBy(x => (Guid)x.subscription_id)
+                .GroupBy(x => (int)x.subscription_id)
                 .Select(x => new
                 {
                     SubscriptionId = x.Key,
@@ -84,7 +84,6 @@ namespace FasTnT.Persistence.Dapper
         {
             var entity = new
             {
-                Id = Guid.NewGuid(),
                 Active = true,
                 subscription.SubscriptionId,
                 subscription.Trigger,
@@ -99,20 +98,14 @@ namespace FasTnT.Persistence.Dapper
                 subscription.Destination,
                 subscription.QueryName
             };
-            var parameters = new List<object>();
-            var values = new List<object>();
 
-            subscription.Parameters.ForEach(parameter =>
-            {
-                var id = Guid.NewGuid();
+            var entityId = await _unitOfWork.Store(SqlRequests.SubscriptionStore, entity, cancellationToken);
 
-                parameters.Add(new { Id = id, SubscriptionId = entity.Id, parameter.Name });
-                parameter.Values.ForEach(value => values.Add(new { Id = Guid.NewGuid(), ParameterId = id, Value = value }));
-            });
+            var parameters = subscription.Parameters.Select(parameter => new { SubscriptionId = entityId, parameter.Name }).ToArray();
+            var parameterIds = await _unitOfWork.Store(SqlRequests.SubscriptionStoreParameter, parameters, cancellationToken);
+            var values = subscription.Parameters.SelectMany((p, i) => p.Values.Select(value => new { ParameterId = parameterIds[i], Value = value })).ToArray();
 
-            await _unitOfWork.Execute(SqlRequests.SubscriptionStore, entity, cancellationToken);
-            await _unitOfWork.Execute(SqlRequests.SubscriptionStoreParameter, parameters, cancellationToken);
-            await _unitOfWork.Execute(SqlRequests.SubscriptionStoreParameterValue, values, cancellationToken);
+            await _unitOfWork.BulkExecute(SqlRequests.SubscriptionStoreParameterValue, values, cancellationToken);
         }
     }
 }

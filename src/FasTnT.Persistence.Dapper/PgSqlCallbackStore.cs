@@ -12,7 +12,7 @@ namespace FasTnT.Persistence.Dapper
 
         public PgSqlCallbackStore(DapperUnitOfWork unitOfWork) => _unitOfWork = unitOfWork;
 
-        public async Task Store(Guid? requestId, string subscriptionId, QueryCallbackType callbackType, CancellationToken cancellationToken)
+        public async Task Store(int? requestId, string subscriptionId, QueryCallbackType callbackType, CancellationToken cancellationToken)
         {
             await _unitOfWork.Execute(SqlRequests.StoreQueryCallback, new { Id = Guid.NewGuid(), RequestId = requestId, SubscriptionId = subscriptionId, CallbackType = callbackType }, cancellationToken);
         }

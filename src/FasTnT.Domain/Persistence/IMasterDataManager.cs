@@ -1,5 +1,4 @@
 ﻿using FasTnT.Model.MasterDatas;
-using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -8,7 +7,7 @@ namespace FasTnT.Domain.Persistence
 {
     public interface IMasterDataManager
     {
-        Task Store(Guid requestId, IEnumerable<EpcisMasterData> masterData, CancellationToken cancellationToken);
+        Task Store(int requestId, IEnumerable<EpcisMasterData> masterData, CancellationToken cancellationToken);
 
         void WhereTypeIn(string[] values);
         void WhereIdIn(string[] values);

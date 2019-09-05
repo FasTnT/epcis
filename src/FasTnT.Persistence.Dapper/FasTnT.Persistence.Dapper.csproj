@@ -13,13 +13,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\DapperUtility\src\Faithlife.Utility.Dapper\Faithlife.Utility.Dapper.csproj" />
     <ProjectReference Include="..\FasTnT.Domain\FasTnT.Domain.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Reference Include="Faithlife.Utility.Dapper">
-      <HintPath>..\..\libs\Faithlife.Utility.Dapper.dll</HintPath>
-    </Reference>
   </ItemGroup>
 
   <ItemGroup>

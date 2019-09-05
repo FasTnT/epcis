@@ -61,7 +61,7 @@ namespace FasTnT.Persistence.Dapper {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to H4sIAAAAAAAA/81b3XKjOBa+jp9Cleqt2LuOy/nrtCc1FxjLCdMOZACnp/eGwiDHVNvg8JOe7KvtxTzSvMIehMCAARObbHeq2p2go6Oj7zs6OkfIf//3r9NTNFWwrCCFv8P3XIuXMadi9hcSxkiUVIT/EBRVQYFHXO8mFlG54QQXSfTCz1a7heDHMlEQwEcoI04nky59GgrY+oogY6G7uuETF73o7qtlP7Wv+h3ES5NJOML6STN0X186T71jk8z1YOkf5zStdc/77rhmgaaz/vnFm3S55MnyQAMxNcdGvrUinq+v1ui75S+cwKdP0H8cmyT90AiPuelEpU1hS/tkqvInv/zikz/9LrKd7+1OJ1LOS6Kiypwgquj44bMWInCMHmThnpO/os/4K2pb5rZo8EwltQSwqSj8PsWoHT/otDqtL4J6h9qSMFLQr2jMTRTcuWm1gFj8wAu1iCVrw6omlkr0XPIcACiV3JqOEayI7WsUrjooxugbwGP9Xm/AnkLI [rest of string was truncated]&quot;;.
+        ///   Looks up a localized string similar to H4sIAAAAAAAA/81b3XKbShK+tp5iyuUtS7s6Kv/EcXxc5wKhkc2JDD6A7JO9oTAgi4oECj/O8b7aXuwj7StszzAg/sES3iRVUSLo6en5vp6e7pnRf//9n19+QXMFywpS+Ft8x/V4GXMqZt+QMEWipCL8p6CoCgp9y/OvYxGVG89wmcSIfPb6PQR/bBOBdoGbUSlxPpsN6XMi4uhrCxlL3dONwPLQi+692s5z/+JkgHhpNiN9bJ41Qw/0lfs8OjSthR6ugsOcpo3u+99dzyzRdHpydv4mXZ71bPugwTI110GBvbb8QF9v0Hc7WLphQJ+gf7mOlbRDEzzl5jOVviJv+sdzlT/+9dfA+isYIsf93h8MIuW8JCqqzAmiig7vP2sEgUN0Lwt3nPwFfcZfUN82i6LhNyqpJYDNReGPOUb9+MGgN+g9Cuot6kvCREG/oSk3U/DgutcDavE9L7Si1toYdj21VGLkWd9CAKWBXdM1wrXlBBoFrA2OMf4GMNm+1RvQ [rest of string was truncated]&quot;;.
         /// </summary>
         public static string CreateDatabaseZipped {
             get {
@@ -190,7 +190,7 @@ namespace FasTnT.Persistence.Dapper {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to INSERT INTO epcis.epc(event_id, epc, type, is_quantity, quantity, unit_of_measure) VALUES (@EventId, @Id, @Type, @IsQuantity, @Quantity, @UnitOfMeasure) ...;.
+        ///   Looks up a localized string similar to INSERT INTO epcis.epc(event_id, epc, type, is_quantity, quantity, unit_of_measure) VALUES (@eventid, @id, @type, @isquantity, @quantity, @unitofmeasure) ...;.
         /// </summary>
         public static string StoreEpcs {
             get {
@@ -199,7 +199,7 @@ namespace FasTnT.Persistence.Dapper {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to INSERT INTO epcis.error_declaration(event_id, declaration_time, reason) VALUES(@EventId, @DeclarationTime, @Reason) ...;.
+        ///   Looks up a localized string similar to INSERT INTO epcis.error_declaration(event_id, declaration_time, reason) VALUES(@eventid, @declarationtime, @reason) ...;.
         /// </summary>
         public static string StoreErrorDeclaration {
             get {
@@ -208,7 +208,7 @@ namespace FasTnT.Persistence.Dapper {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to INSERT INTO epcis.error_declaration_eventid(event_id, corrective_eventid) VALUES(@EventId, @CorrectiveId) ...;.
+        ///   Looks up a localized string similar to INSERT INTO epcis.error_declaration_eventid(event_id, corrective_eventid) VALUES(@eventid, @correctiveid) ...;.
         /// </summary>
         public static string StoreErrorDeclarationIds {
             get {
@@ -217,7 +217,7 @@ namespace FasTnT.Persistence.Dapper {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to INSERT INTO epcis.event(id, request_id, record_time, action, event_type, event_timezone_offset, business_location, business_step, disposition, read_point, transformation_id, event_id) VALUES(@Id, @RequestId, @EventTime, @Action, @Type, @EventTimeZoneOffset, @BusinessLocation, @BusinessStep, @Disposition, @ReadPoint, @TransformationId, @EventId) ...;.
+        ///   Looks up a localized string similar to INSERT INTO epcis.event(request_id, record_time, action, event_type, event_timezone_offset, business_location, business_step, disposition, read_point, transformation_id, event_id) VALUES(@requestid, @eventtime, @action, @type, @eventtimezoneoffset, @businesslocation, @businessstep, @disposition, @readpoint, @transformationid, @eventid) ... RETURNING id;.
         /// </summary>
         public static string StoreEvent {
             get {
@@ -235,7 +235,7 @@ namespace FasTnT.Persistence.Dapper {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to INSERT INTO epcis.request(id, document_time, record_time, user_id) VALUES(@Id, @DocumentTime, @RecordTime, @UserId);.
+        ///   Looks up a localized string similar to INSERT INTO epcis.request(document_time, record_time, user_id) VALUES(@DocumentTime, @RecordTime, @UserId) RETURNING Id;.
         /// </summary>
         public static string StoreRequest {
             get {
@@ -244,7 +244,7 @@ namespace FasTnT.Persistence.Dapper {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to INSERT INTO epcis.source_destination(event_id, type, source_dest_id, direction) VALUES (@EventId, @Type, @Id, @Direction) ...;.
+        ///   Looks up a localized string similar to INSERT INTO epcis.source_destination(event_id, type, source_dest_id, direction) VALUES (@eventid, @type, @id, @direction) ...;.
         /// </summary>
         public static string StoreSourceDestination {
             get {
@@ -325,7 +325,7 @@ namespace FasTnT.Persistence.Dapper {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to INSERT INTO subscriptions.subscription(id, subscription_id, trigger, initial_record_time, report_if_empty, destination, query_name,  active, schedule_seconds, schedule_minutes, schedule_hours, schedule_month, schedule_day_of_month, schedule_day_of_week) VALUES(@Id, @SubscriptionId, @Trigger, @InitialRecordTime, @ReportIfEmpty, @Destination, @QueryName, @Active, @Second, @Minute, @Hour, @Month, @DayOfMonth, @DayOfWeek);.
+        ///   Looks up a localized string similar to INSERT INTO subscriptions.subscription(subscription_id, trigger, initial_record_time, report_if_empty, destination, query_name,  active, schedule_seconds, schedule_minutes, schedule_hours, schedule_month, schedule_day_of_month, schedule_day_of_week) VALUES(@SubscriptionId, @Trigger, @InitialRecordTime, @ReportIfEmpty, @Destination, @QueryName, @Active, @Second, @Minute, @Hour, @Month, @DayOfMonth, @DayOfWeek) RETURNING id;.
         /// </summary>
         public static string SubscriptionStore {
             get {
@@ -334,7 +334,7 @@ namespace FasTnT.Persistence.Dapper {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to INSERT INTO subscriptions.parameter(id, subscription_id, name) VALUES(@Id, @SubscriptionId, @Name).
+        ///   Looks up a localized string similar to INSERT INTO subscriptions.parameter(subscription_id, name) VALUES(@subscriptionid, @name) ... RETURNING id;.
         /// </summary>
         public static string SubscriptionStoreParameter {
             get {
@@ -343,7 +343,7 @@ namespace FasTnT.Persistence.Dapper {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to INSERT INTO subscriptions.parameter_value(id, parameter_id, value) VALUES(@Id, @ParameterId, @Value);.
+        ///   Looks up a localized string similar to INSERT INTO subscriptions.parameter_value(parameter_id, value) VALUES(@parameterid, @value) ...;.
         /// </summary>
         public static string SubscriptionStoreParameterValue {
             get {
@@ -352,7 +352,7 @@ namespace FasTnT.Persistence.Dapper {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to INSERT INTO subscriptions.trigger(id, subscription_id, trigger_time, status, reason) VALUES(@Id, (SELECT id FROM subscriptions.subscription WHERE subscription_id = @SubscriptionId), NOW(), @Status, @Reason);.
+        ///   Looks up a localized string similar to INSERT INTO subscriptions.trigger(subscription_id, trigger_time, status, reason) VALUES((SELECT id FROM subscriptions.subscription WHERE subscription_id = @SubscriptionId), NOW(), @Status, @Reason);.
         /// </summary>
         public static string SubscriptionStoreTrigger {
             get {
