@@ -28,8 +28,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FasTnT.Formatters.Json", "s
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FasTnT.IntegrationTests", "test\FasTnT.IntegrationTests\FasTnT.IntegrationTests.csproj", "{CFBF7866-F6F9-4D9C-B28F-093257916212}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Faithlife.Utility.Dapper", "..\DapperUtility\src\Faithlife.Utility.Dapper\Faithlife.Utility.Dapper.csproj", "{19631895-8347-4D94-9189-D621A5404161}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -72,10 +70,6 @@ Global
 		{CFBF7866-F6F9-4D9C-B28F-093257916212}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CFBF7866-F6F9-4D9C-B28F-093257916212}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CFBF7866-F6F9-4D9C-B28F-093257916212}.Release|Any CPU.Build.0 = Release|Any CPU
-		{19631895-8347-4D94-9189-D621A5404161}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{19631895-8347-4D94-9189-D621A5404161}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{19631895-8347-4D94-9189-D621A5404161}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{19631895-8347-4D94-9189-D621A5404161}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
