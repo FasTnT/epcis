@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace FasTnT.Domain.Persistence
 {
-    public interface IEventStore
+    public interface IEventManager
     {
         Task Store(int requestId, IEnumerable<EpcisEvent> events, CancellationToken cancellationToken);
     }

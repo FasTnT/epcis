@@ -22,9 +22,9 @@ namespace FasTnT.Persistence.Dapper
         public DapperUnitOfWork(IDbConnection connection)
         {
             _connection = connection ?? throw new ArgumentNullException(nameof(connection));
-            EventStore = new PgSqlEventStore(this);
-            CallbackStore = new PgSqlCallbackStore(this);
-            RequestStore = new PgSqlRequestStore(this);
+            EventStore = new PgSqlEventManager(this);
+            CallbackStore = new PgSqlCallbackManager(this);
+            RequestStore = new PgSqlRequestManager(this);
             EventManager = new PgSqlEventRepository(this);
             SubscriptionManager = new PgSqlSubscriptionManager(this);
             DatabaseManager = new PgSqlDatabaseMigrator(this);
@@ -32,9 +32,9 @@ namespace FasTnT.Persistence.Dapper
             UserManager = new PgSqlUserManager(this);
         }
 
-        public ICallbackStore CallbackStore { get; }
-        public IRequestStore RequestStore { get; }
-        public IEventStore EventStore { get; }
+        public ICallbackManager CallbackStore { get; }
+        public IRequestManager RequestStore { get; }
+        public IEventManager EventStore { get; }
         public IEventRepository EventManager { get; }
         public ISubscriptionManager SubscriptionManager { get; }
         public IMasterDataManager MasterDataManager { get; }

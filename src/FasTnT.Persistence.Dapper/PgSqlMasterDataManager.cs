@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -23,28 +22,28 @@ namespace FasTnT.Persistence.Dapper
         public PgSqlMasterDataManager(DapperUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
-            _sqlTemplate = _query.AddTemplate(SqlRequests.MasterDataQuery);
+            _sqlTemplate = _query.AddTemplate(PgSqlMasterdataRequests.Query);
         }
 
         public async Task Store(int requestId, IEnumerable<EpcisMasterData> masterDataList, CancellationToken cancellationToken)
         {
             foreach (var masterData in masterDataList)
             {
-                await _unitOfWork.Execute(SqlRequests.MasterDataDelete, masterData, cancellationToken);
-                await _unitOfWork.Execute(SqlRequests.MasterDataInsert, masterData, cancellationToken);
+                await _unitOfWork.Execute(PgSqlMasterdataRequests.Delete, masterData, cancellationToken);
+                await _unitOfWork.Execute(PgSqlMasterdataRequests.Insert, masterData, cancellationToken);
 
                 foreach (var attribute in masterData.Attributes)
                 {
                     var output = new List<MasterDataFieldEntity>();
                     ParseFields(attribute.Fields, output);
 
-                    await _unitOfWork.Execute(SqlRequests.MasterDataAttributeInsert, attribute, cancellationToken);
-                    await _unitOfWork.Execute(SqlRequests.MasterDataAttributeFieldInsert, output, cancellationToken);
+                    await _unitOfWork.Execute(PgSqlMasterdataRequests.AttributeInsert, attribute, cancellationToken);
+                    await _unitOfWork.Execute(PgSqlMasterdataRequests.AttributeFieldInsert, output, cancellationToken);
                 }
             }
 
             var hierarchies = masterDataList.SelectMany(x => x.Children.Select(c => new EpcisMasterDataHierarchy { Type = x.Type, ChildrenId = c.ChildrenId, ParentId = x.Id }));
-            await _unitOfWork.BulkExecute(SqlRequests.MasterDataHierarchyInsert, hierarchies, cancellationToken);
+            await _unitOfWork.BulkExecute(PgSqlMasterdataRequests.HierarchyInsert, hierarchies, cancellationToken);
         }
 
         private void ParseFields(IEnumerable<MasterDataField> fields, List<MasterDataFieldEntity> output, int? parentId = null)
@@ -69,7 +68,7 @@ namespace FasTnT.Persistence.Dapper
 
             if (attributes != null)
             {
-                var query = !attributes.Any() ? SqlRequests.MasterDataAllAttributeQuery : SqlRequests.MasterDataAttributeQuery;
+                var query = !attributes.Any() ? PgSqlMasterdataRequests.AllAttributeQuery : PgSqlMasterdataRequests.AttributeQuery;
                 var relatedAttribute = await _unitOfWork.Query<MasterDataAttribute>(query, new { Ids = masterData.Select(x => x.Id).ToArray(), Attributes = attributes }, cancellationToken);
                 masterData.ForEach(m => m.Attributes.AddRange(relatedAttribute.Where(a => a.ParentId == m.Id && a.ParentType == m.Type)));
             }

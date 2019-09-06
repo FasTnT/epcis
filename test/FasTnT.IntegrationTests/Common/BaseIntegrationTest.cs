@@ -4,10 +4,10 @@ using Microsoft.Extensions.Configuration;
 using Npgsql;
 using System.Data;
 using System.Collections.Generic;
-using FasTnT.Persistence.Dapper;
 using System;
 using System.IO;
 using System.IO.Compression;
+using FasTnT.Persistence.Dapper.Setup;
 
 namespace FasTnT.IntegrationTests.Common
 {
@@ -52,7 +52,7 @@ namespace FasTnT.IntegrationTests.Common
         {
             using (var command = Connection.CreateCommand())
             {
-                command.CommandText = UnzipCommand(SqlRequests.CreateDatabaseZipped);
+                command.CommandText = UnzipCommand(PgSqlDatabaseRequests.CreateZipped);
                 command.ExecuteNonQuery();
             }
         }
@@ -61,7 +61,7 @@ namespace FasTnT.IntegrationTests.Common
         {
             using (var command = Connection.CreateCommand())
             {
-                command.CommandText = UnzipCommand(SqlRequests.DropDatabaseZipped);
+                command.CommandText = UnzipCommand(PgSqlDatabaseRequests.DropZipped);
                 command.ExecuteNonQuery();
             }
         }

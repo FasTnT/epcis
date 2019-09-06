@@ -117,111 +117,11 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="CreateDatabaseZipped" xml:space="preserve">
+  <data name="CreateZipped" xml:space="preserve">
     <value>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</value>
     <comment>GZIP script of the SQL database schema and tables. (try http://www.txtwizard.net/compression for decompression)</comment>
   </data>
-  <data name="DropDatabaseZipped" xml:space="preserve">
+  <data name="DropZipped" xml:space="preserve">
     <value>H4sIAAAAAAAAC3u/e79LkH+AQrCzh6uvo4Knm4JrhGdwSLBCcVJKhoKzY7Czo4urNS8XdkXJiTk5SYnJ2QQVFpcmFScXZRaUZObnFRM2NqmMoJrUguRMwiaVFqcWIVQBAOPdp4/tAAAA</value>
-  </data>
-  <data name="EventQuery" xml:space="preserve">
-    <value>SELECT request.record_time as capture_time, event.id, event_type as type, event.record_time as event_time, action, read_point, event_timezone_offset, disposition, business_location, business_step, transformation_id, event.event_id, declaration_time, reason FROM epcis.event JOIN epcis.request on request.id = event.request_id LEFT JOIN epcis.error_declaration ed ON event.id = ed.event_id /**where**/ /**orderby**/ LIMIT @limit</value>
-  </data>
-  <data name="RelatedQuery" xml:space="preserve">
-    <value>SELECT event_id, epc as id, type, is_quantity, quantity, unit_of_measure FROM epcis.epc WHERE event_id = ANY(@EventIds);
-SELECT event_id, field_id as id, parent_id, namespace, name, type, text_value, numeric_value, date_value FROM epcis.custom_field WHERE event_id = ANY(@EventIds);
-SELECT event_id, transaction_type as type, transaction_id as id FROM epcis.business_transaction WHERE event_id = ANY(@EventIds);
-SELECT event_id, type, source_dest_id as id, direction FROM epcis.source_destination WHERE event_id = ANY(@EventIds);
-SELECT event_id, corrective_eventid as corrective_id FROM epcis.error_declaration_eventid WHERE event_id = ANY(@EventIds);</value>
-  </data>
-  <data name="StoreBusinessTransaction" xml:space="preserve">
-    <value>INSERT INTO epcis.business_transaction(event_id, transaction_type, transaction_id) VALUES (@EventId, @Type, @Id) ...;</value>
-  </data>
-  <data name="StoreCustomField" xml:space="preserve">
-    <value>INSERT INTO epcis.custom_field(event_id, field_id, parent_id, namespace, name, type, text_value, numeric_value, date_value) VALUES (@EventId, @Id, @ParentId, @Namespace, @Name, @Type, @TextValue, @NumericValue, @DateValue) ...;</value>
-  </data>
-  <data name="StoreEpcs" xml:space="preserve">
-    <value>INSERT INTO epcis.epc(event_id, epc, type, is_quantity, quantity, unit_of_measure) VALUES (@eventid, @id, @type, @isquantity, @quantity, @unitofmeasure) ...;</value>
-  </data>
-  <data name="StoreErrorDeclaration" xml:space="preserve">
-    <value>INSERT INTO epcis.error_declaration(event_id, declaration_time, reason) VALUES(@eventid, @declarationtime, @reason) ...;</value>
-  </data>
-  <data name="StoreErrorDeclarationIds" xml:space="preserve">
-    <value>INSERT INTO epcis.error_declaration_eventid(event_id, corrective_eventid) VALUES(@eventid, @correctiveid) ...;</value>
-  </data>
-  <data name="StoreEvent" xml:space="preserve">
-    <value>INSERT INTO epcis.event(request_id, record_time, action, event_type, event_timezone_offset, business_location, business_step, disposition, read_point, transformation_id, event_id) VALUES(@requestid, @eventtime, @action, @type, @eventtimezoneoffset, @businesslocation, @businessstep, @disposition, @readpoint, @transformationid, @eventid) ... RETURNING id;</value>
-  </data>
-  <data name="StoreRequest" xml:space="preserve">
-    <value>INSERT INTO epcis.request(document_time, record_time, user_id) VALUES(@DocumentTime, @RecordTime, @UserId) RETURNING Id;</value>
-  </data>
-  <data name="StoreSourceDestination" xml:space="preserve">
-    <value>INSERT INTO epcis.source_destination(event_id, type, source_dest_id, direction) VALUES (@eventid, @type, @id, @direction) ...;</value>
-  </data>
-  <data name="SubscriptionStore" xml:space="preserve">
-    <value>INSERT INTO subscriptions.subscription(subscription_id, trigger, initial_record_time, report_if_empty, destination, query_name,  active, schedule_seconds, schedule_minutes, schedule_hours, schedule_month, schedule_day_of_month, schedule_day_of_week) VALUES(@SubscriptionId, @Trigger, @InitialRecordTime, @ReportIfEmpty, @Destination, @QueryName, @Active, @Second, @Minute, @Hour, @Month, @DayOfMonth, @DayOfWeek) RETURNING id;</value>
-  </data>
-  <data name="SubscriptionAcknowledgePendingRequests" xml:space="preserve">
-    <value>DELETE FROM subscriptions.pendingrequest WHERE subscription_id = (SELECT id FROM subscriptions.subscription WHERE subscription_id = @SubscriptionId) AND request_id = ANY(@RequestId)</value>
-  </data>
-  <data name="SubscriptionDelete" xml:space="preserve">
-    <value>DELETE from subscriptions.subscription WHERE subscription_id = @Id;</value>
-  </data>
-  <data name="SubscriptionListIds" xml:space="preserve">
-    <value>SELECT s.id, s.subscription_id, s.query_name, s.active FROM subscriptions.subscription s</value>
-  </data>
-  <data name="SubscriptionListPendingRequestIds" xml:space="preserve">
-    <value>SELECT pr.request_id FROM subscriptions.pendingrequest pr JOIN subscriptions.subscription s ON s.id = pr.subscription_id WHERE s.subscription_id = @SubscriptionId</value>
-  </data>
-  <data name="SubscriptionsList" xml:space="preserve">
-    <value>SELECT s.id, s.destination, s.subscription_id, s.query_name, s.active, s.trigger, s.report_if_empty, s.schedule_minutes, s.schedule_seconds, s.schedule_hours, s.schedule_month, s.schedule_day_of_month, s.schedule_day_of_week FROM subscriptions.subscription s</value>
-  </data>
-  <data name="SubscriptionStoreParameter" xml:space="preserve">
-    <value>INSERT INTO subscriptions.parameter(subscription_id, name) VALUES(@subscriptionid, @name) ... RETURNING id;</value>
-  </data>
-  <data name="SubscriptionStoreParameterValue" xml:space="preserve">
-    <value>INSERT INTO subscriptions.parameter_value(parameter_id, value) VALUES(@parameterid, @value) ...;</value>
-  </data>
-  <data name="SubscriptionListParameters" xml:space="preserve">
-    <value>SELECT p.subscription_id, p.name, pv.value FROM subscriptions.parameter p INNER JOIN subscriptions.parameter_value pv ON pv.parameter_id = p.id</value>
-  </data>
-  <data name="SubscriptionStoreTrigger" xml:space="preserve">
-    <value>INSERT INTO subscriptions.trigger(subscription_id, trigger_time, status, reason) VALUES((SELECT id FROM subscriptions.subscription WHERE subscription_id = @SubscriptionId), NOW(), @Status, @Reason);</value>
-  </data>
-  <data name="MasterDataAttributeInsert" xml:space="preserve">
-    <value>INSERT INTO cbv.attribute(masterdata_id, masterdata_type, id, value) VALUES(@ParentId, @ParentType, @Id, @Value) ON CONFLICT ON CONSTRAINT pk_cbv_masterdata_attribute DO UPDATE SET value = @Value;</value>
-  </data>
-  <data name="MasterDataInsert" xml:space="preserve">
-    <value>INSERT INTO cbv.masterdata(id, type, created_on, last_update) VALUES(@Id, @Type, NOW(), NOW()) ON CONFLICT ON CONSTRAINT pk_cbv_masterdata DO UPDATE SET last_update = NOW();</value>
-  </data>
-  <data name="MasterDataQuery" xml:space="preserve">
-    <value>SELECT md.type, md.id FROM cbv.masterdata md /**where**/ ORDER BY md.last_update DESC LIMIT @limit</value>
-  </data>
-  <data name="UserLoadByName" xml:space="preserve">
-    <value>SELECT id, username, password FROM users.user WHERE username = @Username</value>
-  </data>
-  <data name="MasterDataHierarchyInsert" xml:space="preserve">
-    <value>INSERT INTO cbv.hierarchy(type, parent_id, children_id) VALUES(@Type, @ParentId, @ChildrenId) ...;</value>
-  </data>
-  <data name="MasterDataAttributeFieldInsert" xml:space="preserve">
-    <value>INSERT INTO cbv.attribute_field(internal_id, internal_parent_id, masterdata_id, masterdata_type, parent_id, name, namespace, value) VALUES(@Id, @InternalParentId, @MasterdataId, @MasterdataType, @ParentId, @Name, @Namespace, @Value);</value>
-  </data>
-  <data name="MasterDataDelete" xml:space="preserve">
-    <value>DELETE FROM cbv.attribute_field WHERE masterdata_type = @Type AND masterdata_id = @Id; DELETE FROM cbv.hierarchy WHERE type = @Type AND (parent_id = @Id OR children_id = @Id); DELETE FROM cbv.attribute WHERE masterdata_id = @Id AND masterdata_type = @Type; DELETE FROM cbv.masterdata WHERE id = @Id AND type = @Type;</value>
-  </data>
-  <data name="MasterDataAttributeQuery" xml:space="preserve">
-    <value>SELECT masterdata_type AS parent_type, masterdata_id AS parent_id, id, value FROM cbv.attribute WHERE masterdata_id = ANY(@Ids) AND id = ANY(@Attributes)</value>
-  </data>
-  <data name="MasterDataAllAttributeQuery" xml:space="preserve">
-    <value>SELECT masterdata_type AS parent_type, masterdata_id AS parent_id, id, value FROM cbv.attribute WHERE masterdata_id = ANY(@Ids)</value>
-  </data>
-  <data name="StoreQueryCallback" xml:space="preserve">
-    <value>INSERT INTO callback.query_callback(id, request_id, subscription_id, callback_type) VALUES(@Id, @RequestId, @SubscriptionId, @CallbackType);</value>
-  </data>
-  <data name="StoreStandardHeader" xml:space="preserve">
-    <value>INSERT INTO sbdh.standardheader(id, version, standard, type_version, identifier, type, creation_datetime) VALUES(@Id, @Version, @Standard, @TypeVersion, @InstanceIdentifier, @Type, @CreationDateTime);</value>
-  </data>
-  <data name="StoreStandardHeaderContactInformations" xml:space="preserve">
-    <value>INSERT INTO sbdh.contactinformation(id, header_id, type, identifier, contact, email, fax_number, phone_number, type_identifier) VALUES(@Id, @HeaderId, @Type, @Identifier, @Contact, @EmailAddress, @FaxNumber, @TelephoneNumber, @ContactTypeIdentifier) ...;</value>
   </data>
 </root>

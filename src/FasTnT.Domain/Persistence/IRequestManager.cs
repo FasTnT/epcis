@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace FasTnT.Domain.Persistence
 {
-    public interface IRequestStore
+    public interface IRequestManager
     {
         Task<int> Store(EpcisRequestHeader request, User user, CancellationToken cancellationToken);
     }

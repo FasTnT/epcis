@@ -25,7 +25,7 @@ namespace FasTnT.Persistence.Dapper
         public PgSqlEventRepository(DapperUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
-            _sqlTemplate = _query.AddTemplate(SqlRequests.EventQuery);
+            _sqlTemplate = _query.AddTemplate(PgSqlEventRequests.EventQuery);
         }
 
         public async Task<IEnumerable<EpcisEvent>> ToList(CancellationToken cancellationToken)
@@ -33,7 +33,7 @@ namespace FasTnT.Persistence.Dapper
             _parameters.SetLimit(_limit > 0 ? _limit : int.MaxValue);
             var events = await _unitOfWork.Query<EpcisEventEntity, ErrorDeclarationEntity>(_sqlTemplate.RawSql, _parameters.Values, (evt, ed) => evt.ErrorDeclaration = ed, "declaration_time", cancellationToken);
 
-            using (var reader = await _unitOfWork.FetchMany(SqlRequests.RelatedQuery, new { EventIds = events.Select(x => x.Id).ToArray() }, cancellationToken))
+            using (var reader = await _unitOfWork.FetchMany(PgSqlEventRequests.RelatedQuery, new { EventIds = events.Select(x => x.Id).ToArray() }, cancellationToken))
             {
                 var epcs = await reader.ReadAsync<EpcEntity>();
                 var fields = await reader.ReadAsync<CustomFieldEntity>();
