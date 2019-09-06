@@ -23,7 +23,7 @@ namespace FasTnT.Formatters.Xml.Responses
                 { EventType.Object, new FormatAction[]{ EpcListMandatory, Action, BizStep, Disposition, ReadPoint, BizLocation, BizTransaction, ExtensionIlmd, SourceDest, AddExtensionField, AddEventExtension } },
                 { EventType.Quantity, new FormatAction[]{ EpcList, Action, BizStep, Disposition, ReadPoint, BizLocation, BizTransaction, SourceDest, AddExtensionField, AddEventExtension } },
                 { EventType.Aggregation, new FormatAction[]{ ParentId, ChildEpcs, Action, BizStep, Disposition, ReadPoint, BizLocation, BizTransaction, SourceDest, AddExtensionField, AddEventExtension } },
-                { EventType.Transaction, new FormatAction[]{ EpcList, Action, BizStep, Disposition, ReadPoint, BizLocation, BizTransaction, SourceDest, AddExtensionField, AddEventExtension } },
+                { EventType.Transaction, new FormatAction[]{ BizTransaction, EpcList, Action, BizStep, Disposition, ReadPoint, BizLocation, SourceDest, AddExtensionField, AddEventExtension } },
                 { EventType.Transformation, new FormatAction[]{ EpcList, TransformationId, BizStep, Disposition, ReadPoint, BizLocation, BizTransaction, SourceDest, Ilmd, AddExtensionField, AddEventExtension } },
             };
         }
