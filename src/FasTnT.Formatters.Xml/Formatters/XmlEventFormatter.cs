@@ -13,7 +13,7 @@ namespace FasTnT.Formatters.Xml.Responses
     { 
         const string DateTimeFormat = "yyyy-MM-ddTHH:mm:ss.fffZ";
 
-        private Dictionary<EventType, FormatAction[]> eventBuilder;
+        private readonly Dictionary<EventType, FormatAction[]> eventBuilder;
         private XElement _extensionField;
 
         public XmlEventFormatter()
@@ -21,7 +21,7 @@ namespace FasTnT.Formatters.Xml.Responses
             eventBuilder = new Dictionary<EventType, FormatAction[]>
             {
                 { EventType.Object, new FormatAction[]{ EpcListMandatory, Action, BizStep, Disposition, ReadPoint, BizLocation, BizTransaction, ExtensionIlmd, SourceDest, AddExtensionField, AddEventExtension } },
-                { EventType.Quantity, new FormatAction[]{ EpcList, Action, BizStep, Disposition, ReadPoint, BizLocation, BizTransaction, SourceDest, AddExtensionField, AddEventExtension } },
+                { EventType.Quantity, new FormatAction[]{ QuantityEpc, BizStep, Disposition, ReadPoint, BizLocation, BizTransaction, SourceDest, AddExtensionField, AddEventExtension } },
                 { EventType.Aggregation, new FormatAction[]{ ParentId, ChildEpcs, Action, BizStep, Disposition, ReadPoint, BizLocation, BizTransaction, SourceDest, AddExtensionField, AddEventExtension } },
                 { EventType.Transaction, new FormatAction[]{ BizTransaction, EpcList, Action, BizStep, Disposition, ReadPoint, BizLocation, SourceDest, AddExtensionField, AddEventExtension } },
                 { EventType.Transformation, new FormatAction[]{ EpcList, TransformationId, BizStep, Disposition, ReadPoint, BizLocation, BizTransaction, SourceDest, Ilmd, AddExtensionField, AddEventExtension } },
@@ -77,6 +77,13 @@ namespace FasTnT.Formatters.Xml.Responses
             if (quantityList.HasElements) AddInExtension(element, quantityList);
             if (outputQuantity.HasElements) element.Add(outputQuantity);
             if (outputEpcList.HasElements) element.Add(outputEpcList);
+        }
+
+        public void QuantityEpc(EpcisEvent evt, XContainer element)
+        {
+            var epc = evt.Epcs.Single();
+
+            element.Add(new XElement("epcClass", epc.Id), new XElement("quantity", epc.Quantity));
         }
 
         public XElement FormatQuantity(Epc epc)
