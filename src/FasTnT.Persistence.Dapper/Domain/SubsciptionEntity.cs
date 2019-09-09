@@ -5,6 +5,6 @@ namespace FasTnT.Persistence.Dapper
 {
     public class SubscriptionEntity : Subscription
     {
-        public Guid Id { get; set; }
+        public int Id { get; set; }
     }
 }

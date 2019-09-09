@@ -16,8 +16,8 @@ namespace FasTnT.Persistence.Dapper.Setup
             _unitOfWork = unitOfWork;
         }
 
-        public async Task Migrate(CancellationToken cancellationToken) => await _unitOfWork.Execute(await UnzipCommand(SqlRequests.CreateDatabaseZipped), cancellationToken);
-        public async Task Rollback(CancellationToken cancellationToken) => await _unitOfWork.Execute(await UnzipCommand(SqlRequests.DropDatabaseZipped), cancellationToken);
+        public async Task Migrate(CancellationToken cancellationToken) => await _unitOfWork.Execute(await UnzipCommand(PgSqlDatabaseRequests.CreateZipped), cancellationToken);
+        public async Task Rollback(CancellationToken cancellationToken) => await _unitOfWork.Execute(await UnzipCommand(PgSqlDatabaseRequests.DropZipped), cancellationToken);
 
         private async Task<string> UnzipCommand(string zippedCommand)
         {
