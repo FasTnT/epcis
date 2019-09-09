@@ -1,5 +1,4 @@
-﻿using System;
-using FasTnT.Model;
+﻿using FasTnT.Model;
 
 namespace FasTnT.Persistence.Dapper
 {
@@ -7,6 +6,6 @@ namespace FasTnT.Persistence.Dapper
     {
         public int Id { get; set; }
         public int? ParentId { get; set; }
-        public Guid EventId { get; set; }
+        public int EventId { get; set; }
     }
 }

@@ -23,17 +23,71 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="SqlRequests.Designer.cs">
+    <Compile Update="PgSqlCallbackRequests.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
-      <DependentUpon>SqlRequests.resx</DependentUpon>
+      <DependentUpon>PgSqlCallbackRequests.resx</DependentUpon>
+    </Compile>
+    <Compile Update="PgSqlEventRequests.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>PgSqlEventRequests.resx</DependentUpon>
+    </Compile>
+    <Compile Update="PgSqlMasterdataRequests.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>PgSqlMasterdataRequests.resx</DependentUpon>
+    </Compile>
+    <Compile Update="PgSqlRequestRequests.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>PgSqlRequestRequests.resx</DependentUpon>
+    </Compile>
+    <Compile Update="PgSqlSubscriptionRequests.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>PgSqlSubscriptionRequests.resx</DependentUpon>
+    </Compile>
+    <Compile Update="PgSqlUserRequests.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>PgSqlUserRequests.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Setup\PgSqlDatabaseRequests.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>PgSqlDatabaseRequests.resx</DependentUpon>
     </Compile>
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Update="SqlRequests.resx">
+    <EmbeddedResource Update="PgSqlCallbackRequests.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>PgSqlCallbackRequests.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="PgSqlEventRequests.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>PgSqlEventRequests.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="PgSqlMasterdataRequests.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>PgSqlMasterdataRequests.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="PgSqlRequestRequests.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>PgSqlRequestRequests.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="PgSqlSubscriptionRequests.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>PgSqlSubscriptionRequests.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="PgSqlUserRequests.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>PgSqlUserRequests.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Setup\PgSqlDatabaseRequests.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>SqlRequests.Designer.cs</LastGenOutput>
+      <LastGenOutput>PgSqlDatabaseRequests.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
 

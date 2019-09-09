@@ -1,7 +1,6 @@
 ﻿using FasTnT.Model;
 using FasTnT.Model.Events.Enums;
 using FasTnT.Model.Exceptions;
-using MoreLinq;
 using System;
 using System.Linq;
 

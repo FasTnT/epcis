@@ -13,6 +13,6 @@ namespace FasTnT.Persistence.Dapper
         public PgSqlUserManager(DapperUnitOfWork unitOfWork) => _unitOfWork = unitOfWork;
 
         public async Task<User> GetByUsername(string username, CancellationToken cancellationToken)
-            => (await _unitOfWork.Query<User>(SqlRequests.UserLoadByName, new { Username = username }, cancellationToken)).SingleOrDefault();
+            => (await _unitOfWork.Query<User>(PgSqlUserRequests.LoadByName, new { Username = username }, cancellationToken)).SingleOrDefault();
     }
 }

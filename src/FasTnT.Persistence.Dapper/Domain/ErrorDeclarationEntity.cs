@@ -1,10 +1,9 @@
-﻿using System;
-using FasTnT.Model;
+﻿using FasTnT.Model;
 
 namespace FasTnT.Persistence.Dapper
 {
     public class ErrorDeclarationEntity : ErrorDeclaration
     {
-        public Guid EventId { get; set; }
+        public int EventId { get; set; }
     }
 }
