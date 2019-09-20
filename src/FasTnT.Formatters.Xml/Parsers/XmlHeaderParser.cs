@@ -32,7 +32,7 @@ namespace FasTnT.Formatters.Xml
             var customFields = new List<CustomField>();
             var elements = element?.Elements().Where(x => x.Name.Namespace != XNamespace.Xmlns && x.Name.Namespace != XNamespace.None && x.Name.Namespace != EpcisNamespaces.SBDH && x.Name.Namespace != null);
 
-            foreach (var field in elements)
+            foreach (var field in elements ?? new XElement[0])
             {
                 customFields.Add(ParseCustomField(field));
             }
