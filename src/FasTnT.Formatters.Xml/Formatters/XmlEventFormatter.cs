@@ -20,11 +20,11 @@ namespace FasTnT.Formatters.Xml.Responses
         {
             eventBuilder = new Dictionary<EventType, FormatAction[]>
             {
-                { EventType.Object, new FormatAction[]{ EpcListMandatory, Action, BizStep, Disposition, ReadPoint, BizLocation, BizTransaction, ExtensionIlmd, SourceDest, AddExtensionField, AddEventExtension } },
-                { EventType.Quantity, new FormatAction[]{ QuantityEpc, BizStep, Disposition, ReadPoint, BizLocation, BizTransaction, SourceDest, AddExtensionField, AddEventExtension } },
-                { EventType.Aggregation, new FormatAction[]{ ParentId, ChildEpcs, Action, BizStep, Disposition, ReadPoint, BizLocation, BizTransaction, SourceDest, AddExtensionField, AddEventExtension } },
-                { EventType.Transaction, new FormatAction[]{ BizTransaction, EpcList, Action, BizStep, Disposition, ReadPoint, BizLocation, SourceDest, AddExtensionField, AddEventExtension } },
-                { EventType.Transformation, new FormatAction[]{ EpcList, TransformationId, BizStep, Disposition, ReadPoint, BizLocation, BizTransaction, SourceDest, Ilmd, AddExtensionField, AddEventExtension } },
+                { EventType.Object, new FormatAction[]{ EpcListMandatory, Action, BizStep, Disposition, ReadPoint, BizLocation, BizTransaction, ExtensionIlmd, SourceDestExt, AddExtensionField, AddEventExtension } },
+                { EventType.Quantity, new FormatAction[]{ QuantityEpc, BizStep, Disposition, ReadPoint, BizLocation, BizTransaction, SourceDestExt, AddExtensionField, AddEventExtension } },
+                { EventType.Aggregation, new FormatAction[]{ ParentId, ChildEpcs, Action, BizStep, Disposition, ReadPoint, BizLocation, BizTransaction, SourceDestExt, AddExtensionField, AddEventExtension } },
+                { EventType.Transaction, new FormatAction[]{ BizTransaction, EpcList, Action, BizStep, Disposition, ReadPoint, BizLocation, SourceDestExt, AddExtensionField, AddEventExtension } },
+                { EventType.Transformation, new FormatAction[]{ EpcList, TransformationId, BizStep, Disposition, ReadPoint, BizLocation, BizTransaction, SourceDestRoot, Ilmd, AddExtensionField, AddEventExtension } },
             };
         }
 
@@ -116,7 +116,7 @@ namespace FasTnT.Formatters.Xml.Responses
             if (!string.IsNullOrEmpty(evt.TransformationId)) container.Add(new XElement("transformationID", evt.TransformationId));
         }
 
-        private void SourceDest(EpcisEvent @event, XContainer element)
+        private void InternalSourceDest(EpcisEvent @event, XContainer element, bool wrapInExtension = true)
         {
             if (@event.SourceDestinationList == null || !@event.SourceDestinationList.Any()) return;
 
@@ -131,9 +131,20 @@ namespace FasTnT.Formatters.Xml.Responses
                     destination.Add(new XElement("destination", new XAttribute("type", sourceDest.Type), sourceDest.Id));
             }
 
-            if (source.HasElements) AddInExtension(element, source);
-            if (destination.HasElements) AddInExtension(element, destination);
+            if (source.HasElements)
+            {
+                if (wrapInExtension) AddInExtension(element, source);
+                else element.Add(source);
+            }
+            if (destination.HasElements)
+            {
+                if(wrapInExtension) AddInExtension(element, destination);
+                else element.Add(destination);
+            }
         }
+
+        private void SourceDestRoot(EpcisEvent @event, XContainer element) => InternalSourceDest(@event, element, false);
+        private void SourceDestExt(EpcisEvent @event, XContainer element) => InternalSourceDest(@event, element, true);
 
         private void BizTransaction(EpcisEvent @event, XContainer element)
         {
