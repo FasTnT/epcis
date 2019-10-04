@@ -40,6 +40,8 @@ The file `documents\EPCIS Examples - 1.2.postman_collection.json` contains XML r
 
 These database endpoints are only available when the EPCIS server is in Development configuration.
 
+See the [wiki](https://github.com/FasTnT/epcis/wiki) for more details.
+
 ## Implemented Features
 
 - Capture
@@ -74,4 +76,4 @@ This project is licensed under the Apache 2.0 license - see the LICENSE file for
 
 Contact: fastnt@pm.me
 
-_Last update: september 2019_
+_Last update: October 2019_

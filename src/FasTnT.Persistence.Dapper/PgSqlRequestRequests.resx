@@ -120,6 +120,9 @@
   <data name="Store" xml:space="preserve">
     <value>INSERT INTO epcis.request(document_time, record_time, user_id) VALUES(@documenttime, @recordtime, @userid) RETURNING id;</value>
   </data>
+  <data name="StoreCustomFields" xml:space="preserve">
+    <value>INSERT INTO sbdh.custom_field(header_id, field_id, parent_id, namespace, name, type, text_value, numeric_value, date_value) VALUES (@eventid, @id, @parentid, @namespace, @name, @type, @textvalue, @numericvalue, @datevalue) ...;</value>
+  </data>
   <data name="StoreStandardHeader" xml:space="preserve">
     <value>INSERT INTO sbdh.standardheader(id, version, standard, type_version, identifier, type, creation_datetime) VALUES(@id, @version, @standard, @typeversion, @instanceidentifier, @type, @creationdatetime);</value>
   </data>

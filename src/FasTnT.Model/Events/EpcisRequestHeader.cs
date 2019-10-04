@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace FasTnT.Model
 {
@@ -8,5 +9,6 @@ namespace FasTnT.Model
         public DateTime DocumentTime { get; set; }
         public DateTime RecordTime { get; set; } = DateTime.UtcNow;
         public string SchemaVersion { get; set; }
+        public List<CustomField> CustomFields { get; set; } = new List<CustomField>();
     }
 }

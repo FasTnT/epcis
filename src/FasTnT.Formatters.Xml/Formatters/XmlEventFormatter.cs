@@ -20,11 +20,11 @@ namespace FasTnT.Formatters.Xml.Responses
         {
             eventBuilder = new Dictionary<EventType, FormatAction[]>
             {
-                { EventType.Object, new FormatAction[]{ EpcListMandatory, Action, BizStep, Disposition, ReadPoint, BizLocation, BizTransaction, ExtensionIlmd, SourceDest, AddExtensionField, AddEventExtension } },
-                { EventType.Quantity, new FormatAction[]{ QuantityEpc, BizStep, Disposition, ReadPoint, BizLocation, BizTransaction, SourceDest, AddExtensionField, AddEventExtension } },
-                { EventType.Aggregation, new FormatAction[]{ ParentId, ChildEpcs, Action, BizStep, Disposition, ReadPoint, BizLocation, BizTransaction, SourceDest, AddExtensionField, AddEventExtension } },
-                { EventType.Transaction, new FormatAction[]{ BizTransaction, EpcList, Action, BizStep, Disposition, ReadPoint, BizLocation, SourceDest, AddExtensionField, AddEventExtension } },
-                { EventType.Transformation, new FormatAction[]{ EpcList, TransformationId, BizStep, Disposition, ReadPoint, BizLocation, BizTransaction, SourceDest, Ilmd, AddExtensionField, AddEventExtension } },
+                { EventType.Object, new FormatAction[]{ EpcListMandatory, Action, BizStep, Disposition, ReadPoint, BizLocation, BizTransaction, ExtensionIlmd, SourceDestExt, AddExtensionField, AddEventExtension } },
+                { EventType.Quantity, new FormatAction[]{ QuantityEpc, BizStep, Disposition, ReadPoint, BizLocation, BizTransaction, SourceDestExt, AddExtensionField, AddEventExtension } },
+                { EventType.Aggregation, new FormatAction[]{ ParentId, ChildEpcs, Action, BizStep, Disposition, ReadPoint, BizLocation, BizTransaction, SourceDestExt, AddExtensionField, AddEventExtension } },
+                { EventType.Transaction, new FormatAction[]{ BizTransaction, EpcList, Action, BizStep, Disposition, ReadPoint, BizLocation, SourceDestExt, AddExtensionField, AddEventExtension } },
+                { EventType.Transformation, new FormatAction[]{ EpcList, TransformationId, BizStep, Disposition, ReadPoint, BizLocation, BizTransaction, SourceDestRoot, Ilmd, AddExtensionField, AddEventExtension } },
             };
         }
 
@@ -46,17 +46,27 @@ namespace FasTnT.Formatters.Xml.Responses
             element.Add(new XElement("eventTime", @event.EventTime.ToString(DateTimeFormat, CultureInfo.InvariantCulture)));
             element.Add(new XElement("recordTime", @event.CaptureTime.ToString(DateTimeFormat)));
             element.Add(new XElement("eventTimeZoneOffset", @event.EventTimeZoneOffset.Representation));
-            if (@event.ErrorDeclaration != null) AddErrorDeclaration(@event.ErrorDeclaration, element);
-            if (!string.IsNullOrEmpty(@event.EventId)) element.Add(new XElement("eventID", @event.EventId));
+            if (@event.ErrorDeclaration != null || !string.IsNullOrEmpty(@event.EventId)) AddErrorDeclaration(@event, element);
 
             return element;
         }
 
-        private void AddErrorDeclaration(ErrorDeclaration eventError, XElement element)
+        private void AddErrorDeclaration(EpcisEvent @event, XElement element)
         {
-            var correctiveEventIds = eventError.CorrectiveEventIds.Any() ? new XElement("correctiveEventIDs", eventError.CorrectiveEventIds.Select(x => new XElement("correctiveEventId", x.CorrectiveId))) : null;
-            var errorDeclaration = new XElement("errorDeclaration", new XElement("declarationTime", eventError.DeclarationTime), new XElement("reason", eventError.Reason), correctiveEventIds);
-            element.Add(new XElement("baseExtension", errorDeclaration));
+            XElement errorDeclaration = default, eventId = default;
+            if (@event.ErrorDeclaration != null)
+            {
+                var correctiveEventIds = @event.ErrorDeclaration.CorrectiveEventIds.Any() ? new XElement("correctiveEventIDs", @event.ErrorDeclaration.CorrectiveEventIds.Select(x => new XElement("correctiveEventID", x.CorrectiveId))) : null;
+                errorDeclaration = new XElement("errorDeclaration", new XElement("declarationTime", @event.ErrorDeclaration.DeclarationTime), new XElement("reason", @event.ErrorDeclaration.Reason), correctiveEventIds);
+            }
+
+            if (!string.IsNullOrEmpty(@event.EventId))
+            {
+                eventId = new XElement("eventID", @event.EventId);
+            }
+
+
+            element.Add(new XElement("baseExtension", eventId, errorDeclaration));
         }
 
         public void EpcListMandatory(EpcisEvent evt, XContainer element) => EpcList(evt, element, true);
@@ -75,8 +85,8 @@ namespace FasTnT.Formatters.Xml.Responses
             if (inputEpcList.HasElements) element.Add(inputEpcList);
             if (inputQuantity.HasElements) element.Add(inputQuantity);
             if (quantityList.HasElements) AddInExtension(element, quantityList);
-            if (outputQuantity.HasElements) element.Add(outputQuantity);
             if (outputEpcList.HasElements) element.Add(outputEpcList);
+            if (outputQuantity.HasElements) element.Add(outputQuantity);
         }
 
         public void QuantityEpc(EpcisEvent evt, XContainer element)
@@ -116,7 +126,7 @@ namespace FasTnT.Formatters.Xml.Responses
             if (!string.IsNullOrEmpty(evt.TransformationId)) container.Add(new XElement("transformationID", evt.TransformationId));
         }
 
-        private void SourceDest(EpcisEvent @event, XContainer element)
+        private void InternalSourceDest(EpcisEvent @event, XContainer element, bool wrapInExtension = true)
         {
             if (@event.SourceDestinationList == null || !@event.SourceDestinationList.Any()) return;
 
@@ -131,9 +141,20 @@ namespace FasTnT.Formatters.Xml.Responses
                     destination.Add(new XElement("destination", new XAttribute("type", sourceDest.Type), sourceDest.Id));
             }
 
-            if (source.HasElements) AddInExtension(element, source);
-            if (destination.HasElements) AddInExtension(element, destination);
+            if (source.HasElements)
+            {
+                if (wrapInExtension) AddInExtension(element, source);
+                else element.Add(source);
+            }
+            if (destination.HasElements)
+            {
+                if(wrapInExtension) AddInExtension(element, destination);
+                else element.Add(destination);
+            }
         }
+
+        private void SourceDestRoot(EpcisEvent @event, XContainer element) => InternalSourceDest(@event, element, false);
+        private void SourceDestExt(EpcisEvent @event, XContainer element) => InternalSourceDest(@event, element, true);
 
         private void BizTransaction(EpcisEvent @event, XContainer element)
         {

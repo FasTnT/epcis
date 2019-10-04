@@ -70,6 +70,15 @@ namespace FasTnT.Persistence.Dapper {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to INSERT INTO sbdh.custom_field(header_id, field_id, parent_id, namespace, name, type, text_value, numeric_value, date_value) VALUES (@eventid, @id, @parentid, @namespace, @name, @type, @textvalue, @numericvalue, @datevalue) ...;.
+        /// </summary>
+        internal static string StoreCustomFields {
+            get {
+                return ResourceManager.GetString("StoreCustomFields", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to INSERT INTO sbdh.standardheader(id, version, standard, type_version, identifier, type, creation_datetime) VALUES(@id, @version, @standard, @typeversion, @instanceidentifier, @type, @creationdatetime);.
         /// </summary>
         internal static string StoreStandardHeader {

@@ -84,7 +84,8 @@ namespace FasTnT.Formatters.Xml
             {
                 StandardBusinessHeader = XmlHeaderParser.Parse(root.XPathSelectElement("EPCISHeader/sbdh:StandardBusinessDocumentHeader", EpcisNamespaces.Manager)),
                 DocumentTime = DateTime.Parse(root.Attribute("creationDate").Value, CultureInfo.InvariantCulture),
-                SchemaVersion = root.Attribute("schemaVersion").Value
+                SchemaVersion = root.Attribute("schemaVersion").Value,
+                CustomFields = XmlHeaderParser.ParseCustomFields(root.XPathSelectElement("EPCISHeader"))
             };
         }
 
