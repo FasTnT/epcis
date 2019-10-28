@@ -11,7 +11,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\FasTnT.Formatters.Xml\FasTnT.Formatters.Xml.csproj" />
     <ProjectReference Include="..\FasTnT.Formatters\FasTnT.Formatters.csproj" />
     <ProjectReference Include="..\FasTnT.Model\FasTnT.Model.csproj" />
   </ItemGroup>
