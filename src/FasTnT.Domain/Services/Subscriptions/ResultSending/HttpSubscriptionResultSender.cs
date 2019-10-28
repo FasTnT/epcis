@@ -1,4 +1,4 @@
-﻿using FasTnT.Formatters.Xml;
+﻿using FasTnT.Formatters;
 using FasTnT.Model.Responses;
 using System;
 using System.Net;
@@ -13,7 +13,7 @@ namespace FasTnT.Domain.Services.Subscriptions
     {
         public async Task Send(string destination, IEpcisResponse epcisResponse, CancellationToken cancellationToken)
         {
-            var formatter = XmlFormatter.Instance;
+            var formatter = EpcisFormatter.Default;
             var request = WebRequest.CreateHttp(destination);
             request.Method = "POST";
             request.ContentType = formatter.ContentType;
