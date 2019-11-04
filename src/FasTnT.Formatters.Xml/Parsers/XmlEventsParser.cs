@@ -37,7 +37,7 @@ namespace FasTnT.Formatters.Xml.Requests
             {
                 if (node.Name.NamespaceName != XNamespace.None && node.Name.NamespaceName != XNamespace.Xmlns && node.Name.NamespaceName != EpcisNamespaces.Capture)
                 {
-                    epcisEvent.CustomFields.Add(ParseCustomField(node, epcisEvent, FieldType.EventExtension));
+                    epcisEvent.CustomFields.Add(ParseCustomField(node, epcisEvent, FieldType.CustomField));
                     continue;
                 }
                 switch (node.Name.LocalName)

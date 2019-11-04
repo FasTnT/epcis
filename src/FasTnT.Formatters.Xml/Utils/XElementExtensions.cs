@@ -104,9 +104,7 @@ namespace FasTnT.Formatters.Xml
 
             return new ErrorDeclaration { DeclarationTime = declarationTime, Reason = element.Element("reason").Value, CorrectiveEventIds = correctiveEventIds.ToArray() };
         }
-
-
-
+        
         public static void ParseCorrectiveEventIds(this XElement element, IList<CorrectiveEventId> list)
         {
             var correctiveEventIdList = element.Element("correctiveEventIDs");
@@ -121,6 +119,25 @@ namespace FasTnT.Formatters.Xml
                     });
                 }
             }
+        }
+
+        public static void AddInExtension(this XElement element, XElement children)
+        {
+            var extension = new XElement("extension");
+            bool extensionExists = (element.Element("extension") != null);
+            
+            if (extensionExists)
+            {
+                extension = element.Element("extension");
+            }
+
+            extension.Add(children);
+
+            if(!extensionExists)
+            {
+                element.Add(extension);
+            }
+
         }
     }
 }

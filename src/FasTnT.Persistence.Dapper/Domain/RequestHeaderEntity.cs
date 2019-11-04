@@ -1,5 +1,4 @@
-﻿using System;
-using FasTnT.Model;
+﻿using FasTnT.Model;
 
 namespace FasTnT.Persistence.Dapper
 {
