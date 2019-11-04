@@ -17,7 +17,6 @@ namespace FasTnT.Formatters.Xml.Formatters.Events
             _root = XmlEventFormatter.CreateEvent("TransformationEvent", transformationEvent);
 
             AddEpcList(transformationEvent);
-            AddAction(transformationEvent);
             AddBusinessStep(transformationEvent);
             AddDisposition(transformationEvent);
             AddReadPoint(transformationEvent);
@@ -28,7 +27,7 @@ namespace FasTnT.Formatters.Xml.Formatters.Events
             AddExtensionField();
             AddCustomFields(transformationEvent);
 
-            return _root;
+            return new XElement("extension", _root);
         }
 
         private void AddCustomFields(EpcisEvent evt)
@@ -70,11 +69,6 @@ namespace FasTnT.Formatters.Xml.Formatters.Events
             if (!string.IsNullOrEmpty(epc.UnitOfMeasure)) qtyElement.Add(new XElement("uom", epc.UnitOfMeasure));
 
             return qtyElement;
-        }
-
-        private void AddAction(EpcisEvent evt)
-        {
-            _root.Add(new XElement("action", evt.Action.DisplayName));
         }
 
         private void AddBusinessStep(EpcisEvent evt)
