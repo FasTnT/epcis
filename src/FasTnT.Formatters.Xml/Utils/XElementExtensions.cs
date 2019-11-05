@@ -12,9 +12,6 @@ namespace FasTnT.Formatters.Xml
 {
     public static class XElementExtensions
     {
-        public static EventType ToEventType(this XElement element) => Enumeration.GetByDisplayName<EventType>(element.Name.LocalName);
-        public static EventAction ToEventAction(this XElement element) => Enumeration.GetByDisplayName<EventAction>(element.Value);
-
         public static void ParseEpcListInto(this XElement element, EpcType type, EpcisEvent destination)
         {
             foreach (var epc in element.Elements("epc")) destination.Epcs.Add(new Epc { Type = type, Id = epc.Value });
@@ -121,23 +118,20 @@ namespace FasTnT.Formatters.Xml
             }
         }
 
-        public static void AddInExtension(this XElement element, XElement children)
+        public static void AddIfAny(this XElement root, IEnumerable<XElement> elements)
         {
-            var extension = new XElement("extension");
-            bool extensionExists = (element.Element("extension") != null);
-            
-            if (extensionExists)
+            if (elements != null && elements.Any())
             {
-                extension = element.Element("extension");
+                root.Add(elements);
             }
+        }
 
-            extension.Add(children);
-
-            if(!extensionExists)
+        public static void AddIfNotNull(this XElement root, XElement element)
+        {
+            if (element != default(XElement) && (element.HasAttributes || element.HasElements))
             {
-                element.Add(extension);
+                root.Add(element);
             }
-
         }
     }
 }
