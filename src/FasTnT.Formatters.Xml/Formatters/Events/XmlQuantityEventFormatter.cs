@@ -21,7 +21,6 @@ namespace FasTnT.Formatters.Xml.Formatters.Events
             AddReadPoint(quantityEvent);
             AddBusinessLocation(quantityEvent);
             AddBusinessTransactions(quantityEvent);
-            AddSourceDestinations(quantityEvent);
             AddEventExtension(quantityEvent);
             AddExtensionField();
             AddCustomFields(quantityEvent);
@@ -36,10 +35,7 @@ namespace FasTnT.Formatters.Xml.Formatters.Events
 
         private void AddExtensionField()
         {
-            if (_extension.HasElements || _extension.HasAttributes)
-            {
-                _root.Add(_extension);
-            }
+            _root.AddIfNotNull(_extension);
         }
 
         private void AddQuantityEpc(EpcisEvent evt)
@@ -76,11 +72,6 @@ namespace FasTnT.Formatters.Xml.Formatters.Events
         private void AddIlmdFields(EpcisEvent evt)
         {
             _extension.AddIfAny(XmlEventFormatter.GenerateCustomFields(evt, FieldType.Ilmd));
-        }
-
-        private void AddSourceDestinations(EpcisEvent evt)
-        {
-            _extension.AddIfAny(XmlEventFormatter.GenerateSourceDest(evt));
         }
 
         public void AddEventExtension(EpcisEvent evt)

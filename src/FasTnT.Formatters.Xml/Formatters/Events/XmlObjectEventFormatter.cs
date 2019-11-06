@@ -23,8 +23,8 @@ namespace FasTnT.Formatters.Xml.Formatters.Events
             AddBusinessLocation(objectEvent);
             AddBusinessTransactions(objectEvent);
             AddEventExtension(objectEvent);
-            AddIlmdFields(objectEvent);
             AddSourceDestinations(objectEvent);
+            AddIlmdFields(objectEvent);
             AddExtensionField();
             AddCustomFields(objectEvent);
 
