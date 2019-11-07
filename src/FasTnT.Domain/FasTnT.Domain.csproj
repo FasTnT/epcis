@@ -6,12 +6,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="3.0.0-preview4.19216.2" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="3.0.0" />
     <PackageReference Include="morelinq" Version="3.2.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\FasTnT.Formatters.Xml\FasTnT.Formatters.Xml.csproj" />
     <ProjectReference Include="..\FasTnT.Formatters\FasTnT.Formatters.csproj" />
     <ProjectReference Include="..\FasTnT.Model\FasTnT.Model.csproj" />
   </ItemGroup>

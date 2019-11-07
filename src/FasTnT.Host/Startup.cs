@@ -12,6 +12,8 @@ using FasTnT.Host.Infrastructure.Binding;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authentication;
 using IHostingEnvironment = Microsoft.AspNetCore.Hosting.IHostingEnvironment;
+using FasTnT.Formatters;
+using FasTnT.Formatters.Xml;
 
 namespace FasTnT.Host
 {
@@ -56,6 +58,7 @@ namespace FasTnT.Host
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
+            EpcisFormatter.Default = XmlFormatter.Instance;
             Constants.SubscriptionTaskDelayTimeoutInMs = Configuration.GetSection("Settings").GetValue("SubscriptionWaitTimeout", 5000);
 
             app.UseExceptionHandlingMiddleware(env.IsDevelopment())
