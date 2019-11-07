@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace FasTnT.Model.Users
+﻿namespace FasTnT.Model.Users
 {
     public class User
     {

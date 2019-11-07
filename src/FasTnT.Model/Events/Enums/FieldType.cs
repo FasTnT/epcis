@@ -11,6 +11,7 @@ namespace FasTnT.Model.Events.Enums
         public static FieldType Attribute = new FieldType(4, "Attribute");
         public static FieldType BusinessLocationExtension = new FieldType(5, "BusinessLocationExtension");
         public static FieldType HeaderExtension = new FieldType(6, "HeaderExtension");
+        public static FieldType CustomField = new FieldType(7, "CustomField");
 
         public FieldType() { }
         public FieldType(short id, string displayName) : base(id, displayName) { }
