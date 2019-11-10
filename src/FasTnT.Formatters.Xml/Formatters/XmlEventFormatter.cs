@@ -120,29 +120,8 @@ namespace FasTnT.Formatters.Xml.Responses
             return readPoint;
         }
 
-        internal static XElement GenerateDisposition(EpcisEvent evt)
-        {
-            var disposition = default(XElement);
-
-            if (!string.IsNullOrEmpty(evt.Disposition))
-            {
-                disposition = new XElement("disposition", evt.Disposition);
-            }
-
-            return disposition;
-        }
-
-        internal static XElement GenerateBusinesStep(EpcisEvent evt)
-        {
-            var businessStep = default(XElement);
-
-            if (!string.IsNullOrEmpty(evt.BusinessStep))
-            {
-                businessStep = new XElement("bizStep", evt.BusinessStep);
-            }
-
-            return businessStep;
-        }
+        internal static XElement GenerateDisposition(EpcisEvent evt) => SimpleElement("disposition", evt.Disposition);
+        internal static XElement GenerateBusinesStep(EpcisEvent evt) => SimpleElement("bizStep", evt.BusinessStep);
 
         internal static XElement GenerateBusinessLocation(EpcisEvent evt)
         {
@@ -170,37 +149,47 @@ namespace FasTnT.Formatters.Xml.Responses
 
         internal static IEnumerable<XElement> GenerateCustomFields(EpcisEvent evt, FieldType type)
         {
-            var elements = new List<XElement>();
-            foreach (var rootField in evt.CustomFields.Where(x => x.Type == type))
+            var container = new XElement("container");
+
+            foreach (var field in evt.CustomFields.Where(x => x.Type == type))
             {
-                var xmlElement = new XElement(XName.Get(rootField.Name, rootField.Namespace), rootField.TextValue);
-
-                InnerCustomFields(xmlElement, type, rootField);
-                foreach (var attribute in rootField.Children.Where(x => x.Type == FieldType.Attribute))
-                {
-                    xmlElement.Add(new XAttribute(XName.Get(attribute.Name, attribute.Namespace), attribute.TextValue));
-                }
-
-                elements.Add(xmlElement);
+                GenerateCustomFields(type, container, field);
             }
 
-            return elements;
+            return container.Elements();
+        }
+
+        private static XElement SimpleElement(string elementName, string value)
+        {
+            var element = default(XElement);
+
+            if (!string.IsNullOrEmpty(value))
+            {
+                element = new XElement(elementName, value);
+            }
+
+            return element;
         }
 
         private static void InnerCustomFields(XContainer element, FieldType type, CustomField parent)
         {
             foreach (var field in parent.Children.Where(x => x.Type == type))
             {
-                var xmlElement = new XElement(XName.Get(field.Name, field.Namespace), field.TextValue);
-
-                InnerCustomFields(xmlElement, type, field);
-                foreach (var attribute in field.Children.Where(x => x.Type == FieldType.Attribute))
-                {
-                    xmlElement.Add(new XAttribute(XName.Get(attribute.Name, attribute.Namespace), attribute.TextValue));
-                }
-
-                element.Add(xmlElement);
+                GenerateCustomFields(type, element, field);
             }
+        }
+
+        private static void GenerateCustomFields(FieldType type, XContainer container, CustomField rootField)
+        {
+            var xmlElement = new XElement(XName.Get(rootField.Name, rootField.Namespace), rootField.TextValue);
+
+            InnerCustomFields(xmlElement, type, rootField);
+            foreach (var attribute in rootField.Children.Where(x => x.Type == FieldType.Attribute))
+            {
+                xmlElement.Add(new XAttribute(XName.Get(attribute.Name, attribute.Namespace), attribute.TextValue));
+            }
+
+            container.Add(xmlElement);
         }
     }
 }
