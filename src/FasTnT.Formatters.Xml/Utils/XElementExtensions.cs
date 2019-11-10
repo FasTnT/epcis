@@ -128,7 +128,7 @@ namespace FasTnT.Formatters.Xml
 
         public static void AddIfNotNull(this XElement root, XElement element)
         {
-            if (element != default(XElement) && (element.HasAttributes || element.HasElements))
+            if (element != default(XElement) && !element.IsEmpty)
             {
                 root.Add(element);
             }
