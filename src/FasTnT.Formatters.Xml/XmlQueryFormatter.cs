@@ -24,31 +24,35 @@ namespace FasTnT.Formatters.Xml
             { "Unsubscribe", element => XmlSubscriptionParser.ParseUnsubscription(element) }
         };
 
-        public async Task<EpcisQuery> Read(Stream input, CancellationToken cancellationToken)
+        public virtual async Task<EpcisQuery> Read(Stream input, CancellationToken cancellationToken)
         {
             var document = await XmlDocumentParser.Instance.Load(input, cancellationToken);
 
             if (document.Root.Name.LocalName == "EPCISQueryDocument")
             {
-
                 var element = document.Root.Element("EPCISBody").Elements().FirstOrDefault();
 
-                if (element != null)
-                {
-                    if (Parsers.TryGetValue(element.Name.LocalName, out Func<XElement, EpcisQuery> parseMethod))
-                    {
-                        return parseMethod(element);
-                    }
-                    else
-                    {
-                        throw new Exception($"Element not expected: '{element.Name.LocalName ?? null}'");
-                    }
-                }
-
-                throw new Exception($"EPCISBody element must contain the query type.");
+                return DispatchElement(element);
             }
 
             throw new Exception($"Element not expected: '{document.Root.Name.LocalName}'");
+        }
+
+        internal static EpcisQuery DispatchElement(XElement element)
+        {
+            if (element != null)
+            {
+                if (Parsers.TryGetValue(element.Name.LocalName, out Func<XElement, EpcisQuery> parseMethod))
+                {
+                    return parseMethod(element);
+                }
+                else
+                {
+                    throw new Exception($"Element not expected: '{element.Name.LocalName ?? null}'");
+                }
+            }
+
+            throw new Exception($"EPCISBody element must contain the query type.");
         }
 
         public override async Task Write(EpcisQuery entity, Stream output, CancellationToken cancellationToken)
