@@ -34,6 +34,16 @@ namespace FasTnT.Formatters.Xml.Responses
             }
         }
 
+        internal static IEnumerable<XElement> FormatEpcQuantity(EpcisEvent evt, EpcType epcType)
+        {
+            return evt.Epcs.Where(x => x.Type == epcType).Select(FormatQuantity);
+        }
+
+        internal static IEnumerable<XElement> FormatEpcList(EpcisEvent evt, EpcType epcType)
+        {
+            return evt.Epcs.Where(x => x.Type == epcType).Select(e => new XElement("epc", e.Id));
+        }
+
         internal static XElement CreateEvent(string eventType, EpcisEvent @event)
         {
             var element = new XElement(eventType);
@@ -130,16 +140,6 @@ namespace FasTnT.Formatters.Xml.Responses
             return businessLocation;
         }
 
-        internal static XElement FormatQuantity(Epc epc)
-        {
-            var qtyElement = new XElement("quantityElement");
-            qtyElement.Add(new XElement("epcClass", epc.Id));
-            if (epc.Quantity.HasValue) qtyElement.Add(new XElement("quantity", epc.Quantity));
-            if (!string.IsNullOrEmpty(epc.UnitOfMeasure)) qtyElement.Add(new XElement("uom", epc.UnitOfMeasure));
-
-            return qtyElement;
-        }
-
         internal static IEnumerable<XElement> GenerateCustomFields(EpcisEvent evt, FieldType type)
         {
             var container = new XElement("container");
@@ -170,6 +170,16 @@ namespace FasTnT.Formatters.Xml.Responses
             {
                 GenerateCustomFields(type, element, field);
             }
+        }
+
+        private static XElement FormatQuantity(Epc epc)
+        {
+            var qtyElement = new XElement("quantityElement");
+            qtyElement.Add(new XElement("epcClass", epc.Id));
+            if (epc.Quantity.HasValue) qtyElement.Add(new XElement("quantity", epc.Quantity));
+            if (!string.IsNullOrEmpty(epc.UnitOfMeasure)) qtyElement.Add(new XElement("uom", epc.UnitOfMeasure));
+
+            return qtyElement;
         }
 
         private static void GenerateCustomFields(FieldType type, XContainer container, CustomField rootField)

@@ -1,7 +1,6 @@
 ﻿using FasTnT.Formatters.Xml.Responses;
 using FasTnT.Model;
 using FasTnT.Model.Events.Enums;
-using System.Linq;
 using System.Xml.Linq;
 
 namespace FasTnT.Formatters.Xml.Formatters.Events
@@ -21,12 +20,12 @@ namespace FasTnT.Formatters.Xml.Formatters.Events
             Root.AddIfNotNull(Extension);
         }
 
-        protected virtual void AddEpcList(EpcisEvent objectEvent)
+        protected virtual void AddEpcList(EpcisEvent evt)
         {
-            var inputEpcList = new XElement("inputEPCList", objectEvent.Epcs.Where(x => x.Type == EpcType.InputEpc).Select(e => new XElement("epc", e.Id)));
-            var quantityList = new XElement("quantityList", objectEvent.Epcs.Where(x => x.Type == EpcType.Quantity).Select(XmlEventFormatter.FormatQuantity));
+            var inputEpcList = new XElement("inputEPCList", XmlEventFormatter.FormatEpcList(evt, EpcType.InputEpc));
+            var quantityList = new XElement("quantityList", XmlEventFormatter.FormatEpcQuantity(evt, EpcType.Quantity));
 
-            Root.Add(new XElement("epcList", objectEvent.Epcs.Where(x => x.Type == EpcType.List).Select(e => new XElement("epc", e.Id))));
+            Root.Add(new XElement("epcList", XmlEventFormatter.FormatEpcList(evt, EpcType.List)));
             if (inputEpcList.HasElements) Root.Add(inputEpcList);
             if (quantityList.HasElements) Extension.Add(quantityList);
         }

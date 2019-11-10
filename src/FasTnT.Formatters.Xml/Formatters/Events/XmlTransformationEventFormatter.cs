@@ -1,7 +1,6 @@
 ﻿using FasTnT.Formatters.Xml.Responses;
 using FasTnT.Model;
 using FasTnT.Model.Events.Enums;
-using System.Linq;
 using System.Xml.Linq;
 
 namespace FasTnT.Formatters.Xml.Formatters.Events
@@ -29,10 +28,10 @@ namespace FasTnT.Formatters.Xml.Formatters.Events
 
         private void AddInputOutputEpcList(EpcisEvent evt)
         {
-            var inputEpcList = new XElement("inputEPCList", evt.Epcs.Where(x => x.Type == EpcType.InputEpc).Select(e => new XElement("epc", e.Id)));
-            var inputQuantity = new XElement("inputQuantityList", evt.Epcs.Where(x => x.Type == EpcType.InputQuantity).Select(XmlEventFormatter.FormatQuantity));
-            var outputQuantity = new XElement("outputQuantityList", evt.Epcs.Where(x => x.Type == EpcType.OutputQuantity).Select(XmlEventFormatter.FormatQuantity));
-            var outputEpcList = new XElement("outputEPCList", evt.Epcs.Where(x => x.Type == EpcType.OutputEpc).Select(e => new XElement("epc", e.Id)));
+            var inputEpcList = new XElement("inputEPCList", XmlEventFormatter.FormatEpcList(evt, EpcType.InputEpc));
+            var inputQuantity = new XElement("inputQuantityList", XmlEventFormatter.FormatEpcQuantity(evt, EpcType.InputQuantity));
+            var outputQuantity = new XElement("outputQuantityList", XmlEventFormatter.FormatEpcQuantity(evt, EpcType.OutputQuantity));
+            var outputEpcList = new XElement("outputEPCList", XmlEventFormatter.FormatEpcList(evt, EpcType.OutputEpc));
 
             if (inputEpcList.HasElements) Root.Add(inputEpcList);
             if (inputQuantity.HasElements) Root.Add(inputQuantity);

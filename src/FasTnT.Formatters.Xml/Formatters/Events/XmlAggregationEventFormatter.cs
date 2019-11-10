@@ -39,9 +39,9 @@ namespace FasTnT.Formatters.Xml.Formatters.Events
 
         private void AddChildEpcs(EpcisEvent evt)
         {
-            var childQuantity = new XElement("childQuantityList", evt.Epcs.Where(x => x.Type == EpcType.ChildQuantity).Select(XmlEventFormatter.FormatQuantity));
+            var childQuantity = new XElement("childQuantityList", XmlEventFormatter.FormatEpcQuantity(evt, EpcType.ChildQuantity));
 
-            Root.Add(new XElement("childEPCs", evt.Epcs.Where(e => e.Type == EpcType.ChildEpc).Select(x => new XElement("epc", x.Id))));
+            Root.Add(new XElement("childEPCs", XmlEventFormatter.FormatEpcList(evt, EpcType.ChildEpc)));
             if (childQuantity.HasElements) Extension.Add(childQuantity);
         }
     }
