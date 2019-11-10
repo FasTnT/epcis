@@ -2,7 +2,6 @@
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Xml.Linq;
@@ -17,7 +16,7 @@ using FasTnT.Model.Utils;
 
 namespace FasTnT.Formatters.Xml
 {
-    public class XmlRequestFormatter
+    public class XmlRequestFormatter : XmlEpcisWriter<Request>
     {
         public async Task<Request> Read(Stream input, CancellationToken cancellationToken)
         {
@@ -46,6 +45,11 @@ namespace FasTnT.Formatters.Xml
             }
 
             throw new Exception($"Document with root '{document.Root.Name.ToString()}' is not expected here.");
+        }
+
+        public override async Task Write(Request entity, Stream output, CancellationToken cancellationToken)
+        {
+            await Write(entity, output, e => Write(e), cancellationToken);
         }
 
         private Request ParseCallback(XDocument document)
@@ -84,14 +88,6 @@ namespace FasTnT.Formatters.Xml
                 SchemaVersion = root.Attribute("schemaVersion").Value,
                 CustomFields = XmlCustomFieldParser.ParseCustomFields(root.XPathSelectElement("EPCISHeader"), FieldType.HeaderExtension)
             };
-        }
-
-        public async Task Write(Request entity, Stream output, CancellationToken cancellationToken)
-        {
-            XDocument document = Write((dynamic)entity);
-            var bytes = Encoding.UTF8.GetBytes(document.ToString(SaveOptions.DisableFormatting | SaveOptions.OmitDuplicateNamespaces));
-
-            await output.WriteAsync(bytes, 0, bytes.Length, cancellationToken);
         }
 
         private XDocument Write(CaptureRequest entity)

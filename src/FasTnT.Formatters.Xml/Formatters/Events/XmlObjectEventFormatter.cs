@@ -1,7 +1,5 @@
 ﻿using FasTnT.Formatters.Xml.Responses;
 using FasTnT.Model;
-using FasTnT.Model.Events.Enums;
-using System.Linq;
 using System.Xml.Linq;
 
 namespace FasTnT.Formatters.Xml.Formatters.Events

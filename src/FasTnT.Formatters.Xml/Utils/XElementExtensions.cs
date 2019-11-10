@@ -1,8 +1,6 @@
 ﻿using FasTnT.Formatters.Xml.Parsers;
-using FasTnT.Formatters.Xml.Requests;
 using FasTnT.Model;
 using FasTnT.Model.Events.Enums;
-using FasTnT.Model.Utils;
 using System;
 using System.Collections.Generic;
 using System.Globalization;

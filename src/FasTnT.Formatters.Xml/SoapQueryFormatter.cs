@@ -43,9 +43,9 @@ namespace FasTnT.Formatters.Xml
 
             if (element != null)
             {
-                if (Parsers.TryGetValue(element.Name.LocalName, out Func<XElement, EpcisQuery> parserMethod))
+                if (Parsers.TryGetValue(element.Name.LocalName, out Func<XElement, EpcisQuery> parseMethod))
                 {
-                    return parserMethod(element);
+                    return parseMethod(element);
                 }
                 else
                 {
