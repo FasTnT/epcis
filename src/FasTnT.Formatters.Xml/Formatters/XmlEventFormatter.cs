@@ -13,20 +13,25 @@ namespace FasTnT.Formatters.Xml.Responses
     { 
         const string DateTimeFormat = "yyyy-MM-ddTHH:mm:ss.fffZ";
 
+        public static IDictionary<EventType, Func<EpcisEvent, XElement>> Formatters = new Dictionary<EventType, Func<EpcisEvent, XElement>>
+        {
+            { EventType.Object,         evt => new XmlObjectEventFormatter().Process(evt) },
+            { EventType.Transaction,    evt => new XmlTransactionEventFormatter().Process(evt) },
+            { EventType.Aggregation,    evt => new XmlAggregationEventFormatter().Process(evt) },
+            { EventType.Quantity,       evt => new XmlQuantityEventFormatter().Process(evt) },
+            { EventType.Transformation, evt => new XmlTransformationEventFormatter().Process(evt) }
+        };
+
         public XElement Format(EpcisEvent epcisEvent)
         {
-            if(epcisEvent.Type == EventType.Object)
-                return new XmlObjectEventFormatter().Process(epcisEvent);
-            else if(epcisEvent.Type == EventType.Transaction)
-                return new XmlTransactionEventFormatter().Process(epcisEvent);
-            else if (epcisEvent.Type == EventType.Aggregation)
-                return new XmlAggregationEventFormatter().Process(epcisEvent);
-            else if (epcisEvent.Type == EventType.Quantity)
-                return new XmlQuantityEventFormatter().Process(epcisEvent);
-            else if (epcisEvent.Type == EventType.Transformation)
-                return new XmlTransformationEventFormatter().Process(epcisEvent);
+            if (Formatters.TryGetValue(epcisEvent.Type, out Func<EpcisEvent, XElement> formatter))
+            {
+                return formatter(epcisEvent);
+            }
             else
+            {
                 throw new NotImplementedException();
+            }
         }
 
         internal static XElement CreateEvent(string eventType, EpcisEvent @event)
