@@ -13,6 +13,7 @@ using FasTnT.Formatters.Xml.Responses;
 using FasTnT.Formatters.Xml.Validation;
 using FasTnT.Model;
 using FasTnT.Model.Events.Enums;
+using FasTnT.Model.Utils;
 
 namespace FasTnT.Formatters.Xml
 {
@@ -49,23 +50,18 @@ namespace FasTnT.Formatters.Xml
 
         private Request ParseCallback(XDocument document)
         {
-            switch (document.Root.Element("EPCISBody").Elements().First().Name.LocalName)
+            var callbackType = document.Root.Element("EPCISBody").Elements().First().Name.LocalName;
+
+            switch (callbackType)
             {
                 case "QueryTooLargeException":
-                    return new EpcisQueryCallbackException
-                    {
-                        Header = ParseHeader(document.Root),
-                        SubscriptionName = document.Root.Element("EPCISBody").Element(XName.Get("QueryTooLargeException", EpcisNamespaces.Query)).Element("subscriptionID").Value,
-                        Reason = document.Root.Element("EPCISBody").Element(XName.Get("QueryTooLargeException", EpcisNamespaces.Query)).Element("reason").Value,
-                        CallbackType = QueryCallbackType.ImplementationException
-                    };
                 case "ImplementationException":
                     return new EpcisQueryCallbackException
                     {
                         Header = ParseHeader(document.Root),
-                        SubscriptionName = document.Root.Element("EPCISBody").Element(XName.Get("ImplementationException", EpcisNamespaces.Query)).Element("subscriptionID").Value,
-                        Reason = document.Root.Element("EPCISBody").Element(XName.Get("ImplementationException", EpcisNamespaces.Query)).Element("reason").Value,
-                        CallbackType = QueryCallbackType.ImplementationException
+                        SubscriptionName = document.Root.Element("EPCISBody").Element(XName.Get(callbackType, EpcisNamespaces.Query)).Element("subscriptionID").Value,
+                        Reason = document.Root.Element("EPCISBody").Element(XName.Get(callbackType, EpcisNamespaces.Query)).Element("reason").Value,
+                        CallbackType = Enumeration.GetByDisplayNameInvariant<QueryCallbackType>(callbackType)
                     };
                 case "QueryResults":
                     return new EpcisQueryCallbackDocument
