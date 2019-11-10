@@ -109,12 +109,7 @@ namespace FasTnT.Formatters.Xml.Responses
 
             if (!string.IsNullOrEmpty(evt.ReadPoint))
             {
-                readPoint = new XElement("readPoint", new XElement("id", evt.ReadPoint));
-
-                foreach (var ext in evt.CustomFields.Where(x => x.Type == FieldType.ReadPointExtension))
-                {
-                    readPoint.Add(new XElement(XName.Get(ext.Name, ext.Namespace), ext.TextValue));
-                }
+                readPoint = new XElement("readPoint", new XElement("id", evt.ReadPoint), GenerateCustomFields(evt, FieldType.ReadPointExtension));
             }
 
             return readPoint;
@@ -129,9 +124,7 @@ namespace FasTnT.Formatters.Xml.Responses
 
             if (!string.IsNullOrEmpty(evt.BusinessLocation))
             {
-                var custom = evt.CustomFields.Where(x => x.Type == FieldType.BusinessLocationExtension).Select(field => new XElement(XName.Get(field.Name, field.Namespace), field.TextValue));
-
-                businessLocation = new XElement("bizLocation", new XElement("id", evt.BusinessLocation), custom);
+                businessLocation = new XElement("bizLocation", new XElement("id", evt.BusinessLocation), GenerateCustomFields(evt, FieldType.BusinessLocationExtension)); ;
             }
 
             return businessLocation;
