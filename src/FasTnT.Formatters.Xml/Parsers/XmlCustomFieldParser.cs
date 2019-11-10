@@ -38,27 +38,31 @@ namespace FasTnT.Formatters.Xml.Parsers
             {
                 foreach (var children in element.Elements())
                 {
-                    var childrenField = ParseCustomField(children, fieldType);
-                    field.Children.Add(childrenField);
+                    field.Children.Add(ParseCustomField(children, fieldType));
                 }
             }
 
             foreach (var attribute in element.Attributes().Where(a => a.Name.LocalName != "xmlns"))
             {
-                var attributeField = new CustomField
-                {
-                    Type = FieldType.Attribute,
-                    Name = attribute.Name.LocalName,
-                    Namespace = attribute.Name.Namespace.NamespaceName,
-                    TextValue = attribute.Value,
-                    NumericValue = element.HasElements ? null : double.TryParse(element.Value, out double doubleVal) ? doubleVal : default(double?),
-                    DateValue = element.HasElements ? null : DateTime.TryParse(element.Value, out DateTime dateVal) ? dateVal : default(DateTime?),
-                };
-
-                field.Children.Add(attributeField);
+                ParseAttribute(element, field, attribute);
             }
 
             return field;
+        }
+
+        private static void ParseAttribute(XElement element, CustomField field, XAttribute attribute)
+        {
+            var attributeField = new CustomField
+            {
+                Type = FieldType.Attribute,
+                Name = attribute.Name.LocalName,
+                Namespace = attribute.Name.Namespace.NamespaceName,
+                TextValue = attribute.Value,
+                NumericValue = element.HasElements ? null : double.TryParse(element.Value, out double doubleVal) ? doubleVal : default(double?),
+                DateValue = element.HasElements ? null : DateTime.TryParse(element.Value, out DateTime dateVal) ? dateVal : default(DateTime?),
+            };
+
+            field.Children.Add(attributeField);
         }
     }
 }

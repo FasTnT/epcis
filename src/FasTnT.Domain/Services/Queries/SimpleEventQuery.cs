@@ -93,35 +93,44 @@ namespace FasTnT.Model.Queries.Implementations
                 {
                     _orderField = Enumeration.GetByDisplayName<EpcisField>(parameter.Values.Single());
                 }
-                else if (Equals(parameter.Name, "orderDirection")) {
+                else if (Equals(parameter.Name, "orderDirection"))
+                {
                     _orderDirection = Enumeration.GetByDisplayName<OrderDirection>(parameter.Values.Single());
                 }
-                else if(SimpleParameters.TryGetValue(parameter.Name, out Action<IUnitOfWork, QueryParameter> action))
+                else if (SimpleParameters.TryGetValue(parameter.Name, out Action<IUnitOfWork, QueryParameter> action))
                 {
                     action(unitOfWork, parameter);
                 }
                 else
                 {
-                    var matchingRegex = RegexParameters.Where(x => Regex.Match(parameter.Name, x.Key, RegexOptions.Singleline).Success);
+                    var matchingRegex = RegexParameters.FirstOrDefault(x => Regex.Match(parameter.Name, x.Key, RegexOptions.Singleline).Success);
 
-                    if(matchingRegex.Any())
+                    if (matchingRegex.Key != default)
                     {
-                        matchingRegex.First().Value(unitOfWork, parameter);
+                        matchingRegex.Value(unitOfWork, parameter);
                     }
                     else
                     {
+                        // At this point, we can safely say that the parameter is invalid.
                         throw new NotImplementedException($"Query parameter unexpected or not implemented: '{parameter.Name}'");
                     }
                 }
             }
-            
+
+            return await FetchResults(parameters, unitOfWork, cancellationToken);
+        }
+
+        private async Task<IEnumerable<IEntity>> FetchResults(IEnumerable<QueryParameter> parameters, IUnitOfWork unitOfWork, CancellationToken cancellationToken)
+        {
             unitOfWork.EventManager.OrderBy(_orderField, _orderDirection); // Set order by filter
 
             var results = await unitOfWork.EventManager.ToList(cancellationToken);
 
             // Check for the maxEventCount parameter
-            if(parameters.Any(x => x.Name == "maxEventCount") && results.Count() == parameters.Last(x => x.Name == "maxEventCount").GetValue<int>() + 1)
+            if (parameters.Any(x => x.Name == "maxEventCount") && results.Count() == parameters.Last(x => x.Name == "maxEventCount").GetValue<int>() + 1)
+            {
                 throw new EpcisException(ExceptionType.QueryTooLargeException, "Too many results returned by the request");
+            }
 
             return results;
         }

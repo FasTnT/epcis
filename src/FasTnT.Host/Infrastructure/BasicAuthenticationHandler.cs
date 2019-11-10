@@ -40,27 +40,33 @@ namespace FasTnT.Host
                 var username = credentials[0];
                 var password = credentials[1];
 
-                var user = await _unitOfWork.UserManager.GetByUsername(username, Request.HttpContext.RequestAborted);
-
-                if (_userContext.Authenticate(user, password))
-                {
-                    var claims = new[] {
-                        new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-                        new Claim(ClaimTypes.Name, user.UserName),
-                    };
-                    var principal = new ClaimsPrincipal(new ClaimsIdentity(claims, Scheme.Name));
-                    var ticket = new AuthenticationTicket(principal, Scheme.Name);
-
-                    return AuthenticateResult.Success(ticket);
-                }
-                else
-                {
-                    return AuthenticateResult.Fail($"Invalid {HeaderKey} Header");
-                }
+                return await AuthenticateUser(username, password);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return AuthenticateResult.Fail(ex.Message);
+            }
+        }
+
+        private async Task<AuthenticateResult> AuthenticateUser(string username, string password)
+        {
+            var user = await _unitOfWork.UserManager.GetByUsername(username, Request.HttpContext.RequestAborted);
+
+            if (_userContext.Authenticate(user, password))
+            {
+                var claims = new[] 
+                {
+                    new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+                    new Claim(ClaimTypes.Name, user.UserName),
+                };
+                var principal = new ClaimsPrincipal(new ClaimsIdentity(claims, Scheme.Name));
+                var ticket = new AuthenticationTicket(principal, Scheme.Name);
+
+                return AuthenticateResult.Success(ticket);
+            }
+            else
+            {
+                return AuthenticateResult.Fail($"Invalid {HeaderKey} Header");
             }
         }
     }
