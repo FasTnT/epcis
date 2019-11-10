@@ -7,6 +7,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using System.Xml.XPath;
+using FasTnT.Formatters.Xml.Parsers;
 using FasTnT.Formatters.Xml.Requests;
 using FasTnT.Formatters.Xml.Responses;
 using FasTnT.Formatters.Xml.Validation;
@@ -85,7 +86,7 @@ namespace FasTnT.Formatters.Xml
                 StandardBusinessHeader = XmlHeaderParser.Parse(root.XPathSelectElement("EPCISHeader/sbdh:StandardBusinessDocumentHeader", EpcisNamespaces.Manager)),
                 DocumentTime = DateTime.Parse(root.Attribute("creationDate").Value, CultureInfo.InvariantCulture),
                 SchemaVersion = root.Attribute("schemaVersion").Value,
-                CustomFields = XmlHeaderParser.ParseCustomFields(root.XPathSelectElement("EPCISHeader"))
+                CustomFields = XmlCustomFieldParser.ParseCustomFields(root.XPathSelectElement("EPCISHeader"), FieldType.HeaderExtension)
             };
         }
 

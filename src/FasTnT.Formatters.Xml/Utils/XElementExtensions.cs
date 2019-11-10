@@ -1,4 +1,5 @@
-﻿using FasTnT.Formatters.Xml.Requests;
+﻿using FasTnT.Formatters.Xml.Parsers;
+using FasTnT.Formatters.Xml.Requests;
 using FasTnT.Model;
 using FasTnT.Model.Events.Enums;
 using FasTnT.Model.Utils;
@@ -48,7 +49,7 @@ namespace FasTnT.Formatters.Xml
 
             foreach (var innerElement in element.Elements().Where(x => x.Name.Namespace != XNamespace.None))
             {
-                Event.CustomFields.Add(XmlEventsParser.ParseCustomField(innerElement, Event, FieldType.ReadPointExtension));
+                Event.CustomFields.Add(XmlCustomFieldParser.ParseCustomField(innerElement, FieldType.ReadPointExtension));
             }
         }
 
@@ -82,7 +83,7 @@ namespace FasTnT.Formatters.Xml
         {
             foreach (var innerElement in element.Elements().Where(x => !new[] { "id", "corrective" }.Contains(x.Name.LocalName)))
             {
-                Event.CustomFields.Add(XmlEventsParser.ParseCustomField(innerElement, Event, FieldType.BusinessLocationExtension));
+                Event.CustomFields.Add(XmlCustomFieldParser.ParseCustomField(innerElement, FieldType.BusinessLocationExtension));
             }
 
             Event.BusinessLocation = element.Element("id").Value;
@@ -92,7 +93,7 @@ namespace FasTnT.Formatters.Xml
         {
             foreach (var innerElement in element.Elements().Where(x => !new[] { "id", "corrective", "declarationTime", "reason", "correctiveEventIDs" }.Contains(x.Name.LocalName)))
             {
-                Event.CustomFields.Add(XmlEventsParser.ParseCustomField(innerElement, Event, FieldType.ErrorDeclarationExtension));
+                Event.CustomFields.Add(XmlCustomFieldParser.ParseCustomField(innerElement, FieldType.ErrorDeclarationExtension));
             }
 
             var declarationTime = DateTime.Parse(element.Element("declarationTime").Value, CultureInfo.InvariantCulture);

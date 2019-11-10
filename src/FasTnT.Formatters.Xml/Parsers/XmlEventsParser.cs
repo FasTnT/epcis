@@ -1,4 +1,5 @@
-﻿using FasTnT.Model;
+﻿using FasTnT.Formatters.Xml.Parsers;
+using FasTnT.Model;
 using FasTnT.Model.Events.Enums;
 using FasTnT.Model.Utils;
 using System;
@@ -67,7 +68,7 @@ namespace FasTnT.Formatters.Xml.Requests
             {
                 if (node.Name.NamespaceName != XNamespace.None && node.Name.NamespaceName != XNamespace.Xmlns && node.Name.NamespaceName != EpcisNamespaces.Capture)
                 {
-                    epcisEvent.CustomFields.Add(ParseCustomField(node, epcisEvent, FieldType.CustomField));
+                    epcisEvent.CustomFields.Add(XmlCustomFieldParser.ParseCustomField(node, FieldType.CustomField));
                 }
                 else if (ParserMethods.TryGetValue(node.Name.LocalName, out Action<EpcisEvent, XElement> parserMethod))
                 {
@@ -75,7 +76,7 @@ namespace FasTnT.Formatters.Xml.Requests
                 }
                 else
                 {
-                    epcisEvent.CustomFields.Add(ParseCustomField(node, epcisEvent, FieldType.EventExtension)); break;
+                    epcisEvent.CustomFields.Add(XmlCustomFieldParser.ParseCustomField(node, FieldType.EventExtension));
                 }
             }
 
@@ -87,54 +88,15 @@ namespace FasTnT.Formatters.Xml.Requests
             if (innerElement.Name.Namespace == XNamespace.None || innerElement.Name.Namespace == XNamespace.Xmlns || innerElement.Name.NamespaceName == EpcisNamespaces.Capture)
                 epcisEvent = ParseAttributes(innerElement, epcisEvent);
             else
-                epcisEvent.CustomFields.Add(ParseCustomField(innerElement, epcisEvent, FieldType.EventExtension));
+                epcisEvent.CustomFields.Add(XmlCustomFieldParser.ParseCustomField(innerElement, FieldType.EventExtension));
         }
 
         internal static void ParseIlmd(XElement element, EpcisEvent epcisEvent)
         {
             foreach (var children in element.Elements())
             {
-                epcisEvent.CustomFields.Add(ParseCustomField(children, epcisEvent, FieldType.Ilmd));
+                epcisEvent.CustomFields.Add(XmlCustomFieldParser.ParseCustomField(children, FieldType.Ilmd));
             }
-        }
-
-        internal static CustomField ParseCustomField(XElement element, EpcisEvent epcisEvent, FieldType type)
-        {
-            var field = new CustomField
-            {
-                Type = type,
-                Name = element.Name.LocalName,
-                Namespace = element.Name.NamespaceName,
-                TextValue = element.HasElements ? null : element.Value,
-                NumericValue = element.HasElements ? null : double.TryParse(element.Value, out double doubleValue) ? doubleValue : default(double?),
-                DateValue = element.HasElements ? null : DateTime.TryParse(element.Value, out DateTime dateValue) ? dateValue : default(DateTime?),
-            };
-
-            if (element.HasElements)
-            {
-                foreach (var children in element.Elements())
-                {
-                    var childrenField = ParseCustomField(children, epcisEvent, type);
-                    field.Children.Add(childrenField);
-                }
-            }
-
-            foreach (var attribute in element.Attributes().Where(a => a.Name.LocalName != "xmlns"))
-            {
-                var attributeField = new CustomField
-                {
-                    Type = FieldType.Attribute,
-                    Name = attribute.Name.LocalName,
-                    Namespace = attribute.Name.Namespace.NamespaceName,
-                    TextValue = attribute.Value,
-                    NumericValue = element.HasElements ? null : double.TryParse(element.Value, out double doubleVal) ? doubleVal : default(double?),
-                    DateValue = element.HasElements ? null : DateTime.TryParse(element.Value, out DateTime dateVal) ? dateVal : default(DateTime?),
-                };
-
-                field.Children.Add(attributeField);
-            }
-
-            return field;
         }
     }
 }
