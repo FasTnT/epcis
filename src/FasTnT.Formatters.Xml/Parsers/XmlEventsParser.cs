@@ -10,8 +10,38 @@ using System.Xml.Linq;
 namespace FasTnT.Formatters.Xml.Requests
 {
     public static class XmlEventsParser
-    { 
-        static internal EpcisEvent[] ParseEvents(params XElement[] eventList)
+    {
+        private static IDictionary<string, Action<EpcisEvent, XElement>> ParserMethods = new Dictionary<string, Action<EpcisEvent, XElement>>
+        {
+            { "eventTime",           (evt, node) => evt.EventTime = DateTime.Parse(node.Value, CultureInfo.InvariantCulture, DateTimeStyles.AdjustToUniversal) },
+            { "eventTimeZoneOffset", (evt, node) => evt.EventTimeZoneOffset = new TimeZoneOffset { Representation = node.Value } },
+            { "action",              (evt, node) => evt.Action = Enumeration.GetByDisplayName<EventAction>(node.Value) },
+            { "epcList",             (evt, node) => node.ParseEpcListInto(EpcType.List, evt) },
+            { "childEPCs",           (evt, node) => node.ParseChildEpcListInto(evt) },
+            { "inputQuantityList",   (evt, node) => node.ParseQuantityListInto(evt, EpcType.InputQuantity) },
+            { "inputEPCList",        (evt, node) => node.ParseEpcListInto(EpcType.InputEpc, evt) },
+            { "outputQuantityList",  (evt, node) => node.ParseQuantityListInto(evt, EpcType.OutputQuantity) },
+            { "childQuantityList",   (evt, node) => node.ParseQuantityListInto(evt, EpcType.ChildQuantity) },
+            { "epcClass",            (evt, node) => evt.Epcs.Add(new Epc { Type = EpcType.Quantity, Id = node.Value, IsQuantity = true }) },
+            { "quantity",            (evt, node) => evt.Epcs.Single(x => x.Type == EpcType.Quantity).Quantity = float.Parse(node.Value, CultureInfo.InvariantCulture) },
+            { "bizStep",             (evt, node) => evt.BusinessStep = node.Value },
+            { "disposition",         (evt, node) => evt.Disposition = node.Value },
+            { "eventID",             (evt, node) => evt.EventId = node.Value },
+            { "errorDeclaration",    (evt, node) => evt.ErrorDeclaration = node.ToErrorDeclaration(evt) },
+            { "transformationId",    (evt, node) => evt.TransformationId = node.Value },
+            { "bizLocation",         (evt, node) => node.ParseBusinessLocation(evt) },
+            { "bizTransactionList",  (evt, node) => evt.BusinessTransactions = node.ToBusinessTransactions() },
+            { "readPoint",           (evt, node) => node.ParseReadPoint(evt) },
+            { "sourceList",          (evt, node) => node.ParseSourceInto(evt.SourceDestinationList) },
+            { "destinationList",     (evt, node) => node.ParseDestinationInto(evt.SourceDestinationList) },
+            { "ilmd",                (evt, node) => ParseIlmd(node, evt) },
+            { "parentID",            (evt, node) => evt.Epcs.Add(new Epc { Id = node.Value, Type = EpcType.ParentId }) },
+            { "recordTime",          (evt, node) => { } }, // We don't process record time as it will be overrided in any case..
+            { "extension",           (evt, node) => ParseExtensionElement(node, evt) },
+            { "baseExtension",       (evt, node) => ParseExtensionElement(node, evt) },
+        };
+
+        internal static EpcisEvent[] ParseEvents(params XElement[] eventList)
         {
             var events = new List<EpcisEvent>(eventList.Length);
 
@@ -31,81 +61,28 @@ namespace FasTnT.Formatters.Xml.Requests
             return events.ToArray();
         }
 
-        private static EpcisEvent ParseAttributes(XElement root, EpcisEvent epcisEvent)
+        internal static EpcisEvent ParseAttributes(XElement root, EpcisEvent epcisEvent)
         {
             foreach(var node in root.Elements())
             {
                 if (node.Name.NamespaceName != XNamespace.None && node.Name.NamespaceName != XNamespace.Xmlns && node.Name.NamespaceName != EpcisNamespaces.Capture)
                 {
                     epcisEvent.CustomFields.Add(ParseCustomField(node, epcisEvent, FieldType.CustomField));
-                    continue;
                 }
-                switch (node.Name.LocalName)
+                else if (ParserMethods.TryGetValue(node.Name.LocalName, out Action<EpcisEvent, XElement> parserMethod))
                 {
-                    case "eventTime":
-                        epcisEvent.EventTime = DateTime.Parse(node.Value, CultureInfo.InvariantCulture, DateTimeStyles.AdjustToUniversal); break;
-                    case "eventTimeZoneOffset":
-                        epcisEvent.EventTimeZoneOffset = new TimeZoneOffset { Representation = node.Value }; break;
-                    case "action":
-                        epcisEvent.Action = Enumeration.GetByDisplayName<EventAction>(node.Value); break;
-                    case "epcList":
-                        node.ParseEpcListInto(EpcType.List, epcisEvent); break;
-                    case "childEPCs":
-                        node.ParseChildEpcListInto(epcisEvent); break;
-                    case "inputQuantityList":
-                        node.ParseQuantityListInto(epcisEvent, EpcType.InputQuantity); break;
-                    case "inputEPCList":
-                        node.ParseEpcListInto(EpcType.InputEpc, epcisEvent); break;
-                    case "outputQuantityList":
-                        node.ParseQuantityListInto(epcisEvent, EpcType.OutputQuantity); break;
-                    case "childQuantityList":
-                        node.ParseQuantityListInto(epcisEvent, EpcType.ChildQuantity); break;
-                    case "quantityList":
-                        node.ParseQuantityListInto(epcisEvent, EpcType.Quantity); break;
-                    case "outputEPCList":
-                        node.ParseEpcListInto(EpcType.OutputEpc, epcisEvent); break;
-                    case "epcClass":
-                        epcisEvent.Epcs.Add(new Epc { Type = EpcType.Quantity, Id = node.Value, IsQuantity = true }); break;
-                    case "quantity":
-                        epcisEvent.Epcs.Single(x => x.Type == EpcType.Quantity).Quantity = float.Parse(node.Value, CultureInfo.InvariantCulture); break;
-                    case "bizStep":
-                        epcisEvent.BusinessStep = node.Value; break;
-                    case "disposition":
-                        epcisEvent.Disposition = node.Value; break;
-                    case "eventID":
-                        epcisEvent.EventId = node.Value; break;
-                    case "errorDeclaration":
-                        epcisEvent.ErrorDeclaration = node.ToErrorDeclaration(epcisEvent); break;
-                    case "transformationId":
-                        epcisEvent.TransformationId = node.Value; break;
-                    case "bizLocation":
-                        node.ParseBusinessLocation(epcisEvent); break;
-                    case "bizTransactionList":
-                        epcisEvent.BusinessTransactions = node.ToBusinessTransactions(); break;
-                    case "readPoint":
-                        node.ParseReadPoint(epcisEvent); break;
-                    case "sourceList":
-                        node.ParseSourceInto(epcisEvent.SourceDestinationList); break;
-                    case "destinationList":
-                        node.ParseDestinationInto(epcisEvent.SourceDestinationList); break;
-                    case "ilmd":
-                        ParseIlmd(node, epcisEvent); break;
-                    case "parentID":
-                        epcisEvent.Epcs.Add(new Epc { Id = node.Value, Type = EpcType.ParentId }); break;
-                    case "recordTime": // We don't process record time as it will be overrided in any case..
-                        break;
-                    case "extension":
-                    case "baseExtension":
-                        ParseExtensionElement(node, epcisEvent); break;
-                    default:
-                        epcisEvent.CustomFields.Add(ParseCustomField(node, epcisEvent, FieldType.EventExtension)); break;
+                    parserMethod(epcisEvent, node);
+                }
+                else
+                {
+                    epcisEvent.CustomFields.Add(ParseCustomField(node, epcisEvent, FieldType.EventExtension)); break;
                 }
             }
 
             return epcisEvent;
         }
 
-        private static void ParseExtensionElement(XElement innerElement, EpcisEvent epcisEvent)
+        internal static void ParseExtensionElement(XElement innerElement, EpcisEvent epcisEvent)
         {
             if (innerElement.Name.Namespace == XNamespace.None || innerElement.Name.Namespace == XNamespace.Xmlns || innerElement.Name.NamespaceName == EpcisNamespaces.Capture)
                 epcisEvent = ParseAttributes(innerElement, epcisEvent);
@@ -113,7 +90,7 @@ namespace FasTnT.Formatters.Xml.Requests
                 epcisEvent.CustomFields.Add(ParseCustomField(innerElement, epcisEvent, FieldType.EventExtension));
         }
 
-        private static void ParseIlmd(XElement element, EpcisEvent epcisEvent)
+        internal static void ParseIlmd(XElement element, EpcisEvent epcisEvent)
         {
             foreach (var children in element.Elements())
             {
