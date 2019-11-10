@@ -33,8 +33,8 @@ namespace FasTnT.Formatters.Xml.Requests
             { "bizLocation",         (evt, node) => node.ParseBusinessLocation(evt) },
             { "bizTransactionList",  (evt, node) => evt.BusinessTransactions = node.ToBusinessTransactions() },
             { "readPoint",           (evt, node) => node.ParseReadPoint(evt) },
-            { "sourceList",          (evt, node) => node.ParseSourceInto(evt.SourceDestinationList) },
-            { "destinationList",     (evt, node) => node.ParseDestinationInto(evt.SourceDestinationList) },
+            { "sourceList",          (evt, node) => node.ParseSourceDest(SourceDestinationType.Source, evt.SourceDestinationList) },
+            { "destinationList",     (evt, node) => node.ParseSourceDest(SourceDestinationType.Destination, evt.SourceDestinationList) },
             { "ilmd",                (evt, node) => ParseIlmd(node, evt) },
             { "parentID",            (evt, node) => evt.Epcs.Add(new Epc { Id = node.Value, Type = EpcType.ParentId }) },
             { "recordTime",          (evt, node) => { } }, // We don't process record time as it will be overrided in any case..

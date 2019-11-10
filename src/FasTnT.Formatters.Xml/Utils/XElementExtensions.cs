@@ -53,28 +53,15 @@ namespace FasTnT.Formatters.Xml
             }
         }
 
-        public static void ParseSourceInto(this XElement element, IList<SourceDestination> list)
+        public static void ParseSourceDest(this XElement element, SourceDestinationType type, IList<SourceDestination> list)
         {
-            foreach (var child in element.Elements("source"))
+            foreach (var child in element.Elements(type.DisplayName))
             {
                 list.Add(new SourceDestination
                 {
                     Type = child.Attribute("type").Value,
                     Id = child.Value,
-                    Direction = SourceDestinationType.Source
-                });
-            }
-        }
-
-        public static void ParseDestinationInto(this XElement element, IList<SourceDestination> list)
-        {
-            foreach (var child in element.Elements("destination"))
-            {
-                list.Add(new SourceDestination
-                {
-                    Type = child.Attribute("type").Value,
-                    Id = child.Value,
-                    Direction = SourceDestinationType.Destination
+                    Direction = type
                 });
             }
         }
