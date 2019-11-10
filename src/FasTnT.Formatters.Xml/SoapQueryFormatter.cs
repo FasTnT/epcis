@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading;
@@ -12,6 +13,17 @@ namespace FasTnT.Formatters.Xml
     public class SoapQueryFormatter
     {
         static readonly string SoapEnvelopNamespace = "http://schemas.xmlsoap.org/soap/envelope/";
+        static IDictionary<string, Func<XElement, EpcisQuery>> Parsers = new Dictionary<string, Func<XElement, EpcisQuery>>
+        {
+            { "GetQueryNames", element => new GetQueryNames() },
+            { "GetSubscriptionIDs", element => new GetSubscriptionIds { QueryName = element.Element("queryName").Value } },
+            { "GetStandardVersion", element => new GetStandardVersion() },
+            { "GetVendorVersion", element => new GetVendorVersion() },
+            { "Poll", element => XmlQueryParser.Parse(element) },
+            { "Subscribe", element => XmlSubscriptionParser.ParseSubscription(element) },
+            { "Unsubscribe", element => XmlSubscriptionParser.ParseUnsubscription(element) }
+        };
+
         public async Task<EpcisQuery> Read(Stream input, CancellationToken cancellationToken)
         {
             var document = await XDocument.LoadAsync(input, LoadOptions.None, cancellationToken);
@@ -31,35 +43,14 @@ namespace FasTnT.Formatters.Xml
 
             if (element != null)
             {
-                if (element.Name == XName.Get("GetQueryNames", EpcisNamespaces.Query))
+                if (Parsers.TryGetValue(element.Name.LocalName, out Func<XElement, EpcisQuery> parserMethod))
                 {
-                    return new GetQueryNames();
+                    return parserMethod(element);
                 }
-                if (element.Name == XName.Get("GetSubscriptionIDs", EpcisNamespaces.Query))
+                else
                 {
-                    return new GetSubscriptionIds { QueryName = element.Element("queryName").Value };
+                    throw new Exception($"Element not expected: '{element.Name.LocalName ?? null}'");
                 }
-                if (element.Name == XName.Get("GetStandardVersion", EpcisNamespaces.Query))
-                {
-                    return new GetStandardVersion();
-                }
-                if (element.Name == XName.Get("GetVendorVersion", EpcisNamespaces.Query))
-                {
-                    return new GetVendorVersion();
-                }
-                if (element.Name == XName.Get("Poll", EpcisNamespaces.Query))
-                {
-                    return XmlQueryParser.Parse(element);
-                }
-                if (element.Name == XName.Get("Subscribe", EpcisNamespaces.Query))
-                {
-                    return XmlSubscriptionParser.ParseSubscription(element);
-                }
-                if (element.Name == XName.Get("Unsubscribe", EpcisNamespaces.Query))
-                {
-                    return XmlSubscriptionParser.ParseUnsubscription(element);
-                }
-                throw new Exception($"Element not expected: '{element?.Name?.LocalName ?? null}'");
             }
 
             throw new Exception($"Invalid SOAP request: empty Body.");
