@@ -1,4 +1,4 @@
-![](https://github.com/FasTnT/epcis/workflows/.github/workflows/dotnetcore.yml/badge.svg?branch=workflow)
+![](https://github.com/FasTnT/epcis/workflows/.github/workflows/dotnetcore.yml/badge.svg)
 [![Maintainability](https://api.codeclimate.com/v1/badges/40672e48b92da57852d7/maintainability)](https://codeclimate.com/github/FasTnT/epcis/maintainability)
 
 # FasTnT EPCIS
