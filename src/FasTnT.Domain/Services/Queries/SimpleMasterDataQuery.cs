@@ -15,6 +15,9 @@ namespace FasTnT.Model.Queries.Implementations
         public string Name => "SimpleMasterDataQuery";
         public bool AllowSubscription => false;
 
+        private List<string> _attributeNames = new List<string>();
+        private bool _includeAttributes, _includeChildren;
+
         private static IDictionary<string, Action<IUnitOfWork, QueryParameter>> SimpleParameters = new Dictionary<string, Action<IUnitOfWork, QueryParameter>>
         {
             { "vocabularyName",    (uow, param) => uow.MasterDataManager.WhereTypeIn(param.Values) },
@@ -28,22 +31,11 @@ namespace FasTnT.Model.Queries.Implementations
 
         public async Task<IEnumerable<IEntity>> Execute(IEnumerable<QueryParameter> parameters, IUnitOfWork unitOfWork, CancellationToken cancellationToken)
         {
-            var attributeNames = new List<string>();
-            bool includeAttributes = false, includeChildren = false;
-
             foreach (var parameter in parameters)
             {
-                if (Equals(parameter.Name, "includeAttributes"))
+                if (IsAttributeParameter(parameter))
                 {
-                    includeAttributes = parameter.GetValue<bool>();
-                }
-                else if (Equals(parameter.Name, "attributeNames"))
-                {
-                    attributeNames.AddRange(parameter.Values);
-                }
-                else if (Equals(parameter.Name, "includeChildren"))
-                {
-                    includeChildren = parameter.GetValue<bool>();
+                    HandleAttributeParameter(parameter);
                 }
                 else if (SimpleParameters.TryGetValue(parameter.Name, out Action<IUnitOfWork, QueryParameter> action))
                 {
@@ -55,12 +47,33 @@ namespace FasTnT.Model.Queries.Implementations
                 }
             }
 
-            return await FetchResults(parameters, unitOfWork, attributeNames, includeAttributes, includeChildren, cancellationToken);
+            return await FetchResults(parameters, unitOfWork, cancellationToken);
         }
 
-        private static async Task<IEnumerable<IEntity>> FetchResults(IEnumerable<QueryParameter> parameters, IUnitOfWork unitOfWork, List<string> attributeNames, bool includeAttributes, bool includeChildren, CancellationToken cancellationToken)
+        private bool IsAttributeParameter(QueryParameter parameter)
         {
-            var results = await unitOfWork.MasterDataManager.ToList(includeAttributes ? attributeNames.ToArray() : null, includeChildren, cancellationToken);
+            return Equals(parameter.Name, "includeAttributes") || Equals(parameter.Name, "attributeNames") || Equals(parameter.Name, "includeChildren");
+        }
+
+        private void HandleAttributeParameter(QueryParameter parameter)
+        {
+            if (Equals(parameter.Name, "includeAttributes"))
+            {
+                _includeAttributes = parameter.GetValue<bool>();
+            }
+            else if (Equals(parameter.Name, "attributeNames"))
+            {
+                _attributeNames.AddRange(parameter.Values);
+            }
+            else if (Equals(parameter.Name, "includeChildren"))
+            {
+                _includeChildren = parameter.GetValue<bool>();
+            }
+        }
+
+        private async Task<IEnumerable<IEntity>> FetchResults(IEnumerable<QueryParameter> parameters, IUnitOfWork unitOfWork, CancellationToken cancellationToken)
+        {
+            var results = await unitOfWork.MasterDataManager.ToList(_includeAttributes ? _attributeNames.ToArray() : null, _includeChildren, cancellationToken);
 
             // Check for the maxElementCount parameter
             if (parameters.Any(x => x.Name == "maxElementCount") && results.Count() == parameters.Last(x => x.Name == "maxElementCount").GetValue<int>() + 1)

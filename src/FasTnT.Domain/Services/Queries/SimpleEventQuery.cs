@@ -89,35 +89,56 @@ namespace FasTnT.Model.Queries.Implementations
 
             foreach (var parameter in parameters)
             {
-                if (Equals(parameter.Name, "orderBy"))
+                if (IsOrderParameter(parameter))
                 {
-                    _orderField = Enumeration.GetByDisplayName<EpcisField>(parameter.Values.Single());
+                    HandleOrderParameter(parameter);
                 }
-                else if (Equals(parameter.Name, "orderDirection"))
+                else if (IsSimpleParameter(parameter, out Action<IUnitOfWork, QueryParameter> simpleAction))
                 {
-                    _orderDirection = Enumeration.GetByDisplayName<OrderDirection>(parameter.Values.Single());
+                    simpleAction(unitOfWork, parameter);
                 }
-                else if (SimpleParameters.TryGetValue(parameter.Name, out Action<IUnitOfWork, QueryParameter> action))
+                else if (IsRegexParameter(parameter, out Action<IUnitOfWork, QueryParameter> regexAction))
                 {
-                    action(unitOfWork, parameter);
+                    regexAction(unitOfWork, parameter);
                 }
                 else
                 {
-                    var matchingRegex = RegexParameters.FirstOrDefault(x => Regex.Match(parameter.Name, x.Key, RegexOptions.Singleline).Success);
-
-                    if (matchingRegex.Key != default)
-                    {
-                        matchingRegex.Value(unitOfWork, parameter);
-                    }
-                    else
-                    {
-                        // At this point, we can safely say that the parameter is invalid.
-                        throw new NotImplementedException($"Query parameter unexpected or not implemented: '{parameter.Name}'");
-                    }
+                    throw new NotImplementedException($"Query parameter unexpected or not implemented: '{parameter.Name}'");
                 }
             }
 
             return await FetchResults(parameters, unitOfWork, cancellationToken);
+        }
+
+        private bool IsOrderParameter(QueryParameter parameter)
+        {
+            return Equals(parameter.Name, "orderBy") || Equals(parameter.Name, "orderDirection");
+        }
+
+        private bool IsSimpleParameter(QueryParameter parameter, out Action<IUnitOfWork, QueryParameter> action)
+        {
+            return SimpleParameters.TryGetValue(parameter.Name, out action);
+        }
+
+        private bool IsRegexParameter(QueryParameter parameter, out Action<IUnitOfWork, QueryParameter> action)
+        {
+            var matchingRegex = RegexParameters.FirstOrDefault(x => Regex.Match(parameter.Name, x.Key, RegexOptions.Singleline).Success);
+
+            action = matchingRegex.Value;
+
+            return matchingRegex.Key != default;
+        }
+
+        private void HandleOrderParameter(QueryParameter parameter)
+        {
+            if (Equals(parameter.Name, "orderBy"))
+            {
+                _orderField = Enumeration.GetByDisplayName<EpcisField>(parameter.Values.Single());
+            }
+            else if (Equals(parameter.Name, "orderDirection"))
+            {
+                _orderDirection = Enumeration.GetByDisplayName<OrderDirection>(parameter.Values.Single());
+            }
         }
 
         private async Task<IEnumerable<IEntity>> FetchResults(IEnumerable<QueryParameter> parameters, IUnitOfWork unitOfWork, CancellationToken cancellationToken)
@@ -166,16 +187,17 @@ namespace FasTnT.Model.Queries.Implementations
         private static void ApplyCustomFieldParameter(QueryParameter parameter, bool inner, FieldType fieldType, IUnitOfWork unitOfWork)
         {
             var parts = parameter.Name.Split('_', 4);
+            var field = new CustomField { Name = parts[3], Namespace = parts[2], Type = fieldType };
 
             if (parameter.Values.Length > 1)
             {
                 if (!parameter.Name.StartsWith("EQ_")) throw new EpcisException(ExceptionType.QueryParameterException, "Custom Field parameter must be 'EQ' if multiple values are present.");
-                unitOfWork.EventManager.WhereCustomFieldMatches(inner, fieldType, parts[2], parts[3], parameter.Values);
+                unitOfWork.EventManager.WhereCustomFieldMatches(field, inner, parameter.Values);
             }
             else
             {
                 var filterOperator = Enumeration.GetByDisplayName<FilterComparator>(parameter.Name.Substring(0, 2));
-                unitOfWork.EventManager.WhereCustomFieldMatches(inner, fieldType, parts[2], parts[3], filterOperator, parameter.GetSingleValue());
+                unitOfWork.EventManager.WhereCustomFieldMatches(field, inner, filterOperator, parameter.GetSingleValue());
             }
         }
 
