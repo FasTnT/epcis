@@ -25,7 +25,8 @@ jobs:
     - name: Setup Integration Tests connectionstring
       run: dotnet user-secrets set ConnectionStrings:FasTnT.Database "Server=localhost;Database=fastnt_test;Port=5432;User Id=fastnt_user;Password=pwd;" -p test/FasTnT.IntegrationTests/FasTnT.IntegrationTests.csproj
       
-    - name: Run Tests
-      run: dotnet restore
-           dotnet test test/FasTnT.UnitTest/FasTnT.UnitTest.csproj
-           dotnet test test/FasTnT.IntegrationTests/FasTnT.IntegrationTests.csproj
+    - name: Run Unit Tests
+      run: dotnet test test/FasTnT.UnitTest/FasTnT.UnitTest.csproj
+      
+    - name: Run Integration Tests
+      run: dotnet test test/FasTnT.IntegrationTests/FasTnT.IntegrationTests.csproj
