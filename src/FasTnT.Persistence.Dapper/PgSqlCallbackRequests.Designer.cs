@@ -61,7 +61,7 @@ namespace FasTnT.Persistence.Dapper {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to INSERT INTO callback.query_callback(id, request_id, subscription_id, callback_type) VALUES(@id, @requestid, @subscriptionid, @callbacktype);.
+        ///   Looks up a localized string similar to INSERT INTO callback.query_callback(request_id, subscription_id, callback_type) VALUES(@requestid, @subscriptionid, @callbacktype);.
         /// </summary>
         internal static string Store {
             get {

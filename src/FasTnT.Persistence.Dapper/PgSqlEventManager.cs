@@ -4,6 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using FasTnT.Domain.Persistence;
 using FasTnT.Model;
+using FasTnT.Persistence.Dapper.Utils;
 using MoreLinq;
 using StoreAction = System.Func<FasTnT.Persistence.Dapper.EpcisEventEntity[], FasTnT.Persistence.Dapper.DapperUnitOfWork, System.Threading.CancellationToken, System.Threading.Tasks.Task>;
 
@@ -46,7 +47,7 @@ namespace FasTnT.Persistence.Dapper
         private async static Task StoreCustomFields(EpcisEventEntity[] events, DapperUnitOfWork unitOfWork, CancellationToken cancellationToken)
         {
             var fields = new List<CustomFieldEntity>();
-            events.ForEach(evt => ParseFields(evt.CustomFields, evt.Id, fields));
+            events.ForEach(evt => PgSqlCustomFieldsParser.ParseFields(evt.CustomFields, evt.Id, fields));
 
             await unitOfWork.BulkExecute(PgSqlEventRequests.StoreCustomField, fields, cancellationToken);
         }
@@ -72,19 +73,6 @@ namespace FasTnT.Persistence.Dapper
 
             await unitOfWork.BulkExecute(PgSqlEventRequests.StoreErrorDeclaration, declarations, cancellationToken);
             await unitOfWork.BulkExecute(PgSqlEventRequests.StoreErrorDeclarationIds, corrective, cancellationToken);
-        }
-
-        private static void ParseFields(IList<CustomField> customFields, int eventId, List<CustomFieldEntity> mappedList, int? parentId = null)
-        {
-            if (customFields == null || !customFields.Any()) return;
-
-            foreach (var field in customFields)
-            {
-                var entity = field.Map<CustomField, CustomFieldEntity>(f => { f.EventId = eventId; f.Id = mappedList.Count; f.ParentId = parentId; });
-                mappedList.Add(entity);
-
-                ParseFields(field.Children, eventId, mappedList, entity.Id);
-            }
         }
     }
 }

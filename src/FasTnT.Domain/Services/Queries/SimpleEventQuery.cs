@@ -20,6 +20,44 @@ namespace FasTnT.Model.Queries.Implementations
         private static readonly string[] _anyValuePrefixes = new[] { "EQ_", "EXISTS_", "EQATTR_", "HASATTR_", "WD_", "MATCH_" };
         private static readonly string[] _comparisonPrefixes = new[] { "GE_", "LE_", "GT_", "LT_" };
 
+        private static IDictionary<string, Action<IUnitOfWork, QueryParameter>> SimpleParameters = new Dictionary<string, Action<IUnitOfWork, QueryParameter>>
+        {
+            { "eventType",               (uow, param) => uow.EventManager.WhereSimpleFieldIn(EpcisField.EventType, param.Values.Select(Enumeration.GetByDisplayName<EventType>).ToArray()) },
+            { "eventCountLimit",         (uow, param) => uow.EventManager.SetLimit(param.GetValue<int>()) },
+            { "maxEventCount",           (uow, param) => uow.EventManager.SetLimit(param.GetValue<int>() + 1) },
+            { "EQ_action",               (uow, param) => uow.EventManager.WhereSimpleFieldIn(EpcisField.Action, param.Values.Select(Enumeration.GetByDisplayName<EventAction>).ToArray()) },
+            { "EQ_bizLocation",          (uow, param) => uow.EventManager.WhereSimpleFieldIn(EpcisField.BusinessLocation, param.Values) },
+            { "EQ_bizStep",              (uow, param) => uow.EventManager.WhereSimpleFieldIn(EpcisField.BusinessStep, param.Values) },
+            { "EQ_disposition",          (uow, param) => uow.EventManager.WhereSimpleFieldIn(EpcisField.Disposition, param.Values) },
+            { "EQ_eventID",              (uow, param) => uow.EventManager.WhereSimpleFieldIn(EpcisField.EventId, param.Values) },
+            { "EQ_transformationID",     (uow, param) => uow.EventManager.WhereSimpleFieldIn(EpcisField.TransformationId, param.Values) },
+            { "EQ_readPoint",            (uow, param) => uow.EventManager.WhereSimpleFieldIn(EpcisField.ReadPoint, param.Values) },
+            { "EXISTS_errorDeclaration", (uow, param) => uow.EventManager.WhereExistsErrorDeclaration() },
+            { "EQ_errorReason",          (uow, param) => uow.EventManager.WhereErrorReasonIn(param.Values) },
+            { "EQ_correctiveEventID",    (uow, param) => uow.EventManager.WhereCorrectiveEventIdIn(param.Values) },
+            { "WD_readPoint",            (uow, param) => uow.EventManager.WhereMasterDataHierarchyContains(EpcisField.ReadPoint, param.Values) },
+            { "WD_bizLocation",          (uow, param) => uow.EventManager.WhereMasterDataHierarchyContains(EpcisField.BusinessLocation, param.Values) }
+        };
+
+        private static IDictionary<string, Action<IUnitOfWork, QueryParameter>> RegexParameters = new Dictionary<string, Action<IUnitOfWork, QueryParameter>>
+        {
+            { "^EQ_(source|destination)_",     (uow, param) => ApplySourceDestinationParameter(param, uow) },
+            { "^EQ_bizTransaction_",           (uow, param) => ApplyBusinessTransactionParameter(param, uow) },
+            { "^(GE|LT)_eventTime",            (uow, param) => ApplyTimeParameter(EpcisField.CaptureTime, param, uow) },
+            { "^(GE|LT)_recordTime",           (uow, param) => ApplyTimeParameter(EpcisField.RecordTime, param, uow) },
+            { "^MATCH_",                       (uow, param) => ApplyEpcMatchParameter(param, uow) },
+            { "^(EQ|GT|LT|GE|LE)_quantity$",   (uow, param) => ApplyQuantityParameter(param, uow) },
+            { "^(EQ|GT|LT|GE|LE)_INNER_ILMD_", (uow, param) => ApplyCustomFieldParameter(param, true, FieldType.Ilmd, uow) },
+            { "^(EQ|GT|LT|GE|LE)_ILMD_",       (uow, param) => ApplyCustomFieldParameter(param, false, FieldType.Ilmd, uow) },
+            { "^EXISTS_INNER_ILMD_",           (uow, param) => ApplyExistCustomFieldParameter(param, true, FieldType.Ilmd, uow) },
+            { "^EXISTS_ILMD_",                 (uow, param) => ApplyExistCustomFieldParameter(param, false, FieldType.Ilmd, uow) },
+            { "^(EQ|GT|LT|GE|LE)_INNER_",      (uow, param) => ApplyCustomFieldParameter(param, true, FieldType.EventExtension, uow) },
+            { "^(EQ|GT|LT|GE|LE)_",            (uow, param) => ApplyCustomFieldParameter(param, false, FieldType.EventExtension, uow) },
+            { "^EXISTS_INNER",                 (uow, param) => ApplyExistCustomFieldParameter(param, true, FieldType.EventExtension, uow) },
+            { "^EQATTR_",                      (uow, param) => ApplyExistAttributeParameter(param, uow) },
+            { "^HASATTR_",                     (uow, param) => ApplyHasAttributeParameter(param, uow) }
+        };
+
         public string Name => "SimpleEventQuery";
         public bool AllowSubscription => true;
 
@@ -51,57 +89,53 @@ namespace FasTnT.Model.Queries.Implementations
 
             foreach (var parameter in parameters)
             {
-                if (Equals(parameter.Name, "eventType")) unitOfWork.EventManager.WhereSimpleFieldIn(EpcisField.EventType, parameter.Values.Select(Enumeration.GetByDisplayName<EventType>).ToArray());
-                else if (Equals(parameter.Name, "eventCountLimit")) unitOfWork.EventManager.SetLimit(parameter.GetValue<int>());
-                else if (Equals(parameter.Name, "maxEventCount")) unitOfWork.EventManager.SetLimit(parameter.GetValue<int>() + 1);
-                else if (Equals(parameter.Name, "EQ_action")) unitOfWork.EventManager.WhereSimpleFieldIn(EpcisField.Action, parameter.Values.Select(Enumeration.GetByDisplayName<EventAction>).ToArray());
-                else if (Equals(parameter.Name, "EQ_bizLocation")) unitOfWork.EventManager.WhereSimpleFieldIn(EpcisField.BusinessLocation, parameter.Values);
-                else if (Equals(parameter.Name, "EQ_bizStep")) unitOfWork.EventManager.WhereSimpleFieldIn(EpcisField.BusinessStep, parameter.Values);
-                else if (Equals(parameter.Name, "EQ_disposition")) unitOfWork.EventManager.WhereSimpleFieldIn(EpcisField.Disposition, parameter.Values);
-                else if (Equals(parameter.Name, "EQ_eventID")) unitOfWork.EventManager.WhereSimpleFieldIn(EpcisField.EventId, parameter.Values);
-                else if (Equals(parameter.Name, "EQ_transformationID")) unitOfWork.EventManager.WhereSimpleFieldIn(EpcisField.TransformationId, parameter.Values);
-                else if (Equals(parameter.Name, "EQ_readPoint")) unitOfWork.EventManager.WhereSimpleFieldIn(EpcisField.ReadPoint, parameter.Values);
-                else if (Equals(parameter.Name, "EXISTS_errorDeclaration")) unitOfWork.EventManager.WhereExistsErrorDeclaration();
-                else if (Equals(parameter.Name, "EQ_errorReason")) unitOfWork.EventManager.WhereErrorReasonIn(parameter.Values);
-                else if (Equals(parameter.Name, "EQ_correctiveEventID")) unitOfWork.EventManager.WhereCorrectiveEventIdIn(parameter.Values);
-                else if (Equals(parameter.Name, "WD_readPoint")) unitOfWork.EventManager.WhereMasterDataHierarchyContains(EpcisField.ReadPoint, parameter.Values);
-                else if (Equals(parameter.Name, "WD_bizLocation")) unitOfWork.EventManager.WhereMasterDataHierarchyContains(EpcisField.BusinessLocation, parameter.Values);
+                if (Equals(parameter.Name, "orderBy"))
+                {
+                    _orderField = Enumeration.GetByDisplayName<EpcisField>(parameter.Values.Single());
+                }
+                else if (Equals(parameter.Name, "orderDirection"))
+                {
+                    _orderDirection = Enumeration.GetByDisplayName<OrderDirection>(parameter.Values.Single());
+                }
+                else if (SimpleParameters.TryGetValue(parameter.Name, out Action<IUnitOfWork, QueryParameter> action))
+                {
+                    action(unitOfWork, parameter);
+                }
+                else
+                {
+                    var matchingRegex = RegexParameters.FirstOrDefault(x => Regex.Match(parameter.Name, x.Key, RegexOptions.Singleline).Success);
 
-                else if (Equals(parameter.Name, "orderBy")) _orderField = Enumeration.GetByDisplayName<EpcisField>(parameter.Values.Single());
-                else if (Equals(parameter.Name, "orderDirection")) _orderDirection = Enumeration.GetByDisplayName<OrderDirection>(parameter.Values.Single());
-
-                // Family of parameters (regex name)
-                else if (Regex.IsMatch(parameter.Name, "^EQ_(source|destination)_")) ApplySourceDestinationParameter(parameter, unitOfWork);
-                else if (Regex.IsMatch(parameter.Name, "^EQ_bizTransaction_")) ApplyBusinessTransactionParameter(parameter, unitOfWork);
-                else if (Regex.IsMatch(parameter.Name, "^(GE|LT)_eventTime")) ApplyTimeParameter(EpcisField.CaptureTime, parameter, unitOfWork);
-                else if (Regex.IsMatch(parameter.Name, "^(GE|LT)_recordTime")) ApplyTimeParameter(EpcisField.RecordTime, parameter, unitOfWork);
-                else if (Regex.IsMatch(parameter.Name, "^MATCH_")) ApplyEpcMatchParameter(parameter, unitOfWork);
-                else if (Regex.IsMatch(parameter.Name, "^(EQ|GT|LT|GE|LE)_quantity$")) ApplyQuantityParameter(parameter, unitOfWork);
-                else if (Regex.IsMatch(parameter.Name, "^(EQ|GT|LT|GE|LE)_INNER_ILMD_")) ApplyCustomFieldParameter(parameter, true, FieldType.Ilmd, unitOfWork);
-                else if (Regex.IsMatch(parameter.Name, "^(EQ|GT|LT|GE|LE)_ILMD_")) ApplyCustomFieldParameter(parameter, false, FieldType.Ilmd, unitOfWork);
-                else if (Regex.IsMatch(parameter.Name, "^EXISTS_INNER_ILMD_")) ApplyExistCustomFieldParameter(parameter, true, FieldType.Ilmd, unitOfWork);
-                else if (Regex.IsMatch(parameter.Name, "^EXISTS_ILMD_")) ApplyExistCustomFieldParameter(parameter, false, FieldType.Ilmd, unitOfWork);
-                else if (Regex.IsMatch(parameter.Name, "^(EQ|GT|LT|GE|LE)_INNER_")) ApplyCustomFieldParameter(parameter, true, FieldType.EventExtension, unitOfWork);
-                else if (Regex.IsMatch(parameter.Name, "^(EQ|GT|LT|GE|LE)_")) ApplyCustomFieldParameter(parameter, false, FieldType.EventExtension, unitOfWork);
-                else if (Regex.IsMatch(parameter.Name, "^EXISTS_INNER")) ApplyExistCustomFieldParameter(parameter, true, FieldType.EventExtension, unitOfWork);
-                else if (Regex.IsMatch(parameter.Name, "^EQATTR_")) ApplyExistAttributeParameter(parameter, unitOfWork);
-                else if (Regex.IsMatch(parameter.Name, "^HASATTR_")) ApplyHasAttributeParameter(parameter, unitOfWork);
-
-                else throw new NotImplementedException($"Query parameter unexpected or not implemented: '{parameter.Name}'");
+                    if (matchingRegex.Key != default)
+                    {
+                        matchingRegex.Value(unitOfWork, parameter);
+                    }
+                    else
+                    {
+                        // At this point, we can safely say that the parameter is invalid.
+                        throw new NotImplementedException($"Query parameter unexpected or not implemented: '{parameter.Name}'");
+                    }
+                }
             }
-            
+
+            return await FetchResults(parameters, unitOfWork, cancellationToken);
+        }
+
+        private async Task<IEnumerable<IEntity>> FetchResults(IEnumerable<QueryParameter> parameters, IUnitOfWork unitOfWork, CancellationToken cancellationToken)
+        {
             unitOfWork.EventManager.OrderBy(_orderField, _orderDirection); // Set order by filter
 
             var results = await unitOfWork.EventManager.ToList(cancellationToken);
 
             // Check for the maxEventCount parameter
-            if(parameters.Any(x => x.Name == "maxEventCount") && results.Count() == parameters.Last(x => x.Name == "maxEventCount").GetValue<int>() + 1)
+            if (parameters.Any(x => x.Name == "maxEventCount") && results.Count() == parameters.Last(x => x.Name == "maxEventCount").GetValue<int>() + 1)
+            {
                 throw new EpcisException(ExceptionType.QueryTooLargeException, "Too many results returned by the request");
+            }
 
             return results;
         }
 
-        private void ApplyQuantityParameter(QueryParameter parameter, IUnitOfWork unitOfWork)
+        private static void ApplyQuantityParameter(QueryParameter parameter, IUnitOfWork unitOfWork)
         {
             if (parameter.Values.Length > 1) throw new EpcisException(ExceptionType.QueryParameterException, "QuantityParameter must have only one value");
 
@@ -109,13 +143,13 @@ namespace FasTnT.Model.Queries.Implementations
             unitOfWork.EventManager.WhereEpcQuantityMatches(filterOperator, parameter.GetValue<double>());
         }
 
-        private void ApplyBusinessTransactionParameter(QueryParameter parameter, IUnitOfWork unitOfWork)
+        private static void ApplyBusinessTransactionParameter(QueryParameter parameter, IUnitOfWork unitOfWork)
         {
             var txName = parameter.Name.Split('_', 3)[2];
             unitOfWork.EventManager.WhereBusinessTransactionValueIn(txName, parameter.Values);
         }
 
-        private void ApplySourceDestinationParameter(QueryParameter parameter, IUnitOfWork unitOfWork)
+        private static void ApplySourceDestinationParameter(QueryParameter parameter, IUnitOfWork unitOfWork)
         {
             var name = parameter.Name.Split('_', 3)[2];
             var type = parameter.Name.StartsWith("EQ_source") ? SourceDestinationType.Source : SourceDestinationType.Destination;
@@ -123,13 +157,13 @@ namespace FasTnT.Model.Queries.Implementations
             unitOfWork.EventManager.WhereSourceDestinationValueIn(name, type, parameter.Values);
         }
 
-        private void ApplyExistCustomFieldParameter(QueryParameter parameter, bool inner, FieldType fieldType, IUnitOfWork unitOfWork)
+        private static void ApplyExistCustomFieldParameter(QueryParameter parameter, bool inner, FieldType fieldType, IUnitOfWork unitOfWork)
         {
             var parts = parameter.Name.Split('_', 4);
             unitOfWork.EventManager.WhereCustomFieldExists(inner, fieldType, parts[2], parts[3]);
         }
 
-        private void ApplyCustomFieldParameter(QueryParameter parameter, bool inner, FieldType fieldType, IUnitOfWork unitOfWork)
+        private static void ApplyCustomFieldParameter(QueryParameter parameter, bool inner, FieldType fieldType, IUnitOfWork unitOfWork)
         {
             var parts = parameter.Name.Split('_', 4);
 
@@ -145,25 +179,25 @@ namespace FasTnT.Model.Queries.Implementations
             }
         }
 
-        private void ApplyTimeParameter(EpcisField field, QueryParameter parameter, IUnitOfWork unitOfWork)
+        private static void ApplyTimeParameter(EpcisField field, QueryParameter parameter, IUnitOfWork unitOfWork)
         {
             var filterOperator = Enumeration.GetByDisplayName<FilterComparator>(parameter.Name.Substring(0, 2));
             unitOfWork.EventManager.WhereSimpleFieldMatches(field, filterOperator, parameter.GetValue<DateTime>());
         }
 
-        private void ApplyEpcMatchParameter(QueryParameter parameter, IUnitOfWork unitOfWork)
+        private static void ApplyEpcMatchParameter(QueryParameter parameter, IUnitOfWork unitOfWork)
         {
             unitOfWork.EventManager.WhereEpcMatches(parameter.Values.Select(x => x.Replace("*", "%")).ToArray(), parameter.GetMatchEpcTypes());
         }
 
-        private void ApplyExistAttributeParameter(QueryParameter parameter, IUnitOfWork unitOfWork)
+        private static void ApplyExistAttributeParameter(QueryParameter parameter, IUnitOfWork unitOfWork)
         {
             var parts = parameter.Name.Substring(7).Split("_", 2);
             var attribute = Enumeration.GetByDisplayName<EpcisField>(parts[0]);
             unitOfWork.EventManager.WhereMasterdataAttributeValueIn(attribute, parts[1], parameter.Values);
         }
 
-        private void ApplyHasAttributeParameter(QueryParameter parameter, IUnitOfWork unitOfWork)
+        private static void ApplyHasAttributeParameter(QueryParameter parameter, IUnitOfWork unitOfWork)
         {
             var attribute = Enumeration.GetByDisplayName<EpcisField>(parameter.Name.Substring(8));
             unitOfWork.EventManager.WhereMasterdataHasAttribute(attribute, parameter.Values);

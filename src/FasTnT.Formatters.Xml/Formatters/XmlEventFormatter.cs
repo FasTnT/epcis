@@ -13,20 +13,35 @@ namespace FasTnT.Formatters.Xml.Responses
     { 
         const string DateTimeFormat = "yyyy-MM-ddTHH:mm:ss.fffZ";
 
+        public static IDictionary<EventType, Func<EpcisEvent, XElement>> Formatters = new Dictionary<EventType, Func<EpcisEvent, XElement>>
+        {
+            { EventType.Object,         evt => new XmlObjectEventFormatter().Process(evt) },
+            { EventType.Transaction,    evt => new XmlTransactionEventFormatter().Process(evt) },
+            { EventType.Aggregation,    evt => new XmlAggregationEventFormatter().Process(evt) },
+            { EventType.Quantity,       evt => new XmlQuantityEventFormatter().Process(evt) },
+            { EventType.Transformation, evt => new XmlTransformationEventFormatter().Process(evt) }
+        };
+
         public XElement Format(EpcisEvent epcisEvent)
         {
-            if(epcisEvent.Type == EventType.Object)
-                return new XmlObjectEventFormatter().Process(epcisEvent);
-            else if(epcisEvent.Type == EventType.Transaction)
-                return new XmlTransactionEventFormatter().Process(epcisEvent);
-            else if (epcisEvent.Type == EventType.Aggregation)
-                return new XmlAggregationEventFormatter().Process(epcisEvent);
-            else if (epcisEvent.Type == EventType.Quantity)
-                return new XmlQuantityEventFormatter().Process(epcisEvent);
-            else if (epcisEvent.Type == EventType.Transformation)
-                return new XmlTransformationEventFormatter().Process(epcisEvent);
+            if (Formatters.TryGetValue(epcisEvent.Type, out Func<EpcisEvent, XElement> formatter))
+            {
+                return formatter(epcisEvent);
+            }
             else
+            {
                 throw new NotImplementedException();
+            }
+        }
+
+        internal static IEnumerable<XElement> FormatEpcQuantity(EpcisEvent evt, EpcType epcType)
+        {
+            return evt.Epcs.Where(x => x.Type == epcType).Select(FormatQuantity);
+        }
+
+        internal static IEnumerable<XElement> FormatEpcList(EpcisEvent evt, EpcType epcType)
+        {
+            return evt.Epcs.Where(x => x.Type == epcType).Select(e => new XElement("epc", e.Id));
         }
 
         internal static XElement CreateEvent(string eventType, EpcisEvent @event)
@@ -104,40 +119,14 @@ namespace FasTnT.Formatters.Xml.Responses
 
             if (!string.IsNullOrEmpty(evt.ReadPoint))
             {
-                readPoint = new XElement("readPoint", new XElement("id", evt.ReadPoint));
-
-                foreach (var ext in evt.CustomFields.Where(x => x.Type == FieldType.ReadPointExtension))
-                {
-                    readPoint.Add(new XElement(XName.Get(ext.Name, ext.Namespace), ext.TextValue));
-                }
+                readPoint = new XElement("readPoint", new XElement("id", evt.ReadPoint), GenerateCustomFields(evt, FieldType.ReadPointExtension));
             }
 
             return readPoint;
         }
 
-        internal static XElement GenerateDisposition(EpcisEvent evt)
-        {
-            var disposition = default(XElement);
-
-            if (!string.IsNullOrEmpty(evt.Disposition))
-            {
-                disposition = new XElement("disposition", evt.Disposition);
-            }
-
-            return disposition;
-        }
-
-        internal static XElement GenerateBusinesStep(EpcisEvent evt)
-        {
-            var businessStep = default(XElement);
-
-            if (!string.IsNullOrEmpty(evt.BusinessStep))
-            {
-                businessStep = new XElement("bizStep", evt.BusinessStep);
-            }
-
-            return businessStep;
-        }
+        internal static XElement GenerateDisposition(EpcisEvent evt) => SimpleElement("disposition", evt.Disposition);
+        internal static XElement GenerateBusinesStep(EpcisEvent evt) => SimpleElement("bizStep", evt.BusinessStep);
 
         internal static XElement GenerateBusinessLocation(EpcisEvent evt)
         {
@@ -145,15 +134,45 @@ namespace FasTnT.Formatters.Xml.Responses
 
             if (!string.IsNullOrEmpty(evt.BusinessLocation))
             {
-                var custom = evt.CustomFields.Where(x => x.Type == FieldType.BusinessLocationExtension).Select(field => new XElement(XName.Get(field.Name, field.Namespace), field.TextValue));
-
-                businessLocation = new XElement("bizLocation", new XElement("id", evt.BusinessLocation), custom);
+                businessLocation = new XElement("bizLocation", new XElement("id", evt.BusinessLocation), GenerateCustomFields(evt, FieldType.BusinessLocationExtension)); ;
             }
 
             return businessLocation;
         }
 
-        internal static XElement FormatQuantity(Epc epc)
+        internal static IEnumerable<XElement> GenerateCustomFields(EpcisEvent evt, FieldType type)
+        {
+            var container = new XElement("container");
+
+            foreach (var field in evt.CustomFields.Where(x => x.Type == type))
+            {
+                GenerateCustomFields(type, container, field);
+            }
+
+            return container.Elements();
+        }
+
+        private static XElement SimpleElement(string elementName, string value)
+        {
+            var element = default(XElement);
+
+            if (!string.IsNullOrEmpty(value))
+            {
+                element = new XElement(elementName, value);
+            }
+
+            return element;
+        }
+
+        private static void InnerCustomFields(XContainer element, FieldType type, CustomField parent)
+        {
+            foreach (var field in parent.Children.Where(x => x.Type == type))
+            {
+                GenerateCustomFields(type, element, field);
+            }
+        }
+
+        private static XElement FormatQuantity(Epc epc)
         {
             var qtyElement = new XElement("quantityElement");
             qtyElement.Add(new XElement("epcClass", epc.Id));
@@ -163,39 +182,17 @@ namespace FasTnT.Formatters.Xml.Responses
             return qtyElement;
         }
 
-        internal static IEnumerable<XElement> GenerateCustomFields(EpcisEvent evt, FieldType type)
+        private static void GenerateCustomFields(FieldType type, XContainer container, CustomField rootField)
         {
-            var elements = new List<XElement>();
-            foreach (var rootField in evt.CustomFields.Where(x => x.Type == type))
+            var xmlElement = new XElement(XName.Get(rootField.Name, rootField.Namespace), rootField.TextValue);
+
+            InnerCustomFields(xmlElement, type, rootField);
+            foreach (var attribute in rootField.Children.Where(x => x.Type == FieldType.Attribute))
             {
-                var xmlElement = new XElement(XName.Get(rootField.Name, rootField.Namespace), rootField.TextValue);
-
-                InnerCustomFields(xmlElement, type, rootField);
-                foreach (var attribute in rootField.Children.Where(x => x.Type == FieldType.Attribute))
-                {
-                    xmlElement.Add(new XAttribute(XName.Get(attribute.Name, attribute.Namespace), attribute.TextValue));
-                }
-
-                elements.Add(xmlElement);
+                xmlElement.Add(new XAttribute(XName.Get(attribute.Name, attribute.Namespace), attribute.TextValue));
             }
 
-            return elements;
-        }
-
-        private static void InnerCustomFields(XContainer element, FieldType type, CustomField parent)
-        {
-            foreach (var field in parent.Children.Where(x => x.Type == type))
-            {
-                var xmlElement = new XElement(XName.Get(field.Name, field.Namespace), field.TextValue);
-
-                InnerCustomFields(xmlElement, type, field);
-                foreach (var attribute in field.Children.Where(x => x.Type == FieldType.Attribute))
-                {
-                    xmlElement.Add(new XAttribute(XName.Get(attribute.Name, attribute.Namespace), attribute.TextValue));
-                }
-
-                element.Add(xmlElement);
-            }
+            container.Add(xmlElement);
         }
     }
 }
