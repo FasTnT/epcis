@@ -12,6 +12,37 @@ namespace FasTnT.Formatters.Json
 {
     public class JsonEventParser
     {
+        public static IDictionary<string, Action<EpcisEvent, JToken>> ParserMethods = new Dictionary<string, Action<EpcisEvent, JToken>>
+        {
+            { "isA", (evt, tok) => evt.Type = Enumeration.GetByDisplayName<EventType>(tok.ToString()) },
+            { "eventTime", (evt, tok) => evt.EventTime = DateTime.Parse(tok.ToString()) },
+            { "eventTimeZoneOffset", (evt, tok) => evt.EventTimeZoneOffset = new TimeZoneOffset { Representation = tok.ToString() } },
+            { "action", (evt, tok) => evt.Action = Enumeration.GetByDisplayName<EventAction>(tok.ToString()) },
+            { "epcList", (evt, tok) => ParseEpcs(evt, tok.ToObject<string[]>(), EpcType.List) },
+            { "childEPCs", (evt, tok) => ParseChildEpcsInto(tok.ToObject<string[]>(), evt) },
+            { "inputQuantityList", (evt, tok) => ParseQuantityList(evt, tok.ToObject<JToken[]>(), EpcType.InputQuantity) },
+            { "inputEPCList", (evt, tok) => ParseEpcs(evt, tok.ToObject<string[]>(), EpcType.InputEpc) },
+            { "outputQuantityList", (evt, tok) => ParseQuantityList(evt, tok.ToObject<JToken[]>(), EpcType.OutputQuantity) },
+            { "outputEPCList", (evt, tok) => ParseEpcs(evt, tok.ToObject<string[]>(), EpcType.OutputEpc) },
+            { "childQuantityList", (evt, tok) => ParseQuantityList(evt, tok.ToObject<JToken[]>(), EpcType.ChildQuantity) },
+            { "epcClass", (evt, tok) => evt.Epcs.Add(new Epc { Type = EpcType.Quantity, Id = tok.ToString(), IsQuantity = true }) },
+            { "quantity", (evt, tok) => evt.Epcs.Single(x => x.Type == EpcType.Quantity).Quantity = float.Parse(tok.ToString(), CultureInfo.InvariantCulture) },
+            { "quantityList", (evt, tok) => ParseQuantityList(evt, tok.ToObject<JToken[]>()) },
+            { "bizStep", (evt, tok) => evt.BusinessStep = tok.ToString() },
+            { "disposition", (evt, tok) => evt.Disposition = tok.ToString() },
+            { "eventID", (evt, tok) => evt.EventId = tok.ToString() },
+            { "errorDeclaration", (evt, tok) => { } }, // TODO
+            { "transformationId", (evt, tok) => evt.TransformationId = tok.ToString() },
+            { "bizLocation", (evt, tok) => evt.BusinessLocation = tok.ToString() },
+            { "bizTransactionList", (evt, tok) => ParseBusinessTransactions(evt, tok.ToObject<IList<JToken>>()) },
+            { "readPoint", (evt, tok) => evt.ReadPoint = tok.ToString() },
+            { "sourceList", (evt, tok) => ParseSourceDest(evt, SourceDestinationType.Source, tok.ToObject<JToken[]>()) },
+            { "destinationList", (evt, tok) => ParseSourceDest(evt, SourceDestinationType.Destination, tok.ToObject<JToken[]>()) },
+            { "ilmd", (evt, tok) => ParseIlmd(evt, tok.ToObject<IDictionary<string, JToken>>()) },
+            { "parentID", (evt, tok) => evt.Epcs.Add(new Epc { Id = tok.ToString(), Type = EpcType.ParentId }) },
+            { "recordTime", (evt, tok) => { } }, // We don't process record time as it will be overrided in any case..
+        };
+
         public IEnumerable<EpcisEvent> Parse(IEnumerable<JObject> events)
         {
             return events.Select(Parse);
@@ -22,43 +53,20 @@ namespace FasTnT.Formatters.Json
             var epcisEvent = new EpcisEvent();
             foreach(var key in eventDict.Keys)
             {
-                switch (key)
+                if(ParserMethods.TryGetValue(key, out Action<EpcisEvent, JToken> parseMethod))
                 {
-                    case "isA": epcisEvent.Type = Enumeration.GetByDisplayName<EventType>(eventDict[key].ToString()); break;
-                    case "eventTime": epcisEvent.EventTime = DateTime.Parse(eventDict[key].ToString()); break;
-                    case "eventTimeZoneOffset": epcisEvent.EventTimeZoneOffset = new TimeZoneOffset { Representation = eventDict[key].ToString() }; break;
-                    case "action": epcisEvent.Action = Enumeration.GetByDisplayName<EventAction>(eventDict[key].ToString()); break;
-                    case "epcList": ParseEpcs(epcisEvent, eventDict[key].ToObject<string[]>(), EpcType.List); break;
-                    case "childEPCs": ParseChildEpcsInto(eventDict[key].ToObject<string[]>(), epcisEvent); break;
-                    case "inputQuantityList": ParceQuantityList(epcisEvent, eventDict[key].ToObject<JToken[]>(), EpcType.InputQuantity); break;
-                    case "inputEPCList": ParseEpcs(epcisEvent, eventDict[key].ToObject<string[]>(), EpcType.InputEpc); break; 
-                    case "outputQuantityList": ParceQuantityList(epcisEvent, eventDict[key].ToObject<JToken[]>(), EpcType.OutputQuantity); break;
-                    case "outputEPCList": ParseEpcs(epcisEvent, eventDict[key].ToObject<string[]>(), EpcType.OutputEpc); break;
-                    case "childQuantityList": ParceQuantityList(epcisEvent, eventDict[key].ToObject<JToken[]>(), EpcType.ChildQuantity); break;
-                    case "epcClass": epcisEvent.Epcs.Add(new Epc { Type = EpcType.Quantity, Id = eventDict[key].ToString(), IsQuantity = true }); break;
-                    case "quantity": epcisEvent.Epcs.Single(x => x.Type == EpcType.Quantity).Quantity = float.Parse(eventDict[key].ToString(), CultureInfo.InvariantCulture); break;
-                    case "quantityList": ParseQuantityList(epcisEvent, eventDict[key].ToObject<JToken[]>()); break;
-                    case "bizStep": epcisEvent.BusinessStep = eventDict[key].ToString(); break;
-                    case "disposition": epcisEvent.Disposition = eventDict[key].ToString(); break;
-                    case "eventID": epcisEvent.EventId = eventDict[key].ToString(); break;
-                    case "errorDeclaration": break; // TODO: implement.
-                    case "transformationId": epcisEvent.TransformationId = eventDict[key].ToString(); break;
-                    case "bizLocation": epcisEvent.BusinessLocation = eventDict[key].ToString(); break;
-                    case "bizTransactionList": ParseBusinessTransactions(epcisEvent, eventDict[key].ToObject<IList<JToken>>()); break;
-                    case "readPoint": epcisEvent.ReadPoint = eventDict[key].ToString(); break;
-                    case "sourceList": ParseSourceDest(epcisEvent, SourceDestinationType.Source, eventDict[key].ToObject<JToken[]>()); break;
-                    case "destinationList": ParseSourceDest(epcisEvent, SourceDestinationType.Destination, eventDict[key].ToObject<JToken[]>()); break;
-                    case "ilmd": ParseIlmd(epcisEvent, eventDict[key].ToObject<IDictionary<string, JToken>>()); break;
-                    case "parentID": epcisEvent.Epcs.Add(new Epc { Id = eventDict[key].ToString(), Type = EpcType.ParentId }); break;
-                    case "recordTime": break; // We don't process record time as it will be overrided in any case..
-                    default: TryParseCustomField(epcisEvent, FieldType.EventExtension, key, eventDict[key].ToObject<IDictionary<string, JToken>>()); break;
+                    parseMethod(epcisEvent, eventDict[key]);
+                }
+                else
+                { 
+                    TryParseCustomField(epcisEvent, FieldType.EventExtension, key, eventDict[key].ToObject<IDictionary<string, JToken>>());
                 }
             }
 
             return epcisEvent;
         }
 
-        private void ParseIlmd(EpcisEvent epcisEvent, IDictionary<string, JToken> dict)
+        private static void ParseIlmd(EpcisEvent epcisEvent, IDictionary<string, JToken> dict)
         {
             if (dict == null || !dict.Keys.Any()) return;
 
@@ -68,7 +76,7 @@ namespace FasTnT.Formatters.Json
             }
         }
 
-        private void ParseBusinessTransactions(EpcisEvent epcisEvent, IList<JToken> list)
+        private static void ParseBusinessTransactions(EpcisEvent epcisEvent, IList<JToken> list)
         {
             if (list == null || !list.Any()) return;
 
@@ -79,7 +87,7 @@ namespace FasTnT.Formatters.Json
             }));
         }
 
-        private void ParceQuantityList(EpcisEvent epcisEvent, IList<JToken> list, EpcType type)
+        private static void ParseQuantityList(EpcisEvent epcisEvent, IList<JToken> list, EpcType type)
         {
             if (list == null || !list.Any()) return;
 
@@ -93,7 +101,7 @@ namespace FasTnT.Formatters.Json
             }));
         }
 
-        private void ParseQuantityList(EpcisEvent epcisEvent, IList<JToken> list)
+        private static void ParseQuantityList(EpcisEvent epcisEvent, IList<JToken> list)
         {
             if (list == null || !list.Any()) return;
 
@@ -107,7 +115,7 @@ namespace FasTnT.Formatters.Json
             }));
         }
 
-        private void ParseSourceDest(EpcisEvent epcisEvent, SourceDestinationType direction, IList<JToken> dictionary)
+        private static void ParseSourceDest(EpcisEvent epcisEvent, SourceDestinationType direction, IList<JToken> dictionary)
         {
             if (dictionary == null || !dictionary.Any()) return;
 
@@ -119,19 +127,19 @@ namespace FasTnT.Formatters.Json
             }));
         }
 
-        private void ParseEpcs(EpcisEvent epcisEvent, IList<string> epcs, EpcType type)
+        private static void ParseEpcs(EpcisEvent epcisEvent, IList<string> epcs, EpcType type)
         {
             if (epcs == null || !epcs.Any()) return;
 
             epcs.ForEach(e => epcisEvent.Epcs.Add(new Epc { Id = e, Type = type }));
         }
 
-        private void ParseChildEpcsInto(IList<string> list, EpcisEvent epcisEvent)
+        private static void ParseChildEpcsInto(IList<string> list, EpcisEvent epcisEvent)
         {
             list.ForEach(epc => epcisEvent.Epcs.Add(new Epc { Id = epc, Type = EpcType.ChildEpc }));
         }
 
-        private void TryParseCustomField(EpcisEvent epcisEvent, FieldType type, string id, IDictionary<string, JToken> dictionary)
+        private static void TryParseCustomField(EpcisEvent epcisEvent, FieldType type, string id, IDictionary<string, JToken> dictionary)
         {
             if (dictionary == null) throw new Exception($"Element with name '{id}' is not expected here");
 

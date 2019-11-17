@@ -1,7 +1,6 @@
-﻿using FasTnT.Formatters.Xml.Requests;
+﻿using FasTnT.Formatters.Xml.Parsers;
 using FasTnT.Model;
 using FasTnT.Model.Events.Enums;
-using FasTnT.Model.Utils;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -48,32 +47,19 @@ namespace FasTnT.Formatters.Xml
 
             foreach (var innerElement in element.Elements().Where(x => x.Name.Namespace != XNamespace.None))
             {
-                Event.CustomFields.Add(XmlEventsParser.ParseCustomField(innerElement, Event, FieldType.ReadPointExtension));
+                Event.CustomFields.Add(XmlCustomFieldParser.ParseCustomField(innerElement, FieldType.ReadPointExtension));
             }
         }
 
-        public static void ParseSourceInto(this XElement element, IList<SourceDestination> list)
+        public static void ParseSourceDest(this XElement element, SourceDestinationType type, IList<SourceDestination> list)
         {
-            foreach (var child in element.Elements("source"))
+            foreach (var child in element.Elements(type.DisplayName))
             {
                 list.Add(new SourceDestination
                 {
                     Type = child.Attribute("type").Value,
                     Id = child.Value,
-                    Direction = SourceDestinationType.Source
-                });
-            }
-        }
-
-        public static void ParseDestinationInto(this XElement element, IList<SourceDestination> list)
-        {
-            foreach (var child in element.Elements("destination"))
-            {
-                list.Add(new SourceDestination
-                {
-                    Type = child.Attribute("type").Value,
-                    Id = child.Value,
-                    Direction = SourceDestinationType.Destination
+                    Direction = type
                 });
             }
         }
@@ -82,7 +68,7 @@ namespace FasTnT.Formatters.Xml
         {
             foreach (var innerElement in element.Elements().Where(x => !new[] { "id", "corrective" }.Contains(x.Name.LocalName)))
             {
-                Event.CustomFields.Add(XmlEventsParser.ParseCustomField(innerElement, Event, FieldType.BusinessLocationExtension));
+                Event.CustomFields.Add(XmlCustomFieldParser.ParseCustomField(innerElement, FieldType.BusinessLocationExtension));
             }
 
             Event.BusinessLocation = element.Element("id").Value;
@@ -92,7 +78,7 @@ namespace FasTnT.Formatters.Xml
         {
             foreach (var innerElement in element.Elements().Where(x => !new[] { "id", "corrective", "declarationTime", "reason", "correctiveEventIDs" }.Contains(x.Name.LocalName)))
             {
-                Event.CustomFields.Add(XmlEventsParser.ParseCustomField(innerElement, Event, FieldType.ErrorDeclarationExtension));
+                Event.CustomFields.Add(XmlCustomFieldParser.ParseCustomField(innerElement, FieldType.ErrorDeclarationExtension));
             }
 
             var declarationTime = DateTime.Parse(element.Element("declarationTime").Value, CultureInfo.InvariantCulture);
@@ -128,7 +114,7 @@ namespace FasTnT.Formatters.Xml
 
         public static void AddIfNotNull(this XElement root, XElement element)
         {
-            if (element != default(XElement) && (element.HasAttributes || element.HasElements))
+            if (element != default(XElement) && !element.IsEmpty)
             {
                 root.Add(element);
             }

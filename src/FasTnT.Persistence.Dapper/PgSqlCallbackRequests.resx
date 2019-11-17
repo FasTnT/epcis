@@ -118,6 +118,6 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Store" xml:space="preserve">
-    <value>INSERT INTO callback.query_callback(id, request_id, subscription_id, callback_type) VALUES(@id, @requestid, @subscriptionid, @callbacktype);</value>
+    <value>INSERT INTO callback.query_callback(request_id, subscription_id, callback_type) VALUES(@requestid, @subscriptionid, @callbacktype);</value>
   </data>
 </root>

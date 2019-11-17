@@ -2,20 +2,21 @@
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using System.Xml.XPath;
+using FasTnT.Formatters.Xml.Parsers;
 using FasTnT.Formatters.Xml.Requests;
 using FasTnT.Formatters.Xml.Responses;
 using FasTnT.Formatters.Xml.Validation;
 using FasTnT.Model;
 using FasTnT.Model.Events.Enums;
+using FasTnT.Model.Utils;
 
 namespace FasTnT.Formatters.Xml
 {
-    public class XmlRequestFormatter
+    public class XmlRequestFormatter : XmlEpcisWriter<Request>
     {
         public async Task<Request> Read(Stream input, CancellationToken cancellationToken)
         {
@@ -46,25 +47,25 @@ namespace FasTnT.Formatters.Xml
             throw new Exception($"Document with root '{document.Root.Name.ToString()}' is not expected here.");
         }
 
+        public override async Task Write(Request entity, Stream output, CancellationToken cancellationToken)
+        {
+            await Write(entity, output, e => Write(e), cancellationToken);
+        }
+
         private Request ParseCallback(XDocument document)
         {
-            switch (document.Root.Element("EPCISBody").Elements().First().Name.LocalName)
+            var callbackType = document.Root.Element("EPCISBody").Elements().First().Name.LocalName;
+
+            switch (callbackType)
             {
                 case "QueryTooLargeException":
-                    return new EpcisQueryCallbackException
-                    {
-                        Header = ParseHeader(document.Root),
-                        SubscriptionName = document.Root.Element("EPCISBody").Element(XName.Get("QueryTooLargeException", EpcisNamespaces.Query)).Element("subscriptionID").Value,
-                        Reason = document.Root.Element("EPCISBody").Element(XName.Get("QueryTooLargeException", EpcisNamespaces.Query)).Element("reason").Value,
-                        CallbackType = QueryCallbackType.ImplementationException
-                    };
                 case "ImplementationException":
                     return new EpcisQueryCallbackException
                     {
                         Header = ParseHeader(document.Root),
-                        SubscriptionName = document.Root.Element("EPCISBody").Element(XName.Get("ImplementationException", EpcisNamespaces.Query)).Element("subscriptionID").Value,
-                        Reason = document.Root.Element("EPCISBody").Element(XName.Get("ImplementationException", EpcisNamespaces.Query)).Element("reason").Value,
-                        CallbackType = QueryCallbackType.ImplementationException
+                        SubscriptionName = document.Root.Element("EPCISBody").Element(XName.Get(callbackType, EpcisNamespaces.Query)).Element("subscriptionID").Value,
+                        Reason = document.Root.Element("EPCISBody").Element(XName.Get(callbackType, EpcisNamespaces.Query)).Element("reason").Value,
+                        CallbackType = Enumeration.GetByDisplayNameInvariant<QueryCallbackType>(callbackType)
                     };
                 case "QueryResults":
                     return new EpcisQueryCallbackDocument
@@ -85,16 +86,8 @@ namespace FasTnT.Formatters.Xml
                 StandardBusinessHeader = XmlHeaderParser.Parse(root.XPathSelectElement("EPCISHeader/sbdh:StandardBusinessDocumentHeader", EpcisNamespaces.Manager)),
                 DocumentTime = DateTime.Parse(root.Attribute("creationDate").Value, CultureInfo.InvariantCulture),
                 SchemaVersion = root.Attribute("schemaVersion").Value,
-                CustomFields = XmlHeaderParser.ParseCustomFields(root.XPathSelectElement("EPCISHeader"))
+                CustomFields = XmlCustomFieldParser.ParseCustomFields(root.XPathSelectElement("EPCISHeader"), FieldType.HeaderExtension)
             };
-        }
-
-        public async Task Write(Request entity, Stream output, CancellationToken cancellationToken)
-        {
-            XDocument document = Write((dynamic)entity);
-            var bytes = Encoding.UTF8.GetBytes(document.ToString(SaveOptions.DisableFormatting | SaveOptions.OmitDuplicateNamespaces));
-
-            await output.WriteAsync(bytes, 0, bytes.Length, cancellationToken);
         }
 
         private XDocument Write(CaptureRequest entity)

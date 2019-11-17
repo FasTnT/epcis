@@ -6,6 +6,7 @@ using FasTnT.Domain.Persistence;
 using FasTnT.Model;
 using FasTnT.Model.Events;
 using FasTnT.Model.Users;
+using FasTnT.Persistence.Dapper.Utils;
 
 namespace FasTnT.Persistence.Dapper
 {
@@ -39,22 +40,9 @@ namespace FasTnT.Persistence.Dapper
         private async Task StoreCustomFields(EpcisRequestHeader request, RequestHeaderEntity epcisRequest, CancellationToken cancellationToken)
         {
             var fields = new List<CustomFieldEntity>();
-            ParseFields(request.CustomFields, epcisRequest.Id, fields);
+            PgSqlCustomFieldsParser.ParseFields(request.CustomFields, epcisRequest.Id, fields);
 
             await _unitOfWork.BulkExecute(PgSqlRequestRequests.StoreCustomFields, fields, cancellationToken);
-        }
-
-        private static void ParseFields(IList<CustomField> customFields, int eventId, List<CustomFieldEntity> mappedList, int? parentId = null)
-        {
-            if (customFields == null || !customFields.Any()) return;
-
-            foreach (var field in customFields)
-            {
-                var entity = field.Map<CustomField, CustomFieldEntity>(f => { f.EventId = eventId; f.Id = mappedList.Count; f.ParentId = parentId; });
-                mappedList.Add(entity);
-
-                ParseFields(field.Children, eventId, mappedList, entity.Id);
-            }
         }
     }
 }

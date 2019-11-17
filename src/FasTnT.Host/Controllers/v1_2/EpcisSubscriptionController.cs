@@ -11,11 +11,11 @@ namespace FasTnT.Host.Controllers.v1_2
     [Authorize]
     [Formatter(Format.Xml)]
     [Route("v1_2/Subscription")]
-    public class EpcisSubscriptionService : Controller
+    public class EpcisSubscriptionController : Controller
     {
         private readonly SubscriptionService _service;
 
-        public EpcisSubscriptionService(SubscriptionService service) => _service = service;
+        public EpcisSubscriptionController(SubscriptionService service) => _service = service;
 
         [HttpGet("trigger/{triggerName}")]
         public async Task TriggerSubscription(string triggerName, CancellationToken cancellationToken)
