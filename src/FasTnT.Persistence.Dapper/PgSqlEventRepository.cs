@@ -88,8 +88,8 @@ namespace FasTnT.Persistence.Dapper
         public void WhereCorrectiveEventIdIn(string[] correctiveEventIds)
             => _query = _query.Where($"EXISTS(SELECT edi.event_id FROM epcis.event_declaration_eventid edi WHERE edi.corrective_eventid = ANY({_parameters.Add(correctiveEventIds)}) AND edi.event_id = event.id)");
 
-        public void WhereCustomFieldMatches(bool inner, FieldType type, string fieldNamespace, string fieldName, string[] values) => throw new NotImplementedException();
-        public void WhereCustomFieldMatches(bool inner, FieldType type, string fieldNamespace, string fieldName, FilterComparator comparator, object value) => throw new NotImplementedException();
+        public void WhereCustomFieldMatches(CustomField field, bool inner, string[] values) => throw new NotImplementedException();
+        public void WhereCustomFieldMatches(CustomField field, bool inner, FilterComparator comparator, object value) => throw new NotImplementedException();
 
         public void WhereCustomFieldExists(bool inner, FieldType fieldType, string fieldNamespace, string fieldName)
             => _query = _query.Where($"EXISTS(SELECT cf.event_id FROM epcis.custom_field cf WHERE cf.event_id = event.id AND cf.type = {fieldType.Id} AND cf.namespace = {_parameters.Add(fieldNamespace)} AND cf.name = {_parameters.Add(fieldName)} AND cf.parent_id IS {(inner ? "NOT" : "")} NULL)");
