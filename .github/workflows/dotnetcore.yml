@@ -30,3 +30,6 @@ jobs:
       
     - name: Run Integration Tests
       run: dotnet test test/FasTnT.IntegrationTests/FasTnT.IntegrationTests.csproj
+
+    - name: CodeCov
+      run: bash <(curl -s https://codecov.io/bash)
