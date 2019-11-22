@@ -14,7 +14,7 @@ jobs:
       with:
         dotnet-version: 2.2.108
     - name: Build with dotnet
-      run: dotnet build --configuration Release
+      run: dotnet build -c Release
 
     - name: Prepare PostGreSQL test database
       uses: Harmon758/postgresql-action@v1.0.0
@@ -26,7 +26,7 @@ jobs:
       run: dotnet user-secrets set ConnectionStrings:FasTnT.Database "Server=localhost;Database=fastnt_test;Port=5432;User Id=fastnt_user;Password=pwd;" -p test/FasTnT.IntegrationTests/FasTnT.IntegrationTests.csproj
       
     - name: Run Unit Tests with Coverage
-      run: dotnet test -c Release test/FasTnT.UnitTest/FasTnT.UnitTest.csproj /p:CollectCoverage=true /p:CoverletOutputFormat=opencover
+      run: dotnet test -c Release /p:CollectCoverage=true /p:CoverletOutputFormat=opencover /p:Exclude="[*Test*]*
 
     - name: CodeCov
       run: bash <(curl -s https://codecov.io/bash) -t ${{ secrets.CODECOV_TOKEN }}
