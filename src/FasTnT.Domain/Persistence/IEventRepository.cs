@@ -20,8 +20,8 @@ namespace FasTnT.Domain.Persistence
         void WhereErrorReasonIn(string[] errorReasons);
         void WhereCorrectiveEventIdIn(string[] correctiveEventIds);
         void WhereMasterDataHierarchyContains(EpcisField businessLocation, string[] values);
-        void WhereCustomFieldMatches(bool inner, FieldType fieldType, string fieldNamespace, string fieldName, string[] values);
-        void WhereCustomFieldMatches(bool inner, FieldType fieldType, string fieldNamespace, string fieldName, FilterComparator comparator, object value);
+        void WhereCustomFieldMatches(CustomField field, bool inner, string[] values);
+        void WhereCustomFieldMatches(CustomField field, bool inner, FilterComparator comparator, object value);
         void WhereCustomFieldExists(bool inner, FieldType fieldType, string fieldNamespace, string fieldName);
         void WhereEpcQuantityMatches(FilterComparator filterOperator, double value);
         void WhereMasterdataHasAttribute(EpcisField attribute, string[] values);

@@ -1,9 +1,9 @@
-[![Build Status](https://travis-ci.com/FasTnT/epcis.svg?branch=master)](https://travis-ci.com/FasTnT/epcis) 
+![](https://github.com/FasTnT/epcis/workflows/.NET%20Core/badge.svg)
 [![Maintainability](https://api.codeclimate.com/v1/badges/40672e48b92da57852d7/maintainability)](https://codeclimate.com/github/FasTnT/epcis/maintainability)
 
 # FasTnT EPCIS
 
-FasTnT EPCIS is a simple, lightweight GS1 EPCIS 1.2 repository written in C# using .NET Core 2.2, backed with PostGreSQL database.
+FasTnT EPCIS is a lightweight GS1 EPCIS 1.2 repository written in C# using .NET Core 2.2, backed with PostGreSQL database.
 
 ## Setup
 
@@ -77,4 +77,4 @@ This project is licensed under the Apache 2.0 license - see the LICENSE file for
 
 Contact: fastnt@pm.me
 
-_Last update: October 2019_
+_Last update: November 2019_
