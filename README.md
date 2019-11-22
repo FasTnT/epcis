@@ -3,7 +3,7 @@
 
 # FasTnT EPCIS
 
-FasTnT EPCIS is a simple, lightweight GS1 EPCIS 1.2 repository written in C# using .NET Core 2.2, backed with PostGreSQL database.
+FasTnT EPCIS is a lightweight GS1 EPCIS 1.2 repository written in C# using .NET Core 2.2, backed with PostGreSQL database.
 
 ## Setup
 
