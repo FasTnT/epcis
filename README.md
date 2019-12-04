@@ -1,5 +1,6 @@
 ![](https://github.com/FasTnT/epcis/workflows/.NET%20Core/badge.svg)
 [![Maintainability](https://api.codeclimate.com/v1/badges/40672e48b92da57852d7/maintainability)](https://codeclimate.com/github/FasTnT/epcis/maintainability)
+[![codecov](https://codecov.io/gh/FasTnT/epcis/branch/develop/graph/badge.svg)](https://codecov.io/gh/FasTnT/epcis)
 
 # FasTnT EPCIS
 
