@@ -78,4 +78,4 @@ This project is licensed under the Apache 2.0 license - see the LICENSE file for
 
 Contact: fastnt@pm.me
 
-_Last update: November 2019_
+_Last update: December 2019_
