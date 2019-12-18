@@ -22,13 +22,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\FasTnT.Domain\FasTnT.Domain.csproj" />
-    <ProjectReference Include="..\..\src\FasTnT.Formatters.Json\FasTnT.Formatters.Json.csproj" />
-    <ProjectReference Include="..\..\src\FasTnT.Formatters.Xml\FasTnT.Formatters.Xml.csproj" />
-    <ProjectReference Include="..\..\src\FasTnT.Formatters\FasTnT.Formatters.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
     <None Update="FormattersTests\XmlFormatter\files\requests\xml\invalid_event_1.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

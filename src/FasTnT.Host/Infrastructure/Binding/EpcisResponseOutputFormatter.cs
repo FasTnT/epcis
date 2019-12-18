@@ -1,4 +1,4 @@
-﻿using FasTnT.Model.Responses;
+﻿using FasTnT.Commands.Responses;
 using Microsoft.AspNetCore.Mvc.Formatters;
 using System;
 using System.Threading.Tasks;

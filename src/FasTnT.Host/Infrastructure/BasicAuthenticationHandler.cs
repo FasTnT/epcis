@@ -1,6 +1,4 @@
-﻿using FasTnT.Domain.Persistence;
-using FasTnT.Domain.Services.Users;
-using Microsoft.AspNetCore.Authentication;
+﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System;
@@ -15,14 +13,10 @@ namespace FasTnT.Host
     public class BasicAuthenticationHandler : AuthenticationHandler<AuthenticationSchemeOptions>
     {
         private const string HeaderKey = "Authorization";
-        private readonly UserContext _userContext;
-        private readonly IUnitOfWork _unitOfWork;
 
-        public BasicAuthenticationHandler(IOptionsMonitor<AuthenticationSchemeOptions> options, ILoggerFactory logger, UrlEncoder encoder, ISystemClock clock, IUnitOfWork unitOfWork, UserContext userContext)
+        public BasicAuthenticationHandler(IOptionsMonitor<AuthenticationSchemeOptions> options, ILoggerFactory logger, UrlEncoder encoder, ISystemClock clock)
             : base(options, logger, encoder, clock)
         {
-            _userContext = userContext;
-            _unitOfWork = unitOfWork;
         }
 
         protected override async Task<AuthenticateResult> HandleAuthenticateAsync()
@@ -48,25 +42,25 @@ namespace FasTnT.Host
             }
         }
 
-        private async Task<AuthenticateResult> AuthenticateUser(string username, string password)
+        private Task<AuthenticateResult> AuthenticateUser(string username, string password)
         {
-            var user = await _unitOfWork.UserManager.GetByUsername(username, Request.HttpContext.RequestAborted);
+            var authorized = true;
 
-            if (_userContext.Authenticate(user, password))
+            if(authorized)
             {
-                var claims = new[] 
+                var claims = new[]
                 {
-                    new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-                    new Claim(ClaimTypes.Name, user.UserName),
+                    new Claim(ClaimTypes.NameIdentifier, username),
+                    new Claim(ClaimTypes.Name, username),
                 };
                 var principal = new ClaimsPrincipal(new ClaimsIdentity(claims, Scheme.Name));
                 var ticket = new AuthenticationTicket(principal, Scheme.Name);
 
-                return AuthenticateResult.Success(ticket);
+                return Task.FromResult(AuthenticateResult.Success(ticket));
             }
             else
             {
-                return AuthenticateResult.Fail($"Invalid {HeaderKey} Header");
+                return Task.FromResult(AuthenticateResult.Fail($"Invalid {HeaderKey} Header"));
             }
         }
     }
