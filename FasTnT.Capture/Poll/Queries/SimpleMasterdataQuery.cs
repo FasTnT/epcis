@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace FasTnT.Handlers.Poll.Queries
 {
-    public class SimpleMasterdataQuery
+    public static class SimpleMasterdataQuery
     {
         public static async Task<IEpcisResponse> Handle(QueryParameter[] parameters)
         {

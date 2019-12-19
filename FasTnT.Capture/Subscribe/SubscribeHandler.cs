@@ -20,7 +20,7 @@ namespace FasTnT.Handlers.Subscribe
         {
             await _mediator.Publish(new SubscriptionCreatedNotification(), cancellationToken);
 
-            return EmptyResponse.Default;
+            return EmptyResponse.Value;
         }
     }
 }

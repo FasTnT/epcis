@@ -2,7 +2,6 @@
 {
     public enum Format
     {
-        Json,
         Xml,
         Soap
     }

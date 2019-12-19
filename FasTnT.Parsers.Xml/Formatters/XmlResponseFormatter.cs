@@ -1,6 +1,8 @@
 ﻿using FasTnT.Commands.Responses;
+using FasTnT.Parsers.Xml.Formatters.Implementation;
 using FasTnT.Parsers.Xml.Utils;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading;
@@ -32,32 +34,42 @@ namespace FasTnT.Parsers.Xml.Formatters
                     return FormatInternal(exceptionResponse);
                 case GetQueryNamesResponse getQueryNamesResponse:
                     return FormatInternal(getQueryNamesResponse);
+                case PollResponse pollResponse:
+                    return FormatInternal(pollResponse);
                 default:
                     throw new NotImplementedException($"Unable to format '{entity.GetType()}'");
             }
         }
 
-        //protected XDocument FormatInternal(PollResponse response)
-        //{
-        //    var formatted = CreateResponse("EPCISQueryDocument");
-        //    var resultName = "EventList";
-        //    var typeOfResponse = response.Entities.GetType().GenericTypeArguments[0];
+        protected XDocument FormatInternal(PollResponse response)
+        {
+            var formatted = CreateResponse("EPCISQueryDocument");
+            var resultName = "EventList";
+            var resultList = default(IEnumerable<XElement>);
 
-        //    if (typeOfResponse == typeof(EpcisEvent)) resultName = "EventList";
-        //    if (typeOfResponse == typeof(EpcisMasterData)) resultName = "VocabularyList";
+            if (response.EventList.Any())
+            {
+                resultName = "EventList";
+                resultList = XmlEntityFormatter.FormatEvents(response.EventList);
+            }
+            else if (response.MasterdataList.Any())
+            {
+                resultName = "VocabularyList";
+                resultList = XmlEntityFormatter.FormatMasterData(response.MasterdataList);
+            }
 
-        //    formatted.Root.Add(
-        //        new XElement("EPCISBody",
-        //            new XElement(XName.Get("QueryResults", EpcisNamespaces.Query),
-        //                new XElement("queryName", response.QueryName),
-        //                !string.IsNullOrEmpty(response.SubscriptionId) ? new XElement("subscriptionID", response.SubscriptionId) : null,
-        //                new XElement("resultsBody", new XElement(resultName, XmlEntityFormatter.Format(response.Entities)))
-        //            )
-        //        )
-        //    );
+            formatted.Root.Add(
+                new XElement("EPCISBody",
+                    new XElement(XName.Get("QueryResults", EpcisNamespaces.Query),
+                        new XElement("queryName", response.QueryName),
+                        !string.IsNullOrEmpty(response.SubscriptionId) ? new XElement("subscriptionID", response.SubscriptionId) : null,
+                        new XElement("resultsBody", new XElement(resultName, resultList))
+                    )
+                )
+            );
 
-        //    return formatted;
-        //}
+            return formatted;
+        }
 
         protected XDocument FormatInternal(GetVendorVersionResponse response)
         {

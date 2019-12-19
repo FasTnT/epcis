@@ -34,7 +34,7 @@ namespace FasTnT.Handlers.CaptureEpcisDocument
                 tx.Commit();
             }
 
-            return EmptyResponse.Default;
+            return EmptyResponse.Value;
         }
 
         private async Task<int> PersistHeader(EpcisRequestHeader header, IDbTransaction transaction, CancellationToken cancellationToken)

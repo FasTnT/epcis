@@ -11,14 +11,14 @@ namespace FasTnT.Host.Infrastructure.Attributes
         public static IDictionary<Format, ICommandFormatter> KnownFormatters = new Dictionary<Format, ICommandFormatter>
         {
             { Format.Xml, new XmlCommandFormatter() },
-            { Format.Soap, new XmlCommandFormatter() }
+            { Format.Soap, new SoapCommandFormatter() }
         };
 
         public FormatterAttribute(Format type) => Formatter = GetFormatter(type);
 
-        public ICommandFormatter Formatter { get; private set; }
         public bool IsReusable => false;
         public IFilterMetadata CreateInstance(IServiceProvider serviceProvider) => new FormatterResourceFilter(Formatter);
+        public ICommandFormatter Formatter { get; private set; }
 
         private ICommandFormatter GetFormatter(Format type)
         {

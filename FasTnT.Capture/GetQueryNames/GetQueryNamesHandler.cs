@@ -1,5 +1,4 @@
-﻿using System;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
 using FasTnT.Commands.Requests;
 using FasTnT.Commands.Responses;
@@ -11,7 +10,14 @@ namespace FasTnT.Handlers.GetQueryNames
     {
         public async Task<IEpcisResponse> Handle(GetQueryNamesRequest request, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException("GetQueryNames is not implemented yet.");
+            return await Task.FromResult(new GetQueryNamesResponse
+            {
+                QueryNames = new[]
+                {
+                    "SimpleEventQuery",
+                    "SimpleMasterDataQuery"
+                }
+            });
         }
     }
 }

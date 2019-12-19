@@ -2,6 +2,6 @@
 {
     public class EmptyResponse : IEpcisResponse
     {
-        public static IEpcisResponse Default = new EmptyResponse();
+        public static IEpcisResponse Value = new EmptyResponse();
     }
 }
