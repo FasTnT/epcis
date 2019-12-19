@@ -1,12 +1,22 @@
-﻿using FasTnT.Commands.Responses;
+﻿using FasTnT.Domain.Commands;
 using FasTnT.Model;
-using MediatR;
+using FasTnT.Model.Events.Enums;
 
 namespace FasTnT.Commands.Requests
 {
-    public class CaptureEpcisExceptionRequest : IRequest<IEpcisResponse>
+    public class CaptureEpcisExceptionRequest : ICaptureRequest
     {
         public EpcisRequestHeader Header { get; set; }
-        public EpcisQueryCallbackException Exception { get; set; }
+        public QueryCallbackType CallbackType { get; set; }
+        public string Severity { get; set; } = "ERROR";
+        public string Reason { get; set; }
+        public string SubscriptionName { get; set; }
+    }
+
+    public class CaptureEpcisQueryCallbackRequest : ICaptureRequest
+    {
+        public EpcisRequestHeader Header { get; set; }
+        public EpcisEvent[] EventList { get; set; }
+        public string SubscriptionName { get; set; }
     }
 }

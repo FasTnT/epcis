@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Net;
 using System.Threading.Tasks;
+using FasTnT.Commands.Responses;
 using FasTnT.Model.Exceptions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
@@ -34,7 +35,14 @@ namespace FasTnT.Host.Middleware
                 context.Response.ContentType = context.Request.ContentType;
                 context.Response.StatusCode = (int)(ex is EpcisException ? HttpStatusCode.BadRequest : HttpStatusCode.InternalServerError);
 
-                // TODO: await context.GetFormatter().WriteResponse(response, context.Response.Body, context.RequestAborted);
+                var response = new ExceptionResponse
+                {
+                    Exception = (epcisException?.ExceptionType ?? ExceptionType.ImplementationException).DisplayName,
+                    Severity = epcisException?.Severity ?? ExceptionSeverity.Error,
+                    Reason = GetMessage(ex)
+                };
+
+                await context.GetFormatter().WriteResponse(response, context.Response.Body, context.RequestAborted);
             }
         }
 

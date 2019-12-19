@@ -28,8 +28,8 @@ namespace FasTnT.Handlers.CaptureEpcisDocument
             {
                 var headerId = await PersistHeader(request.Header, tx, cancellationToken);
 
-                await PersistMasterData(headerId, request.MasterDataList, tx);
-                await PersistEvents(headerId, request.EventList, tx);
+                await PersistMasterData(headerId, request.MasterDataList, tx, cancellationToken);
+                await PersistEvents(headerId, request.EventList, tx, cancellationToken);
 
                 tx.Commit();
             }
@@ -37,42 +37,42 @@ namespace FasTnT.Handlers.CaptureEpcisDocument
             return EmptyResponse.Default;
         }
 
-        private async Task<int> PersistHeader(EpcisRequestHeader header, IDbTransaction tx, CancellationToken cancellationToken)
+        private async Task<int> PersistHeader(EpcisRequestHeader header, IDbTransaction transaction, CancellationToken cancellationToken)
         {
             var commandDefinition = new CommandDefinition(
                 commandText: CaptureEpcisDocumentCommands.PersistHeader, 
                 parameters: header, 
-                transaction: tx, 
+                transaction: transaction, 
                 cancellationToken: cancellationToken
             );
 
             var headerId = await _connection.QuerySingleAsync<int>(commandDefinition);
 
-            await StoreStandardBusinessHeader(header, headerId, tx, cancellationToken);
-            await StoreCustomFields(header, headerId, tx, cancellationToken);
+            await StoreStandardBusinessHeader(header, headerId, transaction, cancellationToken);
+            await StoreCustomFields(header, headerId, transaction, cancellationToken);
 
             return headerId;
         }
 
-        private async Task StoreCustomFields(EpcisRequestHeader header, int headerId, IDbTransaction tx, CancellationToken cancellationToken)
+        private async Task StoreCustomFields(EpcisRequestHeader header, int headerId, IDbTransaction transaction, CancellationToken cancellationToken)
         {
-            await _connection.BulkInsertAsync(CaptureEpcisDocumentCommands.PersistHeader, header.CustomFields, tx, cancellationToken: cancellationToken);
+            await _connection.BulkInsertAsync(CaptureEpcisDocumentCommands.PersistHeader, header.CustomFields, transaction, cancellationToken: cancellationToken);
         }
 
-        private async Task StoreStandardBusinessHeader(EpcisRequestHeader header, int headerId, IDbTransaction tx, CancellationToken cancellationToken)
+        private async Task StoreStandardBusinessHeader(EpcisRequestHeader header, int headerId, IDbTransaction transaction, CancellationToken cancellationToken)
         {
             var contactInformations = header.StandardBusinessHeader.ContactInformations; // TODO: mappings.
 
-            await _connection.ExecuteAsync("", header, tx);
-            await _connection.BulkInsertAsync("", contactInformations, tx, cancellationToken: cancellationToken);
+            await _connection.ExecuteAsync("", header, transaction);
+            await _connection.BulkInsertAsync("", contactInformations, transaction, cancellationToken: cancellationToken);
         }
 
-        private Task PersistMasterData(int headerId, IList<EpcisMasterData> masterDataList, IDbTransaction tx)
+        private Task PersistMasterData(int headerId, IList<EpcisMasterData> masterDataList, IDbTransaction transaction, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }
 
-        private Task PersistEvents(int headerId, IList<EpcisEvent> eventList, IDbTransaction tx)
+        private Task PersistEvents(int headerId, IList<EpcisEvent> eventList, IDbTransaction transaction, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }

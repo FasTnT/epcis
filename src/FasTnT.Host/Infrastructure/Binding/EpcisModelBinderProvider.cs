@@ -14,7 +14,8 @@ namespace FasTnT.Host.Infrastructure.Binding
     {
         static readonly IDictionary<Type, IModelBinder> KnownBinders = new Dictionary<Type, IModelBinder>
         {
-            { typeof(IRequest<IEpcisResponse>), new EpcisModelBinder<IRequest<IEpcisResponse>>(x => x.ParseCommand) },
+            { typeof(IQueryRequest), new EpcisModelBinder<IQueryRequest>(x => x.ParseQuery) },
+            { typeof(ICaptureRequest), new EpcisModelBinder<ICaptureRequest>(x => x.ParseCapture) }
         };
 
         public IModelBinder GetBinder(ModelBinderProviderContext context)
@@ -28,9 +29,9 @@ namespace FasTnT.Host.Infrastructure.Binding
 
         private class EpcisModelBinder<T> : IModelBinder
         {
-            private readonly Func<ICommandParser, Func<Stream, CancellationToken, Task<T>>> _selector;
+            private readonly Func<ICommandFormatter, Func<Stream, CancellationToken, Task<T>>> _selector;
 
-            public EpcisModelBinder(Func<ICommandParser, Func<Stream, CancellationToken, Task<T>>> selector) => _selector = selector;
+            public EpcisModelBinder(Func<ICommandFormatter, Func<Stream, CancellationToken, Task<T>>> selector) => _selector = selector;
 
             public async Task BindModelAsync(ModelBindingContext bindingContext)
             {

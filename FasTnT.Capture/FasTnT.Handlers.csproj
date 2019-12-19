@@ -25,12 +25,21 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>CaptureEpcisDocumentCommands.resx</DependentUpon>
     </Compile>
+    <Compile Update="DatabaseSetup\DatabaseSqlRequests.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>DatabaseSqlRequests.resx</DependentUpon>
+    </Compile>
   </ItemGroup>
 
   <ItemGroup>
     <EmbeddedResource Update="CaptureEpcisDocument\CaptureEpcisDocumentCommands.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>CaptureEpcisDocumentCommands.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="DatabaseSetup\DatabaseSqlRequests.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>DatabaseSqlRequests.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
 

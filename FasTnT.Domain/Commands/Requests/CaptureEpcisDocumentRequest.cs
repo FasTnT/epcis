@@ -1,12 +1,11 @@
-﻿using FasTnT.Commands.Responses;
+﻿using FasTnT.Domain.Commands;
 using FasTnT.Model;
 using FasTnT.Model.MasterDatas;
-using MediatR;
 using System.Collections.Generic;
 
 namespace FasTnT.Commands.Requests
 {
-    public class CaptureEpcisDocumentRequest : IRequest<IEpcisResponse>
+    public class CaptureEpcisDocumentRequest : ICaptureRequest
     {
         public EpcisRequestHeader Header { get; set; }
         public IList<EpcisEvent> EventList { get; set; } = new List<EpcisEvent>();

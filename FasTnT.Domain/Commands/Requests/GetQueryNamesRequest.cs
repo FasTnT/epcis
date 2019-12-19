@@ -1,9 +1,8 @@
-﻿using FasTnT.Commands.Responses;
-using MediatR;
+﻿using FasTnT.Domain.Commands;
 
 namespace FasTnT.Commands.Requests
 {
-    public class GetQueryNamesRequest : IRequest<IEpcisResponse>
+    public class GetQueryNamesRequest : IQueryRequest
     {
     }
 }

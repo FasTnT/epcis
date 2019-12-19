@@ -11,8 +11,8 @@ using System.Data;
 using MediatR;
 using Npgsql;
 using FasTnT.Handlers;
+using System;
 using IHostingEnvironment = Microsoft.AspNetCore.Hosting.IHostingEnvironment;
-using FasTnT.Handlers.GetQueryNames;
 
 namespace FasTnT.Host
 {
@@ -38,14 +38,8 @@ namespace FasTnT.Host
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMediatR(typeof(GetQueryNamesHandler));
-            services.AddScoped<IDbConnection>(ctx =>
-            {
-                var conn = new NpgsqlConnection(Configuration.GetConnectionString("FasTnT.Database"));
-                conn.Open();
-
-                return conn;
-            });
+            services.AddMediatR(HandlersAssembly.Value);
+            services.AddScoped(OpenConnection);
 
             services.AddMvc(ConfigureMvsOptions)
                     .AddApplicationPart(typeof(Startup).Assembly)
@@ -67,6 +61,14 @@ namespace FasTnT.Host
         {
             options.ModelBinderProviders.Insert(0, new EpcisModelBinderProvider());
             options.OutputFormatters.Insert(0, new EpcisResponseOutputFormatter());
+        }
+
+        private IDbConnection OpenConnection(IServiceProvider serviceProvider)
+        {
+            var conn = new NpgsqlConnection(Configuration.GetConnectionString("FasTnT.Database"));
+            conn.Open();
+
+            return conn;
         }
     }
 }

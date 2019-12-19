@@ -4,13 +4,13 @@ VisualStudioVersion = 15.0.28307.779
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FasTnT.Host", "src\FasTnT.Host\FasTnT.Host.csproj", "{7DD0A296-CB74-4F31-946E-5FBF951B7E30}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FasTnT.Handlers", "FasTnT.Capture\FasTnT.Handlers.csproj", "{E0217229-AB8C-43AA-BBB3-6524DE66B60D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FasTnT.Handlers", "FasTnT.Capture\FasTnT.Handlers.csproj", "{E0217229-AB8C-43AA-BBB3-6524DE66B60D}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Communication", "Communication", "{8FDF43E8-DBA3-4528-8F21-C7DC67CDECCC}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Formats", "Formats", "{8FDF43E8-DBA3-4528-8F21-C7DC67CDECCC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FasTnT.Parsers.Xml", "FasTnT.Parsers.Xml\FasTnT.Parsers.Xml.csproj", "{FF410886-0588-49B6-BA0B-CFF97ABFEC88}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FasTnT.Parsers.Xml", "FasTnT.Parsers.Xml\FasTnT.Parsers.Xml.csproj", "{FF410886-0588-49B6-BA0B-CFF97ABFEC88}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FasTnT.Domain", "FasTnT.Domain\FasTnT.Domain.csproj", "{570E8F36-0013-414D-A658-67145E61663C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FasTnT.Domain", "FasTnT.Domain\FasTnT.Domain.csproj", "{570E8F36-0013-414D-A658-67145E61663C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -1,9 +1,8 @@
-﻿using FasTnT.Commands.Responses;
-using MediatR;
+﻿using FasTnT.Domain.Commands;
 
 namespace FasTnT.Commands.Requests
 {
-    public class GetVendorVersionRequest : IRequest<IEpcisResponse>
+    public class GetVendorVersionRequest : IQueryRequest
     {
     }
 }

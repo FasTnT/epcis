@@ -1,9 +1,10 @@
-﻿using FasTnT.Commands.Responses;
-using MediatR;
+﻿
+using FasTnT.Domain.Commands;
 
 namespace FasTnT.Commands.Requests
 {
-    public class GetSubscriptionIdsRequest : IRequest<IEpcisResponse>
+    public class GetSubscriptionIdsRequest : IQueryRequest
     {
+        public string QueryName { get; set; }
     }
 }

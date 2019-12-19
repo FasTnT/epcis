@@ -1,4 +1,4 @@
-﻿using FasTnT.Commands.Responses;
+﻿using FasTnT.Domain.Commands;
 using FasTnT.Host.Infrastructure.Attributes;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -18,6 +18,6 @@ namespace FasTnT.Host.Controllers.v1_2
         public EpcisCaptureService(IMediator mediator) => _mediator = mediator;
 
         [HttpPost]
-        public async Task Capture(IRequest<IEpcisResponse> request, CancellationToken cancellationToken) => await _mediator.Send(request, cancellationToken);
+        public async Task Capture(ICaptureRequest request, CancellationToken cancellationToken) => await _mediator.Send(request, cancellationToken);
     }
 }
