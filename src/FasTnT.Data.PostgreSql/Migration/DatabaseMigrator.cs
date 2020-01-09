@@ -1,4 +1,5 @@
 ﻿using Dapper;
+using FasTnT.Data.PostgreSql.Migration;
 using FasTnT.Domain.Data;
 using System;
 using System.Data;

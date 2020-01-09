@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace FasTnT.PostgreSql.Migration {
+namespace FasTnT.Data.PostgreSql.Migration {
     using System;
     
     
@@ -22,7 +22,7 @@ namespace FasTnT.PostgreSql.Migration {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class DatabaseSqlRequests {
+    public class DatabaseSqlRequests {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
@@ -36,10 +36,10 @@ namespace FasTnT.PostgreSql.Migration {
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Resources.ResourceManager ResourceManager {
+        public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("FasTnT.PostgreSql.Migration.DatabaseSqlRequests", typeof(DatabaseSqlRequests).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("FasTnT.Data.PostgreSql.Migration.DatabaseSqlRequests", typeof(DatabaseSqlRequests).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -51,7 +51,7 @@ namespace FasTnT.PostgreSql.Migration {
         ///   resource lookups using this strongly typed resource class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Globalization.CultureInfo Culture {
+        public static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
@@ -63,7 +63,7 @@ namespace FasTnT.PostgreSql.Migration {
         /// <summary>
         ///   Looks up a localized string similar to H4sIAAAAAAAA/+1b3XKjOBa+jp9Cleqt2LseV346nc6k5gJjOWHaAQ/g9PTeUARwTLUNbn7Sk3m1vdhH2lfYIyEw/xCb7PTFpqrdCZKOjr7vk3SOkP/zr3//9BNaKFhWkMLf4Xuux8uYUzH7CwlTJEoqwr8Liqqg0Lc8/yauonLjGS6rMSKfvX4PwY9tIrAucDNaS1zMZkP6nFRx9I2FjJXu6UZgeehZ915s56l/eTpAvDSbkT62T5qhB/rafRodm9ZSD9fBcc7SVvf9765nllg6Oz2/eJUtz3qyfbBgmZrroMDeWH6gb7boux2s3DCgT9CfrmMl7dAET7nFTKVFpKR/slD5k59/Dqw/giFy3O/9wSAyzkuiosqcIKroeP5JIwgco7ks3HPyF/QJf0F92yxWDb/RmloC2EIUfltg1I8fDHqD3mdBvUN9SZgo6Bc05WYKHtz0ekAtnvNCK2qtrWHXU0trjDzrWwigNLBruka4sZxAo4C1wTHG3wAm27d6 [rest of string was truncated]&quot;;.
         /// </summary>
-        internal static string CreateZipped {
+        public static string CreateZipped {
             get {
                 return ResourceManager.GetString("CreateZipped", resourceCulture);
             }
@@ -72,7 +72,7 @@ namespace FasTnT.PostgreSql.Migration {
         /// <summary>
         ///   Looks up a localized string similar to H4sIAAAAAAAAC3u/e79LkH+AQrCzh6uvo4Knm4JrhGdwSLBCcVJKhoKzY7Czo4urNS8XdkXJiTk5SYnJ2QQVFpcmFScXZRaUZObnFRM2NqmMoJrUguRMwiaVFqcWIVQBAOPdp4/tAAAA.
         /// </summary>
-        internal static string DropZipped {
+        public static string DropZipped {
             get {
                 return ResourceManager.GetString("DropZipped", resourceCulture);
             }

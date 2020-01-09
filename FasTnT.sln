@@ -16,6 +16,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{64F70AAE-3
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FasTnT.UnitTest", "test\FasTnT.UnitTest\FasTnT.UnitTest.csproj", "{45B48F9D-0B7D-44DD-9DAB-649CF91ACA48}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FasTnT.IntegrationTests", "test\FasTnT.IntegrationTests\FasTnT.IntegrationTests.csproj", "{793FFB9D-3E9B-45D4-8979-612F85B775BF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -42,6 +44,10 @@ Global
 		{45B48F9D-0B7D-44DD-9DAB-649CF91ACA48}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{45B48F9D-0B7D-44DD-9DAB-649CF91ACA48}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{45B48F9D-0B7D-44DD-9DAB-649CF91ACA48}.Release|Any CPU.Build.0 = Release|Any CPU
+		{793FFB9D-3E9B-45D4-8979-612F85B775BF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{793FFB9D-3E9B-45D4-8979-612F85B775BF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{793FFB9D-3E9B-45D4-8979-612F85B775BF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{793FFB9D-3E9B-45D4-8979-612F85B775BF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -52,6 +58,7 @@ Global
 		{570E8F36-0013-414D-A658-67145E61663C} = {D9851C3E-2F32-41B9-8CB6-06A694FF94E5}
 		{12E90280-5943-4387-A364-220916CBB670} = {D9851C3E-2F32-41B9-8CB6-06A694FF94E5}
 		{45B48F9D-0B7D-44DD-9DAB-649CF91ACA48} = {64F70AAE-3788-478D-B5D0-9A068199EDC8}
+		{793FFB9D-3E9B-45D4-8979-612F85B775BF} = {64F70AAE-3788-478D-B5D0-9A068199EDC8}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {8BF0FBE1-6ADB-48BD-85AD-C2A52AD9E16A}

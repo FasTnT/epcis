@@ -34,6 +34,8 @@ namespace FasTnT.Parsers.Xml.Formatters
                     return FormatInternal(exceptionResponse);
                 case GetQueryNamesResponse getQueryNamesResponse:
                     return FormatInternal(getQueryNamesResponse);
+                case GetSubscriptionIdsResponse getSubscriptionIdsResponse:
+                    return FormatInternal(getSubscriptionIdsResponse);
                 case PollResponse pollResponse:
                     return FormatInternal(pollResponse);
                 default:
@@ -86,8 +88,8 @@ namespace FasTnT.Parsers.Xml.Formatters
         protected XElement FormatInternal(GetQueryNamesResponse response)
             => new XElement(XName.Get("GetQueryNamesResult", EpcisNamespaces.Query), response.QueryNames.Select(x => new XElement("string", x)));
 
-        //protected XElement FormatInternal(GetSubscriptionIdsResponse response)
-        //    => new XElement(XName.Get("GetSubscriptionIDsResult", EpcisNamespaces.Query), response.SubscriptionIds?.Select(x => new XElement("string", x)));
+        protected XElement FormatInternal(GetSubscriptionIdsResponse response)
+            => new XElement(XName.Get("GetSubscriptionIDsResult", EpcisNamespaces.Query), response.SubscriptionIds?.Select(x => new XElement("string", x)));
 
         protected XElement FormatInternal(ExceptionResponse response)
             => new XElement(response.Exception, !string.IsNullOrEmpty(response.Reason) ? new XElement("reason", response.Reason) : null, (response.Severity != null) ? new XElement("severity", response.Severity.DisplayName) : null);

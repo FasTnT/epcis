@@ -19,6 +19,7 @@ using FasTnT.PostgreSql.Migration;
 using IHostingEnvironment = Microsoft.AspNetCore.Hosting.IHostingEnvironment;
 using FasTnT.Domain.Queries;
 using FasTnT.Data.PostgreSql.DataRetrieval;
+using FasTnT.Data.PostgreSql.Subscriptions;
 
 namespace FasTnT.Host
 {
@@ -53,6 +54,7 @@ namespace FasTnT.Host
             services.AddScoped<IDocumentStore, DocumentStore>();
             services.AddScoped<IDatabaseMigrator, DatabaseMigrator>();
             services.AddScoped<IEventFetcher, EventFetcher>();
+            services.AddScoped<ISubscriptionManager, SubscriptionManager>();
 
             // Add Domain services
             services.AddScoped<IEpcisQuery, SimpleEventQuery>();

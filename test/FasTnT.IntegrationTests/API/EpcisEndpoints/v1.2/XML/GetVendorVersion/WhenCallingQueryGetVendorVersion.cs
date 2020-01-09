@@ -44,9 +44,9 @@ namespace FasTnT.IntegrationTests.API.EpcisEndpoints.v1_2.XML.GetVendorVersion
         {
             var content = Result.Content.ReadAsStringAsync().Result;
             var xmlDocument = XDocument.Parse(content);
-            var standardVersion = xmlDocument.Root.Element(XName.Get("EPCISBody")).Element(XName.Get("GetVendorVersionResult", "urn:epcglobal:epcis-query:xsd:1")).Value;
+            var vendorVersion = xmlDocument.Root.Element(XName.Get("EPCISBody")).Element(XName.Get("GetVendorVersionResult", "urn:epcglobal:epcis-query:xsd:1")).Value;
 
-            Assert.AreEqual(Constants.ProductVersion, standardVersion);
+            Assert.AreEqual(Constants.VendorVersion, vendorVersion);
         }
     }
 }

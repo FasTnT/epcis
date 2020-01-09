@@ -38,7 +38,7 @@
     </EmbeddedResource>
     <EmbeddedResource Update="Migration\DatabaseSqlRequests.resx">
       <LastGenOutput>DatabaseSqlRequests.Designer.cs</LastGenOutput>
-      <Generator>ResXFileCodeGenerator</Generator>
+      <Generator>PublicResXFileCodeGenerator</Generator>
     </EmbeddedResource>
   </ItemGroup>
 

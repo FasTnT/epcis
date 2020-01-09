@@ -34,6 +34,8 @@ namespace FasTnT.Parsers.Xml.Formatters
                     return FormatInternal(exceptionResponse);
                 case GetQueryNamesResponse getQueryNamesResponse:
                     return FormatInternal(getQueryNamesResponse);
+                case GetSubscriptionIdsResponse getSubscriptionIdsResponse:
+                    return FormatInternal(getSubscriptionIdsResponse);
                 case PollResponse pollResponse:
                     return FormatInternal(pollResponse);
                 default:
@@ -75,6 +77,14 @@ namespace FasTnT.Parsers.Xml.Formatters
         {
             var formatted = CreateResponse("EPCISQueryDocument");
             formatted.Root.Add(new XElement("EPCISBody", new XElement(XName.Get("GetVendorVersionResult", EpcisNamespaces.Query), response.Version)));
+
+            return formatted;
+        }
+
+        protected XDocument FormatInternal(GetSubscriptionIdsResponse response)
+        {
+            var formatted = CreateResponse("EPCISQueryDocument");
+            formatted.Root.Add(new XElement("EPCISBody", new XElement(XName.Get("GetSubscriptionIDsResult", EpcisNamespaces.Query), response.SubscriptionIds.Select(x => new XElement("string", x)))));
 
             return formatted;
         }
