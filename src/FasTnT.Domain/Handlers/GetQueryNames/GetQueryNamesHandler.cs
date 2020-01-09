@@ -1,0 +1,23 @@
+﻿using System.Threading;
+using System.Threading.Tasks;
+using FasTnT.Commands.Requests;
+using FasTnT.Commands.Responses;
+using MediatR;
+
+namespace FasTnT.Domain.Handlers.GetQueryNames
+{
+    public class GetQueryNamesHandler : IRequestHandler<GetQueryNamesRequest, IEpcisResponse>
+    {
+        public async Task<IEpcisResponse> Handle(GetQueryNamesRequest request, CancellationToken cancellationToken)
+        {
+            return await Task.FromResult(new GetQueryNamesResponse
+            {
+                QueryNames = new[]
+                {
+                    "SimpleEventQuery",
+                    "SimpleMasterDataQuery"
+                }
+            });
+        }
+    }
+}

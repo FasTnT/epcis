@@ -10,8 +10,12 @@ using Microsoft.AspNetCore.Authentication;
 using System.Data;
 using MediatR;
 using Npgsql;
-using FasTnT.Handlers;
 using System;
+using FasTnT.Domain;
+using FasTnT.Domain.Data;
+using FasTnT.PostgreSql;
+using FasTnT.PostgreSql.Capture;
+using FasTnT.PostgreSql.Migration;
 using IHostingEnvironment = Microsoft.AspNetCore.Hosting.IHostingEnvironment;
 
 namespace FasTnT.Host
@@ -38,8 +42,14 @@ namespace FasTnT.Host
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMediatR(HandlersAssembly.Value);
+            services.AddMediatR(Constants.Assembly);
+            services.AddScoped<RequestContext>();
+
+            // Add Storage services
             services.AddScoped(OpenConnection);
+            services.AddScoped<ITransactionProvider, TransactionProvider>();
+            services.AddScoped<IDocumentStore, DocumentStore>();
+            services.AddScoped<IDatabaseMigrator, DatabaseMigrator>();
 
             services.AddMvc(ConfigureMvsOptions)
                     .AddApplicationPart(typeof(Startup).Assembly)

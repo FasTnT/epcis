@@ -16,21 +16,16 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
     <PackageReference Include="FakeItEasy" Version="5.5.0" />
+    <PackageReference Include="Microsoft.AspNetCore.All" Version="2.2.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.4.0" />
+    <PackageReference Include="Moq" Version="4.13.1" />
     <PackageReference Include="MSTest.TestAdapter" Version="2.0.0" />
     <PackageReference Include="MSTest.TestFramework" Version="2.0.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="FormattersTests\XmlFormatter\files\requests\xml\invalid_event_1.xml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="FormattersTests\XmlFormatter\files\requests\xml\valid_event_masterdata_1.xml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="FormattersTests\XmlFormatter\files\requests\xml\valid_event_1.xml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
+    <ProjectReference Include="..\..\src\FasTnT.Domain\FasTnT.Domain.csproj" />
+    <ProjectReference Include="..\..\src\FasTnT.Host\FasTnT.Host.csproj" />
   </ItemGroup>
 
 </Project>

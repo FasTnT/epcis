@@ -11,11 +11,11 @@ namespace FasTnT.Host.Controllers.v1_2
     [Authorize]
     [Formatter(Format.Xml)]
     [Route("v1_2/Capture")]
-    public class EpcisCaptureService : Controller
+    public class EpcisCaptureController : Controller
     {
         private readonly IMediator _mediator;
 
-        public EpcisCaptureService(IMediator mediator) => _mediator = mediator;
+        public EpcisCaptureController(IMediator mediator) => _mediator = mediator;
 
         [HttpPost]
         public async Task Capture(ICaptureRequest request, CancellationToken cancellationToken) => await _mediator.Send(request, cancellationToken);

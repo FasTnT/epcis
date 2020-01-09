@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authentication;
+﻿using FasTnT.Domain;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System;
@@ -7,6 +8,7 @@ using System.Security.Claims;
 using System.Text;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace FasTnT.Host
 {
@@ -44,9 +46,10 @@ namespace FasTnT.Host
 
         private Task<AuthenticateResult> AuthenticateUser(string username, string password)
         {
+            var context = Request.HttpContext.RequestServices.GetService<RequestContext>();
             var authorized = true;
 
-            if(authorized)
+            if (authorized)
             {
                 var claims = new[]
                 {
@@ -55,6 +58,8 @@ namespace FasTnT.Host
                 };
                 var principal = new ClaimsPrincipal(new ClaimsIdentity(claims, Scheme.Name));
                 var ticket = new AuthenticationTicket(principal, Scheme.Name);
+
+                context.User = new Model.Users.User { Id = 1, UserName = username };
 
                 return Task.FromResult(AuthenticateResult.Success(ticket));
             }
