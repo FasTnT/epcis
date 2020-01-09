@@ -1,6 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace FasTnT.UnitTest.Controllers
+namespace FasTnT.UnitTest
 {
     public abstract class TestBase
     {

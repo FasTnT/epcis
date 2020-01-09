@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace FasTnT.Host.Controllers.v1_2
 {
-    public abstract class EpcisQueryController : Controller
+    public abstract class EpcisQueryController : ControllerBase
     {
         private readonly IMediator _dispatcher;
 
