@@ -24,7 +24,7 @@ namespace FasTnT.UnitTest.Handlers
             SubscriptionIds = new[] { "Sub1", "Sub2" };
             CancellationToken = new CancellationTokenSource().Token;
             SubscriptionManager = new Mock<ISubscriptionManager>();
-            Request = new GetSubscriptionIdsRequest();
+            Request = new GetSubscriptionIdsRequest { QueryName = "TestQuery" };
             Handler = new GetSubscriptionIdsHandler(SubscriptionManager.Object);
 
             SubscriptionManager.Setup(x => x.GetSubscriptionIds()).Returns(() => Task.FromResult(SubscriptionIds));

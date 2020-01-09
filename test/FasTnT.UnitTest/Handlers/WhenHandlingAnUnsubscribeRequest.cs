@@ -22,7 +22,7 @@ namespace FasTnT.UnitTest.Handlers
         {
             Mediator = new Mock<IMediator>();
             CancellationToken = new CancellationTokenSource().Token;
-            Request = new UnsubscribeRequest();
+            Request = new UnsubscribeRequest { SubscriptionId = "test-subscription" };
             Handler = new UnsubscribeHandler(Mediator.Object);
         }
 
