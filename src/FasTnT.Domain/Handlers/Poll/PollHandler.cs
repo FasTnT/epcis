@@ -1,8 +1,10 @@
 ﻿using FasTnT.Commands.Requests;
 using FasTnT.Commands.Responses;
-using FasTnT.Domain.Handlers.Poll.Queries;
+using FasTnT.Domain.Queries;
 using FasTnT.Model.Exceptions;
 using MediatR;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -10,16 +12,24 @@ namespace FasTnT.Domain.Handlers.Poll
 {
     public class PollHandler : IRequestHandler<PollRequest, IEpcisResponse>
     {
+        private readonly IEnumerable<IEpcisQuery> _queries;
+
+        public PollHandler(IEnumerable<IEpcisQuery> queries)
+        {
+            _queries = queries;
+        }
+
         public async Task<IEpcisResponse> Handle(PollRequest request, CancellationToken cancellationToken)
         {
-            switch (request.QueryName)
+            var query = _queries.SingleOrDefault(q => q.Name == request.QueryName);
+
+            if (query != null)
             {
-                case "SimpleEventQuery":
-                    return await SimpleEventQuery.Handle(request.Parameters);
-                case "SimpleMasterdataQuery":
-                    return await SimpleMasterdataQuery.Handle(request.Parameters);
-                default:
-                    throw new EpcisException(ExceptionType.NoSuchNameException, $"Unknown query: '{request.QueryName}'");
+                return await query.Handle(request.Parameters, cancellationToken);
+            }
+            else
+            {
+                throw new EpcisException(ExceptionType.NoSuchNameException, $"Query with name '{request.QueryName}' is not implemented");
             }
         }
     }

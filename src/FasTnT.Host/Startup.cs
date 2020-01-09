@@ -17,6 +17,8 @@ using FasTnT.PostgreSql;
 using FasTnT.PostgreSql.Capture;
 using FasTnT.PostgreSql.Migration;
 using IHostingEnvironment = Microsoft.AspNetCore.Hosting.IHostingEnvironment;
+using FasTnT.Domain.Queries;
+using FasTnT.Data.PostgreSql.DataRetrieval;
 
 namespace FasTnT.Host
 {
@@ -50,6 +52,11 @@ namespace FasTnT.Host
             services.AddScoped<ITransactionProvider, TransactionProvider>();
             services.AddScoped<IDocumentStore, DocumentStore>();
             services.AddScoped<IDatabaseMigrator, DatabaseMigrator>();
+            services.AddScoped<IEventFetcher, EventFetcher>();
+
+            // Add Domain services
+            services.AddScoped<IEpcisQuery, SimpleEventQuery>();
+            services.AddScoped<IEpcisQuery, SimpleMasterdataQuery>();
 
             services.AddMvc(ConfigureMvsOptions)
                     .AddApplicationPart(typeof(Startup).Assembly)

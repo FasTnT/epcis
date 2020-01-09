@@ -1,13 +1,16 @@
 ﻿using FasTnT.Commands.Responses;
 using FasTnT.Model.Exceptions;
 using FasTnT.Model.Queries;
+using System.Threading;
 using System.Threading.Tasks;
 
-namespace FasTnT.Domain.Handlers.Poll.Queries
+namespace FasTnT.Domain.Queries
 {
-    public static class SimpleMasterdataQuery
+    public class SimpleMasterdataQuery : IEpcisQuery
     {
-        public static Task<IEpcisResponse> Handle(QueryParameter[] parameters)
+        public string Name => "SimpleMasterdataQuery";
+
+        public Task<IEpcisResponse> Handle(QueryParameter[] parameters, CancellationToken cancellationToken)
         {
             throw new EpcisException(ExceptionType.ImplementationException, "SimpleEventQuery is not implemented yet");
         }
