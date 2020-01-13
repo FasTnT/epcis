@@ -8,6 +8,8 @@ namespace FasTnT.Domain.Queries
     public interface IEpcisQuery
     {
         string Name { get; }
+        bool AllowSubscription { get; }
+
         Task<IEpcisResponse> Handle(QueryParameter[] parameters, CancellationToken cancellationToken);
     }
 }

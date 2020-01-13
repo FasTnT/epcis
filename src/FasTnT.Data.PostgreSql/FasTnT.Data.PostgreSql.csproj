@@ -2,10 +2,14 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.2</TargetFramework>
+	  <LangVersion>7.1</LangVersion>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Dapper" Version="2.0.30" />
+    <PackageReference Include="Dapper.SqlBuilder" Version="2.0.30" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="3.1.0" />
+    <PackageReference Include="Npgsql" Version="4.1.2" />
   </ItemGroup>
 
   <ItemGroup>
@@ -24,6 +28,11 @@
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
     </Compile>
+    <Compile Update="DataRetrieval\PgSqlEventRequests.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>PgSqlEventRequests.resx</DependentUpon>
+    </Compile>
     <Compile Update="Migration\DatabaseSqlRequests.Designer.cs">
       <DependentUpon>DatabaseSqlRequests.resx</DependentUpon>
       <DesignTime>True</DesignTime>
@@ -36,10 +45,18 @@
       <LastGenOutput>CaptureEpcisDocumentCommands.Designer.cs</LastGenOutput>
       <Generator>PublicResXFileCodeGenerator</Generator>
     </EmbeddedResource>
+    <EmbeddedResource Update="DataRetrieval\PgSqlEventRequests.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>PgSqlEventRequests.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Update="Migration\DatabaseSqlRequests.resx">
       <LastGenOutput>DatabaseSqlRequests.Designer.cs</LastGenOutput>
       <Generator>PublicResXFileCodeGenerator</Generator>
     </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="DapperConfiguration\" />
   </ItemGroup>
 
 </Project>

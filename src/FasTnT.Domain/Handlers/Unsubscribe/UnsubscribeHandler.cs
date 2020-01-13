@@ -1,6 +1,8 @@
 ﻿using FasTnT.Commands.Requests;
 using FasTnT.Commands.Responses;
+using FasTnT.Domain.Data;
 using FasTnT.Domain.Notifications;
+using FasTnT.Model.Exceptions;
 using MediatR;
 using System.Threading;
 using System.Threading.Tasks;
@@ -9,16 +11,28 @@ namespace FasTnT.Domain.Handlers.Unsubscribe
 {
     public class UnsubscribeHandler : IRequestHandler<UnsubscribeRequest, IEpcisResponse>
     {
+        private readonly ISubscriptionManager _subscriptionManager;
         private readonly IMediator _mediator;
 
-        public UnsubscribeHandler(IMediator mediator)
+        public UnsubscribeHandler(ISubscriptionManager subscriptionManager, IMediator mediator)
         {
+            _subscriptionManager = subscriptionManager;
             _mediator = mediator;
         }
 
         public async Task<IEpcisResponse> Handle(UnsubscribeRequest request, CancellationToken cancellationToken)
         {
-            await _mediator.Publish(new SubscriptionRemovedNotification(), cancellationToken);
+            var subscription = _subscriptionManager.GetSubscriptionById(request.SubscriptionId);
+
+            if (subscription == null)
+            {
+                throw new EpcisException(ExceptionType.NoSuchSubscriptionException, $"Subscription with ID '{request.SubscriptionId}' does not exist");
+            }
+            else
+            {
+                //await _subscriptionManager.DeleteSubscription(subscription.Id);
+                await _mediator.Publish(new SubscriptionRemovedNotification(), cancellationToken);
+            }
 
             return EmptyResponse.Value;
         }

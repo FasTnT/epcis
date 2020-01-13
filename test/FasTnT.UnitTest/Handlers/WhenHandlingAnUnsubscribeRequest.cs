@@ -1,6 +1,8 @@
 ﻿using FasTnT.Commands.Requests;
 using FasTnT.Commands.Responses;
+using FasTnT.Domain.Data;
 using FasTnT.Domain.Handlers.Unsubscribe;
+using FasTnT.Domain.Model.Subscriptions;
 using FasTnT.Domain.Notifications;
 using MediatR;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -13,6 +15,7 @@ namespace FasTnT.UnitTest.Handlers
     public class WhenHandlingAnUnsubscribeRequest : TestBase
     {
         public Mock<IMediator> Mediator { get; set; }
+        public Mock<ISubscriptionManager> SubscriptionManager { get; set; }
         public UnsubscribeHandler Handler { get; set; }
         public CancellationToken CancellationToken { get; set; }
         public UnsubscribeRequest Request { get; set; }
@@ -21,9 +24,12 @@ namespace FasTnT.UnitTest.Handlers
         public override void Given()
         {
             Mediator = new Mock<IMediator>();
+            SubscriptionManager = new Mock<ISubscriptionManager>();
             CancellationToken = new CancellationTokenSource().Token;
             Request = new UnsubscribeRequest { SubscriptionId = "test-subscription" };
-            Handler = new UnsubscribeHandler(Mediator.Object);
+            Handler = new UnsubscribeHandler(SubscriptionManager.Object, Mediator.Object);
+
+            SubscriptionManager.Setup(x => x.GetSubscriptionById(It.IsAny<string>())).Returns(new Subscription());
         }
 
         public override void When()

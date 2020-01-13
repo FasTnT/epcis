@@ -9,6 +9,7 @@ namespace FasTnT.Domain.Queries
     public class SimpleMasterdataQuery : IEpcisQuery
     {
         public string Name => "SimpleMasterdataQuery";
+        public bool AllowSubscription => false;
 
         public Task<IEpcisResponse> Handle(QueryParameter[] parameters, CancellationToken cancellationToken)
         {

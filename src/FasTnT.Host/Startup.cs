@@ -20,6 +20,7 @@ using IHostingEnvironment = Microsoft.AspNetCore.Hosting.IHostingEnvironment;
 using FasTnT.Domain.Queries;
 using FasTnT.Data.PostgreSql.DataRetrieval;
 using FasTnT.Data.PostgreSql.Subscriptions;
+using FasTnT.Data.PostgreSql;
 
 namespace FasTnT.Host
 {
@@ -49,12 +50,7 @@ namespace FasTnT.Host
             services.AddScoped<RequestContext>();
 
             // Add Storage services
-            services.AddScoped(OpenConnection);
-            services.AddScoped<ITransactionProvider, TransactionProvider>();
-            services.AddScoped<IDocumentStore, DocumentStore>();
-            services.AddScoped<IDatabaseMigrator, DatabaseMigrator>();
-            services.AddScoped<IEventFetcher, EventFetcher>();
-            services.AddScoped<ISubscriptionManager, SubscriptionManager>();
+            services.AddEpcisPersistence(Configuration.GetConnectionString("FasTnT.Database"));
 
             // Add Domain services
             services.AddScoped<IEpcisQuery, SimpleEventQuery>();
@@ -80,14 +76,6 @@ namespace FasTnT.Host
         {
             options.ModelBinderProviders.Insert(0, new EpcisModelBinderProvider());
             options.OutputFormatters.Insert(0, new EpcisResponseOutputFormatter());
-        }
-
-        private IDbConnection OpenConnection(IServiceProvider serviceProvider)
-        {
-            var conn = new NpgsqlConnection(Configuration.GetConnectionString("FasTnT.Database"));
-            conn.Open();
-
-            return conn;
         }
     }
 }

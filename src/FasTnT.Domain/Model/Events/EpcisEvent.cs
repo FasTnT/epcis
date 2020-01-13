@@ -6,6 +6,8 @@ namespace FasTnT.Model
 {
     public class EpcisEvent
     {
+        public int? Id { get; set; }
+        public int? RequestId { get; set; }
         public DateTime CaptureTime { get; set; }
         public DateTime EventTime { get; set; }
         public TimeZoneOffset EventTimeZoneOffset { get; set; } = TimeZoneOffset.Default;
