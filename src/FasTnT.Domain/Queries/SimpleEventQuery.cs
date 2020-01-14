@@ -39,22 +39,20 @@ namespace FasTnT.Domain.Queries
         {
             //{ "^EQ_(source|destination)_",     (fetcher, param) => ApplySourceDestinationParameter(param, fetcher) },
             { "^EQ_bizTransaction_",           (fetcher, param) => fetcher.Apply(new BusinessTransactionFilter { TransactionType = "", Values = param.Values }) },
-            { "^(GE|LT)_eventTime",            (fetcher, param) => fetcher.Apply(new ComparisonParameterFilter { Field = EpcisField.CaptureTime, Comparator = GetComparator(param.Name), Value = param.GetValue<DateTime>() }) },
-            { "^(GE|LT)_recordTime",           (fetcher, param) => fetcher.Apply(new ComparisonParameterFilter { Field = EpcisField.CaptureTime, Comparator = GetComparator(param.Name), Value = param.GetValue<DateTime>() }) },
-            //{ "^MATCH_",                       (fetcher, param) => ApplyEpcMatchParameter(param, fetcher) },
-            //{ "^(EQ|GT|LT|GE|LE)_quantity$",   (fetcher, param) => ApplyQuantityParameter(param, fetcher) },
-            //{ "^(EQ|GT|LT|GE|LE)_INNER_ILMD_", (fetcher, param) => ApplyCustomFieldParameter(param, true, FieldType.Ilmd, fetcher) },
-            //{ "^(EQ|GT|LT|GE|LE)_ILMD_",       (fetcher, param) => ApplyCustomFieldParameter(param, false, FieldType.Ilmd, fetcher) },
-            //{ "^EXISTS_INNER_ILMD_",           (fetcher, param) => ApplyExistCustomFieldParameter(param, true, FieldType.Ilmd, fetcher) },
-            //{ "^EXISTS_ILMD_",                 (fetcher, param) => ApplyExistCustomFieldParameter(param, false, FieldType.Ilmd, fetcher) },
-            //{ "^(EQ|GT|LT|GE|LE)_INNER_",      (fetcher, param) => ApplyCustomFieldParameter(param, true, FieldType.EventExtension, fetcher) },
-            //{ "^(EQ|GT|LT|GE|LE)_",            (fetcher, param) => ApplyCustomFieldParameter(param, false, FieldType.EventExtension, fetcher) },
-            //{ "^EXISTS_INNER",                 (fetcher, param) => ApplyExistCustomFieldParameter(param, true, FieldType.EventExtension, fetcher) },
+            { "^(GE|LT)_eventTime",            (fetcher, param) => fetcher.Apply(new ComparisonParameterFilter { Field = EpcisField.CaptureTime, Comparator = param.GetComparator(), Value = param.GetValue<DateTime>() }) },
+            { "^(GE|LT)_recordTime",           (fetcher, param) => fetcher.Apply(new ComparisonParameterFilter { Field = EpcisField.CaptureTime, Comparator = param.GetComparator(), Value = param.GetValue<DateTime>() }) },
+            { "^MATCH_",                       (fetcher, param) => fetcher.Apply(new MatchEpcFilter { EpcType = param.GetMatchEpcTypes(), Values = param.Values.Select(x => x.Replace("*", "%")).ToArray() }) },
+            { "^(EQ|GT|LT|GE|LE)_quantity$",   (fetcher, param) => fetcher.Apply(new QuantityFilter { Operator = param.GetComparator(), Value = param.GetValue<double>() }) },
+            { "^(EQ|GT|LT|GE|LE)_INNER_ILMD_", (fetcher, param) => fetcher.Apply(new CustomFieldFilter { Field = param.GetField(FieldType.Ilmd, true), Comparator = param.GetComparator(), IsInner = true, Values = param.Values }) },
+            { "^(EQ|GT|LT|GE|LE)_ILMD_",       (fetcher, param) => fetcher.Apply(new CustomFieldFilter { Field = param.GetField(FieldType.Ilmd, false), Comparator = param.GetComparator(), IsInner = false, Values = param.Values }) },
+            { "^EXISTS_INNER_ILMD_",           (fetcher, param) => fetcher.Apply(new ExistCustomFieldFilter { Field = param.GetField(FieldType.Ilmd, true), IsInner = true }) },
+            { "^EXISTS_ILMD_",                 (fetcher, param) => fetcher.Apply(new ExistCustomFieldFilter { Field = param.GetField(FieldType.Ilmd, false), IsInner = false }) },
+            { "^(EQ|GT|LT|GE|LE)_INNER_",      (fetcher, param) => fetcher.Apply(new CustomFieldFilter { Field = param.GetField(FieldType.EventExtension, true), Comparator = param.GetComparator(), IsInner = true, Values = param.Values }) },
+            { "^(EQ|GT|LT|GE|LE)_",            (fetcher, param) => fetcher.Apply(new CustomFieldFilter { Field = param.GetField(FieldType.EventExtension, false), Comparator = param.GetComparator(), IsInner = false, Values = param.Values }) },
+            { "^EXISTS_INNER",                 (fetcher, param) => fetcher.Apply(new ExistCustomFieldFilter { Field = param.GetField(FieldType.EventExtension, true), IsInner = true }) },
             //{ "^EQATTR_",                      (fetcher, param) => ApplyExistAttributeParameter(param, fetcher) },
             //{ "^HASATTR_",                     (fetcher, param) => ApplyHasAttributeParameter(param, fetcher) }
         };
-
-        private static FilterComparator GetComparator(string paramName) => Enumeration.GetByDisplayName<FilterComparator>(paramName.Split('_')[0]);
 
         private readonly IEventFetcher _eventFetcher;
 
@@ -101,7 +99,6 @@ namespace FasTnT.Domain.Queries
         private bool IsRegexParameter(QueryParameter parameter, out Action<IEventFetcher, QueryParameter> action)
         {
             var matchingRegex = RegexParameters.FirstOrDefault(x => Regex.Match(parameter.Name, x.Key, RegexOptions.Singleline).Success);
-
             action = matchingRegex.Value;
 
             return matchingRegex.Key != default;

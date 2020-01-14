@@ -2,6 +2,7 @@
 using FasTnT.Domain.Data;
 using FasTnT.Domain.Data.Model.Filters;
 using FasTnT.Model;
+using FasTnT.Model.Events.Enums;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
@@ -27,7 +28,11 @@ namespace FasTnT.Data.PostgreSql.DataRetrieval
 
         public void Apply(SimpleParameterFilter filter) => _query = _query.Where($"{filter.Field.ToPgSql()} = ANY({_parameters.Add(filter.Values)})");
         public void Apply(ComparisonParameterFilter filter) => _query = _query.Where($"{filter.Field.ToPgSql()} {filter.Comparator.ToSql()} {_parameters.Add(filter.Value)}");
-        public void Apply(BusinessTransactionFilter filter) => throw new System.NotImplementedException();
+        public void Apply(BusinessTransactionFilter filter) => _query = _query.Where($"EXISTS(SELECT bt.event_id FROM epcis.business_transaction bt WHERE bt.event_id = event.id AND bt.transaction_type = {_parameters.Add(filter.TransactionType)} AND bt.transaction_id = ANY({_parameters.Add(filter.Values)}))");
+        public void Apply(MatchEpcFilter filter) => _query = _query.Where($"EXISTS(SELECT epc.event_id FROM epcis.epc epc WHERE epc.event_id = event.id AND epc.epc LIKE ANY({_parameters.Add(filter.Values)}) AND epc.type = ANY({_parameters.Add(filter.EpcType)}))");
+        public void Apply(QuantityFilter filter) => _query = _query.Where($"EXISTS(SELECT epc.event_id FROM epcis.epc epc WHERE epc.type = {EpcType.Quantity} AND epc.quantity {filter.Operator.ToSql()} {_parameters.Add(filter.Value)} AND epc.event_id = event.id)");
+        public void Apply(ExistCustomFieldFilter filter) => _query = _query.Where($"EXISTS(SELECT cf.event_id FROM epcis.custom_field cf WHERE cf.event_id = event.id AND cf.type = {filter.Field.Type.Id} AND cf.namespace = {_parameters.Add(filter.Field.Namespace)} AND cf.name = {_parameters.Add(filter.Field.Name)} AND cf.parent_id IS {(filter.IsInner ? "NOT" : "")} NULL)");
+        public void Apply(CustomFieldFilter filter) => throw new System.NotImplementedException();
         public void Apply(LimitFilter filter) => _limit = filter.Value;
 
         public async Task<IEnumerable<EpcisEvent>> Fetch(CancellationToken cancellationToken)
