@@ -22,24 +22,24 @@ namespace FasTnT.Data.PostgreSql.Capture {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    public class CaptureEpcisDocumentCommands {
+    internal class CaptureEpcisMasterdataCommands {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal CaptureEpcisDocumentCommands() {
+        internal CaptureEpcisMasterdataCommands() {
         }
         
         /// <summary>
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        public static global::System.Resources.ResourceManager ResourceManager {
+        internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("FasTnT.Data.PostgreSql.Capture.CaptureEpcisDocumentCommands", typeof(CaptureEpcisDocumentCommands).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("FasTnT.Data.PostgreSql.Capture.CaptureEpcisMasterdataCommands", typeof(CaptureEpcisMasterdataCommands).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -51,7 +51,7 @@ namespace FasTnT.Data.PostgreSql.Capture {
         ///   resource lookups using this strongly typed resource class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        public static global::System.Globalization.CultureInfo Culture {
+        internal static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
@@ -61,38 +61,47 @@ namespace FasTnT.Data.PostgreSql.Capture {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to INSERT INTO sbdh.contactinformation(id, header_id, type, identifier, contact, email, fax_number, phone_number, type_identifier) VALUES(@id, @headerid, @type, @identifier, @contact, @emailaddress, @faxnumber, @telephonenumber, @contacttypeidentifier) ...;.
+        ///   Looks up a localized string similar to INSERT INTO cbv.attribute_field(internal_id, internal_parent_id, masterdata_id, masterdata_type, parent_id, name, namespace, value) VALUES(@id, @internalparentid, @masterdataid, @masterdatatype, @parentid, @name, @namespace, @value) ...;.
         /// </summary>
-        public static string PersistContactInformations {
+        internal static string AttributeFieldInsert {
             get {
-                return ResourceManager.GetString("PersistContactInformations", resourceCulture);
+                return ResourceManager.GetString("AttributeFieldInsert", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to INSERT INTO sbdh.custom_field(header_id, field_id, parent_id, namespace, name, type, text_value, numeric_value, date_value) VALUES (@eventid, @id, @parentid, @namespace, @name, @type, @textvalue, @numericvalue, @datevalue) ...;.
+        ///   Looks up a localized string similar to INSERT INTO cbv.attribute(masterdata_id, masterdata_type, id, value) VALUES(@parentid, @parenttype, @id, @value) ON CONFLICT ON CONSTRAINT pk_cbv_masterdata_attribute DO UPDATE SET value = @value;.
         /// </summary>
-        public static string PersistCustomFields {
+        internal static string AttributeInsert {
             get {
-                return ResourceManager.GetString("PersistCustomFields", resourceCulture);
+                return ResourceManager.GetString("AttributeInsert", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to INSERT INTO epcis.request(document_time, record_time, user_id) VALUES(@documenttime, @recordtime, @userid) RETURNING id;.
+        ///   Looks up a localized string similar to DELETE FROM cbv.attribute_field WHERE masterdata_type = @type AND masterdata_id = @id; DELETE FROM cbv.hierarchy WHERE type = @type AND (parent_id = @id OR children_id = @id); DELETE FROM cbv.attribute WHERE masterdata_id = @id AND masterdata_type = @type; DELETE FROM cbv.masterdata WHERE id = @id AND type = @type;.
         /// </summary>
-        public static string PersistHeader {
+        internal static string Delete {
             get {
-                return ResourceManager.GetString("PersistHeader", resourceCulture);
+                return ResourceManager.GetString("Delete", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to INSERT INTO sbdh.standardheader(id, version, standard, type_version, identifier, type, creation_datetime) VALUES(@id, @version, @standard, @typeversion, @instanceidentifier, @type, @creationdatetime);.
+        ///   Looks up a localized string similar to INSERT INTO cbv.hierarchy(type, parent_id, children_id) VALUES(@type, @parentid, @childrenid) ...;.
         /// </summary>
-        public static string PersistStandardHeader {
+        internal static string HierarchyInsert {
             get {
-                return ResourceManager.GetString("PersistStandardHeader", resourceCulture);
+                return ResourceManager.GetString("HierarchyInsert", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to INSERT INTO cbv.masterdata(id, type, created_on, last_update) VALUES(@id, @type, NOW(), NOW()) ON CONFLICT ON CONSTRAINT pk_cbv_masterdata DO UPDATE SET last_update = NOW();.
+        /// </summary>
+        internal static string Insert {
+            get {
+                return ResourceManager.GetString("Insert", resourceCulture);
             }
         }
     }

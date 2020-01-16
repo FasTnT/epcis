@@ -9,6 +9,7 @@
     <PackageReference Include="Dapper" Version="2.0.30" />
     <PackageReference Include="Dapper.SqlBuilder" Version="2.0.30" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="3.1.0" />
+    <PackageReference Include="morelinq" Version="3.3.2" />
     <PackageReference Include="Npgsql" Version="4.1.2" />
   </ItemGroup>
 
@@ -28,6 +29,16 @@
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
     </Compile>
+    <Compile Update="Capture\CaptureEpcisEventCommand.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>CaptureEpcisEventCommand.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Capture\CaptureEpcisMasterdataCommands.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>CaptureEpcisMasterdataCommands.resx</DependentUpon>
+    </Compile>
     <Compile Update="DataRetrieval\PgSqlEventRequests.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
@@ -38,12 +49,25 @@
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
     </Compile>
+    <Compile Update="Users\PgSqlUserRequests.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>PgSqlUserRequests.resx</DependentUpon>
+    </Compile>
   </ItemGroup>
 
   <ItemGroup>
     <EmbeddedResource Update="Capture\CaptureEpcisDocumentCommands.resx">
       <LastGenOutput>CaptureEpcisDocumentCommands.Designer.cs</LastGenOutput>
       <Generator>PublicResXFileCodeGenerator</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Capture\CaptureEpcisEventCommand.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>CaptureEpcisEventCommand.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Capture\CaptureEpcisMasterdataCommands.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>CaptureEpcisMasterdataCommands.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Update="DataRetrieval\PgSqlEventRequests.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -52,6 +76,10 @@
     <EmbeddedResource Update="Migration\DatabaseSqlRequests.resx">
       <LastGenOutput>DatabaseSqlRequests.Designer.cs</LastGenOutput>
       <Generator>PublicResXFileCodeGenerator</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Users\PgSqlUserRequests.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>PgSqlUserRequests.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
 

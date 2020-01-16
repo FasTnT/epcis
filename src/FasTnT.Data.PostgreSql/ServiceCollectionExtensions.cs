@@ -2,6 +2,7 @@
 using FasTnT.Data.PostgreSql.DapperConfiguration;
 using FasTnT.Data.PostgreSql.DataRetrieval;
 using FasTnT.Data.PostgreSql.Subscriptions;
+using FasTnT.Data.PostgreSql.Users;
 using FasTnT.Domain.Data;
 using FasTnT.Model.Events.Enums;
 using FasTnT.PostgreSql;
@@ -22,6 +23,7 @@ namespace FasTnT.Data.PostgreSql
             services.AddScoped<IDatabaseMigrator, DatabaseMigrator>();
             services.AddScoped<IEventFetcher, EventFetcher>();
             services.AddScoped<ISubscriptionManager, SubscriptionManager>();
+            services.AddScoped<IUserManager, UserManager>();
             services.AddScoped(s => OpenConnection(connectionString));
 
 

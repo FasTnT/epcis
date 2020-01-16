@@ -9,6 +9,8 @@ using System.Text;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
+using MediatR;
+using FasTnT.Domain.Commands.Requests;
 
 namespace FasTnT.Host
 {
@@ -44,12 +46,13 @@ namespace FasTnT.Host
             }
         }
 
-        private Task<AuthenticateResult> AuthenticateUser(string username, string password)
+        private async Task<AuthenticateResult> AuthenticateUser(string username, string password)
         {
             var context = Request.HttpContext.RequestServices.GetService<RequestContext>();
-            var authorized = true;
+            var mediator = Request.HttpContext.RequestServices.GetService<IMediator>();
+            var response = await mediator.Send(new UserLogInRequest { Username = username, Password = password });
 
-            if (authorized)
+            if (response.Authorized)
             {
                 var claims = new[]
                 {
@@ -61,11 +64,11 @@ namespace FasTnT.Host
 
                 context.User = new Model.Users.User { Id = 1, UserName = username };
 
-                return Task.FromResult(AuthenticateResult.Success(ticket));
+                return AuthenticateResult.Success(ticket);
             }
             else
             {
-                return Task.FromResult(AuthenticateResult.Fail($"Invalid {HeaderKey} Header"));
+                return AuthenticateResult.Fail($"Invalid {HeaderKey} Header");
             }
         }
     }

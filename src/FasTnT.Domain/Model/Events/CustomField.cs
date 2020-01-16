@@ -7,6 +7,7 @@ namespace FasTnT.Model
     public class CustomField
     {
         public int? Id { get; set; }
+        public int? HeaderId { get; set; }
         public int? ParentId { get; set; }
         public int? EventId { get; set; }
         public FieldType Type { get; set; }

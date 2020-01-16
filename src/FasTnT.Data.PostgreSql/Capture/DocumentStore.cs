@@ -1,7 +1,9 @@
 ﻿using Dapper;
 using Faithlife.Utility.Dapper;
+using FasTnT.Data.PostgreSql.Capture;
 using FasTnT.Domain.Data;
 using FasTnT.Domain.Data.Model;
+using MoreLinq;
 using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
@@ -20,23 +22,20 @@ namespace FasTnT.PostgreSql.Capture
         public async Task Capture(CaptureDocumentRequest request)
         {
             var headerId = await PersistHeader(request);
-            await StoreStandardBusinessHeader(request, headerId);
-            await StoreCustomFields(request, headerId);
 
-            // TODO: store events and masterdata.
+            await EpcisEventStore.StoreEpcisEvents(request, _connection, headerId);
+            await EpcisMasterdataStore.StoreEpcisMasterdata(request, _connection, headerId);
         }
 
         private async Task<int> PersistHeader(CaptureDocumentRequest request)
         {
             var parameters = new { request.Payload.Header.DocumentTime, request.Payload.Header.RecordTime, UserId = request.User.Id };
-            var commandDefinition = new CommandDefinition(
-                commandText: CaptureEpcisDocumentCommands.PersistHeader,
-                parameters: parameters,
-                transaction: request.Transaction,
-                cancellationToken: request.CancellationToken
-            );
+            var headerId = await _connection.ExecuteScalarAsync<int>(new CommandDefinition(CaptureEpcisDocumentCommands.PersistHeader, parameters, request.Transaction, cancellationToken: request.CancellationToken));
 
-            return await _connection.QuerySingleAsync<int>(commandDefinition);
+            await StoreStandardBusinessHeader(request, headerId);
+            await StoreCustomFields(request, headerId);
+
+            return headerId;
         }
 
         private async Task StoreCustomFields(CaptureDocumentRequest request, int headerId)
@@ -44,41 +43,25 @@ namespace FasTnT.PostgreSql.Capture
             var customFields = request.Payload.Header.CustomFields;
 
             if (customFields == null || !customFields.Any()) return;
+            customFields.ForEach(x => x.HeaderId = headerId);
 
-            var parameters = customFields.Select(c => new
-            {
-                HeaderId = headerId,
-                c.Children,
-                c.DateValue,
-                c.Name,
-                c.Namespace,
-                c.NumericValue,
-                c.TextValue,
-                c.Type
-            });
-
-            await _connection.BulkInsertAsync(CaptureEpcisDocumentCommands.PersistHeader, parameters, request.Transaction, cancellationToken: request.CancellationToken);
+            await _connection.BulkInsertAsync(CaptureEpcisDocumentCommands.PersistHeader, customFields, request.Transaction, cancellationToken: request.CancellationToken);
         }
 
         private async Task StoreStandardBusinessHeader(CaptureDocumentRequest request, int headerId)
         {
+            if (request.Payload.Header.StandardBusinessHeader == null) return;
+
+            request.Payload.Header.StandardBusinessHeader.Id = headerId;
+
+            await _connection.ExecuteAsync(new CommandDefinition(CaptureEpcisDocumentCommands.PersistStandardHeader, request.Payload.Header.StandardBusinessHeader, request.Transaction, cancellationToken: request.CancellationToken));
+
             var contactInformations = request.Payload.Header.StandardBusinessHeader?.ContactInformations;
 
             if (contactInformations == null || !contactInformations.Any()) return;
+            contactInformations.ForEach((x, i) => { x.HeaderId = headerId; x.Id = i; });
 
-            var parameters = contactInformations.Select(ci => new
-            {
-                HeaderId = headerId,
-                ci.Contact,
-                ci.EmailAddress,
-                ci.Identifier,
-                ci.TelephoneNumber,
-                ci.Type,
-                ci.FaxNumber,
-                ci.ContactTypeIdentifier
-            });
-
-            await _connection.BulkInsertAsync("", parameters, request.Transaction, cancellationToken: request.CancellationToken);
+            await _connection.BulkInsertAsync(CaptureEpcisDocumentCommands.PersistContactInformations, contactInformations, request.Transaction, cancellationToken: request.CancellationToken);
         }
     }
 }
