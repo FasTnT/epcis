@@ -27,7 +27,7 @@ namespace FasTnT.UnitTest.Handlers
             Handler = new PollHandler(new [] { Query.Object });
 
             Query.SetupGet(x => x.Name).Returns("ExampleQuery");
-            Query.Setup(x => x.Handle(It.IsAny<QueryParameter[]>(), CancellationToken)).Returns(Task.FromResult<IEpcisResponse>(new PollResponse()));
+            Query.Setup(x => x.Handle(It.IsAny<QueryParameter[]>(), CancellationToken)).Returns(Task.FromResult(new PollResponse()));
         }
 
         public override void When()

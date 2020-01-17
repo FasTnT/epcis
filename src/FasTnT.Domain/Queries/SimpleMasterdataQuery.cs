@@ -11,7 +11,7 @@ namespace FasTnT.Domain.Queries
         public string Name => "SimpleMasterdataQuery";
         public bool AllowSubscription => false;
 
-        public Task<IEpcisResponse> Handle(QueryParameter[] parameters, CancellationToken cancellationToken)
+        public Task<PollResponse> Handle(QueryParameter[] parameters, CancellationToken cancellationToken)
         {
             throw new EpcisException(ExceptionType.ImplementationException, "SimpleEventQuery is not implemented yet");
         }

@@ -64,7 +64,7 @@ namespace FasTnT.Domain.Queries
         public string Name => "SimpleEventQuery";
         public bool AllowSubscription => true;
 
-        public async Task<IEpcisResponse> Handle(QueryParameter[] parameters, CancellationToken cancellationToken)
+        public async Task<PollResponse> Handle(QueryParameter[] parameters, CancellationToken cancellationToken)
         {
             foreach(var parameter in parameters)
             {
