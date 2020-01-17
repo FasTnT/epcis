@@ -43,5 +43,17 @@ namespace FasTnT.UnitTest.Handlers
         {
             Assert.IsNotNull(Response);
         }
+
+        [TestMethod]
+        public void TheUserShouldBeAuthorized()
+        {
+            Assert.AreEqual(true, Response.Authorized);
+        }
+
+        [TestMethod]
+        public void TheResponseShouldContainTheUserRetrievedFromTheDatabase()
+        {
+            Assert.IsNotNull(Response.User);
+        }
     }
 }

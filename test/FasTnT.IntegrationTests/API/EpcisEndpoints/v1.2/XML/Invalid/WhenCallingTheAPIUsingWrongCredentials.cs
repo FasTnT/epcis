@@ -17,8 +17,7 @@ namespace FasTnT.IntegrationTests.API.EpcisEndpoints.v1._2.XML.Invalid
             Result = Client.PostAsync("/v1_2/Query", new StringContent(File.ReadAllText("Requests/XML/Poll.xml"), Encoding.UTF8, "application/xml")).Result;
         }
 
-        // TODO: wait for authentication to be implemented.
-        [Assert, Ignore]
+        [Assert]
         public void ItShouldReturnHttp401Unauthorized() => Assert.AreEqual(HttpStatusCode.Unauthorized, Result.StatusCode);
     }
 }

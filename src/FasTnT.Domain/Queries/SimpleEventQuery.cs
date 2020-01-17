@@ -40,7 +40,7 @@ namespace FasTnT.Domain.Queries
             //{ "^EQ_(source|destination)_",     (fetcher, param) => ApplySourceDestinationParameter(param, fetcher) },
             { "^EQ_bizTransaction_",           (fetcher, param) => fetcher.Apply(new BusinessTransactionFilter { TransactionType = "", Values = param.Values }) },
             { "^(GE|LT)_eventTime",            (fetcher, param) => fetcher.Apply(new ComparisonParameterFilter { Field = EpcisField.CaptureTime, Comparator = param.GetComparator(), Value = param.GetValue<DateTime>() }) },
-            { "^(GE|LT)_recordTime",           (fetcher, param) => fetcher.Apply(new ComparisonParameterFilter { Field = EpcisField.CaptureTime, Comparator = param.GetComparator(), Value = param.GetValue<DateTime>() }) },
+            { "^(GE|LT)_recordTime",           (fetcher, param) => fetcher.Apply(new ComparisonParameterFilter { Field = EpcisField.RecordTime, Comparator = param.GetComparator(), Value = param.GetValue<DateTime>() }) },
             { "^MATCH_",                       (fetcher, param) => fetcher.Apply(new MatchEpcFilter { EpcType = param.GetMatchEpcTypes(), Values = param.Values.Select(x => x.Replace("*", "%")).ToArray() }) },
             { "^(EQ|GT|LT|GE|LE)_quantity$",   (fetcher, param) => fetcher.Apply(new QuantityFilter { Operator = param.GetComparator(), Value = param.GetValue<double>() }) },
             { "^(EQ|GT|LT|GE|LE)_INNER_ILMD_", (fetcher, param) => fetcher.Apply(new CustomFieldFilter { Field = param.GetField(FieldType.Ilmd, true), Comparator = param.GetComparator(), IsInner = true, Values = param.Values }) },

@@ -4,6 +4,7 @@ using FasTnT.Data.PostgreSql.Utils;
 using FasTnT.Domain.Data.Model;
 using FasTnT.Model;
 using MoreLinq;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
@@ -39,12 +40,6 @@ namespace FasTnT.PostgreSql.Capture
             }
         }
 
-        private async static Task StoreEpcs(CaptureDocumentRequest request, IDbConnection connection)
-        {
-            var epcs = request.Payload.EventList.SelectMany(e => { e.Epcs.ForEach(x => x.EventId = e.Id); return e.Epcs; });
-            await connection.BulkInsertAsync(CaptureEpcisEventCommand.StoreEpcs, epcs, request.Transaction, cancellationToken: request.CancellationToken);
-        }
-
         private async static Task StoreCustomFields(CaptureDocumentRequest request, IDbConnection connection)
         {
             var fields = new List<CustomField>();
@@ -53,16 +48,14 @@ namespace FasTnT.PostgreSql.Capture
             await connection.BulkInsertAsync(CaptureEpcisEventCommand.StoreCustomField, fields, request.Transaction, cancellationToken: request.CancellationToken);
         }
 
-        private async static Task StoreSourceDestinations(CaptureDocumentRequest request, IDbConnection connection)
-        {
-            var sourceDest = request.Payload.EventList.SelectMany(e => { e.SourceDestinationList.ForEach(sd => sd.EventId = e.Id); return e.SourceDestinationList; });
-            await connection.BulkInsertAsync(CaptureEpcisEventCommand.StoreSourceDestination, sourceDest, request.Transaction, cancellationToken: request.CancellationToken);
-        }
+        private async static Task StoreEpcs(CaptureDocumentRequest request, IDbConnection connection) => await Store(connection, request, e => { e.Epcs.ForEach(x => x.EventId = e.Id); return e.Epcs; }, CaptureEpcisEventCommand.StoreEpcs);
+        private async static Task StoreSourceDestinations(CaptureDocumentRequest request, IDbConnection connection) => await Store(connection, request, e => { e.SourceDestinationList.ForEach(sd => sd.EventId = e.Id); return e.SourceDestinationList; }, CaptureEpcisEventCommand.StoreSourceDestination);
+        private async static Task StoreBusinessTransactions(CaptureDocumentRequest request, IDbConnection connection) => await Store(connection, request, e => { e.BusinessTransactions.ForEach(x => x.EventId = e.Id); return e.BusinessTransactions; }, CaptureEpcisEventCommand.StoreBusinessTransaction);
 
-        private async static Task StoreBusinessTransactions(CaptureDocumentRequest request, IDbConnection connection)
+        private async static Task Store<T>(IDbConnection connection, CaptureDocumentRequest request, Func<EpcisEvent, IEnumerable<T>> selector, string command)
         {
-            var tx = request.Payload.EventList.SelectMany(e => { e.BusinessTransactions.ForEach(x => x.EventId = e.Id); return e.BusinessTransactions; });
-            await connection.BulkInsertAsync(CaptureEpcisEventCommand.StoreBusinessTransaction, tx, request.Transaction, cancellationToken: request.CancellationToken);
+            var selectedData = request.Payload.EventList.SelectMany(selector);
+            await connection.BulkInsertAsync(CaptureEpcisEventCommand.StoreSourceDestination, selectedData, request.Transaction, cancellationToken: request.CancellationToken);
         }
 
         private async static Task StoreErrorDeclaration(CaptureDocumentRequest request, IDbConnection connection)
