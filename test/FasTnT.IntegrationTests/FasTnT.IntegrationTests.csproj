@@ -57,6 +57,9 @@
     <None Update="Requests\Soap\ListSubscriptionIDs.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="Requests\XML\Masterdata.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Requests\XML\Capture.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
