@@ -57,6 +57,12 @@
     <None Update="Requests\Soap\ListSubscriptionIDs.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="Requests\XML\Capture.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Requests\XML\Poll_Unknown.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Requests\XML\Poll.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

@@ -55,7 +55,9 @@ namespace FasTnT.PostgreSql.Capture
         private async static Task Store<T>(IDbConnection connection, CaptureDocumentRequest request, Func<EpcisEvent, IEnumerable<T>> selector, string command)
         {
             var selectedData = request.Payload.EventList.SelectMany(selector);
-            await connection.BulkInsertAsync(CaptureEpcisEventCommand.StoreSourceDestination, selectedData, request.Transaction, cancellationToken: request.CancellationToken);
+            if (selectedData == null || !selectedData.Any()) return;
+
+            await connection.BulkInsertAsync(command, selectedData, request.Transaction, cancellationToken: request.CancellationToken);
         }
 
         private async static Task StoreErrorDeclaration(CaptureDocumentRequest request, IDbConnection connection)
