@@ -3,47 +3,14 @@ using FasTnT.Parsers.Xml.Formatters.Implementation;
 using FasTnT.Parsers.Xml.Utils;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 using System.Xml.Linq;
 
 namespace FasTnT.Parsers.Xml.Formatters
 {
-    public class XmlResponseFormatter
+    public class XmlResponseFormatter : BaseXmlFormatter
     {
-        private const SaveOptions Options = SaveOptions.DisableFormatting | SaveOptions.OmitDuplicateNamespaces;
-
-        public async Task Write(IEpcisResponse entity, Stream output, CancellationToken cancellationToken)
-        {
-            if (entity == default(IEpcisResponse)) return;
-            
-            await Format(entity).SaveAsync(output, Options, cancellationToken);
-        }
-
-        private XDocument Format(IEpcisResponse entity)
-        {
-            switch (entity)
-            {
-                case GetStandardVersionResponse getStandardVersionResponse:
-                    return FormatInternal(getStandardVersionResponse);
-                case GetVendorVersionResponse getVendorVersionResponse:
-                    return FormatInternal(getVendorVersionResponse);
-                case ExceptionResponse exceptionResponse:
-                    return FormatInternal(exceptionResponse);
-                case GetQueryNamesResponse getQueryNamesResponse:
-                    return FormatInternal(getQueryNamesResponse);
-                case GetSubscriptionIdsResponse getSubscriptionIdsResponse:
-                    return FormatInternal(getSubscriptionIdsResponse);
-                case PollResponse pollResponse:
-                    return FormatInternal(pollResponse);
-                default:
-                    throw new NotImplementedException($"Unable to format '{entity.GetType()}'");
-            }
-        }
-
-        protected XDocument FormatInternal(PollResponse response)
+        public override XDocument FormatInternal(PollResponse response)
         {
             var formatted = CreateResponse("EPCISQueryDocument");
             var resultName = "EventList";
@@ -73,7 +40,7 @@ namespace FasTnT.Parsers.Xml.Formatters
             return formatted;
         }
 
-        protected XDocument FormatInternal(GetVendorVersionResponse response)
+        public override XDocument FormatInternal(GetVendorVersionResponse response)
         {
             var formatted = CreateResponse("EPCISQueryDocument");
             formatted.Root.Add(new XElement("EPCISBody", new XElement(XName.Get("GetVendorVersionResult", EpcisNamespaces.Query), response.Version)));
@@ -81,7 +48,7 @@ namespace FasTnT.Parsers.Xml.Formatters
             return formatted;
         }
 
-        protected XDocument FormatInternal(GetSubscriptionIdsResponse response)
+        public override XDocument FormatInternal(GetSubscriptionIdsResponse response)
         {
             var formatted = CreateResponse("EPCISQueryDocument");
             formatted.Root.Add(new XElement("EPCISBody", new XElement(XName.Get("GetSubscriptionIDsResult", EpcisNamespaces.Query), response.SubscriptionIds.Select(x => new XElement("string", x)))));
@@ -89,7 +56,7 @@ namespace FasTnT.Parsers.Xml.Formatters
             return formatted;
         }
 
-        protected XDocument FormatInternal(GetStandardVersionResponse response)
+        public override XDocument FormatInternal(GetStandardVersionResponse response)
         {
             var formatted = CreateResponse("EPCISQueryDocument");
             formatted.Root.Add(new XElement("EPCISBody", new XElement(XName.Get("GetStandardVersionResult", EpcisNamespaces.Query), response.Version)));
@@ -97,7 +64,7 @@ namespace FasTnT.Parsers.Xml.Formatters
             return formatted;
         }
 
-        protected XDocument FormatInternal(GetQueryNamesResponse response)
+        public override XDocument FormatInternal(GetQueryNamesResponse response)
         {
             var formatted = CreateResponse("EPCISQueryDocument");
             formatted.Root.Add(
@@ -107,17 +74,7 @@ namespace FasTnT.Parsers.Xml.Formatters
             return formatted;
         }
 
-        //protected XDocument FormatInternal(GetSubscriptionIdsResult response)
-        //{
-        //    var formatted = CreateResponse("EPCISQueryDocument");
-        //    formatted.Root.Add(
-        //        new XElement("EPCISBody", new XElement(XName.Get("GetSubscriptionIDsResult", EpcisNamespaces.Query), response.SubscriptionIds?.Select(x => new XElement("string", x))))
-        //    );
-
-        //    return formatted;
-        //}
-
-        protected XDocument FormatInternal(ExceptionResponse response)
+        public override XDocument FormatInternal(ExceptionResponse response)
         {
             var formatted = CreateResponse(response.Exception, false);
             formatted.Root.Add(!string.IsNullOrEmpty(response.Reason) ? new XElement("reason", response.Reason) : null);

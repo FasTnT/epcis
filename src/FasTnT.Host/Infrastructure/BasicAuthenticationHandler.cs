@@ -62,7 +62,7 @@ namespace FasTnT.Host
                 var principal = new ClaimsPrincipal(new ClaimsIdentity(claims, Scheme.Name));
                 var ticket = new AuthenticationTicket(principal, Scheme.Name);
 
-                context.User = new Model.Users.User { Id = 1, UserName = username };
+                context.User = response.User;
 
                 return AuthenticateResult.Success(ticket);
             }

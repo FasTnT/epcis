@@ -73,7 +73,7 @@ namespace FasTnT.Data.PostgreSql.DataRetrieval {
         ///   Looks up a localized string similar to SELECT event_id, epc as id, type, is_quantity, quantity, unit_of_measure FROM epcis.epc WHERE event_id = ANY(@eventids);
         ///SELECT event_id, field_id as id, parent_id, namespace, name, type, text_value, numeric_value, date_value FROM epcis.custom_field WHERE event_id = ANY(@eventids);
         ///SELECT event_id, transaction_type as type, transaction_id as id FROM epcis.business_transaction WHERE event_id = ANY(@eventids);
-        ///SELECT event_id, type, source_dest_id as id, direction FROM epcis.source_destination WHERE event_id  [rest of string was truncated]&quot;;.
+        ///SELECT event_id, type, source_dest_id as id, direction FROM epcis.source_destination WHERE event_ [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string RelatedQuery {
             get {

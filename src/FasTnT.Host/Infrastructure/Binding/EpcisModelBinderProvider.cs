@@ -1,12 +1,12 @@
-﻿using FasTnT.Commands.Responses;
+﻿using FasTnT.Domain;
 using FasTnT.Domain.Commands;
-using MediatR;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace FasTnT.Host.Infrastructure.Binding
 {
@@ -35,9 +35,10 @@ namespace FasTnT.Host.Infrastructure.Binding
 
             public async Task BindModelAsync(ModelBindingContext bindingContext)
             {
-                var httpCtx = bindingContext.HttpContext;
-                var formatter = _selector(httpCtx.GetFormatter());
-                var model = await formatter(httpCtx.Request.Body, httpCtx.RequestAborted);
+                var httpContext = bindingContext.HttpContext;
+                var requestContext = httpContext.RequestServices.GetService<RequestContext>();
+                var formatter = _selector(requestContext.Formatter);
+                var model = await formatter(httpContext.Request.Body, httpContext.RequestAborted);
 
                 bindingContext.Result = ModelBindingResult.Success(model);
             }

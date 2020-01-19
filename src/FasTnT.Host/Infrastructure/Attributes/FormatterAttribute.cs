@@ -3,6 +3,8 @@ using FasTnT.Parsers.Xml;
 using Microsoft.AspNetCore.Mvc.Filters;
 using System;
 using System.Collections.Generic;
+using Microsoft.Extensions.DependencyInjection;
+using FasTnT.Domain;
 
 namespace FasTnT.Host.Infrastructure.Attributes
 {
@@ -39,7 +41,7 @@ namespace FasTnT.Host.Infrastructure.Attributes
             public FormatterResourceFilter(ICommandFormatter formatter) => _formatter = formatter;
 
             public void OnResourceExecuted(ResourceExecutedContext context) { }
-            public void OnResourceExecuting(ResourceExecutingContext context) => context.HttpContext.SetFormatter(_formatter);
+            public void OnResourceExecuting(ResourceExecutingContext context) => context.HttpContext.RequestServices.GetService<RequestContext>().Formatter = _formatter;
         }
     }
 }

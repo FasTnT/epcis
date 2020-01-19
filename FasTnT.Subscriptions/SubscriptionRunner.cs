@@ -1,9 +1,7 @@
 ﻿using FasTnT.Commands.Responses;
 using FasTnT.Domain.Data;
-using FasTnT.Domain.Data.Model.Filters;
 using FasTnT.Domain.Model.Subscriptions;
 using FasTnT.Domain.Queries;
-using FasTnT.Model.Events.Enums;
 using System;
 using System.Linq;
 using System.Threading;
@@ -16,13 +14,14 @@ namespace FasTnT.Subscriptions
         private readonly IEpcisQuery[] _epcisQueries;
         private readonly IEventFetcher _eventFetcher;
         private readonly ISubscriptionManager _subscriptionManager;
-        //private readonly ISubscriptionResultSender _resultSender;
+        private readonly SubscriptionResultSender _resultSender;
 
-        public SubscriptionRunner(IEpcisQuery[] epcisQueries, IEventFetcher eventFetcher, ISubscriptionManager subscriptionManager)
+        public SubscriptionRunner(IEpcisQuery[] epcisQueries, IEventFetcher eventFetcher, ISubscriptionManager subscriptionManager, SubscriptionResultSender resultSender)
         {
             _epcisQueries = epcisQueries;
             _eventFetcher = eventFetcher;
             _subscriptionManager = subscriptionManager;
+            _resultSender = resultSender;
         }
 
         public async Task Run(Subscription subscription, CancellationToken cancellationToken)
@@ -31,7 +30,6 @@ namespace FasTnT.Subscriptions
             var response = default(PollResponse) ;
             try
             {
-
                 //var pendingRequests = await _subscriptionManager.GetPendingRequestIds(subscription.SubscriptionId, cancellationToken);
 
                 //if (pendingRequests.Any())
@@ -42,7 +40,7 @@ namespace FasTnT.Subscriptions
                 //    response.SubscriptionId = subscription.SubscriptionId;
                 //}
 
-                //await SendSubscriptionResults(subscription, response);
+                await SendSubscriptionResults(subscription, response, cancellationToken);
                 //await _subscriptionManager.AcknowledgePendingRequests(subscription.SubscriptionId, pendingRequests, cancellationToken);
                 //await _subscriptionManager.RegisterSubscriptionTrigger(subscription.SubscriptionId, SubscriptionResult.Success, default, cancellationToken);
             }
@@ -52,11 +50,11 @@ namespace FasTnT.Subscriptions
             }
         }
 
-        private async Task SendSubscriptionResults(Subscription subscription, PollResponse response)
+        private async Task SendSubscriptionResults(Subscription subscription, PollResponse response, CancellationToken cancellationToken)
         {
             if (response.EventList.Count() > 0 || subscription.ReportIfEmpty)
             {
-                //await _resultSender.Send(subscription.Destination, response);
+                await _resultSender.Send(subscription.Destination, response, cancellationToken);
             }
         }
     }
