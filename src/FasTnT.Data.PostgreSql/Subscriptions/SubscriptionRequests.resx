@@ -118,12 +118,27 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="AcknowledgePendingRequests" xml:space="preserve">
-    <value>TODO</value>
+    <value>DELETE FROM subscriptions.pendingrequest WHERE subscription_id = (SELECT id FROM subscriptions.subscription WHERE subscription_id = @SubscriptionId) AND request_id = ANY(@RequestIds);</value>
   </data>
   <data name="DeleteSubscription" xml:space="preserve">
-    <value>TODO</value>
+    <value>DELETE from subscriptions.subscription WHERE subscription_id = @SubcriptionId;</value>
+  </data>
+  <data name="GetAllSubscriptions" xml:space="preserve">
+    <value>SELECT s.id, s.destination, s.subscription_id, s.query_name, s.active, s.trigger, s.report_if_empty, s.schedule_minutes, s.schedule_seconds, s.schedule_hours, s.schedule_month, s.schedule_day_of_month, s.schedule_day_of_week FROM subscriptions.subscription s;</value>
+  </data>
+  <data name="GetSubscriptionById" xml:space="preserve">
+    <value>SELECT s.id, s.destination, s.subscription_id, s.query_name, s.active, s.trigger, s.report_if_empty, s.schedule_minutes, s.schedule_seconds, s.schedule_hours, s.schedule_month, s.schedule_day_of_month, s.schedule_day_of_week FROM subscriptions.subscription s WHERE s.subscription_id = @SubscriptionId;</value>
+  </data>
+  <data name="ListParameters" xml:space="preserve">
+    <value>SELECT p.subscription_id, p.name, pv.value FROM subscriptions.parameter p INNER JOIN subscriptions.parameter_value pv ON pv.parameter_id = p.id WHERE p.subscription_id = ANY(@SubscriptionIds);</value>
+  </data>
+  <data name="ListPendingRequests" xml:space="preserve">
+    <value>SELECT pr.request_id FROM subscriptions.pendingrequest pr JOIN subscriptions.subscription s ON s.id = pr.subscription_id WHERE s.subscription_id = @SubscriptionId;</value>
+  </data>
+  <data name="ListSubscriptionIds" xml:space="preserve">
+    <value>SELECT s.subscription_id FROM subscriptions.subscription s WHERE s.active = true;</value>
   </data>
   <data name="RegisterTrigger" xml:space="preserve">
-    <value>TODO</value>
+    <value>INSERT INTO subscriptions.trigger(id, subscription_id, trigger_time, status, reason) VALUES(@Id, (SELECT id FROM subscriptions.subscription WHERE subscription_id = @SubscriptionId), NOW(), @Result, @Reason);</value>
   </data>
 </root>

@@ -6,7 +6,7 @@ namespace FasTnT.Domain.Data
 {
     public interface ISubscriptionManager
     {
-        Task<string[]> GetSubscriptionIds();
+        Task<string[]> GetSubscriptionIds(CancellationToken cancellationToken);
         Task<Subscription[]> GetAll(CancellationToken cancellationToken);
         Task<Subscription> GetById(string subscriptionId, CancellationToken cancellationToken);
         Task Delete(int subscriptionId, CancellationToken cancellationToken);

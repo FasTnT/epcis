@@ -61,7 +61,7 @@ namespace FasTnT.Data.PostgreSql.Subscriptions {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to TODO.
+        ///   Looks up a localized string similar to DELETE FROM subscriptions.pendingrequest WHERE subscription_id = (SELECT id FROM subscriptions.subscription WHERE subscription_id = @SubscriptionId) AND request_id = ANY(@RequestIds);.
         /// </summary>
         internal static string AcknowledgePendingRequests {
             get {
@@ -70,7 +70,7 @@ namespace FasTnT.Data.PostgreSql.Subscriptions {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to TODO.
+        ///   Looks up a localized string similar to DELETE from subscriptions.subscription WHERE subscription_id = @SubcriptionId;.
         /// </summary>
         internal static string DeleteSubscription {
             get {
@@ -79,7 +79,52 @@ namespace FasTnT.Data.PostgreSql.Subscriptions {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to TODO.
+        ///   Looks up a localized string similar to SELECT s.id, s.destination, s.subscription_id, s.query_name, s.active, s.trigger, s.report_if_empty, s.schedule_minutes, s.schedule_seconds, s.schedule_hours, s.schedule_month, s.schedule_day_of_month, s.schedule_day_of_week FROM subscriptions.subscription s;.
+        /// </summary>
+        internal static string GetAllSubscriptions {
+            get {
+                return ResourceManager.GetString("GetAllSubscriptions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to SELECT s.id, s.destination, s.subscription_id, s.query_name, s.active, s.trigger, s.report_if_empty, s.schedule_minutes, s.schedule_seconds, s.schedule_hours, s.schedule_month, s.schedule_day_of_month, s.schedule_day_of_week FROM subscriptions.subscription s WHERE s.subscription_id = @SubscriptionId;.
+        /// </summary>
+        internal static string GetSubscriptionById {
+            get {
+                return ResourceManager.GetString("GetSubscriptionById", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to SELECT p.subscription_id, p.name, pv.value FROM subscriptions.parameter p INNER JOIN subscriptions.parameter_value pv ON pv.parameter_id = p.id WHERE p.subscription_id = ANY(@SubscriptionIds);.
+        /// </summary>
+        internal static string ListParameters {
+            get {
+                return ResourceManager.GetString("ListParameters", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to SELECT pr.request_id FROM subscriptions.pendingrequest pr JOIN subscriptions.subscription s ON s.id = pr.subscription_id WHERE s.subscription_id = @SubscriptionId;.
+        /// </summary>
+        internal static string ListPendingRequests {
+            get {
+                return ResourceManager.GetString("ListPendingRequests", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to SELECT s.subscription_id FROM subscriptions.subscription s WHERE s.active = true;.
+        /// </summary>
+        internal static string ListSubscriptionIds {
+            get {
+                return ResourceManager.GetString("ListSubscriptionIds", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to INSERT INTO subscriptions.trigger(id, subscription_id, trigger_time, status, reason) VALUES(@Id, (SELECT id FROM subscriptions.subscription WHERE subscription_id = @SubscriptionId), NOW(), @Result, @Reason);.
         /// </summary>
         internal static string RegisterTrigger {
             get {

@@ -18,7 +18,7 @@ namespace FasTnT.Domain.Handlers.GetSubscriptionIds
 
         public async Task<IEpcisResponse> Handle(GetSubscriptionIdsRequest request, CancellationToken cancellationToken)
         {
-            var subscriptionIds = await _subscriptionManager.GetSubscriptionIds();
+            var subscriptionIds = await _subscriptionManager.GetSubscriptionIds(cancellationToken);
 
             return new GetSubscriptionIdsResponse { SubscriptionIds = subscriptionIds };
         }

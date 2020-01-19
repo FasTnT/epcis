@@ -27,7 +27,7 @@ namespace FasTnT.UnitTest.Handlers
             Request = new GetSubscriptionIdsRequest { QueryName = "TestQuery" };
             Handler = new GetSubscriptionIdsHandler(SubscriptionManager.Object);
 
-            SubscriptionManager.Setup(x => x.GetSubscriptionIds()).Returns(() => Task.FromResult(SubscriptionIds));
+            SubscriptionManager.Setup(x => x.GetSubscriptionIds(It.IsAny<CancellationToken>())).Returns(() => Task.FromResult(SubscriptionIds));
         }
 
         public override void When()
@@ -38,7 +38,7 @@ namespace FasTnT.UnitTest.Handlers
         [TestMethod]
         public void ItShouldCallTheSubscriptionManagerGetSubscriptionIdsMethod()
         {
-            SubscriptionManager.Verify(x => x.GetSubscriptionIds(), Times.Once);
+            SubscriptionManager.Verify(x => x.GetSubscriptionIds(CancellationToken), Times.Once);
         }
 
         [TestMethod]
