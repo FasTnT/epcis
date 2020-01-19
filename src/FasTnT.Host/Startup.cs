@@ -7,20 +7,12 @@ using Microsoft.Extensions.Hosting;
 using FasTnT.Host.Infrastructure.Binding;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authentication;
-using System.Data;
 using MediatR;
-using Npgsql;
-using System;
 using FasTnT.Domain;
-using FasTnT.Domain.Data;
-using FasTnT.PostgreSql;
-using FasTnT.PostgreSql.Capture;
-using FasTnT.PostgreSql.Migration;
-using IHostingEnvironment = Microsoft.AspNetCore.Hosting.IHostingEnvironment;
 using FasTnT.Domain.Queries;
-using FasTnT.Data.PostgreSql.DataRetrieval;
-using FasTnT.Data.PostgreSql.Subscriptions;
 using FasTnT.Data.PostgreSql;
+using FasTnT.Subscriptions;
+using IHostingEnvironment = Microsoft.AspNetCore.Hosting.IHostingEnvironment;
 
 namespace FasTnT.Host
 {
@@ -48,13 +40,13 @@ namespace FasTnT.Host
         {
             services.AddMediatR(Constants.Assembly);
             services.AddScoped<RequestContext>();
-
-            // Add Storage services
-            services.AddEpcisPersistence(Configuration.GetConnectionString("FasTnT.Database"));
-
             // Add Domain services
             services.AddScoped<IEpcisQuery, SimpleEventQuery>();
             services.AddScoped<IEpcisQuery, SimpleMasterdataQuery>();
+
+            // Add Storage services
+            services.AddEpcisPersistence(Configuration.GetConnectionString("FasTnT.Database"))
+                    .AddBackgroundSubscriptionService();
 
             services.AddMvc(ConfigureMvsOptions)
                     .AddApplicationPart(typeof(Startup).Assembly)

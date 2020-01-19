@@ -8,6 +8,7 @@ using MediatR;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace FasTnT.UnitTest.Handlers
 {
@@ -29,7 +30,7 @@ namespace FasTnT.UnitTest.Handlers
             Request = new UnsubscribeRequest { SubscriptionId = "test-subscription" };
             Handler = new UnsubscribeHandler(SubscriptionManager.Object, Mediator.Object);
 
-            SubscriptionManager.Setup(x => x.GetSubscriptionById(It.IsAny<string>())).Returns(new Subscription());
+            SubscriptionManager.Setup(x => x.GetById(It.IsAny<string>(), It.IsAny<CancellationToken>())).Returns(Task.FromResult(new Subscription()));
         }
 
         public override void When()

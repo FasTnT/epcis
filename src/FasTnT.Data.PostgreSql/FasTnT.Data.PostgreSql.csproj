@@ -49,6 +49,11 @@
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
     </Compile>
+    <Compile Update="Subscriptions\SubscriptionRequests.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>SubscriptionRequests.resx</DependentUpon>
+    </Compile>
     <Compile Update="Users\PgSqlUserRequests.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
@@ -76,6 +81,10 @@
     <EmbeddedResource Update="Migration\DatabaseSqlRequests.resx">
       <LastGenOutput>DatabaseSqlRequests.Designer.cs</LastGenOutput>
       <Generator>PublicResXFileCodeGenerator</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Subscriptions\SubscriptionRequests.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>SubscriptionRequests.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Update="Users\PgSqlUserRequests.resx">
       <Generator>ResXFileCodeGenerator</Generator>

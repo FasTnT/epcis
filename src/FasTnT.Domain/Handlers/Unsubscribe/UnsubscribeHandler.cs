@@ -22,7 +22,7 @@ namespace FasTnT.Domain.Handlers.Unsubscribe
 
         public async Task<IEpcisResponse> Handle(UnsubscribeRequest request, CancellationToken cancellationToken)
         {
-            var subscription = _subscriptionManager.GetSubscriptionById(request.SubscriptionId);
+            var subscription = _subscriptionManager.GetById(request.SubscriptionId, cancellationToken);
 
             if (subscription == null)
             {
