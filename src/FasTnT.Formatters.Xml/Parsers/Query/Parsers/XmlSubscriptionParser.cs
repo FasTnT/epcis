@@ -1,5 +1,8 @@
 ﻿using FasTnT.Commands.Requests;
 using FasTnT.Domain.Commands;
+using FasTnT.Domain.Model.Subscriptions;
+using System;
+using System.Linq;
 using System.Xml.Linq;
 
 namespace FasTnT.Parsers.Xml.Query
@@ -8,20 +11,19 @@ namespace FasTnT.Parsers.Xml.Query
     {
         public static IQueryRequest ParseSubscription(XElement element)
         {
-            var subscription = new SubscribeRequest
+            var subscription = new Subscription
             {
-                // TODO
-                //SubscriptionId = element.Element("subscriptionID").Value,
-                //QueryName = element.Element("queryName").Value,
-                //Destination = element.Element("dest").Value,
-                //Trigger = element.Element("controls")?.Element("trigger")?.Value,
-                //ReportIfEmpty = bool.Parse(element.Element("controls").Element("reportIfEmpty").Value),
-                //InitialRecordTime = DateTime.TryParse(element.Element("controls")?.Element("initialRecordTime")?.Value ?? "", out DateTime date) ? date : default(DateTime?), 
-                //Parameters = XmlPollQueryParser.ParseParameters(element.Element("params")?.Elements()).ToArray()
+                SubscriptionId = element.Element("subscriptionID").Value,
+                QueryName = element.Element("queryName").Value,
+                Destination = element.Element("dest").Value,
+                Trigger = element.Element("controls")?.Element("trigger")?.Value,
+                ReportIfEmpty = bool.Parse(element.Element("controls").Element("reportIfEmpty").Value),
+                InitialRecordTime = DateTime.TryParse(element.Element("controls")?.Element("initialRecordTime")?.Value ?? "", out DateTime date) ? date : default(DateTime?),
+                Parameters = XmlPollQueryParser.ParseParameters(element.Element("params")?.Elements()).ToArray()
             };
-            //subscription.Schedule = ParseQuerySchedule(element.Element("controls")?.Element("schedule"));
+            subscription.Schedule = ParseQuerySchedule(element.Element("controls")?.Element("schedule"));
 
-            return subscription;
+            return new SubscribeRequest { Subscription = subscription };
         }
 
         public static IQueryRequest ParseUnsubscription(XElement element)
@@ -32,18 +34,17 @@ namespace FasTnT.Parsers.Xml.Query
             };
         }
 
-        private static IQueryRequest ParseQuerySchedule(XElement element)
+        private static QuerySchedule ParseQuerySchedule(XElement element)
         {
-            return null; // TODO
-            //return element == default ? null : new QuerySchedule
-            //{
-            //    Second = element.Element("second")?.Value,
-            //    Minute = element.Element("minute")?.Value,
-            //    Hour = element.Element("hour")?.Value,
-            //    Month = element.Element("month")?.Value,
-            //    DayOfMonth = element.Element("dayOfMonth")?.Value,
-            //    DayOfWeek = element.Element("dayOfWeek")?.Value
-            //};
+            return element == default ? null : new QuerySchedule
+            {
+                Second = element.Element("second")?.Value,
+                Minute = element.Element("minute")?.Value,
+                Hour = element.Element("hour")?.Value,
+                Month = element.Element("month")?.Value,
+                DayOfMonth = element.Element("dayOfMonth")?.Value,
+                DayOfWeek = element.Element("dayOfWeek")?.Value
+            };
         }
     }
 }

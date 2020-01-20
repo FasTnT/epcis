@@ -8,6 +8,8 @@ namespace FasTnT.Subscriptions
         public static IServiceCollection AddBackgroundSubscriptionService(this IServiceCollection services)
         {
             services.AddSingleton<IHostedService, SubscriptionBackgroundService>();
+            services.AddScoped<SubscriptionRunner>();
+            services.AddScoped<SubscriptionResultSender>();
 
             return services;
         }

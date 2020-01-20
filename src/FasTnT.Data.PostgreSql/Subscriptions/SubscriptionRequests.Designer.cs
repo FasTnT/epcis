@@ -70,7 +70,7 @@ namespace FasTnT.Data.PostgreSql.Subscriptions {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to DELETE from subscriptions.subscription WHERE subscription_id = @SubcriptionId;.
+        ///   Looks up a localized string similar to DELETE from subscriptions.subscription WHERE id = @SubscriptionId;.
         /// </summary>
         internal static string DeleteSubscription {
             get {
@@ -106,7 +106,7 @@ namespace FasTnT.Data.PostgreSql.Subscriptions {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to SELECT pr.request_id FROM subscriptions.pendingrequest pr JOIN subscriptions.subscription s ON s.id = pr.subscription_id WHERE s.subscription_id = @SubscriptionId;.
+        ///   Looks up a localized string similar to SELECT pr.request_id FROM subscriptions.pendingrequest pr JOIN subscriptions.subscription s ON s.id = pr.subscription_id WHERE s.id = @SubscriptionId;.
         /// </summary>
         internal static string ListPendingRequests {
             get {
@@ -129,6 +129,33 @@ namespace FasTnT.Data.PostgreSql.Subscriptions {
         internal static string RegisterTrigger {
             get {
                 return ResourceManager.GetString("RegisterTrigger", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to INSERT INTO subscriptions.subscription(subscription_id, trigger, initial_record_time, report_if_empty, destination, query_name,  active, schedule_seconds, schedule_minutes, schedule_hours, schedule_month, schedule_day_of_month, schedule_day_of_week) VALUES(@subscriptionid, @trigger, @initialrecordtime, @reportifempty, @destination, @queryname, @active, @second, @minute, @hour, @month, @dayofmonth, @dayofweek) RETURNING id;.
+        /// </summary>
+        internal static string Store {
+            get {
+                return ResourceManager.GetString("Store", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to INSERT INTO subscriptions.parameter(subscription_id, name) VALUES(@subscriptionid, @name) ... RETURNING id;.
+        /// </summary>
+        internal static string StoreParameter {
+            get {
+                return ResourceManager.GetString("StoreParameter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to INSERT INTO subscriptions.parameter_value(parameter_id, value) VALUES(@parameterid, @value) ...;.
+        /// </summary>
+        internal static string StoreParameterValue {
+            get {
+                return ResourceManager.GetString("StoreParameterValue", resourceCulture);
             }
         }
     }

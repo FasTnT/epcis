@@ -10,32 +10,25 @@ namespace FasTnT.Domain.Handlers.CaptureEpcisDocument
 {
     public class CaptureEpcisDocumentHandler : IRequestHandler<CaptureEpcisDocumentRequest, IEpcisResponse>
     {
-        private ITransactionProvider _transactionProvider;
         private readonly RequestContext _context;
         private readonly IDocumentStore _documentStore;
 
-        public CaptureEpcisDocumentHandler(ITransactionProvider transactionProvider, RequestContext context, IDocumentStore documentStore)
+        public CaptureEpcisDocumentHandler(RequestContext context, IDocumentStore documentStore)
         {
-            _transactionProvider = transactionProvider;
             _context = context;
             _documentStore = documentStore;
         }
 
         public async Task<IEpcisResponse> Handle(CaptureEpcisDocumentRequest request, CancellationToken cancellationToken)
         {
-            using (var tx = _transactionProvider.BeginTransaction())
+            var captureRequest = new CaptureDocumentRequest
             {
-                var captureRequest = new CaptureDocumentRequest
-                {
-                    Payload = request,
-                    User = _context.User,
-                    Transaction = tx,
-                    CancellationToken = cancellationToken
-                };
+                Payload = request,
+                User = _context.User,
+                CancellationToken = cancellationToken
+            };
 
-                await _documentStore.Capture(captureRequest);
-                tx.Commit();
-            }
+            await _documentStore.Capture(captureRequest);
 
             return EmptyResponse.Value;
         }

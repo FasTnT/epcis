@@ -3,6 +3,7 @@ using FasTnT.Domain.Data;
 using FasTnT.Domain.Model.Subscriptions;
 using FasTnT.Domain.Queries;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -11,11 +12,11 @@ namespace FasTnT.Subscriptions
 {
     public class SubscriptionRunner
     {
-        private readonly IEpcisQuery[] _epcisQueries;
+        private readonly IEnumerable<IEpcisQuery> _epcisQueries;
         private readonly ISubscriptionManager _subscriptionManager;
         private readonly SubscriptionResultSender _resultSender;
 
-        public SubscriptionRunner(IEpcisQuery[] epcisQueries, ISubscriptionManager subscriptionManager, SubscriptionResultSender resultSender)
+        public SubscriptionRunner(IEnumerable<IEpcisQuery> epcisQueries, ISubscriptionManager subscriptionManager, SubscriptionResultSender resultSender)
         {
             _epcisQueries = epcisQueries;
             _subscriptionManager = subscriptionManager;
@@ -25,7 +26,7 @@ namespace FasTnT.Subscriptions
         public async Task Run(Subscription subscription, CancellationToken cancellationToken)
         {
             var query = _epcisQueries.Single(x => x.Name == subscription.QueryName);
-            var response = default(PollResponse);
+            var response = new PollResponse();
 
             try
             {

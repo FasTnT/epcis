@@ -30,7 +30,7 @@ namespace FasTnT.Domain.Handlers.Unsubscribe
             }
             else
             {
-                //await _subscriptionManager.DeleteSubscription(subscription.Id);
+                await _subscriptionManager.Delete(subscription.Id, cancellationToken);
                 await _mediator.Publish(new SubscriptionRemovedNotification(), cancellationToken);
             }
 

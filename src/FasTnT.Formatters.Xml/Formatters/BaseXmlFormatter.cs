@@ -13,7 +13,7 @@ namespace FasTnT.Parsers.Xml.Formatters
 
         public async Task Write(IEpcisResponse entity, Stream output, CancellationToken cancellationToken)
         {
-            if (entity == default(IEpcisResponse)) return;
+            if (entity == default || entity is EmptyResponse) return;
 
             await Format(entity).SaveAsync(output, Options, cancellationToken);
         }

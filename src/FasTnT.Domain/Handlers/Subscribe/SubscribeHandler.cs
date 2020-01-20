@@ -1,9 +1,11 @@
 ﻿using FasTnT.Commands.Requests;
 using FasTnT.Commands.Responses;
+using FasTnT.Domain.Data;
 using FasTnT.Domain.Notifications;
 using FasTnT.Domain.Queries;
 using FasTnT.Model.Exceptions;
 using MediatR;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -12,30 +14,32 @@ namespace FasTnT.Domain.Handlers.Subscribe
 {
     public class SubscribeHandler : IRequestHandler<SubscribeRequest, IEpcisResponse>
     {
-        private readonly IEpcisQuery[] _queries;
+        private readonly IEnumerable<IEpcisQuery> _queries;
+        private readonly ISubscriptionManager _subscriptionManager;
         private readonly IMediator _mediator;
 
-        public SubscribeHandler(IEpcisQuery[] queries, IMediator mediator)
+        public SubscribeHandler(IEnumerable<IEpcisQuery> queries, ISubscriptionManager subscriptionManager, IMediator mediator)
         {
             _queries = queries;
+            _subscriptionManager = subscriptionManager;
             _mediator = mediator;
         }
 
         public async Task<IEpcisResponse> Handle(SubscribeRequest request, CancellationToken cancellationToken)
         {
-            var query = _queries.SingleOrDefault(q => q.Name == request.QueryName);
+            var query = _queries.SingleOrDefault(q => q.Name == request.Subscription.QueryName);
 
             if (query == null)
             {
-                throw new EpcisException(ExceptionType.NoSuchNameException, $"Query with name '{request.QueryName}' is not implemented");
+                throw new EpcisException(ExceptionType.NoSuchNameException, $"Query with name '{request.Subscription.QueryName}' is not implemented");
             }
             else if (!query.AllowSubscription)
             {
-                throw new EpcisException(ExceptionType.SubscribeNotPermittedException, $"Query with name '{request.QueryName}' does not allow subscription");
+                throw new EpcisException(ExceptionType.SubscribeNotPermittedException, $"Query with name '{request.Subscription.QueryName}' does not allow subscription");
             }
             else
             {
-                // TODO: validate parameters and store subscription in Database
+                await _subscriptionManager.Store(request.Subscription, cancellationToken);
                 await _mediator.Publish(new SubscriptionCreatedNotification(), cancellationToken);
 
                 return EmptyResponse.Value;

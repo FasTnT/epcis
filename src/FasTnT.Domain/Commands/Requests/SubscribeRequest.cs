@@ -1,9 +1,10 @@
 ﻿using FasTnT.Domain.Commands;
+using FasTnT.Domain.Model.Subscriptions;
 
 namespace FasTnT.Commands.Requests
 {
     public class SubscribeRequest : IQueryRequest
     {
-        public string QueryName { get; set; }
+        public Subscription Subscription { get; set; }
     }
 }

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Dapper;
+using Faithlife.Utility.Dapper;
 using FasTnT.Domain.Data;
 using FasTnT.Domain.Model.Subscriptions;
 using FasTnT.Model.Queries;
@@ -18,6 +19,33 @@ namespace FasTnT.Data.PostgreSql.Subscriptions
         public SubscriptionManager(IDbConnection connection)
         {
             _connection = connection;
+        }
+
+        public async Task Store(Subscription subscription, CancellationToken cancellationToken)
+        {
+            var entity = new
+            {
+                Active = true,
+                subscription.SubscriptionId,
+                subscription.Trigger,
+                subscription.InitialRecordTime,
+                subscription.ReportIfEmpty,
+                subscription.Schedule?.Second,
+                subscription.Schedule?.Hour,
+                subscription.Schedule?.Minute,
+                subscription.Schedule?.Month,
+                subscription.Schedule?.DayOfMonth,
+                subscription.Schedule?.DayOfWeek,
+                subscription.Destination,
+                subscription.QueryName
+            };
+
+            var entityId = await _connection.ExecuteScalarAsync<int>(new CommandDefinition(SubscriptionRequests.Store, entity, cancellationToken: cancellationToken));
+            var parameters = subscription.Parameters.Select(parameter => new { SubscriptionId = entityId, parameter.Name }).ToArray();
+            var parameterIds = (await _connection.BulkInsertReturningAsync(SubscriptionRequests.StoreParameter, parameters, cancellationToken: cancellationToken)).ToArray();
+            var values = subscription.Parameters.SelectMany((p, i) => p.Values.Select(value => new { ParameterId = parameterIds[i], Value = value })).ToArray();
+
+            await _connection.BulkInsertAsync(SubscriptionRequests.StoreParameterValue, values, cancellationToken: cancellationToken);
         }
 
         public async Task AcknowledgePendingRequests(int subscriptionId, int[] requestIds, CancellationToken cancellationToken)
@@ -97,7 +125,7 @@ namespace FasTnT.Data.PostgreSql.Subscriptions
         {
             var command = new CommandDefinition(SubscriptionRequests.ListParameters, new { SubscriptionIds = subscriptions.Select(x => x.Id.Value).ToArray() }, cancellationToken: cancellationToken);
             var @params = (await _connection.QueryAsync<dynamic>(command))
-                .GroupBy(x => (int) x.id)
+                .GroupBy(x => (int) x.subscription_id)
                 .Select(x => new
                 {
                     SubscriptionId = x.Key,
