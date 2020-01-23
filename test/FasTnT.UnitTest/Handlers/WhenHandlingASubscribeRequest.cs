@@ -27,8 +27,8 @@ namespace FasTnT.UnitTest.Handlers
             Mediator = new Mock<IMediator>();
             Query = new Mock<IEpcisQuery>();
             CancellationToken = new CancellationTokenSource().Token;
-            Request = new SubscribeRequest { QueryName = "TestQuery" };
-            Handler = new SubscribeHandler(new[] { Query.Object }, Mediator.Object);
+            Request = new SubscribeRequest { Subscription = new Domain.Model.Subscriptions.Subscription{ QueryName = "TestQuery" } };
+            Handler = new SubscribeHandler(new[] { Query.Object }, null, Mediator.Object); // TODO
 
             Query.SetupGet(x => x.Name).Returns("TestQuery");
             Query.SetupGet(x => x.AllowSubscription).Returns(true);
@@ -62,8 +62,8 @@ namespace FasTnT.UnitTest.Handlers
             Mediator = new Mock<IMediator>();
             Query = new Mock<IEpcisQuery>();
             CancellationToken = new CancellationTokenSource().Token;
-            Request = new SubscribeRequest { QueryName = "UnknownQuery" };
-            Handler = new SubscribeHandler(new[] { Query.Object }, Mediator.Object);
+            Request = new SubscribeRequest { Subscription = new Domain.Model.Subscriptions.Subscription { QueryName = "UnknownQuery" } };
+            Handler = new SubscribeHandler(new[] { Query.Object }, null, Mediator.Object); // TODO
 
             Query.SetupGet(x => x.Name).Returns("TestQuery");
         }
@@ -115,8 +115,8 @@ namespace FasTnT.UnitTest.Handlers
             Mediator = new Mock<IMediator>();
             Query = new Mock<IEpcisQuery>();
             CancellationToken = new CancellationTokenSource().Token;
-            Request = new SubscribeRequest { QueryName = "TestQuery" };
-            Handler = new SubscribeHandler(new[] { Query.Object }, Mediator.Object);
+            Request = new SubscribeRequest { Subscription = new Domain.Model.Subscriptions.Subscription { QueryName = "TestQuery" } };
+            Handler = new SubscribeHandler(new[] { Query.Object }, null, Mediator.Object); // TODO
 
             Query.SetupGet(x => x.Name).Returns("TestQuery");
         }

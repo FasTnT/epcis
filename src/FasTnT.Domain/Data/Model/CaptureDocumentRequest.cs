@@ -1,15 +1,13 @@
-﻿using FasTnT.Commands.Requests;
-using FasTnT.Model.Users;
-using System.Data;
-using System.Threading;
+﻿using System.Collections.Generic;
+using FasTnT.Model;
+using FasTnT.Model.MasterDatas;
 
 namespace FasTnT.Domain.Data.Model
 {
     public class CaptureDocumentRequest
     {
-        public CaptureEpcisDocumentRequest Payload { get; set; }
-        public User User { get; set; }
-        public IDbTransaction Transaction { get; set; }
-        public CancellationToken CancellationToken { get; set; }
+        public EpcisRequestHeader Header { get; set; }
+        public IList<EpcisEvent> EventList { get; set; }
+        public IList<EpcisMasterData> MasterdataList { get; set; }
     }
 }

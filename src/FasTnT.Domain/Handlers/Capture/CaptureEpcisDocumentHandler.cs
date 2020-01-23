@@ -23,12 +23,12 @@ namespace FasTnT.Domain.Handlers.CaptureEpcisDocument
         {
             var captureRequest = new CaptureDocumentRequest
             {
-                Payload = request,
-                User = _context.User,
-                CancellationToken = cancellationToken
+                Header = request.Header,
+                EventList = request.EventList,
+                MasterdataList = request.MasterDataList
             };
 
-            await _documentStore.Capture(captureRequest);
+            await _documentStore.Capture(captureRequest, _context, cancellationToken);
 
             return EmptyResponse.Value;
         }
