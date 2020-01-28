@@ -22,7 +22,7 @@ namespace FasTnT.Domain.Handlers.Unsubscribe
 
         public async Task<IEpcisResponse> Handle(UnsubscribeRequest request, CancellationToken cancellationToken)
         {
-            var subscription = _subscriptionManager.GetById(request.SubscriptionId, cancellationToken);
+            var subscription = await _subscriptionManager.GetById(request.SubscriptionId, cancellationToken);
 
             if (subscription == null)
             {
@@ -30,7 +30,7 @@ namespace FasTnT.Domain.Handlers.Unsubscribe
             }
             else
             {
-                await _subscriptionManager.Delete(subscription.Id, cancellationToken);
+                await _subscriptionManager.Delete(subscription.Id.Value, cancellationToken);
                 await _mediator.Publish(new SubscriptionRemovedNotification(), cancellationToken);
             }
 

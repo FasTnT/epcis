@@ -5,7 +5,6 @@ using FasTnT.Data.PostgreSql.Subscriptions;
 using FasTnT.Data.PostgreSql.Users;
 using FasTnT.Domain.Data;
 using FasTnT.Model.Events.Enums;
-using FasTnT.PostgreSql;
 using FasTnT.PostgreSql.Capture;
 using FasTnT.PostgreSql.Migration;
 using Microsoft.Extensions.DependencyInjection;
@@ -21,6 +20,7 @@ namespace FasTnT.Data.PostgreSql
             services.AddScoped<IDocumentStore, DocumentStore>();
             services.AddScoped<IDatabaseMigrator, DatabaseMigrator>();
             services.AddScoped<IEventFetcher, EventFetcher>();
+            services.AddScoped<IMasterdataFetcher, MasterdataFetcher>();
             services.AddScoped<ISubscriptionManager, SubscriptionManager>();
             services.AddScoped<IUserManager, UserManager>();
             services.AddScoped(s => OpenConnection(connectionString));

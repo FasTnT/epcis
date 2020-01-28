@@ -44,6 +44,11 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>PgSqlEventRequests.resx</DependentUpon>
     </Compile>
+    <Compile Update="DataRetrieval\PgSqlMasterdataRequests.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>PgSqlMasterdataRequests.resx</DependentUpon>
+    </Compile>
     <Compile Update="Migration\DatabaseSqlRequests.Designer.cs">
       <DependentUpon>DatabaseSqlRequests.resx</DependentUpon>
       <DesignTime>True</DesignTime>
@@ -77,6 +82,10 @@
     <EmbeddedResource Update="DataRetrieval\PgSqlEventRequests.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>PgSqlEventRequests.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="DataRetrieval\PgSqlMasterdataRequests.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>PgSqlMasterdataRequests.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Update="Migration\DatabaseSqlRequests.resx">
       <LastGenOutput>DatabaseSqlRequests.Designer.cs</LastGenOutput>
