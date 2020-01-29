@@ -1,9 +1,9 @@
 ﻿using FasTnT.Commands.Requests;
 using FasTnT.Commands.Responses;
 using FasTnT.Domain;
-using FasTnT.Domain.Handlers.GetStandardVersion;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Threading;
+using static FasTnT.Commands.Requests.GetStandardVersionRequest;
 
 namespace FasTnT.UnitTest.Handlers
 {

@@ -1,10 +1,10 @@
 ﻿using FasTnT.Domain.Commands.Setup;
 using FasTnT.Domain.Data;
-using FasTnT.Domain.Handlers.DatabaseSetup;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using System.Threading;
 using System.Threading.Tasks;
+using static FasTnT.Domain.Commands.Setup.MigrateDatabaseRequest;
 
 namespace FasTnT.UnitTest.Handlers
 {

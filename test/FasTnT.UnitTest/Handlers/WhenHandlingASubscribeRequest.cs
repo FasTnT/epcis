@@ -1,6 +1,5 @@
 ﻿using FasTnT.Commands.Requests;
 using FasTnT.Commands.Responses;
-using FasTnT.Domain.Handlers.Subscribe;
 using FasTnT.Domain.Notifications;
 using FasTnT.Domain.Queries;
 using FasTnT.Model.Exceptions;
@@ -9,6 +8,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using System;
 using System.Threading;
+using static FasTnT.Commands.Requests.SubscribeRequest;
 
 namespace FasTnT.UnitTest.Handlers
 {

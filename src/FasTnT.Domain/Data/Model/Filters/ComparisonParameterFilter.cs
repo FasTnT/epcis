@@ -2,9 +2,10 @@
 
 namespace FasTnT.Domain.Data.Model.Filters
 {
-    public class SimpleParameterFilter
+    public class ComparisonParameterFilter
     {
         public EpcisField Field { get; set; }
-        public object[] Values { get; set; }
+        public FilterComparator Comparator { get; set; }
+        public object Value { get; set; }
     }
 }

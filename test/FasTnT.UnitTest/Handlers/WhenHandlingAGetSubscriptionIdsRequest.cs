@@ -1,11 +1,11 @@
 ﻿using FasTnT.Commands.Requests;
 using FasTnT.Commands.Responses;
 using FasTnT.Domain.Data;
-using FasTnT.Domain.Handlers.GetSubscriptionIds;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using System.Threading;
 using System.Threading.Tasks;
+using static FasTnT.Commands.Requests.GetSubscriptionIdsRequest;
 
 namespace FasTnT.UnitTest.Handlers
 {

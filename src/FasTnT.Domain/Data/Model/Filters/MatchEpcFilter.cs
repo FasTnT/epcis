@@ -2,9 +2,9 @@
 
 namespace FasTnT.Domain.Data.Model.Filters
 {
-    public class SimpleParameterFilter
+    public class MatchEpcFilter
     {
-        public EpcisField Field { get; set; }
+        public EpcType[] EpcType { get; set; }
         public object[] Values { get; set; }
     }
 }

@@ -5,6 +5,7 @@ using FasTnT.Domain.Queries;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -12,6 +13,8 @@ namespace FasTnT.Subscriptions
 {
     public class SubscriptionRunner
     {
+        public static Assembly Assembly = typeof(SubscriptionRunner).Assembly;
+
         private readonly IEnumerable<IEpcisQuery> _epcisQueries;
         private readonly ISubscriptionManager _subscriptionManager;
         private readonly SubscriptionResultSender _resultSender;

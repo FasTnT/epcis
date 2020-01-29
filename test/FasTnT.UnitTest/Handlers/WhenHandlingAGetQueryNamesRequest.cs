@@ -1,11 +1,11 @@
 ﻿using FasTnT.Commands.Requests;
 using FasTnT.Commands.Responses;
-using FasTnT.Domain.Handlers.GetQueryNames;
 using FasTnT.Domain.Queries;
 using FasTnT.Model.Queries;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using System.Threading;
+using static FasTnT.Commands.Requests.GetQueryNamesRequest;
 
 namespace FasTnT.UnitTest.Handlers
 {

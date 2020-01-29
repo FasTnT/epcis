@@ -1,12 +1,12 @@
 ﻿using FasTnT.Domain.Commands.Requests;
 using FasTnT.Domain.Commands.Responses;
 using FasTnT.Domain.Data;
-using FasTnT.Domain.Handlers.UserLogIn;
 using FasTnT.Model.Users;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using System.Threading;
 using System.Threading.Tasks;
+using static FasTnT.Domain.Commands.Requests.UserLogInRequest;
 
 namespace FasTnT.UnitTest.Handlers
 {

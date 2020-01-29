@@ -21,21 +21,4 @@ namespace FasTnT.Subscriptions.Handlers
             return Task.CompletedTask;
         }
     }
-
-    public class SubscriptionRemovedHandler : INotificationHandler<SubscriptionRemovedNotification>
-    {
-        private readonly SubscriptionBackgroundService _service;
-
-        public SubscriptionRemovedHandler(SubscriptionBackgroundService service)
-        {
-            _service = service;
-        }
-
-        public Task Handle(SubscriptionRemovedNotification notification, CancellationToken cancellationToken)
-        {
-            _service.Remove(notification.Subscription);
-
-            return Task.CompletedTask;
-        }
-    }
 }

@@ -117,7 +117,10 @@ namespace FasTnT.Subscriptions
             {
                 if (string.IsNullOrEmpty(subscription.Trigger))
                 {
-                    _scheduledExecutions.TryRemove(_scheduledExecutions.FirstOrDefault(x => x.Key.SubscriptionId == subscription.SubscriptionId).Key, out DateTime value);
+                    if (_scheduledExecutions.Any(x => x.Key.SubscriptionId == subscription.SubscriptionId))
+                    {
+                        _scheduledExecutions.TryRemove(_scheduledExecutions.FirstOrDefault(x => x.Key.SubscriptionId == subscription.SubscriptionId).Key, out DateTime value);
+                    }
                 }
                 else
                 {

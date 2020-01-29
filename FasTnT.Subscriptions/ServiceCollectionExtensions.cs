@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using MediatR;
 using Microsoft.Extensions.Hosting;
 
 namespace FasTnT.Subscriptions
@@ -7,7 +8,9 @@ namespace FasTnT.Subscriptions
     {
         public static IServiceCollection AddBackgroundSubscriptionService(this IServiceCollection services)
         {
-            services.AddSingleton<IHostedService, SubscriptionBackgroundService>();
+            services.AddMediatR(SubscriptionRunner.Assembly);
+            services.AddSingleton<SubscriptionBackgroundService>();
+            services.AddSingleton<IHostedService>(s => s.GetService<SubscriptionBackgroundService>());
             services.AddScoped<SubscriptionRunner>();
             services.AddScoped<SubscriptionResultSender>();
 

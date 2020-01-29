@@ -1,6 +1,5 @@
 ﻿using FasTnT.Commands.Requests;
 using FasTnT.Commands.Responses;
-using FasTnT.Domain.Handlers.Poll;
 using FasTnT.Domain.Queries;
 using FasTnT.Model.Exceptions;
 using FasTnT.Model.Queries;
@@ -8,6 +7,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using System;
 using System.Threading;
+using static FasTnT.Commands.Requests.PollRequest;
 
 namespace FasTnT.UnitTest.Handlers
 {

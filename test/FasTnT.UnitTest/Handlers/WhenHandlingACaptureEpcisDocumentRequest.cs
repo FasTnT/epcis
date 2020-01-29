@@ -3,12 +3,12 @@ using FasTnT.Commands.Responses;
 using FasTnT.Domain;
 using FasTnT.Domain.Data;
 using FasTnT.Domain.Data.Model;
-using FasTnT.Domain.Handlers.CaptureEpcisDocument;
 using FasTnT.Model;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using System.Collections.Generic;
 using System.Threading;
+using static FasTnT.Commands.Requests.CaptureEpcisDocumentRequest;
 
 namespace FasTnT.UnitTest.Handlers
 {
