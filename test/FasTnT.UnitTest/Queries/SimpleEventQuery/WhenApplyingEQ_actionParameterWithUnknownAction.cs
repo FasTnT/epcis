@@ -19,7 +19,7 @@ namespace FasTnT.UnitTest.Queries.SimpleEventQuery
             Assert.IsNotNull(Catched);
         }
 
-        [TestMethod, Ignore("Yet to be implemented")]
+        [TestMethod]
         public void ItShouldThrowAnEpcisException()
         {
             Assert.IsInstanceOfType(Catched, typeof(EpcisException));

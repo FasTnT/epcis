@@ -3,6 +3,7 @@ using FasTnT.Domain.Data;
 using FasTnT.Domain.Data.Model.Filters;
 using FasTnT.Domain.Utils;
 using FasTnT.Model.Events.Enums;
+using FasTnT.Model.Exceptions;
 using FasTnT.Model.Queries;
 using FasTnT.Model.Utils;
 using System;
@@ -68,13 +69,9 @@ namespace FasTnT.Domain.Queries
         {
             foreach(var parameter in parameters)
             {
-                if (IsSimpleParameter(parameter, out Action<IEventFetcher, QueryParameter> simpleAction))
+                if (IsSimpleParameter(parameter, out Action<IEventFetcher, QueryParameter> action) || IsRegexParameter(parameter, out action))
                 {
-                    simpleAction(_eventFetcher, parameter);
-                }
-                else if (IsRegexParameter(parameter, out Action<IEventFetcher, QueryParameter> regexAction))
-                {
-                    regexAction(_eventFetcher, parameter);
+                    ApplyParameter(action, parameter);
                 }
                 else
                 {
@@ -89,6 +86,18 @@ namespace FasTnT.Domain.Queries
                 QueryName = Name,
                 EventList = result.ToArray()
             };
+        }
+
+        private void ApplyParameter(Action<IEventFetcher, QueryParameter> simpleAction, QueryParameter parameter)
+        {
+            try
+            {
+                simpleAction(_eventFetcher, parameter);
+            }
+            catch(Exception ex)
+            {
+                throw new EpcisException(ExceptionType.QueryParameterException, ex.Message);
+            }
         }
 
         private bool IsSimpleParameter(QueryParameter parameter, out Action<IEventFetcher, QueryParameter> action) => SimpleParameters.TryGetValue(parameter.Name, out action);
