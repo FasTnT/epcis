@@ -2,7 +2,7 @@
 
 namespace FasTnT.Domain.Commands.Requests
 {
-    public class TriggerSubscriptionRequest : INotification
+    public class TriggerSubscriptionNotification : INotification
     {
         public string Name { get; set; }
     }

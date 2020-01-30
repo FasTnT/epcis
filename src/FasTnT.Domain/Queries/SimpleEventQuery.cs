@@ -19,21 +19,22 @@ namespace FasTnT.Domain.Queries
     {
         private static IDictionary<string, Action<IEventFetcher, QueryParameter>> SimpleParameters = new Dictionary<string, Action<IEventFetcher, QueryParameter>>
         {
-            { "eventType",               (fetcher, param) => fetcher.Apply(new SimpleParameterFilter { Field = EpcisField.EventType, Values = param.Values.Select(Enumeration.GetByDisplayName<EventType>).ToArray() }) },
+            { "eventType",               (fetcher, param) => fetcher.Apply(new SimpleParameterFilter<EventType> { Field = EpcisField.EventType, Values = param.Values.Select(Enumeration.GetByDisplayName<EventType>).ToArray() }) },
             { "eventCountLimit",         (fetcher, param) => fetcher.Apply(new LimitFilter { Value = param.GetValue<int>() }) },
             { "maxEventCount",           (fetcher, param) => fetcher.Apply(new LimitFilter { Value = param.GetValue<int>() +1 }) },
-            { "EQ_action",               (fetcher, param) => fetcher.Apply(new SimpleParameterFilter { Field = EpcisField.Action, Values = param.Values.Select(Enumeration.GetByDisplayName<EventAction>).ToArray() }) },
-            { "EQ_bizLocation",          (fetcher, param) => fetcher.Apply(new SimpleParameterFilter { Field = EpcisField.BusinessLocation, Values =  param.Values }) },
-            { "EQ_bizStep",              (fetcher, param) => fetcher.Apply(new SimpleParameterFilter { Field = EpcisField.BusinessStep, Values =  param.Values }) },
-            { "EQ_disposition",          (fetcher, param) => fetcher.Apply(new SimpleParameterFilter { Field = EpcisField.Disposition, Values =  param.Values }) },
-            { "EQ_eventID",              (fetcher, param) => fetcher.Apply(new SimpleParameterFilter { Field = EpcisField.EventId, Values =  param.Values }) },
-            { "EQ_transformationID",     (fetcher, param) => fetcher.Apply(new SimpleParameterFilter { Field = EpcisField.TransformationId, Values =  param.Values }) },
-            { "EQ_readPoint",            (fetcher, param) => fetcher.Apply(new SimpleParameterFilter { Field = EpcisField.ReadPoint, Values =  param.Values }) },
+            { "EQ_action",               (fetcher, param) => fetcher.Apply(new SimpleParameterFilter<EventAction> { Field = EpcisField.Action, Values = param.Values.Select(Enumeration.GetByDisplayName<EventAction>).ToArray() }) },
+            { "EQ_bizLocation",          (fetcher, param) => fetcher.Apply(new SimpleParameterFilter<string> { Field = EpcisField.BusinessLocation, Values =  param.Values }) },
+            { "EQ_bizStep",              (fetcher, param) => fetcher.Apply(new SimpleParameterFilter<string> { Field = EpcisField.BusinessStep, Values =  param.Values }) },
+            { "EQ_disposition",          (fetcher, param) => fetcher.Apply(new SimpleParameterFilter<string> { Field = EpcisField.Disposition, Values =  param.Values }) },
+            { "EQ_eventID",              (fetcher, param) => fetcher.Apply(new SimpleParameterFilter<string> { Field = EpcisField.EventId, Values =  param.Values }) },
+            { "EQ_transformationID",     (fetcher, param) => fetcher.Apply(new SimpleParameterFilter<string> { Field = EpcisField.TransformationId, Values =  param.Values }) },
+            { "EQ_readPoint",            (fetcher, param) => fetcher.Apply(new SimpleParameterFilter<string> { Field = EpcisField.ReadPoint, Values =  param.Values }) },
             { "EXISTS_errorDeclaration", (fetcher, param) => fetcher.Apply(new ExistsErrorDeclarationFilter ()) },
             { "EQ_errorReason",          (fetcher, param) => fetcher.Apply(new EqualsErrorReasonFilter { Values = param.Values }) },
-            { "EQ_correctiveEventID",    (fetcher, param) => fetcher.Apply(new EqualsCorrectiveEventIdFilter{ Values = param.Values }) },
-            { "WD_readPoint",            (fetcher, param) => fetcher.Apply(new MasterdataHierarchyFilter{ Field = EpcisField.ReadPoint, Values = param.Values }) },
-            { "WD_bizLocation",          (fetcher, param) => fetcher.Apply(new MasterdataHierarchyFilter{ Field = EpcisField.BusinessLocation, Values = param.Values }) }
+            { "EQ_correctiveEventID",    (fetcher, param) => fetcher.Apply(new EqualsCorrectiveEventIdFilter { Values = param.Values }) },
+            { "WD_readPoint",            (fetcher, param) => fetcher.Apply(new MasterdataHierarchyFilter { Field = EpcisField.ReadPoint, Values = param.Values }) },
+            { "WD_bizLocation",          (fetcher, param) => fetcher.Apply(new MasterdataHierarchyFilter { Field = EpcisField.BusinessLocation, Values = param.Values }) },
+            { "EQ_requestId",            (fetcher, param) => fetcher.Apply(new SimpleParameterFilter<int> { Field = EpcisField.RequestId, Values = param.Values.Select(int.Parse).ToArray() }) }
         };
 
         private static IDictionary<string, Action<IEventFetcher, QueryParameter>> RegexParameters = new Dictionary<string, Action<IEventFetcher, QueryParameter>>

@@ -19,7 +19,7 @@ namespace FasTnT.UnitTest.Queries.SimpleEventQuery
         [TestMethod]
         public void ItShouldCallTheEventFetcherApplyMethodWithSimpleParameterFilter()
         {
-            EventFetcher.Verify(x => x.Apply(It.Is<SimpleParameterFilter>(f => f.Field == EpcisField.EventType && f.Values.Any(v => v.ToString() == "ObjectEvent"))), Times.Once);
+            EventFetcher.Verify(x => x.Apply(It.Is<SimpleParameterFilter<EventType>>(f => f.Field == EpcisField.EventType && f.Values.Any(v => v.ToString() == "ObjectEvent"))), Times.Once);
         }
     }
 }

@@ -7,5 +7,6 @@ namespace FasTnT.Domain.Data
     public interface IDocumentStore
     {
         Task Capture(CaptureDocumentRequest captureRequest, RequestContext context, CancellationToken cancellationToken);
+        Task Capture(CaptureCallbackRequest captureRequest, RequestContext context, CancellationToken cancellationToken);
     }
 }

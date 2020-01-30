@@ -2,7 +2,9 @@
 using FasTnT.Domain;
 using FasTnT.Domain.Commands;
 using FasTnT.Domain.Data;
+using FasTnT.Domain.Data.Model;
 using FasTnT.Model;
+using FasTnT.Model.Events.Enums;
 using MediatR;
 using System;
 using System.Threading;
@@ -27,9 +29,19 @@ namespace FasTnT.Commands.Requests
                 _documentStore = documentStore;
             }
 
-            public Task<IEpcisResponse> Handle(CaptureEpcisQueryCallbackRequest request, CancellationToken cancellationToken)
+            public async Task<IEpcisResponse> Handle(CaptureEpcisQueryCallbackRequest request, CancellationToken cancellationToken)
             {
-                throw new NotImplementedException();
+                var captureRequest = new CaptureCallbackRequest
+                {
+                    SubscriptionId = request.SubscriptionName,
+                    CallbackType = QueryCallbackType.Success,
+                    EventList = request.EventList,
+                    Header = request.Header
+                };
+
+                await _documentStore.Capture(captureRequest, _context, cancellationToken);
+
+                return EmptyResponse.Value;
             }
         }
     }

@@ -1,7 +1,6 @@
 ﻿using Dapper;
 using Faithlife.Utility.Dapper;
 using FasTnT.Data.PostgreSql.Capture;
-using FasTnT.Domain.Data.Model;
 using FasTnT.Model.MasterDatas;
 using System.Collections.Generic;
 using System.Data;
@@ -13,11 +12,11 @@ namespace FasTnT.PostgreSql.Capture
 {
     public static class EpcisMasterdataStore
     {
-        public static async Task StoreEpcisMasterdata(CaptureDocumentRequest request, IDbTransaction transaction, int headerId, CancellationToken cancellationToken)
+        public static async Task StoreEpcisMasterdata(IEnumerable<EpcisMasterData> masterdataList, IDbTransaction transaction, int headerId, CancellationToken cancellationToken)
         {
-            if (request.MasterdataList == null || !request.MasterdataList.Any()) return;
+            if (masterdataList == null || !masterdataList.Any()) return;
 
-            foreach (var masterData in request.MasterdataList)
+            foreach (var masterData in masterdataList)
             {
                 await transaction.Connection.ExecuteAsync(new CommandDefinition(CaptureEpcisMasterdataCommands.Delete, masterData, transaction, cancellationToken: cancellationToken));
                 await transaction.Connection.ExecuteAsync(new CommandDefinition(CaptureEpcisMasterdataCommands.Insert, masterData, transaction, cancellationToken: cancellationToken));
@@ -32,7 +31,7 @@ namespace FasTnT.PostgreSql.Capture
                 }
             }
 
-            var hierarchies = request.MasterdataList.SelectMany(x => x.Children.Select(c => new EpcisMasterDataHierarchy { Type = x.Type, ChildrenId = c.ChildrenId, ParentId = x.Id }));
+            var hierarchies = masterdataList.SelectMany(x => x.Children.Select(c => new EpcisMasterDataHierarchy { Type = x.Type, ChildrenId = c.ChildrenId, ParentId = x.Id }));
             await transaction.Connection.BulkInsertAsync(CaptureEpcisMasterdataCommands.HierarchyInsert, hierarchies, transaction, cancellationToken: cancellationToken);
         }
 

@@ -8,7 +8,8 @@ namespace FasTnT.Domain.Data
 {
     public interface IEventFetcher
     {
-        void Apply(SimpleParameterFilter filter);
+        void Apply(RequestIdFilter requestIdFilter);
+        void Apply<T>(SimpleParameterFilter<T> filter);
         void Apply(ComparisonParameterFilter filter);
         void Apply(BusinessTransactionFilter filter);
         void Apply(MatchEpcFilter filter);

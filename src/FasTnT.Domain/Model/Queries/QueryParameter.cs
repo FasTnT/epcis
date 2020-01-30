@@ -1,4 +1,6 @@
-﻿namespace FasTnT.Model.Queries
+﻿using System;
+
+namespace FasTnT.Model.Queries
 {
     public class QueryParameter
     {

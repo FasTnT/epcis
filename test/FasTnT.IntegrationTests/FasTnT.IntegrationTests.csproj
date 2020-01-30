@@ -63,6 +63,9 @@
     <None Update="Requests\XML\Capture.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="Requests\XML\Subscribe.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Requests\XML\Poll_Unknown.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

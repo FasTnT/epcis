@@ -14,8 +14,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\src\FasTnT.Domain\FasTnT.Domain.csproj" />
-    <ProjectReference Include="..\src\FasTnT.Formatters.Xml\FasTnT.Formatters.Xml.csproj" />
+    <ProjectReference Include="..\FasTnT.Domain\FasTnT.Domain.csproj" />
+    <ProjectReference Include="..\FasTnT.Formatters.Xml\FasTnT.Formatters.Xml.csproj" />
   </ItemGroup>
 
   <ItemGroup>

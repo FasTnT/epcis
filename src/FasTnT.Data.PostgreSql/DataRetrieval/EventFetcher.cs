@@ -26,7 +26,8 @@ namespace FasTnT.Data.PostgreSql.DataRetrieval
             _sqlTemplate = _query.AddTemplate(PgSqlEventRequests.EventQuery);
         }
 
-        public void Apply(SimpleParameterFilter filter) => _query = _query.Where($"{filter.Field.ToPgSql()} = ANY({_parameters.Add(filter.Values)})");
+        public void Apply(RequestIdFilter filter) => _query = _query.Where($"request.id = ANY({_parameters.Add(filter.Values)})");
+        public void Apply<T>(SimpleParameterFilter<T> filter) => _query = _query.Where($"{filter.Field.ToPgSql()} = ANY({_parameters.Add(filter.Values)})");
         public void Apply(ComparisonParameterFilter filter) => _query = _query.Where($"{filter.Field.ToPgSql()} {filter.Comparator.ToSql()} {_parameters.Add(filter.Value)}");
         public void Apply(BusinessTransactionFilter filter) => _query = _query.Where($"EXISTS(SELECT bt.event_id FROM epcis.business_transaction bt WHERE bt.event_id = event.id AND bt.transaction_type = {_parameters.Add(filter.TransactionType)} AND bt.transaction_id = ANY({_parameters.Add(filter.Values)}))");
         public void Apply(MatchEpcFilter filter) => _query = _query.Where($"EXISTS(SELECT epc.event_id FROM epcis.epc epc WHERE epc.event_id = event.id AND epc.epc LIKE ANY({_parameters.Add(filter.Values)}) AND epc.type = ANY({_parameters.Add(filter.EpcType)}))");

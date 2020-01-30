@@ -22,10 +22,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\FasTnT.Subscriptions\FasTnT.Subscriptions.csproj" />
     <ProjectReference Include="..\FasTnT.Data.PostgreSql\FasTnT.Data.PostgreSql.csproj" />
     <ProjectReference Include="..\FasTnT.Domain\FasTnT.Domain.csproj" />
     <ProjectReference Include="..\FasTnT.Formatters.Xml\FasTnT.Formatters.Xml.csproj" />
+    <ProjectReference Include="..\FasTnT.Subscriptions\FasTnT.Subscriptions.csproj" />
   </ItemGroup>
 
 </Project>

@@ -61,7 +61,7 @@ namespace FasTnT.Data.PostgreSql.Subscriptions {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to DELETE FROM subscriptions.pendingrequest WHERE subscription_id = (SELECT id FROM subscriptions.subscription WHERE subscription_id = @SubscriptionId) AND request_id = ANY(@RequestIds);.
+        ///   Looks up a localized string similar to DELETE FROM subscriptions.pendingrequest WHERE subscription_id = @SubscriptionId AND request_id = ANY(@RequestIds);.
         /// </summary>
         internal static string AcknowledgePendingRequests {
             get {
@@ -124,7 +124,7 @@ namespace FasTnT.Data.PostgreSql.Subscriptions {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to INSERT INTO subscriptions.trigger(id, subscription_id, trigger_time, status, reason) VALUES(@Id, (SELECT id FROM subscriptions.subscription WHERE subscription_id = @SubscriptionId), NOW(), @Result, @Reason);.
+        ///   Looks up a localized string similar to INSERT INTO subscriptions.trigger(subscription_id, trigger_time, status, reason) VALUES(@SubscriptionId, NOW(), @Result, @Reason);.
         /// </summary>
         internal static string RegisterTrigger {
             get {

@@ -24,6 +24,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="Capture\CaptureEpcisCallbackCommands.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>CaptureEpcisCallbackCommands.resx</DependentUpon>
+    </Compile>
     <Compile Update="Capture\CaptureEpcisDocumentCommands.Designer.cs">
       <DependentUpon>CaptureEpcisDocumentCommands.resx</DependentUpon>
       <DesignTime>True</DesignTime>
@@ -67,6 +72,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Update="Capture\CaptureEpcisCallbackCommands.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>CaptureEpcisCallbackCommands.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Update="Capture\CaptureEpcisDocumentCommands.resx">
       <LastGenOutput>CaptureEpcisDocumentCommands.Designer.cs</LastGenOutput>
       <Generator>PublicResXFileCodeGenerator</Generator>

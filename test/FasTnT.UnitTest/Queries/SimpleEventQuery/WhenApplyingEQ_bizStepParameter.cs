@@ -19,7 +19,7 @@ namespace FasTnT.UnitTest.Queries.SimpleEventQuery
         [TestMethod]
         public void ItShouldCallTheEventFetcherApplyMethodWithComparisonParameterFilter()
         {
-            EventFetcher.Verify(x => x.Apply(It.Is<SimpleParameterFilter>(f => f.Field == EpcisField.BusinessStep&& f.Values.Any(v => v.ToString() == "urn:fastnt:demo:bizstep:demo:packing"))), Times.Once);
+            EventFetcher.Verify(x => x.Apply(It.Is<SimpleParameterFilter<string>>(f => f.Field == EpcisField.BusinessStep&& f.Values.Any(v => v.ToString() == "urn:fastnt:demo:bizstep:demo:packing"))), Times.Once);
         }
     }
 }

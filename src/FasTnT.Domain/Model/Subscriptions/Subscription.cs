@@ -9,7 +9,7 @@ namespace FasTnT.Domain.Model.Subscriptions
         public bool Active { get; set; } = true;
         public string SubscriptionId { get; set; }
         public string QueryName { get; set; }
-        public QueryParameter[] Parameters { get; set; }
+        public QueryParameter[] Parameters { get; set; } = new QueryParameter[0];
         public bool ReportIfEmpty { get; set; }
         public string Destination { get; set; }
         public QuerySchedule Schedule { get; set; }

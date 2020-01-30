@@ -1,5 +1,6 @@
 ﻿using FasTnT.Commands.Requests;
 using FasTnT.Commands.Responses;
+using FasTnT.Domain.Data;
 using FasTnT.Domain.Notifications;
 using FasTnT.Domain.Queries;
 using FasTnT.Model.Exceptions;
@@ -17,6 +18,7 @@ namespace FasTnT.UnitTest.Handlers
     {
         public Mock<IMediator> Mediator { get; set; }
         public Mock<IEpcisQuery> Query { get; set; }
+        public Mock<ISubscriptionManager> SubscriptionManager { get; set; }
         public SubscribeHandler Handler { get; set; }
         public CancellationToken CancellationToken { get; set; }
         public SubscribeRequest Request { get; set; }
@@ -27,9 +29,10 @@ namespace FasTnT.UnitTest.Handlers
         {
             Mediator = new Mock<IMediator>();
             Query = new Mock<IEpcisQuery>();
+            SubscriptionManager = new Mock<ISubscriptionManager>();
             CancellationToken = new CancellationTokenSource().Token;
             Request = new SubscribeRequest { Subscription = new Domain.Model.Subscriptions.Subscription { QueryName = "TestQuery" } };
-            Handler = new SubscribeHandler(new[] { Query.Object }, null, Mediator.Object); // TODO
+            Handler = new SubscribeHandler(new[] { Query.Object }, SubscriptionManager.Object, Mediator.Object);
 
             Query.SetupGet(x => x.Name).Returns("TestQuery");
         }

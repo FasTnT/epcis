@@ -31,6 +31,7 @@ namespace FasTnT.Subscriptions
             var query = _epcisQueries.Single(x => x.Name == subscription.QueryName);
             var response = new PollResponse();
 
+
             try
             {
                 var pendingRequests = await _subscriptionManager.GetPendingRequestIds(subscription.Id.Value, cancellationToken);
@@ -39,9 +40,10 @@ namespace FasTnT.Subscriptions
                 {
                     var parameters = subscription.Parameters.Append(new Model.Queries.QueryParameter { Name = "EQ_requestId", Values = pendingRequests.Select(x => x.ToString()).ToArray() });
                     response = await query.Handle(parameters.ToArray(), cancellationToken);
-                    response.QueryName = query.Name;
-                    response.SubscriptionId = subscription.SubscriptionId;
                 }
+
+                response.QueryName = query.Name;
+                response.SubscriptionId = subscription.SubscriptionId;
 
                 await SendSubscriptionResults(subscription, response, cancellationToken);
                 await _subscriptionManager.AcknowledgePendingRequests(subscription.Id.Value, pendingRequests, cancellationToken);

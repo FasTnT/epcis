@@ -4,6 +4,7 @@ using FasTnT.Data.PostgreSql.DataRetrieval;
 using FasTnT.Data.PostgreSql.Subscriptions;
 using FasTnT.Data.PostgreSql.Users;
 using FasTnT.Domain.Data;
+using FasTnT.Domain.Model.Subscriptions;
 using FasTnT.Model.Events.Enums;
 using FasTnT.PostgreSql.Capture;
 using FasTnT.PostgreSql.Migration;
@@ -37,7 +38,7 @@ namespace FasTnT.Data.PostgreSql
             SqlMapper.AddTypeHandler(EnumerationHandler<SourceDestinationType>.Default);
             SqlMapper.AddTypeHandler(EnumerationHandler<EpcType>.Default);
             SqlMapper.AddTypeHandler(EnumerationHandler<QueryCallbackType>.Default);
-            //SqlMapper.AddTypeHandler(EnumerationHandler<SubscriptionResult>.Default);
+            SqlMapper.AddTypeHandler(EnumerationHandler<SubscriptionResult>.Default);
             SqlMapper.AddTypeHandler(EnumerationHandler<ContactInformationType>.Default);
 
             return services;

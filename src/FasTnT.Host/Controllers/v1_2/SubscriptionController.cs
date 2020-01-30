@@ -16,6 +16,6 @@ namespace FasTnT.Host.Controllers.v1_2
         public SubscriptionController(IMediator mediator) => _mediator = mediator;
 
         [HttpGet("{triggerName}")]
-        public async Task TriggerSubscription(string triggerName, CancellationToken cancellationToken) => await _mediator.Publish(new TriggerSubscriptionRequest { Name = triggerName }, cancellationToken);
+        public async Task TriggerSubscription(string triggerName, CancellationToken cancellationToken) => await _mediator.Publish(new TriggerSubscriptionNotification { Name = triggerName }, cancellationToken);
     }
 }

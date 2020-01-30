@@ -16,16 +16,12 @@ namespace FasTnT.Domain.Utils
                 throw new Exception($"A single value is expected, but multiple were found. Parameter name '{parameter.Name}'");
             }
 
-            if (typeof(T) == typeof(DateTime))
-                return (T)Convert.ChangeType(DateTime.Parse(parameter.Values.Single()), typeof(T));
-            else if (typeof(T) == typeof(int))
-                return (T)Convert.ChangeType(int.Parse(parameter.Values.Single()), typeof(T));
-            else if (typeof(T) == typeof(double))
-                return (T)Convert.ChangeType(double.Parse(parameter.Values.Single()), typeof(T));
-            else if (typeof(T) == typeof(bool))
-                return (T)Convert.ChangeType(bool.Parse(parameter.Values.Single()), typeof(T));
-            else
-                throw new Exception($"Unknow value type: '{typeof(T).Name}'");
+            return ChangeType<T>(parameter.Values.Single());
+        }
+
+        public static T[] GetValues<T>(this QueryParameter parameter)
+        {
+            return !parameter.Values.Any() ? new T[0] : parameter.Values.Select(x => ChangeType<T>(x)).ToArray();
         }
 
         public static FilterComparator GetComparator(this QueryParameter parameter)
@@ -65,6 +61,20 @@ namespace FasTnT.Domain.Utils
             }
 
             throw new Exception($"Unknown 'MATCH_*' parameter: '{parameter.Name}'");
+        }
+
+        private static T ChangeType<T>(string value)
+        {
+            if (typeof(T) == typeof(DateTime))
+                return (T)Convert.ChangeType(DateTime.Parse(value), typeof(T));
+            else if (typeof(T) == typeof(int))
+                return (T)Convert.ChangeType(int.Parse(value), typeof(T));
+            else if (typeof(T) == typeof(double))
+                return (T)Convert.ChangeType(double.Parse(value), typeof(T));
+            else if (typeof(T) == typeof(bool))
+                return (T)Convert.ChangeType(bool.Parse(value), typeof(T));
+            else
+                throw new Exception($"Invalid value type: '{typeof(T).Name}'");
         }
     }
 }
