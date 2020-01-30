@@ -5,6 +5,7 @@
         public override void Arrange()
         {
             base.Arrange();
+            RollbackDatabase();
             MigrateDatabase();
         }
     }

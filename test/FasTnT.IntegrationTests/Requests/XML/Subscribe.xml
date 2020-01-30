@@ -11,14 +11,14 @@
           </value>
         </param>
       </params>
-      <dest>http://admin:P%40ssw0rd@localhost:54805/v1_2/Capture</dest>
+      <dest>http://localhost:54805/v1_2/Capture</dest>
       <controls>
         <schedule>
           <second>0</second>
         </schedule>
         <reportIfEmpty>true</reportIfEmpty>
       </controls>
-      <subscriptionID>AllObjectEvents</subscriptionID>
+      <subscriptionID>TestSubscription</subscriptionID>
     </epcisq:Subscribe>
   </EPCISBody>
 </epcisq:EPCISQueryDocument>

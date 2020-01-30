@@ -25,7 +25,7 @@ namespace FasTnT.IntegrationTests.API.EpcisEndpoints.v1_2.XML.ListSubscriptionID
         {
             var content = Result.Content.ReadAsStringAsync().Result;
 
-            Assert.IsTrue(string.IsNullOrEmpty(content));
+            Assert.IsTrue(string.IsNullOrEmpty(content), content);
         }
     }
 }
