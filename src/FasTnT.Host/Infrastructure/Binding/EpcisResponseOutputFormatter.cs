@@ -1,7 +1,9 @@
-﻿using FasTnT.Model.Responses;
+﻿using FasTnT.Commands.Responses;
+using FasTnT.Domain;
 using Microsoft.AspNetCore.Mvc.Formatters;
 using System;
 using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace FasTnT.Host.Infrastructure.Binding
 {
@@ -11,6 +13,7 @@ namespace FasTnT.Host.Infrastructure.Binding
         {
             SupportedMediaTypes.Add("application/json");
             SupportedMediaTypes.Add("application/xml");
+            SupportedMediaTypes.Add("application/soap+xml");
             SupportedMediaTypes.Add("text/xml");
         }
 
@@ -18,9 +21,11 @@ namespace FasTnT.Host.Infrastructure.Binding
 
         public override async Task WriteResponseBodyAsync(OutputFormatterWriteContext context)
         {
-            var httpCtx = context.HttpContext;
-            httpCtx.Response.ContentType = httpCtx.GetFormatter().ContentType;
-            await httpCtx.GetFormatter().WriteResponse(context.Object as IEpcisResponse, httpCtx.Response.Body, httpCtx.RequestAborted);
+            var httpContext = context.HttpContext;
+            var requestContext = httpContext.RequestServices.GetService<RequestContext>();
+
+            httpContext.Response.ContentType = requestContext.Formatter.ContentType;
+            await requestContext.Formatter.WriteResponse(context.Object as IEpcisResponse, httpContext.Response.Body, httpContext.RequestAborted);
         }
     }
 }

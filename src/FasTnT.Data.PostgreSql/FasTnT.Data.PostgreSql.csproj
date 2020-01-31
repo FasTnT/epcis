@@ -1,0 +1,117 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
+	  <LangVersion>7.1</LangVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Dapper" Version="2.0.30" />
+    <PackageReference Include="Dapper.SqlBuilder" Version="2.0.30" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="3.1.0" />
+    <PackageReference Include="morelinq" Version="3.3.2" />
+    <PackageReference Include="Npgsql" Version="4.1.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\FasTnT.Domain\FasTnT.Domain.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="Faithlife.Utility.Dapper">
+      <HintPath>..\..\libs\Faithlife.Utility.Dapper.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Capture\CaptureEpcisCallbackCommands.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>CaptureEpcisCallbackCommands.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Capture\CaptureEpcisDocumentCommands.Designer.cs">
+      <DependentUpon>CaptureEpcisDocumentCommands.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Update="Capture\CaptureEpcisEventCommand.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>CaptureEpcisEventCommand.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Capture\CaptureEpcisMasterdataCommands.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>CaptureEpcisMasterdataCommands.resx</DependentUpon>
+    </Compile>
+    <Compile Update="DataRetrieval\PgSqlEventRequests.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>PgSqlEventRequests.resx</DependentUpon>
+    </Compile>
+    <Compile Update="DataRetrieval\PgSqlMasterdataRequests.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>PgSqlMasterdataRequests.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Migration\DatabaseSqlRequests.Designer.cs">
+      <DependentUpon>DatabaseSqlRequests.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Update="Subscriptions\SubscriptionRequests.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>SubscriptionRequests.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Users\PgSqlUserRequests.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>PgSqlUserRequests.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Capture\CaptureEpcisCallbackCommands.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>CaptureEpcisCallbackCommands.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Capture\CaptureEpcisDocumentCommands.resx">
+      <LastGenOutput>CaptureEpcisDocumentCommands.Designer.cs</LastGenOutput>
+      <Generator>PublicResXFileCodeGenerator</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Capture\CaptureEpcisEventCommand.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>CaptureEpcisEventCommand.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Capture\CaptureEpcisMasterdataCommands.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>CaptureEpcisMasterdataCommands.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="DataRetrieval\PgSqlEventRequests.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>PgSqlEventRequests.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="DataRetrieval\PgSqlMasterdataRequests.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>PgSqlMasterdataRequests.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Migration\DatabaseSqlRequests.resx">
+      <LastGenOutput>DatabaseSqlRequests.Designer.cs</LastGenOutput>
+      <Generator>PublicResXFileCodeGenerator</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Subscriptions\SubscriptionRequests.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>SubscriptionRequests.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Users\PgSqlUserRequests.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>PgSqlUserRequests.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="DapperConfiguration\" />
+  </ItemGroup>
+
+</Project>

@@ -1,5 +1,5 @@
-﻿using FasTnT.Domain.Extensions;
-using FasTnT.Domain.Persistence;
+﻿using FasTnT.Domain.Commands.Setup;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading;
 using System.Threading.Tasks;
@@ -9,16 +9,16 @@ namespace FasTnT.Host.Controllers
     [Route("Setup/Database")]
     public class EpcisMigrationController : Controller
     {
-        private readonly IUnitOfWork _unitOfWork;
+        private readonly IMediator _mediator;
 
-        public EpcisMigrationController(IUnitOfWork unitOfWork) => _unitOfWork = unitOfWork;
+        public EpcisMigrationController(IMediator mediator) => _mediator = mediator;
 
         [HttpPost("Migrate")]
-        public async Task Migrate(CancellationToken cancellationToken) 
-            => await _unitOfWork.Execute(u => u.DatabaseManager.Migrate(cancellationToken));
+        public async Task Migrate(CancellationToken cancellationToken)
+            => await _mediator.Send(new MigrateDatabaseRequest(), cancellationToken);
 
         [HttpPost("Rollback")]
-        public async Task Rollback(CancellationToken cancellationToken) 
-            => await _unitOfWork.Execute(u => u.DatabaseManager.Rollback(cancellationToken));
+        public async Task Rollback(CancellationToken cancellationToken)
+            => await _mediator.Send(new RollbackDatabaseRequest(), cancellationToken);
     }
 }

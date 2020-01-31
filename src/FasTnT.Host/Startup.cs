@@ -2,18 +2,17 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using FasTnT.Persistence.Dapper;
 using FasTnT.Host.Middleware;
-using FasTnT.Host.BackgroundTasks;
-using FasTnT.Domain.Extensions;
-using FasTnT.Domain;
 using Microsoft.Extensions.Hosting;
 using FasTnT.Host.Infrastructure.Binding;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authentication;
+using MediatR;
+using FasTnT.Domain;
+using FasTnT.Domain.Queries;
+using FasTnT.Data.PostgreSql;
+using FasTnT.Subscriptions;
 using IHostingEnvironment = Microsoft.AspNetCore.Hosting.IHostingEnvironment;
-using FasTnT.Formatters;
-using FasTnT.Formatters.Xml;
 
 namespace FasTnT.Host
 {
@@ -39,16 +38,17 @@ namespace FasTnT.Host
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddEpcisDomain()
-                    .AddEpcisPersistence(Configuration.GetConnectionString("FasTnT.Database"))
-                    .AddSingleton<IHostedService, SubscriptionService>();
+            services.AddMediatR(Constants.Assembly);
+            services.AddScoped<RequestContext>();
+            // Add Domain services
+            services.AddScoped<IEpcisQuery, SimpleEventQuery>();
+            services.AddScoped<IEpcisQuery, SimpleMasterdataQuery>();
 
-            services.AddMvc(o =>
-                        {
-                            o.ModelBinderProviders.Insert(0, new EpcisModelBinderProvider());
-                            o.ModelBinderProviders.Insert(1, new EpcisQueryParameterBinderProvider());
-                            o.OutputFormatters.Insert(0, new EpcisResponseOutputFormatter());
-                        })
+            // Add Storage services
+            services.AddEpcisPersistence(Configuration.GetConnectionString("FasTnT.Database"))
+                    .AddBackgroundSubscriptionService();
+
+            services.AddMvc(ConfigureMvsOptions)
                     .AddApplicationPart(typeof(Startup).Assembly)
                     .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
@@ -58,13 +58,16 @@ namespace FasTnT.Host
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
-            EpcisFormatter.Default = XmlFormatter.Instance;
-            Constants.SubscriptionTaskDelayTimeoutInMs = Configuration.GetSection("Settings").GetValue("SubscriptionWaitTimeout", 5000);
-
             app.UseExceptionHandlingMiddleware(env.IsDevelopment())
                .UseAuthentication()
                .UseNoContentStatusCode()
                .UseMvc();
+        }
+
+        private static void ConfigureMvsOptions(MvcOptions options)
+        {
+            options.ModelBinderProviders.Insert(0, new EpcisModelBinderProvider());
+            options.OutputFormatters.Insert(0, new EpcisResponseOutputFormatter());
         }
     }
 }

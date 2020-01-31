@@ -1,38 +1,47 @@
-﻿using FasTnT.Formatters;
-using FasTnT.Formatters.Json;
-using FasTnT.Formatters.Xml;
+﻿using FasTnT.Domain.Commands;
+using FasTnT.Parsers.Xml;
 using Microsoft.AspNetCore.Mvc.Filters;
 using System;
+using System.Collections.Generic;
+using Microsoft.Extensions.DependencyInjection;
+using FasTnT.Domain;
 
 namespace FasTnT.Host.Infrastructure.Attributes
 {
     public class FormatterAttribute : Attribute, IFilterFactory
     {
+        public static IDictionary<Format, ICommandFormatter> KnownFormatters = new Dictionary<Format, ICommandFormatter>
+        {
+            { Format.Xml, new XmlCommandFormatter() },
+            { Format.Soap, new SoapCommandFormatter() }
+        };
+
         public FormatterAttribute(Format type) => Formatter = GetFormatter(type);
 
-        public IFormatter Formatter { get; private set; }
         public bool IsReusable => false;
         public IFilterMetadata CreateInstance(IServiceProvider serviceProvider) => new FormatterResourceFilter(Formatter);
+        public ICommandFormatter Formatter { get; private set; }
 
-        private IFormatter GetFormatter(Format type)
+        private ICommandFormatter GetFormatter(Format type)
         {
-            switch(type)
+            if (KnownFormatters.TryGetValue(type, out ICommandFormatter formatter))
             {
-                case Format.Json: return JsonFormatter.Instance;
-                case Format.Soap: return SoapFormatter.Instance;
-                case Format.Xml: return XmlFormatter.Instance;
-                default: throw new ArgumentOutOfRangeException(type.ToString());
-            };
+                return formatter;
+            }
+            else
+            {
+                throw new ArgumentException($"Unknown EPCIS format: '{type}'");
+            }
         }
 
         private class FormatterResourceFilter : IResourceFilter
         {
-            private readonly IFormatter _formatter;
+            private readonly ICommandFormatter _formatter;
 
-            public FormatterResourceFilter(IFormatter formatter) => _formatter = formatter;
+            public FormatterResourceFilter(ICommandFormatter formatter) => _formatter = formatter;
 
             public void OnResourceExecuted(ResourceExecutedContext context) { }
-            public void OnResourceExecuting(ResourceExecutingContext context) => context.HttpContext.SetFormatter(_formatter);
+            public void OnResourceExecuting(ResourceExecutingContext context) => context.HttpContext.RequestServices.GetService<RequestContext>().Formatter = _formatter;
         }
     }
 }

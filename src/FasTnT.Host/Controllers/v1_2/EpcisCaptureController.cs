@@ -1,6 +1,6 @@
-﻿using FasTnT.Domain;
+﻿using FasTnT.Domain.Commands;
 using FasTnT.Host.Infrastructure.Attributes;
-using FasTnT.Model;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading;
@@ -11,14 +11,13 @@ namespace FasTnT.Host.Controllers.v1_2
     [Authorize]
     [Formatter(Format.Xml)]
     [Route("v1_2/Capture")]
-    public class EpcisCaptureService : Controller
+    public class EpcisCaptureController : Controller
     {
-        private readonly CaptureDispatcher _dispatcher;
+        private readonly IMediator _mediator;
 
-        public EpcisCaptureService(CaptureDispatcher service) => _dispatcher = service;
+        public EpcisCaptureController(IMediator mediator) => _mediator = mediator;
 
         [HttpPost]
-        public async Task Capture(Request request, CancellationToken cancellationToken)
-            => await _dispatcher.DispatchDocument(request, cancellationToken);
+        public async Task Capture(ICaptureRequest request, CancellationToken cancellationToken) => await _mediator.Send(request, cancellationToken);
     }
 }

@@ -1,12 +1,12 @@
-﻿using FasTnT.Formatters;
-using FasTnT.Model;
-using FasTnT.Model.Queries;
+﻿using FasTnT.Domain;
+using FasTnT.Domain.Commands;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace FasTnT.Host.Infrastructure.Binding
 {
@@ -14,8 +14,8 @@ namespace FasTnT.Host.Infrastructure.Binding
     {
         static readonly IDictionary<Type, IModelBinder> KnownBinders = new Dictionary<Type, IModelBinder>
         {
-            { typeof(EpcisQuery), new EpcisModelBinder<EpcisQuery>(x => x.ReadQuery) },
-            { typeof(Request), new EpcisModelBinder<Request>(x => x.ReadRequest) }
+            { typeof(IQueryRequest), new EpcisModelBinder<IQueryRequest>(x => x.ParseQuery) },
+            { typeof(ICaptureRequest), new EpcisModelBinder<ICaptureRequest>(x => x.ParseCapture) }
         };
 
         public IModelBinder GetBinder(ModelBinderProviderContext context)
@@ -29,15 +29,16 @@ namespace FasTnT.Host.Infrastructure.Binding
 
         private class EpcisModelBinder<T> : IModelBinder
         {
-            private readonly Func<IFormatter, Func<Stream, CancellationToken, Task<T>>> _selector;
+            private readonly Func<ICommandFormatter, Func<Stream, CancellationToken, Task<T>>> _selector;
 
-            public EpcisModelBinder(Func<IFormatter, Func<Stream, CancellationToken, Task<T>>> selector) => _selector = selector;
+            public EpcisModelBinder(Func<ICommandFormatter, Func<Stream, CancellationToken, Task<T>>> selector) => _selector = selector;
 
             public async Task BindModelAsync(ModelBindingContext bindingContext)
             {
-                var httpCtx = bindingContext.HttpContext;
-                var formatter = _selector(httpCtx.GetFormatter());
-                var model = await formatter(httpCtx.Request.Body, httpCtx.RequestAborted);
+                var httpContext = bindingContext.HttpContext;
+                var requestContext = httpContext.RequestServices.GetService<RequestContext>();
+                var formatter = _selector(requestContext.Formatter);
+                var model = await formatter(httpContext.Request.Body, httpContext.RequestAborted);
 
                 bindingContext.Result = ModelBindingResult.Success(model);
             }
