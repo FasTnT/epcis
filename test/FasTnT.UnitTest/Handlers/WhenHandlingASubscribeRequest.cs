@@ -28,7 +28,7 @@ namespace FasTnT.UnitTest.Handlers
             Query = new Mock<IEpcisQuery>();
             SubscriptionManager = new Mock<ISubscriptionManager>();
             CancellationToken = new CancellationTokenSource().Token;
-            Request = new SubscribeRequest { Subscription = new Domain.Model.Subscriptions.Subscription{ QueryName = "TestQuery" } };
+            Request = new SubscribeRequest { Subscription = new Domain.Model.Subscriptions.Subscription { QueryName = "TestQuery", Trigger = "test", Destination = "https://test.epcis.server/capture" } };
             Handler = new SubscribeHandler(new[] { Query.Object }, SubscriptionManager.Object, Mediator.Object);
 
             Query.SetupGet(x => x.Name).Returns("TestQuery");

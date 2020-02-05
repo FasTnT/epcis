@@ -7,7 +7,7 @@ namespace FasTnT.Parsers.Xml.Capture
 {
     public static class XmlMasterDataParser
     {
-        public static IList<EpcisMasterData> ParseMasterDatas(IEnumerable<XElement> elements)
+        public static List<EpcisMasterData> ParseMasterDatas(IEnumerable<XElement> elements)
         {
             var parsedElements = new List<EpcisMasterData>();
 

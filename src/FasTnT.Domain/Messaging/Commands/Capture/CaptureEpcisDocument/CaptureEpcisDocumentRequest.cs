@@ -4,9 +4,12 @@ using FasTnT.Domain.Commands;
 using FasTnT.Domain.Data;
 using FasTnT.Domain.Data.Model;
 using FasTnT.Model;
+using FasTnT.Model.Events.Enums;
+using FasTnT.Model.Exceptions;
 using FasTnT.Model.MasterDatas;
 using MediatR;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -15,8 +18,8 @@ namespace FasTnT.Commands.Requests
     public class CaptureEpcisDocumentRequest : ICaptureRequest
     {
         public EpcisRequestHeader Header { get; set; }
-        public IList<EpcisEvent> EventList { get; set; } = new List<EpcisEvent>();
-        public IList<EpcisMasterData> MasterDataList { get; set; } = new List<EpcisMasterData>();
+        public List<EpcisEvent> EventList { get; set; } = new List<EpcisEvent>();
+        public List<EpcisMasterData> MasterDataList { get; set; } = new List<EpcisMasterData>();
 
         public class CaptureEpcisDocumentHandler : IRequestHandler<CaptureEpcisDocumentRequest, IEpcisResponse>
         {
@@ -31,6 +34,8 @@ namespace FasTnT.Commands.Requests
 
             public async Task<IEpcisResponse> Handle(CaptureEpcisDocumentRequest request, CancellationToken cancellationToken)
             {
+                request.EventList.ForEach(Validate);
+
                 var captureRequest = new CaptureDocumentRequest
                 {
                     Header = request.Header,
@@ -42,6 +47,18 @@ namespace FasTnT.Commands.Requests
 
                 return EmptyResponse.Value;
             }
+
+            internal static void Validate(EpcisEvent evt)
+            {
+                evt.Epcs.ForEach(e => UriValidator.Validate(e.Id));
+
+                if (IsAddOrDeleteAggregation(evt) && !evt.Epcs.Any(x => x.Type == EpcType.ParentId)) // TCR-7 parentID is Populated for ADD or DELETE Actions in Aggregation Events
+                {
+                    throw new EpcisException(ExceptionType.ValidationException, "TCR-7: parentID must be populated for ADD or DELETE aggregation event.");
+                }
+            }
+
+            private static bool IsAddOrDeleteAggregation(EpcisEvent evt) => evt.Type == EventType.Aggregation && new[] { EventAction.Add, EventAction.Delete }.Contains(evt.Action);
         }
     }
 }
