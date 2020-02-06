@@ -9,6 +9,8 @@ namespace FasTnT.Domain.Subscriptions
         private readonly List<int> _values = new List<int>();
         private readonly int _minValue, _maxValue;
 
+        public int Min => _values.Min();
+
         public static ScheduleEntry Parse(string expression, int min, int max) => new ScheduleEntry(expression, min, max);
         public bool HasValue(int value) => _values.Contains(value);
 
