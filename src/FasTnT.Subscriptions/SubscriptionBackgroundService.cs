@@ -38,7 +38,7 @@ namespace FasTnT.Subscriptions
                 {
                     // Get all subscriptions where the next execution time is reached
                     var subscriptions = _scheduledExecutions.Where(x => x.Value <= DateTime.UtcNow).ToArray();
-                    subscriptions.ForEach(x => _scheduledExecutions.TryUpdate(x.Key, new SubscriptionSchedule(x.Key).GetNextOccurence(DateTime.UtcNow), x.Value));
+                    subscriptions.ForEach(x => _scheduledExecutions.TryUpdate(x.Key, new SubscriptionSchedule(x.Key.Schedule).GetNextOccurence(DateTime.UtcNow), x.Value));
 
                     triggeredSubscriptions.AddRange(subscriptions.Select(x => x.Key));
 
@@ -97,7 +97,7 @@ namespace FasTnT.Subscriptions
             {
                 if (string.IsNullOrEmpty(subscription.Trigger))
                 {
-                    _scheduledExecutions[subscription] = new SubscriptionSchedule(subscription).GetNextOccurence(DateTime.UtcNow);
+                    _scheduledExecutions[subscription] = new SubscriptionSchedule(subscription.Schedule).GetNextOccurence(DateTime.UtcNow);
                 }
                 else
                 {

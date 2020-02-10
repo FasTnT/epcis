@@ -6,7 +6,7 @@ using FasTnT.Domain.Data.Model;
 using FasTnT.Model;
 using FasTnT.Model.Events.Enums;
 using MediatR;
-using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -15,7 +15,7 @@ namespace FasTnT.Commands.Requests
     public class CaptureEpcisQueryCallbackRequest : ICaptureRequest
     {
         public EpcisRequestHeader Header { get; set; }
-        public EpcisEvent[] EventList { get; set; }
+        public List<EpcisEvent> EventList { get; set; }
         public string SubscriptionName { get; set; }
 
         public class CaptureEpcisQueryCallbackHandler : IRequestHandler<CaptureEpcisQueryCallbackRequest, IEpcisResponse>

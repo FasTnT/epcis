@@ -7,26 +7,35 @@ namespace FasTnT.Domain.Subscriptions
     {
         private readonly ScheduleEntry _seconds, _minutes, _hours, _dayOfMonth, _month, _dayOfWeek;
 
-        public SubscriptionSchedule(Subscription subscription)
+        public SubscriptionSchedule(QuerySchedule schedule)
         {
-            _seconds = ScheduleEntry.Parse(subscription.Schedule?.Second, 0, 59);
-            _minutes = ScheduleEntry.Parse(subscription.Schedule?.Minute, 0, 59);
-            _hours = ScheduleEntry.Parse(subscription.Schedule?.Hour, 0, 23);
-            _dayOfMonth = ScheduleEntry.Parse(subscription.Schedule?.DayOfMonth, 1, 31);
-            _month = ScheduleEntry.Parse(subscription.Schedule?.Month, 1, 12);
-            _dayOfWeek = ScheduleEntry.Parse(subscription.Schedule?.DayOfWeek, 1, 7);
+            schedule = schedule ?? new QuerySchedule();
+
+            _seconds = ScheduleEntry.Parse(schedule.Second, 0, 59);
+            _minutes = ScheduleEntry.Parse(schedule.Minute, 0, 59);
+            _hours = ScheduleEntry.Parse(schedule.Hour, 0, 23);
+            _dayOfMonth = ScheduleEntry.Parse(schedule.DayOfMonth, 1, 31);
+            _month = ScheduleEntry.Parse(schedule.Month, 1, 12);
+            _dayOfWeek = ScheduleEntry.Parse(schedule.DayOfWeek, 1, 7);
+        }
+
+        public static bool IsValid(Subscription request)
+        {
+            try
+            {
+                new SubscriptionSchedule(request.Schedule);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
         }
 
 
         public virtual DateTime GetNextOccurence(DateTime startDate)
         {
-            var tentative = startDate.AddSeconds(1); // Parse from the next second
-
-            while (!_seconds.HasValue(tentative.Second)) tentative = tentative.AddSeconds(1);
-            while (!_minutes.HasValue(tentative.Minute)) tentative = tentative.AddMinutes(1);
-            while (!_hours.HasValue(tentative.Hour)) tentative = tentative.AddHours(1);
-            while (!_dayOfMonth.HasValue(tentative.Day)) tentative = tentative.AddDays(1);
-            while (!_month.HasValue(tentative.Month)) tentative = tentative.AddMonths(1);
+            var tentative = SetMonth(SetDayOfMonth(SetHours(SetMinutes(SetSeconds(startDate.AddSeconds(1)))))); // Parse from the next second
 
             if (!_dayOfWeek.HasValue(1 + (int)tentative.DayOfWeek))
             {
@@ -36,17 +45,42 @@ namespace FasTnT.Domain.Subscriptions
             return tentative;
         }
 
-        public static bool IsValid(Subscription request)
+        private DateTime SetMinutes(DateTime tentative)
         {
-            try
-            {
-                new SubscriptionSchedule(request);
-                return true;
-            }
-            catch
-            {
-                return false;
-            }
+            if (!_minutes.HasValue(tentative.Minute)) tentative = new DateTime(tentative.Year, tentative.Month, tentative.Day, tentative.Hour, Math.Max(tentative.Minute, _minutes.Min), _seconds.Min);
+            while (!_minutes.HasValue(tentative.Minute)) tentative = tentative.AddMinutes(1);
+
+            return tentative;
+        }
+
+        private DateTime SetHours(DateTime tentative)
+        {
+            if (!_hours.HasValue(tentative.Hour)) tentative = new DateTime(tentative.Year, tentative.Month, tentative.Day, Math.Max(tentative.Hour, _hours.Min), _minutes.Min, _seconds.Min);
+            while (!_hours.HasValue(tentative.Hour)) tentative = tentative.AddHours(1);
+
+            return tentative;
+        }
+
+        private DateTime SetDayOfMonth(DateTime tentative)
+        {
+            if (!_dayOfMonth.HasValue(tentative.Day)) tentative = new DateTime(tentative.Year, tentative.Month, Math.Max(tentative.Day, _dayOfMonth.Min), _hours.Min, _minutes.Min, _seconds.Min);
+            while (!_dayOfMonth.HasValue(tentative.Day)) tentative = tentative.AddDays(1);
+
+            return tentative;
+        }
+
+        private DateTime SetMonth(DateTime tentative)
+        {
+            if (!_month.HasValue(tentative.Month)) tentative = new DateTime(tentative.Year, Math.Max(tentative.Month, _month.Min), _dayOfMonth.Min, _hours.Min, _hours.Min, _minutes.Min, _seconds.Min);
+            while (!_month.HasValue(tentative.Month)) tentative = tentative.AddMonths(1);
+
+            return tentative;
+        }
+
+        private DateTime SetSeconds(DateTime tentative)
+        {
+            while (!_seconds.HasValue(tentative.Second)) tentative = tentative.AddSeconds(1);
+            return tentative;
         }
     }
 }

@@ -42,7 +42,7 @@ namespace FasTnT.Parsers.Xml.Capture
             { "baseExtension",       (evt, node) => ParseExtensionElement(node, evt) },
         };
 
-        internal static EpcisEvent[] ParseEvents(params XElement[] eventList)
+        internal static List<EpcisEvent> ParseEvents(params XElement[] eventList)
         {
             var events = new List<EpcisEvent>(eventList.Length);
 
@@ -59,7 +59,7 @@ namespace FasTnT.Parsers.Xml.Capture
                 }
             }
 
-            return events.ToArray();
+            return events.ToList();
         }
 
         internal static EpcisEvent ParseAttributes(XElement root, EpcisEvent epcisEvent)
