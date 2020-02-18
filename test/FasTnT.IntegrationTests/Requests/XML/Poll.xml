@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<epcisq:EPCISQueryDocument xmlns:epcisq="urn:epcglobal:epcis-query:xsd:1" creationDate="2019-01-26T20:10:01.8111457Z" schemaVersion="1">
+  <EPCISBody>
+    <epcisq:Poll>
+      <queryName>SimpleEventQuery</queryName>
+      <params>
+        <param>
+          <name>EQ_action</name>
+          <value>
+            <value>ADD</value>
+          </value>
+        </param>
+      </params>
+    </epcisq:Poll>
+  </EPCISBody>
+</epcisq:EPCISQueryDocument>

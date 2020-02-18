@@ -1,5 +1,6 @@
 ![](https://github.com/FasTnT/epcis/workflows/.NET%20Core/badge.svg)
 [![Maintainability](https://api.codeclimate.com/v1/badges/40672e48b92da57852d7/maintainability)](https://codeclimate.com/github/FasTnT/epcis/maintainability)
+[![codecov](https://codecov.io/gh/FasTnT/epcis/branch/develop/graph/badge.svg)](https://codecov.io/gh/FasTnT/epcis)
 
 # FasTnT EPCIS
 
@@ -32,7 +33,7 @@ The API is secured using HTTP Basic authentication. The default username:passwor
 
 **Queries** endpoint supports XML requests on endpoint `/v1_2/Query` and SOAP requests on endpoint `/v1_2/Query.svc`. Note that it will not return the wsdl on a `GET` request..
 
-The file `documents\EPCIS Examples - 1.2.postman_collection.json` contains XML requests examples to be run in [PostMan](https://www.getpostman.com/), and the file `EPCglobal-epcis-query-1-2-soapui-project` contains a project with SOAP example requests to be run in [SoapUI](https://www.soapui.org/open-source.html).
+The file `documents\EPCIS Examples - 1.2.postman_collection.json` contains XML requests examples to be run in [PostMan](https://www.getpostman.com/), and the file `EPCglobal-epcis-query-1-2-soapui-project.xml` contains a project with SOAP example requests to be run in [SoapUI](https://www.soapui.org/open-source.html).
 
 ### Others endpoints:
 
@@ -77,4 +78,4 @@ This project is licensed under the Apache 2.0 license - see the LICENSE file for
 
 Contact: fastnt@pm.me
 
-_Last update: November 2019_
+_Last update: February 2020_

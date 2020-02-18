@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System;
 using System.IO;
 using System.IO.Compression;
-using FasTnT.Persistence.Dapper.Setup;
+using FasTnT.Data.PostgreSql.Migration;
 
 namespace FasTnT.IntegrationTests.Common
 {
@@ -52,7 +52,7 @@ namespace FasTnT.IntegrationTests.Common
         {
             using (var command = Connection.CreateCommand())
             {
-                command.CommandText = UnzipCommand(PgSqlDatabaseRequests.CreateZipped);
+                command.CommandText = UnzipCommand(DatabaseSqlRequests.CreateZipped);
                 command.ExecuteNonQuery();
             }
         }
@@ -61,7 +61,7 @@ namespace FasTnT.IntegrationTests.Common
         {
             using (var command = Connection.CreateCommand())
             {
-                command.CommandText = UnzipCommand(PgSqlDatabaseRequests.DropZipped);
+                command.CommandText = UnzipCommand(DatabaseSqlRequests.DropZipped);
                 command.ExecuteNonQuery();
             }
         }

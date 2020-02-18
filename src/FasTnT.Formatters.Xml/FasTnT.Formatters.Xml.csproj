@@ -1,30 +1,38 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.2</TargetFramework>
-	  <LangVersion>7.1</LangVersion>
+	<LangVersion>7.1</LangVersion>
   </PropertyGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="Validation\XSDs\BasicTypes.xsd" />
-    <EmbeddedResource Include="Validation\XSDs\BusinessScope.xsd" />
-    <EmbeddedResource Include="Validation\XSDs\DocumentIdentification.xsd" />
-    <EmbeddedResource Include="Validation\XSDs\EPCglobal-epcis-1_2.xsd" />
-    <EmbeddedResource Include="Validation\XSDs\EPCglobal-epcis-masterdata-1_2.xsd" />
-    <EmbeddedResource Include="Validation\XSDs\EPCglobal-epcis-query-1_2.xsd" />
-    <EmbeddedResource Include="Validation\XSDs\EPCglobal.xsd" />
-    <EmbeddedResource Include="Validation\XSDs\Manifest.xsd" />
-    <EmbeddedResource Include="Validation\XSDs\Partner.xsd" />
-    <EmbeddedResource Include="Validation\XSDs\StandardBusinessDocumentHeader.xsd" />
+    <None Remove="Parsers\XSDs\BasicTypes.xsd" />
+    <None Remove="Parsers\XSDs\BusinessScope.xsd" />
+    <None Remove="Parsers\XSDs\DocumentIdentification.xsd" />
+    <None Remove="Parsers\XSDs\EPCglobal-epcis-1_2.xsd" />
+    <None Remove="Parsers\XSDs\EPCglobal-epcis-masterdata-1_2.xsd" />
+    <None Remove="Parsers\XSDs\EPCglobal-epcis-query-1_2.xsd" />
+    <None Remove="Parsers\XSDs\EPCglobal.xsd" />
+    <None Remove="Parsers\XSDs\Manifest.xsd" />
+    <None Remove="Parsers\XSDs\Partner.xsd" />
+    <None Remove="Parsers\XSDs\StandardBusinessDocumentHeader.xsd" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="morelinq" Version="3.2.0" />
+    <EmbeddedResource Include="Parsers\XSDs\BasicTypes.xsd" />
+    <EmbeddedResource Include="Parsers\XSDs\BusinessScope.xsd" />
+    <EmbeddedResource Include="Parsers\XSDs\DocumentIdentification.xsd" />
+    <EmbeddedResource Include="Parsers\XSDs\EPCglobal-epcis-1_2.xsd" />
+    <EmbeddedResource Include="Parsers\XSDs\EPCglobal-epcis-masterdata-1_2.xsd" />
+    <EmbeddedResource Include="Parsers\XSDs\EPCglobal-epcis-query-1_2.xsd" />
+    <EmbeddedResource Include="Parsers\XSDs\EPCglobal.xsd" />
+    <EmbeddedResource Include="Parsers\XSDs\Manifest.xsd" />
+    <EmbeddedResource Include="Parsers\XSDs\Partner.xsd" />
+    <EmbeddedResource Include="Parsers\XSDs\StandardBusinessDocumentHeader.xsd" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\FasTnT.Formatters\FasTnT.Formatters.csproj" />
-    <ProjectReference Include="..\FasTnT.Model\FasTnT.Model.csproj" />
+    <ProjectReference Include="..\FasTnT.Domain\FasTnT.Domain.csproj" />
   </ItemGroup>
 
 </Project>

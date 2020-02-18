@@ -1,5 +1,4 @@
-﻿using FasTnT.Domain.Persistence;
-using FasTnT.Domain.Services.Users;
+﻿using FasTnT.Domain;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -9,20 +8,19 @@ using System.Security.Claims;
 using System.Text;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
+using MediatR;
+using FasTnT.Domain.Commands.Requests;
 
 namespace FasTnT.Host
 {
     public class BasicAuthenticationHandler : AuthenticationHandler<AuthenticationSchemeOptions>
     {
         private const string HeaderKey = "Authorization";
-        private readonly UserContext _userContext;
-        private readonly IUnitOfWork _unitOfWork;
 
-        public BasicAuthenticationHandler(IOptionsMonitor<AuthenticationSchemeOptions> options, ILoggerFactory logger, UrlEncoder encoder, ISystemClock clock, IUnitOfWork unitOfWork, UserContext userContext)
+        public BasicAuthenticationHandler(IOptionsMonitor<AuthenticationSchemeOptions> options, ILoggerFactory logger, UrlEncoder encoder, ISystemClock clock)
             : base(options, logger, encoder, clock)
         {
-            _userContext = userContext;
-            _unitOfWork = unitOfWork;
         }
 
         protected override async Task<AuthenticateResult> HandleAuthenticateAsync()
@@ -50,17 +48,21 @@ namespace FasTnT.Host
 
         private async Task<AuthenticateResult> AuthenticateUser(string username, string password)
         {
-            var user = await _unitOfWork.UserManager.GetByUsername(username, Request.HttpContext.RequestAborted);
+            var context = Request.HttpContext.RequestServices.GetService<RequestContext>();
+            var mediator = Request.HttpContext.RequestServices.GetService<IMediator>();
+            var response = await mediator.Send(new UserLogInRequest { Username = username, Password = password });
 
-            if (_userContext.Authenticate(user, password))
+            if (response.Authorized)
             {
-                var claims = new[] 
+                var claims = new[]
                 {
-                    new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-                    new Claim(ClaimTypes.Name, user.UserName),
+                    new Claim(ClaimTypes.NameIdentifier, username),
+                    new Claim(ClaimTypes.Name, username),
                 };
                 var principal = new ClaimsPrincipal(new ClaimsIdentity(claims, Scheme.Name));
                 var ticket = new AuthenticationTicket(principal, Scheme.Name);
+
+                context.User = response.User;
 
                 return AuthenticateResult.Success(ticket);
             }

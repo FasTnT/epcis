@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Net;
 using System.Threading.Tasks;
+using FasTnT.Commands.Responses;
+using FasTnT.Domain;
 using FasTnT.Model.Exceptions;
-using FasTnT.Model.Responses;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace FasTnT.Host.Middleware
 {
@@ -31,6 +33,11 @@ namespace FasTnT.Host.Middleware
             {
                 _logger.LogError($"[{context.TraceIdentifier}] Request failed with reason '{ex.Message}'");
                 var epcisException = ex as EpcisException;
+
+                context.Response.ContentType = context.Request.ContentType;
+                context.Response.StatusCode = (int)(ex is EpcisException ? HttpStatusCode.BadRequest : HttpStatusCode.InternalServerError);
+
+                var requestContext = context.RequestServices.GetService<RequestContext>();
                 var response = new ExceptionResponse
                 {
                     Exception = (epcisException?.ExceptionType ?? ExceptionType.ImplementationException).DisplayName,
@@ -38,10 +45,7 @@ namespace FasTnT.Host.Middleware
                     Reason = GetMessage(ex)
                 };
 
-                context.Response.ContentType = context.Request.ContentType;
-                context.Response.StatusCode = (int)(ex is EpcisException ? HttpStatusCode.BadRequest : HttpStatusCode.InternalServerError);
-
-                await context.GetFormatter().WriteResponse(response, context.Response.Body, context.RequestAborted);
+                await requestContext.Formatter.WriteResponse(response, context.Response.Body, context.RequestAborted);
             }
         }
 
