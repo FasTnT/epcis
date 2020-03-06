@@ -22,6 +22,8 @@ namespace FasTnT.Domain.Data
         void Apply(EqualsCorrectiveEventIdFilter filter);
         void Apply(MasterdataHierarchyFilter filter);
         void Apply(SourceDestinationFilter filter);
+        void Apply(ExistsAttributeFilter filter);
+        void Apply(AttributeFilter filter);
         Task<IEnumerable<EpcisEvent>> Fetch(CancellationToken cancellationToken);
     }
 }

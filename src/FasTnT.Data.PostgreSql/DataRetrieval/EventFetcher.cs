@@ -38,6 +38,8 @@ namespace FasTnT.Data.PostgreSql.DataRetrieval
         public void Apply(EqualsCorrectiveEventIdFilter filter) => _query = _query.Where($"EXISTS(SELECT edi.event_id FROM epcis.event_declaration_eventid edi WHERE edi.corrective_eventid = ANY({_parameters.Add(filter.Values)}) AND edi.event_id = event.id)");
         public void Apply(MasterdataHierarchyFilter filter) => _query = _query.Where($"({filter.Field.ToPgSql()} = ANY({_parameters.Add(filter.Values)}) OR EXISTS(SELECT h.parent_id FROM cbv.masterdata_hierarchy h WHERE h.parent_id = ANY({_parameters.Last}) AND h.children_id = {filter.Field.ToPgSql()} AND h.type = '{filter.Field.ToCbvType()}'))");
         public void Apply(SourceDestinationFilter filter) => _query = _query.Where($"EXISTS(SELECT sd.event_id FROM epcis.source_destination sd WHERE sd.direction = {filter.Type.Id} AND sd.type = {_parameters.Add(filter.Name)} AND sd.source_dest_id = ANY({_parameters.Add(filter.Values)}) AND sd.event_id = event.id)");
+        public void Apply(ExistsAttributeFilter filter) => _query = _query.Where($"EXISTS(SELECT at.id FROM cbv.attribute at WHERE at.masterdata_id = {filter.Field.ToPgSql()} AND at.id = {_parameters.Add(filter.AttributeName)})");
+        public void Apply(AttributeFilter filter) => _query = _query.Where($"EXISTS(SELECT at.id FROM cbv.attribute at WHERE at.masterdata_id = {filter.Field.ToPgSql()} AND at.id = {_parameters.Add(filter.AttributeName)} AND at.value = ANY({_parameters.Add(filter.Values)}))");
         public void Apply(CustomFieldFilter filter) => throw new System.NotImplementedException();
         public void Apply(LimitFilter filter) => _limit = filter.Value;
 

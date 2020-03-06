@@ -52,8 +52,8 @@ namespace FasTnT.Domain.Queries
             { "^(EQ|GT|LT|GE|LE)_INNER_",      (fetcher, param) => fetcher.Apply(new CustomFieldFilter { Field = param.GetField(FieldType.EventExtension, true), Comparator = param.GetComparator(), IsInner = true, Values = param.Values }) },
             { "^(EQ|GT|LT|GE|LE)_",            (fetcher, param) => fetcher.Apply(new CustomFieldFilter { Field = param.GetField(FieldType.EventExtension, false), Comparator = param.GetComparator(), IsInner = false, Values = param.Values }) },
             { "^EXISTS_INNER",                 (fetcher, param) => fetcher.Apply(new ExistCustomFieldFilter { Field = param.GetField(FieldType.EventExtension, true), IsInner = true }) },
-            //{ "^EQATTR_",                      (fetcher, param) => ApplyExistAttributeParameter(param, fetcher) },
-            //{ "^HASATTR_",                     (fetcher, param) => ApplyHasAttributeParameter(param, fetcher) }
+            { "^EQATTR_",                      (fetcher, param) => fetcher.Apply(new AttributeFilter { Field = param.GetAttributeField(), AttributeName = param.GetAttributeName(), Values = param.Values }) },
+            { "^HASATTR_",                     (fetcher, param) => fetcher.Apply(new ExistsAttributeFilter { Field = param.GetAttributeField(), AttributeName = param.GetAttributeName()}) }
         };
 
         private readonly IEventFetcher _eventFetcher;

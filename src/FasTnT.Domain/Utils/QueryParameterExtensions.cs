@@ -43,6 +43,20 @@ namespace FasTnT.Domain.Utils
             };
         }
 
+        public static EpcisField GetAttributeField(this QueryParameter parameter)
+        {
+            var parts = parameter.Name.Split('_', 3);
+
+            return Enumeration.GetByDisplayName<EpcisField>(parts[1]);
+        }
+
+        public static string GetAttributeName(this QueryParameter parameter)
+        {
+            var parts = parameter.Name.Split('_', 3);
+
+            return parts[2];
+        }
+
         public static EpcType[] GetMatchEpcTypes(this QueryParameter parameter)
         {
             if (!parameter.Name.StartsWith("MATCH_")) throw new Exception("A 'MATCH_*' parameter is expected here.");
