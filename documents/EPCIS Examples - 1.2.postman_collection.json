@@ -112,7 +112,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<epcis:EPCISDocument xmlns:epcis=\"urn:epcglobal:epcis:xsd:1\" creationDate=\"2017-09-19T12:57:12Z\" schemaVersion=\"1.0\">\r\n   <EPCISBody>\r\n      <EventList>\r\n         <AggregationEvent>\r\n            <eventTime>2018-06-14T12:51:17+02:00</eventTime>\r\n            <eventTimeZoneOffset>+02:00</eventTimeZoneOffset>\r\n            <parentID>urn:epc:id:sscc:4001356.5900000817</parentID>\r\n            <childEPCs>\r\n               <epc>urn:epc:id:sscc:4001356.5900000818</epc>\r\n               <epc>urn:epc:id:sscc:4001356.5900000819</epc>\r\n               <epc>urn:epc:id:sscc:4001356.5900000820</epc>\r\n            </childEPCs>\r\n            <action>ADD</action>\r\n            <bizStep>urn:fastnt:demo:bizstep:demo:packing</bizStep>\r\n            <disposition>urn:epcglobal:cbv:disp:loading</disposition>\r\n            <readPoint>\r\n               <id>urn:fastnt:demo:readpoint:0037000.00729.210,432</id>\r\n            </readPoint>\r\n            <bizLocation>\r\n               <id>urn:fastnt:demo:bizloc:0037000.00729.210</id>\r\n            </bizLocation>\r\n         </AggregationEvent>\r\n      </EventList>\r\n   </EPCISBody>\r\n</epcis:EPCISDocument>"
+							"raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<epcis:EPCISDocument xmlns:cbvmda=\"urn:epcglobal:cbv:mda\" xmlns:epcis=\"urn:epcglobal:epcis:xsd:1\" xmlns:gs1ushc=\"http://epcis.gs1us.org/hc/ns\"\r\nxmlns:tl=\"http://epcis.tracelink.com/ns\"\r\nxmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:sbdh=\"http://www.unece.org/cefact/namespaces/StandardBusinessDocumentHeader\"\r\nschemaVersion=\"1.2\" creationDate=\"2018-06-12T06:31:32Z\">\r\n\t<EPCISHeader>\r\n\t\t<sbdh:StandardBusinessDocumentHeader>\r\n\t\t\t<sbdh:HeaderVersion>1.0</sbdh:HeaderVersion>\r\n\t\t\t<sbdh:Sender>\r\n\t\t\t\t<sbdh:Identifier Authority=\"GLN\">8779891013658</sbdh:Identifier>\r\n\t\t\t</sbdh:Sender>\r\n\t\t\t<sbdh:Receiver>\r\n\t\t\t\t<sbdh:Identifier Authority=\"GLN\">8811891013778</sbdh:Identifier>\r\n\t\t\t</sbdh:Receiver>\r\n\t\t\t<sbdh:DocumentIdentification>\r\n\t\t\t\t<sbdh:Standard>EPCglobal</sbdh:Standard>\r\n\t\t\t\t<sbdh:TypeVersion>1.0</sbdh:TypeVersion>\r\n\t\t\t\t<sbdh:InstanceIdentifier>201806121745200001</sbdh:InstanceIdentifier>\r\n\t\t\t\t<sbdh:Type>Events</sbdh:Type>\r\n\t\t\t\t<sbdh:CreationDateAndTime>2018-06-12T06:31:32Z</sbdh:CreationDateAndTime>\r\n\t\t\t</sbdh:DocumentIdentification>\r\n\t\t</sbdh:StandardBusinessDocumentHeader>\r\n\t\t<extension>\r\n\t\t\t<EPCISMasterData>\r\n\t\t\t\t<VocabularyList>\r\n\t\t\t\t\t<Vocabulary type=\"urn:epcglobal:epcis:vtype:Location\">\r\n\t\t\t\t\t\t<VocabularyElementList>\r\n\t\t\t\t\t\t\t<!-- SourceList owning_party (sold from business party) -->\r\n\t\t\t\t\t\t\t<VocabularyElement id=\"urn:epc:id:sgln:088202.867701.0\">\r\n\t\t\t\t\t\t\t\t<attribute id=\"urn:epcglobal:cbv:mda#name\">Clara Manufacturing</attribute>\r\n\t\t\t\t\t\t\t\t<attribute id=\"http://epcis.tracelink.com/mda/additionalIdentifier\">712333444</attribute>\r\n\t\t\t\t\t\t\t\t<attribute id=\"http://epcis.tracelink.com/mda/additionalIdentifierType\">DEA</attribute>\r\n\t\t\t\t\t\t\t\t<attribute id=\"http://epcis.tracelink.com/mda/businessClassification\">MANUFACTURER</attribute>\r\n\t\t\t\t\t\t\t\t<attribute id=\"urn:epcglobal:cbv:mda#streetAddressOne\">10 Welsh St</attribute>\r\n\t\t\t\t\t\t\t\t<attribute id=\"urn:epcglobal:cbv:mda#city\">Malden</attribute>\r\n\t\t\t\t\t\t\t\t<attribute id=\"urn:epcglobal:cbv:mda#state\">MA</attribute>\r\n\t\t\t\t\t\t\t\t<attribute id=\"urn:epcglobal:cbv:mda#postalCode\">02148</attribute>\r\n\t\t\t\t\t\t\t\t<attribute id=\"urn:epcglobal:cbv:mda#countryCode\">US</attribute>\r\n\t\t\t\t\t\t\t</VocabularyElement>\r\n\t\t\t\t\t\t\t<!-- SourceList location (ship from location) -->\r\n\t\t\t\t\t\t\t<VocabularyElement id=\"urn:epc:id:sgln:9297187.01994.0\">\r\n\t\t\t\t\t\t\t\t<attribute id=\"urn:epcglobal:cbv:mda#name\">Wilbur Pharmaceutical Imports</attribute>\r\n\t\t\t\t\t\t\t\t<attribute id=\"http://epcis.tracelink.com/mda/additionalIdentifier\">412333444</attribute>\r\n\t\t\t\t\t\t\t\t<attribute id=\"http://epcis.tracelink.com/mda/additionalIdentifierType\">DEA</attribute>\r\n\t\t\t\t\t\t\t\t<attribute id=\"urn:epcglobal:cbv:mda#streetAddressOne\">154 Broadway</attribute>\r\n\t\t\t\t\t\t\t\t<attribute id=\"urn:epcglobal:cbv:mda#city\">Somerville</attribute>\r\n\t\t\t\t\t\t\t\t<attribute id=\"urn:epcglobal:cbv:mda#state\">MA</attribute>\r\n\t\t\t\t\t\t\t\t<attribute id=\"urn:epcglobal:cbv:mda#postalCode\">02145</attribute>\r\n\t\t\t\t\t\t\t\t<attribute id=\"urn:epcglobal:cbv:mda#countryCode\">US</attribute>\r\n\t\t\t\t\t\t\t</VocabularyElement>\r\n\t\t\t\t\t\t\t<!-- DestinationList owning_party (sold to business party) -->\r\n\t\t\t\t\t\t\t<VocabularyElement id=\"urn:epc:id:sgln:8887777.01384.0\">\r\n\t\t\t\t\t\t\t\t<attribute id=\"urn:epcglobal:cbv:mda#name\">Watson Rx Wholesaler</attribute>\r\n\t\t\t\t\t\t\t\t<attribute id=\"http://epcis.tracelink.com/mda/additionalIdentifier\">512333444</attribute>\r\n\t\t\t\t\t\t\t\t<attribute id=\"http://epcis.tracelink.com/mda/additionalIdentifierType\">DEA</attribute>\r\n\t\t\t\t\t\t\t\t<attribute id=\"http://epcis.tracelink.com/mda/businessClassification\">WHOLESALER</attribute>\r\n\t\t\t\t\t\t\t\t<attribute id=\"urn:epcglobal:cbv:mda#streetAddressOne\">555 Neelan Road</attribute>\r\n\t\t\t\t\t\t\t\t<attribute id=\"urn:epcglobal:cbv:mda#city\">Sacramento</attribute>\r\n\t\t\t\t\t\t\t\t<attribute id=\"urn:epcglobal:cbv:mda#state\">CA</attribute>\r\n\t\t\t\t\t\t\t\t<attribute id=\"urn:epcglobal:cbv:mda#postalCode\">95833</attribute>\r\n\t\t\t\t\t\t\t\t<attribute id=\"urn:epcglobal:cbv:mda#countryCode\">US</attribute>\r\n\t\t\t\t\t\t\t</VocabularyElement>\r\n\t\t\t\t\t\t\t<!-- DestinationList location (ship to location) -->\r\n\t\t\t\t\t\t\t<VocabularyElement id=\"http://epcis.gs1us.org/hc/dea/loc/512333444\">\r\n\t\t\t\t\t\t\t\t<attribute id=\"urn:epcglobal:cbv:mda#name\">Watson Rx Wholesaler</attribute>\r\n\t\t\t\t\t\t\t\t<attribute id=\"http://epcis.tracelink.com/mda/additionalIdentifier\">512333444</attribute>\r\n\t\t\t\t\t\t\t\t<attribute id=\"http://epcis.tracelink.com/mda/additionalIdentifierType\">DEA</attribute>\r\n\t\t\t\t\t\t\t\t<attribute id=\"http://epcis.tracelink.com/mda/businessClassification\">WHOLESALER</attribute>\r\n\t\t\t\t\t\t\t\t<attribute id=\"urn:epcglobal:cbv:mda#streetAddressOne\">555 Neelan Road</attribute>\r\n\t\t\t\t\t\t\t\t<attribute id=\"urn:epcglobal:cbv:mda#city\">Sacramento</attribute>\r\n\t\t\t\t\t\t\t\t<attribute id=\"urn:epcglobal:cbv:mda#state\">CA</attribute>\r\n\t\t\t\t\t\t\t\t<attribute id=\"urn:epcglobal:cbv:mda#postalCode\">95833</attribute>\r\n\t\t\t\t\t\t\t\t<attribute id=\"urn:epcglobal:cbv:mda#countryCode\">US</attribute>\r\n\t\t\t\t\t\t\t</VocabularyElement>\r\n\t\t\t\t\t\t\t<!-- SourceList location (Carrier Party) -->\r\n\t\t\t\t\t\t\t<VocabularyElement id=\"urn:epc:id:sgln:064202.867703.0\">\r\n\t\t\t\t\t\t\t\t<attribute id=\"urn:epcglobal:cbv:mda#name\">FedEx</attribute>\r\n\t\t\t\t\t\t\t\t<attribute id=\"urn:epcglobal:cbv:mda#streetAddressOne\">180 Fedex Road</attribute>\r\n\t\t\t\t\t\t\t\t<attribute id=\"urn:epcglobal:cbv:mda#streetAddressTwo\">Building 6B</attribute>\r\n\t\t\t\t\t\t\t\t<attribute id=\"urn:epcglobal:cbv:mda#city\">Atlanta</attribute>\r\n\t\t\t\t\t\t\t\t<attribute id=\"http://epcis.tracelink.com/mda/district\">456</attribute>\r\n\t\t\t\t\t\t\t\t<attribute id=\"urn:epcglobal:cbv:mda#state\">GA</attribute>\r\n\t\t\t\t\t\t\t\t<attribute id=\"urn:epcglobal:cbv:mda#postalCode\">31305</attribute>\r\n\t\t\t\t\t\t\t\t<attribute id=\"urn:epcglobal:cbv:mda#countryCode\">US</attribute>\r\n\t\t\t\t\t\t\t</VocabularyElement>\r\n\t\t\t\t\t\t</VocabularyElementList>\r\n\t\t\t\t\t</Vocabulary>\r\n\t\t\t\t</VocabularyList>\r\n\t\t\t</EPCISMasterData>\r\n\t\t</extension>\r\n\t</EPCISHeader>\r\n\t<EPCISBody>\r\n\t\t<EventList>\r\n\t\t\t<AggregationEvent>\r\n\t\t\t\t<eventTime>2018-06-12T06:31:32Z</eventTime>\r\n\t\t\t\t<eventTimeZoneOffset>-04:00</eventTimeZoneOffset>\r\n\t\t\t\t<parentID>urn:epc:id:sscc:005434.40000000019</parentID>\r\n\t\t\t\t<childEPCs>\r\n\t\t\t\t\t<epc>urn:epc:id:sgtin:068202.0401034.11220207026272</epc>\r\n\t\t\t\t\t<epc>urn:epc:id:sgtin:068202.0401034.11220207026273</epc>\r\n\t\t\t\t\t<epc>urn:epc:id:sgtin:068202.0401034.11220207026274</epc>\r\n\t\t\t\t\t<epc>urn:epc:id:sgtin:068202.0401034.11220207026275</epc>\r\n\t\t\t\t</childEPCs>\r\n\t\t\t\t<action>ADD</action>\r\n\t\t\t\t<bizStep>urn:epcglobal:cbv:bizstep:packing</bizStep>\r\n\t\t\t\t<disposition>urn:epcglobal:cbv:disp:in_progress</disposition>\r\n\t\t\t\t<bizLocation>\r\n\t\t\t\t\t<id>urn:epc:id:sgln:9297187.01994.0</id>\r\n\t\t\t\t</bizLocation>\r\n\t\t\t\t<tl:aggregationEventExtensions>\r\n\t\t\t\t\t<tl:epcOrderItemDetails>\r\n\t\t\t\t\t\t<tl:epcOrderItemList orderItemNumber=\"910\">\r\n\t\t\t\t\t\t\t<tl:epcOrderItem>urn:epc:id:sscc:005434.40000000019</tl:epcOrderItem>\r\n\t\t\t\t\t\t</tl:epcOrderItemList>\r\n\t\t\t\t\t</tl:epcOrderItemDetails>\r\n\t\t\t\t</tl:aggregationEventExtensions>\r\n\t\t\t</AggregationEvent>\r\n\t\t\t<AggregationEvent>\r\n\t\t\t\t<eventTime>2018-06-12T06:31:32Z</eventTime>\r\n\t\t\t\t<eventTimeZoneOffset>-04:00</eventTimeZoneOffset>\r\n\t\t\t\t<parentID>urn:epc:id:sscc:005434.40000000020</parentID>\r\n\t\t\t\t<childEPCs>\r\n\t\t\t\t\t<epc>urn:epc:id:sgtin:068202.0401034.11220207024592</epc>\r\n\t\t\t\t\t<epc>urn:epc:id:sgtin:068202.0401034.11220207024593</epc>\r\n\t\t\t\t\t<epc>urn:epc:id:sgtin:068202.0401034.11220207024594</epc>\r\n\t\t\t\t\t<epc>urn:epc:id:sgtin:068202.0401034.11220207024595</epc>\r\n\t\t\t\t</childEPCs>\r\n\t\t\t\t<action>ADD</action>\r\n\t\t\t\t<bizStep>urn:epcglobal:cbv:bizstep:packing</bizStep>\r\n\t\t\t\t<disposition>urn:epcglobal:cbv:disp:in_progress</disposition>\r\n\t\t\t\t<bizLocation>\r\n\t\t\t\t\t<id>urn:epc:id:sgln:9297187.01994.0</id>\r\n\t\t\t\t</bizLocation>\r\n\t\t\t\t<tl:aggregationEventExtensions>\r\n\t\t\t\t\t<tl:epcOrderItemDetails>\r\n\t\t\t\t\t\t<tl:epcOrderItemList orderItemNumber=\"910\">\r\n\t\t\t\t\t\t\t<tl:epcOrderItem>urn:epc:id:sscc:005434.40000000020</tl:epcOrderItem>\r\n\t\t\t\t\t\t</tl:epcOrderItemList>\r\n\t\t\t\t\t</tl:epcOrderItemDetails>\r\n\t\t\t\t</tl:aggregationEventExtensions>\r\n\t\t\t</AggregationEvent>\r\n\t\t\t<AggregationEvent>\r\n\t\t\t\t<eventTime>2018-06-12T06:31:32Z</eventTime>\r\n\t\t\t\t<eventTimeZoneOffset>-05:00</eventTimeZoneOffset>\r\n\t\t\t\t<parentID>urn:epc:id:sscc:005434.40000000021</parentID>\r\n\t\t\t\t<childEPCs>\r\n\t\t\t\t\t<epc>urn:epc:id:sgtin:068202.0401034.11220207024596</epc>\r\n\t\t\t\t\t<epc>urn:epc:id:sgtin:068202.0401034.11220207024597</epc>\r\n\t\t\t\t</childEPCs>\r\n\t\t\t\t<action>ADD</action>\r\n\t\t\t\t<bizStep>urn:epcglobal:cbv:bizstep:packing</bizStep>\r\n\t\t\t\t<disposition>urn:epcglobal:cbv:disp:in_progress</disposition>\r\n\t\t\t\t<bizLocation>\r\n\t\t\t\t\t<id>urn:epc:id:sgln:9297187.01994.0</id>\r\n\t\t\t\t</bizLocation>\r\n\t\t\t\t<tl:aggregationEventExtensions>\r\n\t\t\t\t\t<tl:epcOrderItemDetails>\r\n\t\t\t\t\t\t<tl:epcOrderItemList orderItemNumber=\"910\">\r\n\t\t\t\t\t\t\t<tl:epcOrderItem>urn:epc:id:sscc:005434.40000000021</tl:epcOrderItem>\r\n\t\t\t\t\t\t</tl:epcOrderItemList>\r\n\t\t\t\t\t</tl:epcOrderItemDetails>\r\n\t\t\t\t</tl:aggregationEventExtensions>\r\n\t\t\t</AggregationEvent>\r\n\t\t\t<!-- Shipping -->\r\n\t\t\t<ObjectEvent>\r\n\t\t\t\t<eventTime>2018-06-12T06:31:32Z</eventTime>\r\n\t\t\t\t<eventTimeZoneOffset>-04:00</eventTimeZoneOffset>\r\n\t\t\t\t<epcList>\r\n\t\t\t\t\t<epc>urn:epc:id:sscc:005434.40000000021</epc>\r\n\t\t\t\t</epcList>\r\n\t\t\t\t<action>OBSERVE</action>\r\n\t\t\t\t<bizStep>urn:epcglobal:cbv:bizstep:shipping</bizStep>\r\n\t\t\t\t<disposition>urn:epcglobal:cbv:disp:in_transit</disposition>\r\n\t\t\t\t<readPoint>\r\n\t\t\t\t\t<id>urn:epc:id:sgln:9997777.01994.0</id>\r\n\t\t\t\t</readPoint>\r\n\t\t\t\t<bizTransactionList>\r\n\t\t\t\t\t<bizTransaction type=\"urn:epcglobal:cbv:btt:desadv\">urn:epcglobal:cbv:bt:8779891013658:H9022413</bizTransaction>\r\n\t\t\t\t\t<bizTransaction type=\"urn:epcglobal:cbv:btt:po\">urn:epcglobal:cbv:bt:8811891013778:PO654321</bizTransaction>\r\n\t\t\t\t</bizTransactionList>\r\n\t\t\t\t<extension>\r\n\t\t\t\t\t<sourceList>\r\n\t\t\t\t\t\t<!-- owning_party = from business party -->\r\n\t\t\t\t\t\t<source type=\"urn:epcglobal:cbv:sdt:owning_party\">urn:epc:id:sgln:088202.867701.0</source>\r\n\t\t\t\t\t\t<!-- location = Ship from location -->\r\n\t\t\t\t\t\t<source type=\"urn:epcglobal:cbv:sdt:location\">urn:epc:id:sgln:9297187.01994.0</source>\r\n\t\t\t\t\t\t<!-- carrier_party = Transportation carrier -->\r\n\t\t\t\t\t\t<source type=\"http://epcis.tracelink.com/sdt/carrier_party\">urn:epc:id:sgln:064202.867703.0</source>\r\n\t\t\t\t\t</sourceList>\r\n\t\t\t\t\t<destinationList>\r\n\t\t\t\t\t\t<!-- owning_paty = to business party -->\r\n\t\t\t\t\t\t<destination type=\"urn:epcglobal:cbv:sdt:owning_party\">urn:epc:id:sgln:8887777.01384.0</destination>\r\n\t\t\t\t\t\t<!-- location = Ship to location -->\r\n\t\t\t\t\t\t<destination type=\"urn:epcglobal:cbv:sdt:location\">http://epcis.gs1us.org/hc/dea/loc/512333444</destination>\r\n\t\t\t\t\t</destinationList>\r\n\t\t\t\t</extension>\r\n\t\t\t\t<tl:shippingEventExtensions>\r\n\t\t\t\t\t<tl:transactionDate>2018-06-12</tl:transactionDate>\r\n\t\t\t\t\t<tl:shipToCountryCode>US</tl:shipToCountryCode>\r\n\t\t\t\t\t<tl:salesDistributionType>INCOUNTRYSALE</tl:salesDistributionType>\r\n\t\t\t\t\t<tl:supplyType>MedicalCareDistribution</tl:supplyType>\r\n\t\t\t\t\t<tl:contractType>CompetitiveBid</tl:contractType>\r\n\t\t\t\t\t<tl:dropShipmentIndicator>false</tl:dropShipmentIndicator>\r\n\t\t\t\t\t<tl:comments>Special shipment handling</tl:comments>\r\n\t\t\t\t\t<tl:contractNubmer>C102</tl:contractNubmer>\r\n\t\t\t\t\t<tl:fundingSource>OwnFunds</tl:fundingSource>\r\n\t\t\t\t\t<tl:epcOrderItemDetails>\r\n\t\t\t\t\t\t<tl:epcOrderItemList orderItemNumber=\"910\">\r\n\t\t\t\t\t\t\t<tl:epcOrderItem>urn:epc:id:sscc:005434.40000000019</tl:epcOrderItem>\r\n\t\t\t\t\t\t\t<tl:epcOrderItem>urn:epc:id:sscc:005434.40000000020</tl:epcOrderItem>\r\n\t\t\t\t\t\t\t<tl:epcOrderItem>urn:epc:id:sscc:005434.40000000021</tl:epcOrderItem>\r\n\t\t\t\t\t\t</tl:epcOrderItemList>\r\n\t\t\t\t\t</tl:epcOrderItemDetails>\r\n\t\t\t\t\t<tl:orderItemList>\r\n\t\t\t\t\t\t<tl:orderItem>\r\n\t\t\t\t\t\t\t<tl:orderItemNumber>910</tl:orderItemNumber>\r\n\t\t\t\t\t\t\t<tl:packagingItemCode type=\"GTIN-14\">00992326050107</tl:packagingItemCode>\r\n\t\t\t\t\t\t\t<cbvmda:itemExpirationDate>2020-06-12</cbvmda:itemExpirationDate>\r\n\t\t\t\t\t\t\t<tl:quantity>5</tl:quantity>\r\n\t\t\t\t\t\t\t<tl:unitPrice currencyCode=\"USD\">50.43</tl:unitPrice>\r\n\t\t\t\t\t\t\t<tl:vat currencyCode=\"USD\">50.00</tl:vat>\r\n\t\t\t\t\t\t\t<tl:grossPrice currencyCode=\"USD\">100.43</tl:grossPrice>\r\n\t\t\t\t\t\t\t<tl:transactionIdentifier type=\"PO\" date=\"2018-06-12\">PO97</tl:transactionIdentifier>\r\n\t\t\t\t\t\t</tl:orderItem>\r\n\t\t\t\t\t</tl:orderItemList>\r\n\t\t\t\t</tl:shippingEventExtensions>\r\n\t\t\t</ObjectEvent>\r\n\t\t</EventList>\r\n\t</EPCISBody>\r\n</epcis:EPCISDocument>"
 						},
 						"url": {
 							"raw": "{{BaseUrl}}/v1_2/Capture",
@@ -291,7 +291,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "<?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<epcisq:EPCISQueryDocument xmlns:epcisq=\"urn:epcglobal:epcis-query:xsd:1\" creationDate=\"2019-01-26T20:10:01.8111457Z\" schemaVersion=\"1\">\r\n  <EPCISBody>\r\n    <epcisq:Subscribe>\r\n      <queryName>SimpleEventQuery</queryName>\r\n      <params>\r\n        <param>\r\n          <name>eventType</name>\r\n          <value>\r\n            <value>AggregationEvent</value>\r\n          </value>\r\n        </param>\r\n      </params>\r\n      <dest>http://admin:P#40ssw0rd@localhost:54805/v1_2/Capture</dest>\r\n      <controls>\r\n      \t<schedule>\r\n          <second>0</second>\r\n        </schedule>\r\n        <reportIfEmpty>true</reportIfEmpty>\r\n      </controls>\r\n      <subscriptionID>AllObjectEvents</subscriptionID>\r\n    </epcisq:Subscribe>\r\n  </EPCISBody>\r\n</epcisq:EPCISQueryDocument>"
+									"raw": "<?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<epcisq:EPCISQueryDocument xmlns:epcisq=\"urn:epcglobal:epcis-query:xsd:1\" creationDate=\"2019-01-26T20:10:01.8111457Z\" schemaVersion=\"1\">\r\n  <EPCISBody>\r\n    <epcisq:Subscribe>\r\n      <queryName>SimpleEventQuery</queryName>\r\n      <params>\r\n        <param>\r\n          <name>eventType</name>\r\n          <value>\r\n            <value>AggregationEvent</value>\r\n          </value>\r\n        </param>\r\n      </params>\r\n      <dest>http://admin:P%40ssw0rd@localhost:54805/v1_2/Capture</dest>\r\n      <controls>\r\n      \t<schedule>\r\n          <second>0</second>\r\n        </schedule>\r\n        <reportIfEmpty>true</reportIfEmpty>\r\n      </controls>\r\n      <subscriptionID>AllObjectEvents</subscriptionID>\r\n    </epcisq:Subscribe>\r\n  </EPCISBody>\r\n</epcisq:EPCISQueryDocument>"
 								},
 								"url": {
 									"raw": "{{BaseUrl}}/v1_2/Query",
@@ -694,34 +694,6 @@
 										}
 									},
 									"response": []
-								},
-								{
-									"name": "HASATTR",
-									"request": {
-										"method": "POST",
-										"header": [
-											{
-												"key": "Content-Type",
-												"value": "text/xml",
-												"type": "text"
-											}
-										],
-										"body": {
-											"mode": "raw",
-											"raw": "<?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<epcisq:EPCISQueryDocument xmlns:epcisq=\"urn:epcglobal:epcis-query:xsd:1\" creationDate=\"2019-01-26T20:10:01.8111457Z\" schemaVersion=\"1\">\r\n  <EPCISBody>\r\n    <epcisq:Poll>\r\n    \t<queryName>SimpleEventQuery</queryName>\r\n    \t<params>\r\n    \t\t<param>\r\n    \t\t\t<name>HASATTR_bizLocation</name>\r\n    \t\t\t<value>\r\n    \t\t\t\t<value>http://epcis.example.com/mda/latitude</value>\r\n    \t\t\t</value>\r\n    \t\t</param>\r\n    \t</params>\r\n    </epcisq:Poll>\r\n  </EPCISBody>\r\n</epcisq:EPCISQueryDocument>"
-										},
-										"url": {
-											"raw": "{{BaseUrl}}/v1_2/Query",
-											"host": [
-												"{{BaseUrl}}"
-											],
-											"path": [
-												"v1_2",
-												"Query"
-											]
-										}
-									},
-									"response": []
 								}
 							],
 							"_postman_isSubFolder": true
@@ -984,6 +956,62 @@
 									"response": []
 								},
 								{
+									"name": "EQATTR",
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Content-Type",
+												"type": "text",
+												"value": "text/xml"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<epcisq:EPCISQueryDocument xmlns:epcisq=\"urn:epcglobal:epcis-query:xsd:1\" creationDate=\"2019-01-26T20:10:01.8111457Z\" schemaVersion=\"1\">\n  <EPCISBody>\n    <epcisq:Poll>\n    \t<queryName>SimpleEventQuery</queryName>\n    \t<params>\n    \t\t<param>\n    \t\t\t<name>EQATTR_bizLocation_http://epcis.tracelink.com/mda/additionalIdentifierType</name>\n    \t\t\t<value>DEA</value>\n    \t\t</param>\n    \t</params>\n    </epcisq:Poll>\n  </EPCISBody>\n</epcisq:EPCISQueryDocument>"
+										},
+										"url": {
+											"raw": "{{BaseUrl}}/v1_2/Query",
+											"host": [
+												"{{BaseUrl}}"
+											],
+											"path": [
+												"v1_2",
+												"Query"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "HASATTR",
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Content-Type",
+												"type": "text",
+												"value": "text/xml"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<epcisq:EPCISQueryDocument xmlns:epcisq=\"urn:epcglobal:epcis-query:xsd:1\" creationDate=\"2019-01-26T20:10:01.8111457Z\" schemaVersion=\"1\">\n  <EPCISBody>\n    <epcisq:Poll>\n    \t<queryName>SimpleEventQuery</queryName>\n    \t<params>\n    \t\t<param>\n    \t\t\t<name>HASATTR_bizLocation_http://epcis.tracelink.com/mda/additionalIdentifierType</name>\n    \t\t\t<value />\n    \t\t</param>\n    \t</params>\n    </epcisq:Poll>\n  </EPCISBody>\n</epcisq:EPCISQueryDocument>"
+										},
+										"url": {
+											"raw": "{{BaseUrl}}/v1_2/Query",
+											"host": [
+												"{{BaseUrl}}"
+											],
+											"path": [
+												"v1_2",
+												"Query"
+											]
+										}
+									},
+									"response": []
+								},
+								{
 									"name": "LT_eventTime",
 									"request": {
 										"method": "POST",
@@ -1108,7 +1136,7 @@
 										],
 										"body": {
 											"mode": "raw",
-											"raw": "<?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<epcisq:EPCISQueryDocument xmlns:epcisq=\"urn:epcglobal:epcis-query:xsd:1\" creationDate=\"2019-01-26T20:10:01.8111457Z\" schemaVersion=\"1\">\r\n  <EPCISBody>\r\n    <epcisq:Poll>\r\n    \t<queryName>SimpleEventQuery</queryName>\r\n    \t<params>\r\n    \t\t<param>\r\n    \t\t\t<name>EQ_bizStep</name>\r\n    \t\t\t<value>\r\n    \t\t\t\t<value>urn:fastnt:demo:bizstep:demo:packing</value>\r\n    \t\t\t</value>\r\n    \t\t</param>\r\n    \t</params>\r\n    </epcisq:Poll>\r\n  </EPCISBody>\r\n</epcisq:EPCISQueryDocument>\r\n"
+											"raw": "<?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<epcisq:EPCISQueryDocument xmlns:epcisq=\"urn:epcglobal:epcis-query:xsd:1\" creationDate=\"2019-01-26T20:10:01.8111457Z\" schemaVersion=\"1\">\r\n  <EPCISBody>\r\n    <epcisq:Poll>\r\n    \t<queryName>SimpleEventQuery</queryName>\r\n    \t<params>\r\n    \t\t<param>\r\n    \t\t\t<name>EQ_bizStep</name>\r\n    \t\t\t<value>\r\n    \t\t\t\t<value>urn:epcglobal:cbv:bizstep:packing</value>\r\n    \t\t\t</value>\r\n    \t\t</param>\r\n    \t</params>\r\n    </epcisq:Poll>\r\n  </EPCISBody>\r\n</epcisq:EPCISQueryDocument>\r\n"
 										},
 										"url": {
 											"raw": "{{BaseUrl}}/v1_2/Query",
@@ -1362,6 +1390,34 @@
 										"body": {
 											"mode": "raw",
 											"raw": "<?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<epcisq:EPCISQueryDocument xmlns:epcisq=\"urn:epcglobal:epcis-query:xsd:1\" creationDate=\"2019-01-26T20:10:01.8111457Z\" schemaVersion=\"1\">\r\n  <EPCISBody>\r\n    <epcisq:Poll>\r\n    \t<queryName>SimpleEventQuery</queryName>\r\n    \t<params>\r\n    \t\t<param>\r\n    \t\t\t<name>MATCH_epc</name>\r\n    \t\t\t<value>\r\n    \t\t\t\t<value>urn:epc:id:sscc:4001356.5900000818</value>\r\n    \t\t\t</value>\r\n    \t\t</param>\r\n    \t</params>\r\n    </epcisq:Poll>\r\n  </EPCISBody>\r\n</epcisq:EPCISQueryDocument>"
+										},
+										"url": {
+											"raw": "{{BaseUrl}}/v1_2/Query",
+											"host": [
+												"{{BaseUrl}}"
+											],
+											"path": [
+												"v1_2",
+												"Query"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "EQ_INNER",
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Content-Type",
+												"value": "text/xml",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "<?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<epcisq:EPCISQueryDocument xmlns:epcisq=\"urn:epcglobal:epcis-query:xsd:1\" creationDate=\"2019-01-26T20:10:01.8111457Z\" schemaVersion=\"1\">\r\n  <EPCISBody>\r\n    <epcisq:Poll>\r\n    \t<queryName>SimpleEventQuery</queryName>\r\n    \t<params>\r\n    \t\t<param>\r\n    \t\t\t<name>EQ_INNER_http://epcis.tracelink.com/ns#epcOrderItem</name>\r\n    \t\t\t<value>\r\n    \t\t\t\t<value>urn:epc:id:sscc:005434.40000000019</value>\r\n    \t\t\t</value>\r\n    \t\t</param>\r\n    \t</params>\r\n    </epcisq:Poll>\r\n  </EPCISBody>\r\n</epcisq:EPCISQueryDocument>"
 										},
 										"url": {
 											"raw": "{{BaseUrl}}/v1_2/Query",
