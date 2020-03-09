@@ -19,6 +19,16 @@ namespace FasTnT.Domain.Utils
             return ChangeType<T>(parameter.Values.Single());
         }
 
+        public static object GetComparisonValue(this QueryParameter parameter)
+        {
+            if (parameter.Values.Length != 1)
+            {
+                throw new Exception($"A single value is expected, but multiple were found. Parameter name '{parameter.Name}'");
+            }
+
+            return DateTime.TryParse(parameter.Values[0], out DateTime date) ? (object) date : ChangeType<double>(parameter.Values[0]);
+        }
+
         public static T[] GetValues<T>(this QueryParameter parameter)
         {
             return !parameter.Values.Any() ? new T[0] : parameter.Values.Select(x => ChangeType<T>(x)).ToArray();
@@ -32,13 +42,13 @@ namespace FasTnT.Domain.Utils
         public static CustomField GetField(this QueryParameter parameter, FieldType type, bool inner)
         {
             var parts = parameter.Name.Split('_');
-            var nameIndex = type == FieldType.EventExtension ? inner ? 2 : 1 : inner ? 3 : 2;
+            var nameIndex = type == FieldType.CustomField ? inner ? 2 : 1 : inner ? 3 : 2;
             var splittedName = parts[nameIndex].Split('#');
 
             return new CustomField
             {
-                Name = splittedName[0],
-                Namespace = splittedName[1],
+                Namespace = splittedName[0],
+                Name = splittedName[1],
                 Type = type
             };
         }

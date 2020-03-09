@@ -16,6 +16,7 @@ namespace FasTnT.Domain.Data
         void Apply(LimitFilter filter);
         void Apply(QuantityFilter filter);
         void Apply(CustomFieldFilter filter);
+        void Apply(ComparisonCustomFieldFilter filter);
         void Apply(ExistCustomFieldFilter filter);
         void Apply(ExistsErrorDeclarationFilter filter);
         void Apply(EqualsErrorReasonFilter filter);
