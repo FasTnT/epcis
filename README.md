@@ -16,7 +16,7 @@ Steps:
 1. Download the source code, and create a new user/database in PostGreSQL for FasTnT ;
 2. Update the connection string: `$ dotnet user-secrets set ConnectionStrings:FasTnT.Database "{your connectionstring}" -p src\FasTnT.Host\FasTnT.Host.csproj` ;
 3. Start the repository with the command `$ dotnet run -p src\FasTnT.Host\FasTnT.Host.csproj --urls "http://localhost:5102/"` ;
-4. Create the SQL schemas and tables: `curl -X POST http://localhost:5102/Setup/Database/Migrate` ;
+4. Create the SQL schemas and tables: `curl -X POST http://localhost:5102/Setup/Database/Migrate -d ""` ;
 5. That's it! You have a properly working EPCIS 1.2 repository.
 
 ## HTTP Endpoints

@@ -17,7 +17,7 @@ namespace FasTnT.IntegrationTests.API.EpcisEndpoints.v1._2.XML.Capture
         }
 
         [Assert]
-        public void ItShouldReturnHttp204NoContent() => Assert.AreEqual(HttpStatusCode.NoContent, Result.StatusCode);
+        public void ItShouldReturnHttp200OKContent() => Assert.AreEqual(HttpStatusCode.OK, Result.StatusCode);
 
         [Assert]
         public void ItShouldReturnANullContent()
