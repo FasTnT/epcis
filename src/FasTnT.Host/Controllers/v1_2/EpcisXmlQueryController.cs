@@ -7,7 +7,7 @@ namespace FasTnT.Host.Controllers.v1_2
 {
     [Authorize]
     [Formatter(Format.Xml)]
-    [Route("v1_2/Query")]
+    [ApiController, Route("v1_2/Query")]
     public class EpcisXmlQueryController : EpcisQueryController
     {
         public EpcisXmlQueryController(IMediator dispatcher) : base(dispatcher)

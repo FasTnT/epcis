@@ -17,7 +17,7 @@ namespace FasTnT.Host
     {
         public IConfiguration Configuration { get; }
 
-        public Startup(IHostingEnvironment env)
+        public Startup(IWebHostEnvironment env)
         {
             var builder = new ConfigurationBuilder()
                 .SetBasePath(env.ContentRootPath)
@@ -40,24 +40,30 @@ namespace FasTnT.Host
                     .AddEpcisPersistence(Configuration.GetConnectionString("FasTnT.Database"))
                     .AddBackgroundSubscriptionService();
 
-            services.AddMvc(ConfigureMvsOptions)
+            services.AddControllers(ConfigureOptions)
                     .AddApplicationPart(typeof(Startup).Assembly)
-                    .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+                    .SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
 
             services.AddAuthentication("BasicAuthentication")
                 .AddScheme<AuthenticationSchemeOptions, BasicAuthenticationHandler>("BasicAuthentication", null);
         }
 
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             app.UseExceptionHandlingMiddleware(env.IsDevelopment())
-               .UseAuthentication()
+               .UseRouting()
                .UseNoContentStatusCode()
-               .UseMvc();
+               .UseAuthentication()
+               .UseAuthorization()
+               .UseEndpoints(endpoints =>
+               {
+                   endpoints.MapControllers();
+               });
         }
 
-        private static void ConfigureMvsOptions(MvcOptions options)
+        private static void ConfigureOptions(MvcOptions options)
         {
+            options.EnableEndpointRouting = false;
             options.ModelBinderProviders.Insert(0, new EpcisModelBinderProvider());
             options.OutputFormatters.Insert(0, new EpcisResponseOutputFormatter());
         }
