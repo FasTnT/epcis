@@ -10,8 +10,8 @@ namespace FasTnT.Host.Controllers.v1_2
 {
     [Authorize]
     [Formatter(Format.Xml)]
-    [Route("v1_2/Capture")]
-    public class EpcisCaptureController : Controller
+    [ApiController, Route("v1_2/Capture")]
+    public class EpcisCaptureController : ControllerBase
     {
         private readonly IMediator _mediator;
 
