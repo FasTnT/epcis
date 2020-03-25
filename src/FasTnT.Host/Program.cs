@@ -18,7 +18,11 @@ namespace FasTnT.Host
         public static IWebHost BuildWebHost(string[] args, IConfiguration configuration) => 
             WebHost.CreateDefaultBuilder(args)
             .UseShutdownTimeout(TimeSpan.FromSeconds(10))
-            .UseKestrel(c => c.AddServerHeader = false)
+            .UseKestrel(c => 
+            {
+                c.AddServerHeader = false;
+                c.AllowSynchronousIO = true; // XDocument.SaveAsync still uses synchronous IO operation
+            })
             .UseConfiguration(configuration)
             .UseStartup<Startup>()
             .Build();
