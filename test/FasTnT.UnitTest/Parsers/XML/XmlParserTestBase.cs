@@ -2,7 +2,7 @@
 using FasTnT.Parsers.Xml.Parsers.Query;
 using System.IO;
 
-namespace FasTnT.UnitTest.Parsers
+namespace FasTnT.UnitTest.Parsers.XML
 {
     public abstract class XmlParserTestBase : TestBase
     {

@@ -1,14 +1,14 @@
 ﻿using FasTnT.Commands.Requests;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace FasTnT.UnitTest.Parsers
+namespace FasTnT.UnitTest.Parsers.Soap
 {
     [TestClass]
-    public class WhenParsingXmlSubscribeRequest : XmlParserTestBase
+    public class WhenParsingSoapSubscribeRequest : SoapParserTestBase
     {
         public override void Given()
         {
-            SetRequest("<?xml version=\"1.0\" encoding=\"utf-8\"?><epcisq:EPCISQueryDocument xmlns:epcisq=\"urn:epcglobal:epcis-query:xsd:1\" creationDate=\"2019-01-26T20:10:01.8111457Z\" schemaVersion=\"1\"><EPCISBody><epcisq:Subscribe><queryName>SimpleEventQuery</queryName><params /><dest>http://callback/url</dest><controls><schedule><second>0</second></schedule><reportIfEmpty>true</reportIfEmpty></controls><subscriptionID>TestSubscriptionId</subscriptionID></epcisq:Subscribe></EPCISBody></epcisq:EPCISQueryDocument>");
+            SetRequest("<?xml version=\"1.0\" encoding=\"utf-8\"?><soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:urn=\"urn:epcglobal:epcis-query:xsd:1\"><soapenv:Body><urn:Subscribe><queryName>SimpleEventQuery</queryName><params /><dest>http://callback/url</dest><controls><schedule><second>0</second></schedule><reportIfEmpty>true</reportIfEmpty></controls><subscriptionID>TestSubscriptionId</subscriptionID></urn:Subscribe></soapenv:Body></soapenv:Envelope>");
         }
 
         [TestMethod]

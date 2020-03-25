@@ -1,10 +1,10 @@
 ﻿using FasTnT.Commands.Requests;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace FasTnT.UnitTest.Parsers
+namespace FasTnT.UnitTest.Parsers.XML
 {
     [TestClass]
-    public class WhenParsingXmlGetStandardVersionRequest : XmlParserTestBase
+    public class WhenParsingSoapGetStandardVersionRequest : XmlParserTestBase
     {
         public override void Given()
         {

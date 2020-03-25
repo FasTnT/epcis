@@ -1,7 +1,7 @@
 ﻿using FasTnT.Commands.Requests;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace FasTnT.UnitTest.Parsers
+namespace FasTnT.UnitTest.Parsers.XML
 {
     [TestClass]
     public class WhenParsingXmlGetQueryNamesRequest : XmlParserTestBase
