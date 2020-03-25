@@ -1,15 +1,14 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using FasTnT.Host.Middleware;
-using Microsoft.Extensions.Hosting;
 using FasTnT.Host.Infrastructure.Binding;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authentication;
 using MediatR;
 using FasTnT.Domain;
-using FasTnT.Domain.Queries;
 using FasTnT.Data.PostgreSql;
 using FasTnT.Subscriptions;
 
@@ -37,14 +36,9 @@ namespace FasTnT.Host
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMediatR(Constants.Assembly);
-            services.AddScoped<RequestContext>();
-            // Add Domain services
-            services.AddScoped<IEpcisQuery, SimpleEventQuery>();
-            services.AddScoped<IEpcisQuery, SimpleMasterdataQuery>();
-
-            // Add Storage services
-            services.AddEpcisPersistence(Configuration.GetConnectionString("FasTnT.Database"))
+            services.AddMediatR(Constants.Assembly)
+                    .AddEpcisDomain()
+                    .AddEpcisPersistence(Configuration.GetConnectionString("FasTnT.Database"))
                     .AddBackgroundSubscriptionService();
 
             services.AddControllers(ConfigureOptions)
