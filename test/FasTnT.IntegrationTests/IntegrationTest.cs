@@ -8,7 +8,7 @@ using System.Net.Http;
 namespace FasTnT.IntegrationTests
 {
     [TestClass]
-    public class IntegrationTest
+    public static class IntegrationTest
     {
         private static TestServer TestServer { get; set; }
         public static IConfiguration Configuration { get; private set; }
@@ -22,8 +22,10 @@ namespace FasTnT.IntegrationTests
 
             EnsureConnectionStringIsSpecified(context);
 
-            TestServer = new TestServer(builder);
-            TestServer.AllowSynchronousIO = true; // XDocument.SaveAsync still uses synchronous IO operation
+            TestServer = new TestServer(builder)
+            {
+                AllowSynchronousIO = true // XDocument.SaveAsync still uses synchronous IO operation
+            };
 
             Client = TestServer.CreateClient();
         }
