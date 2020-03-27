@@ -36,8 +36,7 @@ namespace FasTnT.Host
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMediatR(Constants.Assembly)
-                    .AddEpcisDomain()
+            services.AddEpcisDomain()
                     .AddEpcisPersistence(Configuration.GetConnectionString("FasTnT.Database"))
                     .AddBackgroundSubscriptionService();
 
