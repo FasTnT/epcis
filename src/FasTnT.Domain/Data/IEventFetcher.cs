@@ -16,12 +16,15 @@ namespace FasTnT.Domain.Data
         void Apply(LimitFilter filter);
         void Apply(QuantityFilter filter);
         void Apply(CustomFieldFilter filter);
+        void Apply(ComparisonCustomFieldFilter filter);
         void Apply(ExistCustomFieldFilter filter);
         void Apply(ExistsErrorDeclarationFilter filter);
         void Apply(EqualsErrorReasonFilter filter);
         void Apply(EqualsCorrectiveEventIdFilter filter);
         void Apply(MasterdataHierarchyFilter filter);
         void Apply(SourceDestinationFilter filter);
+        void Apply(ExistsAttributeFilter filter);
+        void Apply(AttributeFilter filter);
         Task<IEnumerable<EpcisEvent>> Fetch(CancellationToken cancellationToken);
     }
 }

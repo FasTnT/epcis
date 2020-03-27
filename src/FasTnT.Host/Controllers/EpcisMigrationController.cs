@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace FasTnT.Host.Controllers
 {
-    [Route("Setup/Database")]
-    public class EpcisMigrationController : Controller
+    [ApiController, Route("Setup/Database")]
+    public class EpcisMigrationController : ControllerBase
     {
         private readonly IMediator _mediator;
 

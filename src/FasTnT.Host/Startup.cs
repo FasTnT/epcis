@@ -1,18 +1,16 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using FasTnT.Host.Middleware;
-using Microsoft.Extensions.Hosting;
 using FasTnT.Host.Infrastructure.Binding;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authentication;
 using MediatR;
 using FasTnT.Domain;
-using FasTnT.Domain.Queries;
 using FasTnT.Data.PostgreSql;
 using FasTnT.Subscriptions;
-using IHostingEnvironment = Microsoft.AspNetCore.Hosting.IHostingEnvironment;
 
 namespace FasTnT.Host
 {
@@ -20,7 +18,7 @@ namespace FasTnT.Host
     {
         public IConfiguration Configuration { get; }
 
-        public Startup(IHostingEnvironment env)
+        public Startup(IWebHostEnvironment env)
         {
             var builder = new ConfigurationBuilder()
                 .SetBasePath(env.ContentRootPath)
@@ -38,34 +36,35 @@ namespace FasTnT.Host
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMediatR(Constants.Assembly);
-            services.AddScoped<RequestContext>();
-            // Add Domain services
-            services.AddScoped<IEpcisQuery, SimpleEventQuery>();
-            services.AddScoped<IEpcisQuery, SimpleMasterdataQuery>();
-
-            // Add Storage services
-            services.AddEpcisPersistence(Configuration.GetConnectionString("FasTnT.Database"))
+            services.AddEpcisDomain()
+                    .AddEpcisPersistence(Configuration.GetConnectionString("FasTnT.Database"))
                     .AddBackgroundSubscriptionService();
 
-            services.AddMvc(ConfigureMvsOptions)
+            services.AddControllers(ConfigureOptions)
                     .AddApplicationPart(typeof(Startup).Assembly)
-                    .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+                    .SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
 
             services.AddAuthentication("BasicAuthentication")
                 .AddScheme<AuthenticationSchemeOptions, BasicAuthenticationHandler>("BasicAuthentication", null);
         }
 
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             app.UseExceptionHandlingMiddleware(env.IsDevelopment())
+               .UseRouting()
+               .UseHttpSynchronousIO()
+               .UseOkStatusCode()
                .UseAuthentication()
-               .UseNoContentStatusCode()
-               .UseMvc();
+               .UseAuthorization()
+               .UseEndpoints(endpoints =>
+               {
+                   endpoints.MapControllers();
+               });
         }
 
-        private static void ConfigureMvsOptions(MvcOptions options)
+        private static void ConfigureOptions(MvcOptions options)
         {
+            options.EnableEndpointRouting = false;
             options.ModelBinderProviders.Insert(0, new EpcisModelBinderProvider());
             options.OutputFormatters.Insert(0, new EpcisResponseOutputFormatter());
         }

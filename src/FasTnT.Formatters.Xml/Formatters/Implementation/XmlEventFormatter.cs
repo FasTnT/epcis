@@ -59,6 +59,8 @@ namespace FasTnT.Parsers.Xml.Formatters.Implementation
         private static void AddErrorDeclaration(EpcisEvent @event, XElement element)
         {
             XElement errorDeclaration = default, eventId = default;
+            
+            if (@event.ErrorDeclaration != null)
             {
                 var correctiveEventIds = @event.ErrorDeclaration.CorrectiveEventIds.Any() ? new XElement("correctiveEventIDs", @event.ErrorDeclaration.CorrectiveEventIds.Select(x => new XElement("correctiveEventID", x.CorrectiveId))) : null;
                 errorDeclaration = new XElement("errorDeclaration", new XElement("declarationTime", @event.ErrorDeclaration.DeclarationTime), new XElement("reason", @event.ErrorDeclaration.Reason), correctiveEventIds);

@@ -8,8 +8,8 @@ using System.Threading.Tasks;
 namespace FasTnT.Host.Controllers.v1_2
 {
     [Authorize]
-    [Route("v1_2/Subscription/Trigger")]
-    public class SubscriptionController : Controller
+    [ApiController, Route("v1_2/Subscription/Trigger")]
+    public class SubscriptionController : ControllerBase
     {
         private readonly IMediator _mediator;
 

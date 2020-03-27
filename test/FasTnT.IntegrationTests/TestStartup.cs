@@ -5,7 +5,7 @@ namespace FasTnT.IntegrationTests
 {
     public class TestStartup : Startup
     {
-        public TestStartup(IHostingEnvironment env) : base(env)
+        public TestStartup(IWebHostEnvironment env) : base(env)
         {
         }
     }
