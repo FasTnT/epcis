@@ -1,6 +1,7 @@
-﻿using Microsoft.AspNetCore;
-using Microsoft.AspNetCore.Hosting;
+﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using System;
 
 namespace FasTnT.Host
@@ -13,18 +14,22 @@ namespace FasTnT.Host
             .AddCommandLine(args)
             .Build();
 
-            BuildWebHost(args, configuration).Run();
+            var host = BuildWebHost(args, configuration);
+            host.Run();
         }
-        public static IWebHost BuildWebHost(string[] args, IConfiguration configuration) => 
-            WebHost.CreateDefaultBuilder(args)
-            .UseShutdownTimeout(TimeSpan.FromSeconds(10))
-            .UseKestrel(c => 
+        public static IHost BuildWebHost(string[] args, IConfiguration configuration) =>
+            new HostBuilder().ConfigureWebHostDefaults(webBuilder =>
             {
-                c.AddServerHeader = false;
-                c.AllowSynchronousIO = true; // XDocument.SaveAsync still uses synchronous IO operation
+                webBuilder.UseShutdownTimeout(TimeSpan.FromSeconds(10))
+                          .UseIISIntegration()
+                          .ConfigureLogging((config, builder) =>
+                          {
+                              builder.AddConsole()
+                                     .SetMinimumLevel(LogLevel.Debug);
+                          })
+                          .UseConfiguration(configuration)
+                          .UseStartup<Startup>();
             })
-            .UseConfiguration(configuration)
-            .UseStartup<Startup>()
             .Build();
     }
 }
