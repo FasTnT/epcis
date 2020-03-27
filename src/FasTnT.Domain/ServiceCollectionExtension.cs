@@ -1,4 +1,5 @@
-﻿using FasTnT.Domain.Queries;
+﻿using MediatR;
+using FasTnT.Domain.Queries;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace FasTnT.Domain
@@ -7,6 +8,8 @@ namespace FasTnT.Domain
     {
         public static IServiceCollection AddEpcisDomain(this IServiceCollection services)
         {
+            services.AddMediatR(Constants.Assembly);
+
             services.AddScoped<RequestContext>();
             services.AddScoped<IEpcisQuery, SimpleEventQuery>();
             services.AddScoped<IEpcisQuery, SimpleMasterdataQuery>();
