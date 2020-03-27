@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Hosting;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Npgsql;
 using System.Net.Http;
@@ -17,12 +18,16 @@ namespace FasTnT.IntegrationTests
         [AssemblyInitialize]
         public static void IntegrationTestInitialize(TestContext context)
         {
-            var builder = new WebHostBuilder().UseEnvironment("Development").UseStartup<TestStartup>();
             Configuration = new ConfigurationBuilder().AddUserSecrets<TestStartup>().Build();
+
+            var host = new WebHostBuilder().UseEnvironment("Development")
+                          .UseIISIntegration()
+                          .UseConfiguration(Configuration)
+                          .UseStartup<TestStartup>();
 
             EnsureConnectionStringIsSpecified(context);
 
-            TestServer = new TestServer(builder)
+            TestServer = new TestServer(host)
             {
                 AllowSynchronousIO = true // XDocument.SaveAsync still uses synchronous IO operation
             };

@@ -53,6 +53,7 @@ namespace FasTnT.Host
         {
             app.UseExceptionHandlingMiddleware(env.IsDevelopment())
                .UseRouting()
+               .UseHttpSynchronousIO()
                .UseOkStatusCode()
                .UseAuthentication()
                .UseAuthorization()

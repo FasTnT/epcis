@@ -6,5 +6,6 @@ namespace FasTnT.Host.Middleware
     {
         public static IApplicationBuilder UseExceptionHandlingMiddleware(this IApplicationBuilder builder, bool isDevelopment = false) => builder.UseMiddleware<ExceptionHandlingMiddleware>(isDevelopment);
         public static IApplicationBuilder UseOkStatusCode(this IApplicationBuilder builder) => builder.UseMiddleware<HttpStatusCodeHandlingMiddleware>();
+        public static IApplicationBuilder UseHttpSynchronousIO(this IApplicationBuilder builder) => builder.UseMiddleware<HttpStatusCodeHandlingMiddleware>();
     }
 }
