@@ -1,0 +1,267 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "location": {
+            "defaultValue": "[resourceGroup().location]",
+            "type": "String",
+            "metadata": {
+                "description": "Location of the FasTnT EPCIS Deployment"
+            }
+        },
+        "apiName": {
+            "defaultValue": "fastnt-api",
+            "type": "String",
+            "metadata": {
+                "description": "Name of the API"
+            }
+        },
+		"apiSize": {
+            "type": "string",
+			"allowedValues": [
+				"F1",
+				"D1",
+				"B1",
+				"B2",
+				"B3",
+				"S1",
+				"S2",
+				"S3",
+				"P1v2",
+				"P2v2",
+				"P3v2"
+			],
+            "defaultValue": "F1",
+            "metadata": {
+                "description": "Size of the API server"
+            }
+        },
+        "apiServerName": {
+            "defaultValue": "fastnt-dev",
+            "type": "String",
+            "metadata": {
+                "description": "Name of the API Server Farm"
+            }
+        },
+		"databaseServerSize": {
+            "type": "string",
+			"allowedValues": [
+				"B_Gen5_1",
+				"B_Gen5_2",
+				"GP_Gen5_2",
+				"GP_Gen5_4",
+				"GP_Gen5_8",
+				"GP_Gen5_16",
+				"GP_Gen5_32",
+				"MO_Gen5_2",
+				"MO_Gen5_4",
+				"MO_Gen5_8",
+				"MO_Gen5_16",
+				"MO_Gen5_32"
+			],
+            "defaultValue": "B_Gen5_1",
+            "metadata": {
+                "description": "Size of the PgSQL Database"
+            }
+        },
+		"databaseVersion": {
+            "type": "string",
+            "defaultValue": "10",
+            "metadata": {
+                "description": "Version of PgSQL database"
+            }
+        },
+        "databaseServerName": {
+            "defaultValue": "fastntdb",
+            "type": "String",
+            "metadata": {
+                "description": "Name of the PgSQL database server"
+            }
+        },
+        "databaseName": {
+            "defaultValue": "epcis",
+            "type": "String",
+            "metadata": {
+                "description": "Name of the PgSQL database"
+            }
+        },
+        "databaseLogin": {
+            "defaultValue": "fastnt_admin",
+            "type": "String",
+            "metadata": {
+                "description": "PgSQL Administrator Login"
+            }
+        },
+        "databasePassword": {
+            "defaultValue": "Fas7nT_P@ssw0rd",
+            "type": "String",
+            "metadata": {
+                "description": "PgSQL Administrator Password"
+            }
+        },
+		"databaseSize": {
+            "type": "string",
+            "defaultValue": 5120,
+            "metadata": {
+                "description": "Version of PgSQL database (min. 9.5)"
+            }
+        }
+    },
+    "variables": {},
+    "resources": [
+        {
+            "type": "Microsoft.DBforPostgreSQL/servers",
+            "apiVersion": "2017-12-01",
+            "name": "[parameters('databaseServerName')]",
+            "location": "[parameters('location')]",
+            "sku": {
+                "name": "[parameters('databaseServerSize')]"
+            },
+            "properties": {
+                "administratorLogin": "[parameters('databaseLogin')]",
+                "administratorLoginPassword": "[parameters('databasePassword')]",
+                "storageProfile": {
+                    "storageMB": "[parameters('databaseSize')]",
+                    "backupRetentionDays": 7,
+                    "geoRedundantBackup": "Disabled",
+                    "storageAutogrow": "Disabled"
+                },
+                "version": "[parameters('databaseVersion')]",
+                "sslEnforcement": "Disabled"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/servers/databases",
+            "apiversion": "2017-12-01",
+            "name": "[concat(parameters('databaseServerName'), '/', parameters('databaseName'))]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/servers', parameters('databaseServerName'))]"
+            ],
+            "properties": {
+                "charset": "SQL_ASCII",
+                "collation": "default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/servers/firewallRules",
+            "apiVersion": "2017-12-01",
+            "name": "[concat(parameters('databaseServerName'), '/AllowAllWindowsAzureIps')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/servers', parameters('databaseServerName'))]"
+            ],
+            "properties": {
+                "startIpAddress": "0.0.0.0",
+                "endIpAddress": "0.0.0.0"
+            }
+        },
+        {
+            "type": "microsoft.insights/components",
+            "apiVersion": "2015-05-01",
+            "name": "[parameters('databaseName')]",
+            "location": "[parameters('location')]",
+            "kind": "web",
+            "properties": {
+                "Application_Type": "web",
+                "Request_Source": "IbizaWebAppExtensionCreate"
+            }
+        },
+        {
+            "type": "Microsoft.Web/serverfarms",
+            "apiVersion": "2018-02-01",
+            "name": "[parameters('apiServerName')]",
+            "location": "[parameters('location')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/servers', parameters('databaseServerName'))]"
+            ],
+            "tags": {
+                "Environment": "public-dev"
+            },
+            "sku": {
+                "name": "[parameters('apiSize')]"
+            },
+            "kind": "app"
+        },
+        {
+            "type": "Microsoft.Web/sites",
+            "apiVersion": "2018-11-01",
+            "name": "[parameters('apiName')]",
+            "location": "[parameters('location')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/serverfarms', parameters('apiServerName'))]"
+            ],
+            "tags": {
+                "Environment": "public-dev"
+            },
+            "kind": "api",
+            "properties": {
+                "enabled": true,
+                "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', parameters('apiServerName'))]",
+                "clientAffinityEnabled": false,
+                "httpsOnly": true,
+                "siteConfig": {
+                    "appSettings": [
+                        {
+                            "name": "ConnectionStrings:FasTnT.Database",
+                            "value": "[concat('Server=', parameters('databaseServerName'), '.postgres.database.azure.com;Database=', parameters('databaseName'), ';Port=5432;User Id=', parameters('databaseLogin'), '@' , parameters('databaseName'), ';Password=', parameters('databasePassword'), ';')]"
+                        }
+                    ],
+					"metadata": [
+						{
+							"name": "CURRENT_STACK",
+							"value": "dotnetcore"
+						}
+					]
+                }
+            },
+            "resources": [
+                {
+                    "type": "sourcecontrols",
+                    "apiVersion": "2018-02-01",
+                    "name": "web",
+                    "location": "[parameters('location')]",
+                    "dependsOn": [
+                        "[resourceId('Microsoft.Web/sites', parameters('apiName'))]"
+                    ],
+                    "properties": {
+                        "repoUrl": "https://github.com/FasTnT/epcis",
+                        "branch": "master",
+                        "isManualIntegration": true
+                    }
+                }
+            ]
+        },
+        {
+            "type": "Microsoft.Web/sites/config",
+            "apiVersion": "2018-11-01",
+            "name": "[concat(parameters('apiName'), '/web')]",
+            "location": "[parameters('location')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('apiName'))]"
+            ],
+            "tags": {
+                "Environment": "public-dev"
+            },
+            "properties": {
+                "netFrameworkVersion": "v4.0",
+                "use32BitWorkerProcess": true,
+                "managedPipelineMode": "Integrated",
+                "virtualApplications": [
+                    {
+                        "virtualPath": "/",
+                        "physicalPath": "site\\wwwroot",
+                        "preloadEnabled": false
+                    }
+                ],
+                "ipSecurityRestrictions": [
+                    {
+                        "ipAddress": "Any",
+                        "action": "Allow",
+                        "priority": 1,
+                        "name": "Allow all",
+                        "description": "Allow all access"
+                    }
+                ]
+            }
+        }
+    ]
+}

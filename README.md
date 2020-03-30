@@ -2,6 +2,8 @@
 [![Maintainability](https://api.codeclimate.com/v1/badges/40672e48b92da57852d7/maintainability)](https://codeclimate.com/github/FasTnT/epcis/maintainability)
 [![codecov](https://codecov.io/gh/FasTnT/epcis/branch/develop/graph/badge.svg)](https://codecov.io/gh/FasTnT/epcis)
 
+[![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FFasTnT%2Fepcis%2Fmaster%2Fazure%2Ftemplates%2Ffastnt.template.json)
+
 # FasTnT EPCIS
 
 FasTnT EPCIS is a lightweight GS1 EPCIS 1.2 repository written in C# using .NET Core 3.1, backed with PostGreSQL database.
