@@ -3,6 +3,7 @@
 [![codecov](https://codecov.io/gh/FasTnT/epcis/branch/develop/graph/badge.svg)](https://codecov.io/gh/FasTnT/epcis)
 
 [![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FFasTnT%2Fepcis%2Fmaster%2Fazure%2Ftemplates%2Ffastnt.template.json)
+[![Visualize in Armviz](http://armviz.io/visualizebutton.png)](http://armviz.io/#/?load=https%3A%2F%2Fraw.githubusercontent.com%2FFasTnT%2Fepcis%2Fmaster%2Fazure%2Ftemplates%2Ffastnt.template.json)
 
 # FasTnT EPCIS
 
@@ -80,4 +81,4 @@ This project is licensed under the Apache 2.0 license - see the LICENSE file for
 
 Contact: fastnt@pm.me
 
-_Last update: March 2020_
+_Last update: April 2020_
