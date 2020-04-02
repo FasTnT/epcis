@@ -1,9 +1,12 @@
 ﻿using FasTnT.Commands.Responses;
+using FasTnT.Parsers.Xml.Formatters.Implementation;
+using FasTnT.Parsers.Xml.Utils;
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Xml;
 using System.Xml.Linq;
 
 namespace FasTnT.Parsers.Xml.Formatters
@@ -46,5 +49,28 @@ namespace FasTnT.Parsers.Xml.Formatters
         public abstract XDocument FormatInternal(GetQueryNamesResponse response);
         public abstract XDocument FormatInternal(GetSubscriptionIdsResponse response);
         public abstract XDocument FormatInternal(PollResponse response);
+
+        protected XElement FormatPollResponse(PollResponse response)
+        {
+            var resultName = "EventList";
+            var resultList = default(IEnumerable<XElement>);
+
+            if (response.EventList.Any())
+            {
+                resultName = "EventList";
+                resultList = XmlEntityFormatter.FormatEvents(response.EventList);
+            }
+            else if (response.MasterdataList.Any())
+            {
+                resultName = "VocabularyList";
+                resultList = XmlEntityFormatter.FormatMasterData(response.MasterdataList);
+            }
+
+            return new XElement(XName.Get("QueryResults", EpcisNamespaces.Query),
+                new XElement("queryName", response.QueryName),
+                !string.IsNullOrEmpty(response.SubscriptionId) ? new XElement("subscriptionID", response.SubscriptionId) : null,
+                new XElement("resultsBody", new XElement(resultName, resultList))
+            );
+        }
     }
 }

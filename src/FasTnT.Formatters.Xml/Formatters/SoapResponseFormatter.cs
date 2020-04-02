@@ -1,7 +1,5 @@
 ﻿using FasTnT.Commands.Responses;
-using FasTnT.Parsers.Xml.Formatters.Implementation;
 using FasTnT.Parsers.Xml.Utils;
-using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Linq;
 
@@ -22,27 +20,7 @@ namespace FasTnT.Parsers.Xml.Formatters
 
         public override XDocument FormatInternal(PollResponse response)
         {
-            var resultName = "EventList";
-            var resultList = default(IEnumerable<XElement>);
-
-            if (response.EventList.Any())
-            {
-                resultName = "EventList";
-                resultList = XmlEntityFormatter.FormatEvents(response.EventList);
-            }
-            else if (response.MasterdataList.Any())
-            {
-                resultName = "VocabularyList";
-                resultList = XmlEntityFormatter.FormatMasterData(response.MasterdataList);
-            }
-
-            var evt = new XElement(XName.Get("QueryResults", EpcisNamespaces.Query),
-                new XElement("queryName", response.QueryName),
-                !string.IsNullOrEmpty(response.SubscriptionId) ? new XElement("subscriptionID", response.SubscriptionId) : null,
-                new XElement("resultsBody", new XElement(resultName, resultList))
-            );
-
-            return FormatSoap(evt);
+            return FormatSoap(FormatPollResponse(response));
         }
 
         public override XDocument FormatInternal(GetVendorVersionResponse response)
