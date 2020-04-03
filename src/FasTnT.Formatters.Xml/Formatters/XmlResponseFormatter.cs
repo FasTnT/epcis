@@ -3,7 +3,6 @@ using FasTnT.Parsers.Xml.Formatters.Implementation;
 using FasTnT.Parsers.Xml.Utils;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Xml.Linq;
 

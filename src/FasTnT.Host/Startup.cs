@@ -7,7 +7,6 @@ using FasTnT.Host.Middleware;
 using FasTnT.Host.Infrastructure.Binding;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authentication;
-using MediatR;
 using FasTnT.Domain;
 using FasTnT.Data.PostgreSql;
 using FasTnT.Subscriptions;
