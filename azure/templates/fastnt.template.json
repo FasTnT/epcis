@@ -92,9 +92,9 @@
                 "description": "PgSQL Administrator Password"
             }
         },
-		"databaseSize": {
-            "type": "string",
-            "defaultValue": 5120,
+        "databaseSize": {
+            "type": "String",
+            "defaultValue": "5120",
             "metadata": {
                 "description": "Version of PgSQL database (min. 9.5)"
             }
