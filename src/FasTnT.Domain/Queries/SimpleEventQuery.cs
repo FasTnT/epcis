@@ -2,7 +2,7 @@
 using FasTnT.Domain.Data;
 using FasTnT.Domain.Data.Model.Filters;
 using FasTnT.Domain.Utils;
-using FasTnT.Model.Events.Enums;
+using FasTnT.Model.Enums;
 using FasTnT.Model.Exceptions;
 using FasTnT.Model.Queries;
 using FasTnT.Model.Utils;
@@ -17,7 +17,7 @@ namespace FasTnT.Domain.Queries
 {
     public class SimpleEventQuery : IEpcisQuery
     {
-        private static IDictionary<string, Action<IEventFetcher, QueryParameter>> SimpleParameters = new Dictionary<string, Action<IEventFetcher, QueryParameter>>
+        private static readonly IDictionary<string, Action<IEventFetcher, QueryParameter>> SimpleParameters = new Dictionary<string, Action<IEventFetcher, QueryParameter>>
         {
             { "eventType",               (fetcher, param) => fetcher.Apply(new SimpleParameterFilter<EventType> { Field = EpcisField.EventType, Values = param.Values.Select(Enumeration.GetByDisplayName<EventType>).ToArray() }) },
             { "eventCountLimit",         (fetcher, param) => fetcher.Apply(new LimitFilter { Value = param.GetValue<int>() }) },
@@ -36,8 +36,7 @@ namespace FasTnT.Domain.Queries
             { "WD_bizLocation",          (fetcher, param) => fetcher.Apply(new MasterdataHierarchyFilter { Field = EpcisField.BusinessLocation, Values = param.Values }) },
             { "EQ_requestId",            (fetcher, param) => fetcher.Apply(new SimpleParameterFilter<int> { Field = EpcisField.RequestId, Values = param.Values.Select(int.Parse).ToArray() }) }
         };
-
-        private static IDictionary<string, Action<IEventFetcher, QueryParameter>> RegexParameters = new Dictionary<string, Action<IEventFetcher, QueryParameter>>
+        private static readonly IDictionary<string, Action<IEventFetcher, QueryParameter>> RegexParameters = new Dictionary<string, Action<IEventFetcher, QueryParameter>>
         {
             { "^EQ_(source|destination)_",  (fetcher, param) => fetcher.Apply(new SourceDestinationFilter { Name = param.Name.Split('_', 3)[2], Type = param.Name.StartsWith("EQ_source") ? SourceDestinationType.Source : SourceDestinationType.Destination, Values = param.Values }) },
             { "^EQ_bizTransaction_",        (fetcher, param) => fetcher.Apply(new BusinessTransactionFilter { TransactionType = "", Values = param.Values }) },
@@ -59,7 +58,6 @@ namespace FasTnT.Domain.Queries
             { "^EQATTR_",                   (fetcher, param) => fetcher.Apply(new AttributeFilter { Field = param.GetAttributeField(), AttributeName = param.GetAttributeName(), Values = param.Values }) },
             { "^HASATTR_",                  (fetcher, param) => fetcher.Apply(new ExistsAttributeFilter { Field = param.GetAttributeField(), AttributeName = param.GetAttributeName()}) }
         };
-
         private readonly IEventFetcher _eventFetcher;
 
         public SimpleEventQuery(IEventFetcher eventFetcher)
@@ -74,7 +72,9 @@ namespace FasTnT.Domain.Queries
         {
             foreach(var parameter in parameters)
             {
-                if (IsSimpleParameter(parameter, out Action<IEventFetcher, QueryParameter> action) || IsRegexParameter(parameter, out action))
+                var action = default(Action<IEventFetcher, QueryParameter>);
+
+                if (IsSimpleParameter(parameter, out action) || IsRegexParameter(parameter, out action))
                 {
                     ApplyParameter(action, parameter);
                 }

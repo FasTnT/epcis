@@ -1,5 +1,5 @@
-﻿using FasTnT.Model;
-using FasTnT.Model.Events.Enums;
+﻿using FasTnT.Model.Enums;
+using FasTnT.Model.Events;
 using FasTnT.Model.Queries;
 using FasTnT.Model.Utils;
 using System;
@@ -31,7 +31,7 @@ namespace FasTnT.Domain.Utils
 
         public static T[] GetValues<T>(this QueryParameter parameter)
         {
-            return !parameter.Values.Any() ? new T[0] : parameter.Values.Select(x => ChangeType<T>(x)).ToArray();
+            return !parameter.Values.Any() ? Array.Empty<T>() : parameter.Values.Select(x => ChangeType<T>(x)).ToArray();
         }
 
         public static FilterComparator GetComparator(this QueryParameter parameter)

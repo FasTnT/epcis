@@ -1,5 +1,4 @@
-﻿using FasTnT.Model;
-using FasTnT.Model.Events.Enums;
+﻿using FasTnT.Model.Enums;
 using FasTnT.Model.Utils;
 using System;
 using System.Collections.Generic;
@@ -7,12 +6,13 @@ using System.Globalization;
 using System.Linq;
 using System.Xml.Linq;
 using FasTnT.Parsers.Xml.Utils;
+using FasTnT.Model.Events;
 
 namespace FasTnT.Parsers.Xml.Capture
 {
     public static class XmlEventsParser
     {
-        private static IDictionary<string, Action<EpcisEvent, XElement>> ParserMethods = new Dictionary<string, Action<EpcisEvent, XElement>>
+        private static readonly IDictionary<string, Action<EpcisEvent, XElement>> ParserMethods = new Dictionary<string, Action<EpcisEvent, XElement>>
         {
             { "eventTime",           (evt, node) => evt.EventTime = DateTime.Parse(node.Value, CultureInfo.InvariantCulture, DateTimeStyles.AdjustToUniversal) },
             { "eventTimeZoneOffset", (evt, node) => evt.EventTimeZoneOffset = new TimeZoneOffset { Representation = node.Value } },
@@ -86,7 +86,7 @@ namespace FasTnT.Parsers.Xml.Capture
         internal static void ParseExtensionElement(XElement innerElement, EpcisEvent epcisEvent)
         {
             if (innerElement.Name.Namespace == XNamespace.None || innerElement.Name.Namespace == XNamespace.Xmlns || innerElement.Name.NamespaceName == EpcisNamespaces.Capture)
-                epcisEvent = ParseAttributes(innerElement, epcisEvent);
+                _ = ParseAttributes(innerElement, epcisEvent);
             else
                 epcisEvent.CustomFields.Add(XmlCustomFieldParser.ParseCustomField(innerElement, FieldType.EventExtension));
         }

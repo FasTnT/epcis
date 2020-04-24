@@ -2,11 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Linq;
-using FasTnT.Model;
-using FasTnT.Model.Events;
-using FasTnT.Model.Events.Enums;
+using FasTnT.Model.Enums;
 using FasTnT.Model.Utils;
 using FasTnT.Parsers.Xml.Utils;
+using FasTnT.Model.Headers;
 
 namespace FasTnT.Parsers.Xml.Capture
 {

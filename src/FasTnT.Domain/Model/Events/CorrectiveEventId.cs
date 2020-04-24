@@ -1,4 +1,4 @@
-﻿namespace FasTnT.Model
+﻿namespace FasTnT.Model.Events
 {
     public class CorrectiveEventId
     {

@@ -1,8 +1,8 @@
-﻿using FasTnT.Model.Events.Enums;
+﻿using FasTnT.Model.Enums;
 using System;
 using System.Collections.Generic;
 
-namespace FasTnT.Model
+namespace FasTnT.Model.Events
 {
     public class CustomField
     {

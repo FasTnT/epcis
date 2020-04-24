@@ -4,7 +4,7 @@ using FasTnT.Domain;
 using FasTnT.Domain.Data;
 using FasTnT.Domain.Data.Model;
 using FasTnT.Model;
-using FasTnT.Model.Events.Enums;
+using FasTnT.Model.Enums;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using System.Threading;
@@ -27,7 +27,7 @@ namespace FasTnT.UnitTest.Handlers
             DocumentStore = new Mock<IDocumentStore>();
             CancellationToken = new CancellationTokenSource().Token;
             RequestContext = new RequestContext();
-            Request = new CaptureEpcisExceptionRequest { Header = new EpcisRequestHeader(), CallbackType = QueryCallbackType.ImplementationException, SubscriptionName = "test_sub" };
+            Request = new CaptureEpcisExceptionRequest { Header = new EpcisRequest(), CallbackType = QueryCallbackType.ImplementationException, SubscriptionName = "test_sub" };
             Handler = new CaptureEpcisExceptionHandler(RequestContext, DocumentStore.Object);
         }
 

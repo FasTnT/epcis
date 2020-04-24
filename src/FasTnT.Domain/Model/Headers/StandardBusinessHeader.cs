@@ -1,8 +1,7 @@
-﻿using FasTnT.Model.Events;
-using System;
+﻿using System;
 using System.Collections.Generic;
 
-namespace FasTnT.Model
+namespace FasTnT.Model.Headers
 {
     public class StandardBusinessHeader
     {

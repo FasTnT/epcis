@@ -1,5 +1,5 @@
 ﻿using Dapper;
-using FasTnT.Model;
+using FasTnT.Model.Events;
 using System.Data;
 
 namespace FasTnT.Data.PostgreSql.DapperConfiguration

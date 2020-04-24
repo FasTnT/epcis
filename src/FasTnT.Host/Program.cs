@@ -6,7 +6,7 @@ using System;
 
 namespace FasTnT.Host
 {
-    public class Program
+    public static class Program
     {
         public static void Main(string[] args)
         {
@@ -14,10 +14,11 @@ namespace FasTnT.Host
             .AddCommandLine(args)
             .Build();
 
-            var host = BuildWebHost(args, configuration);
+            var host = BuildWebHost(configuration);
             host.Run();
         }
-        public static IHost BuildWebHost(string[] args, IConfiguration configuration) =>
+
+        public static IHost BuildWebHost(IConfiguration configuration) =>
             new HostBuilder().ConfigureWebHostDefaults(webBuilder =>
             {
                 webBuilder.UseShutdownTimeout(TimeSpan.FromSeconds(10))

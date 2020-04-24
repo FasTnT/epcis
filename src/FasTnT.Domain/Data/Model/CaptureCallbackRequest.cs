@@ -1,14 +1,12 @@
-﻿using System.Collections.Generic;
-using FasTnT.Model;
-using FasTnT.Model.Events.Enums;
+﻿using FasTnT.Model;
+using FasTnT.Model.Enums;
 
 namespace FasTnT.Domain.Data.Model
 {
-    public class CaptureCallbackRequest
+    public class CaptureCallbackRequest : EpcisRequest
     {
         public string SubscriptionId { get; set; }
         public QueryCallbackType CallbackType { get; set; }
-        public EpcisRequestHeader Header { get; set; }
-        public IList<EpcisEvent> EventList { get; set; }
+        public EpcisRequest Header { get; set; }
     }
 }

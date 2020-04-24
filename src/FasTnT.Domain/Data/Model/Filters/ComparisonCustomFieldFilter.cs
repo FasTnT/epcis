@@ -1,5 +1,5 @@
-﻿using FasTnT.Model;
-using FasTnT.Model.Events.Enums;
+﻿using FasTnT.Model.Enums;
+using FasTnT.Model.Events;
 
 namespace FasTnT.Domain.Data.Model.Filters
 {

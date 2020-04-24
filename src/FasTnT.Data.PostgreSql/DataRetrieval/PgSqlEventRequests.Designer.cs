@@ -19,7 +19,7 @@ namespace FasTnT.Data.PostgreSql.DataRetrieval {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class PgSqlEventRequests {
@@ -61,23 +61,23 @@ namespace FasTnT.Data.PostgreSql.DataRetrieval {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to SELECT request.record_time as capture_time, event.id, event_type as type, event.record_time as event_time, action, read_point, event_timezone_offset, disposition, business_location, business_step, transformation_id, event.event_id, declaration_time, reason FROM epcis.event JOIN epcis.request on request.id = event.request_id LEFT JOIN epcis.error_declaration ed ON event.id = ed.event_id /**where**/ /**orderby**/ LIMIT @limit.
+        ///   Looks up a localized string similar to CREATE TEMP TABLE eventIds AS
+        ///(
+        ///  SELECT event.id 
+        ///  FROM epcis.event 
+        ///  JOIN epcis.request ON request.id = event.request_id 
+        ///  LEFT JOIN epcis.error_declaration ed ON event.id = ed.event_id 
+        ///  /**where**/ 
+        ///  /**orderby**/ 
+        ///  LIMIT @limit
+        ///);
+        ///SELECT request.record_time as capture_time, event.id, event_type as type, event.record_time as event_time, action, read_point, event_timezone_offset, disposition, business_location, business_step, transformation_id, event_id 
+        ///  FROM epcis.event 
+        ///  JOIN epcis [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string EventQuery {
             get {
                 return ResourceManager.GetString("EventQuery", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to SELECT event_id, epc as id, type, is_quantity, quantity, unit_of_measure FROM epcis.epc WHERE event_id = ANY(@eventids);
-        ///SELECT event_id, field_id as id, parent_id, namespace, name, type, text_value, numeric_value, date_value FROM epcis.custom_field WHERE event_id = ANY(@eventids);
-        ///SELECT event_id, transaction_type as type, transaction_id as id FROM epcis.business_transaction WHERE event_id = ANY(@eventids);
-        ///SELECT event_id, type, source_dest_id as id, direction FROM epcis.source_destination WHERE event_ [rest of string was truncated]&quot;;.
-        /// </summary>
-        internal static string RelatedQuery {
-            get {
-                return ResourceManager.GetString("RelatedQuery", resourceCulture);
             }
         }
     }
