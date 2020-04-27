@@ -1,14 +1,14 @@
 ﻿using Faithlife.Utility.Dapper;
 using FasTnT.Data.PostgreSql.Capture;
 using FasTnT.Data.PostgreSql.Utils;
-using FasTnT.Model;
+using FasTnT.Model.Events;
 using MoreLinq;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using StoreAction = System.Func<FasTnT.Model.EpcisEvent[], System.Data.IDbTransaction, System.Threading.CancellationToken, System.Threading.Tasks.Task>;
+using StoreAction = System.Func<FasTnT.Model.Events.EpcisEvent[], System.Data.IDbTransaction, System.Threading.CancellationToken, System.Threading.Tasks.Task>;
 
 namespace FasTnT.PostgreSql.Capture
 {

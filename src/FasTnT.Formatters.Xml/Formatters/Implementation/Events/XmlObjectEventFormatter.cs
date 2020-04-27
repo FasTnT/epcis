@@ -1,4 +1,4 @@
-﻿using FasTnT.Model;
+﻿using FasTnT.Model.Events;
 using FasTnT.Parsers.Xml.Formatters.Implementation;
 using System.Xml.Linq;
 

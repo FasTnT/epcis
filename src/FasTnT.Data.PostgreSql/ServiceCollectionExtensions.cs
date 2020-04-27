@@ -5,7 +5,7 @@ using FasTnT.Data.PostgreSql.Subscriptions;
 using FasTnT.Data.PostgreSql.Users;
 using FasTnT.Domain.Data;
 using FasTnT.Domain.Model.Subscriptions;
-using FasTnT.Model.Events.Enums;
+using FasTnT.Model.Enums;
 using FasTnT.PostgreSql.Capture;
 using FasTnT.PostgreSql.Migration;
 using Microsoft.Extensions.DependencyInjection;

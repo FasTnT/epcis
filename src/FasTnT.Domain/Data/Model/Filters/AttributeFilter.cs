@@ -2,9 +2,10 @@
 
 namespace FasTnT.Domain.Data.Model.Filters
 {
-    public class SimpleParameterFilter<T>
+    public class AttributeFilter
     {
         public EpcisField Field { get; set; }
-        public T[] Values { get; set; }
+        public string AttributeName { get; set; }
+        public string[] Values { get; set; }
     }
 }

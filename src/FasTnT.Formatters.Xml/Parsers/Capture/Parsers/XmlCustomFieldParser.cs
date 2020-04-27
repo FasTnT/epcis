@@ -1,5 +1,5 @@
-﻿using FasTnT.Model;
-using FasTnT.Model.Events.Enums;
+﻿using FasTnT.Model.Enums;
+using FasTnT.Model.Events;
 using FasTnT.Parsers.Xml.Utils;
 using System;
 using System.Collections.Generic;
@@ -15,7 +15,7 @@ namespace FasTnT.Parsers.Xml.Capture
             var customFields = new List<CustomField>();
             var elements = element?.Elements().Where(x => x.Name.Namespace != XNamespace.Xmlns && x.Name.Namespace != XNamespace.None && x.Name.Namespace != EpcisNamespaces.SBDH && x.Name.Namespace != null);
 
-            foreach (var field in elements ?? new XElement[0])
+            foreach (var field in elements ?? Array.Empty<XElement>())
             {
                 customFields.Add(ParseCustomField(field, fieldType));
             }

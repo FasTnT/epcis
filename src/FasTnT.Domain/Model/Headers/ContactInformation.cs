@@ -1,6 +1,6 @@
-﻿using FasTnT.Model.Events.Enums;
+﻿using FasTnT.Model.Enums;
 
-namespace FasTnT.Model.Events
+namespace FasTnT.Model.Headers
 {
     public class ContactInformation
     {

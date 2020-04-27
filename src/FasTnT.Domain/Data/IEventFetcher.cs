@@ -1,5 +1,5 @@
 ﻿using FasTnT.Domain.Data.Model.Filters;
-using FasTnT.Model;
+using FasTnT.Model.Events;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;

@@ -1,6 +1,6 @@
 ﻿using FasTnT.Model.Utils;
 
-namespace FasTnT.Model.Events.Enums
+namespace FasTnT.Model.Enums
 {
     public class FilterComparator : Enumeration
     {

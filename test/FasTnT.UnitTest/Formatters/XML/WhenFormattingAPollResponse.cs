@@ -1,6 +1,6 @@
 ﻿using FasTnT.Commands.Responses;
-using FasTnT.Model;
-using FasTnT.Model.Events.Enums;
+using FasTnT.Model.Enums;
+using FasTnT.Model.Events;
 using FasTnT.Model.MasterDatas;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Collections.Generic;

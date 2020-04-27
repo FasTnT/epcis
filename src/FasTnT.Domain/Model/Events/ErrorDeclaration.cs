@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace FasTnT.Model
+namespace FasTnT.Model.Events
 {
     public class ErrorDeclaration
     {

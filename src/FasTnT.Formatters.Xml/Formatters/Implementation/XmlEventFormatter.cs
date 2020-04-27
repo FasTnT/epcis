@@ -1,6 +1,6 @@
 ﻿using FasTnT.Formatters.Xml.Formatters.Events;
-using FasTnT.Model;
-using FasTnT.Model.Events.Enums;
+using FasTnT.Model.Enums;
+using FasTnT.Model.Events;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -10,7 +10,7 @@ using System.Xml.Linq;
 namespace FasTnT.Parsers.Xml.Formatters.Implementation
 {
 
-    public class XmlEventFormatter
+    public static class XmlEventFormatter
     {
         const string DateTimeFormat = "yyyy-MM-ddTHH:mm:ss.fffZ";
 
@@ -23,7 +23,7 @@ namespace FasTnT.Parsers.Xml.Formatters.Implementation
             { EventType.Transformation, evt => new XmlTransformationEventFormatter().Process(evt) }
         };
 
-        public XElement Format(EpcisEvent epcisEvent)
+        public static XElement Format(EpcisEvent epcisEvent)
         {
             if (Formatters.TryGetValue(epcisEvent.Type, out Func<EpcisEvent, XElement> formatter))
             {

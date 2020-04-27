@@ -7,7 +7,6 @@ using FasTnT.Host.Middleware;
 using FasTnT.Host.Infrastructure.Binding;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authentication;
-using MediatR;
 using FasTnT.Domain;
 using FasTnT.Data.PostgreSql;
 using FasTnT.Subscriptions;
@@ -48,11 +47,11 @@ namespace FasTnT.Host
                 .AddScheme<AuthenticationSchemeOptions, BasicAuthenticationHandler>("BasicAuthentication", null);
         }
 
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public virtual void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             app.UseExceptionHandlingMiddleware(env.IsDevelopment())
-               .UseRouting()
                .UseHttpSynchronousIO()
+               .UseRouting()
                .UseOkStatusCode()
                .UseAuthentication()
                .UseAuthorization()

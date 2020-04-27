@@ -1,7 +1,7 @@
 ﻿using FasTnT.Commands.Requests;
 using FasTnT.Domain.Commands;
 using FasTnT.Model;
-using FasTnT.Model.Events.Enums;
+using FasTnT.Model.Enums;
 using FasTnT.Model.Utils;
 using FasTnT.Parsers.Xml.Utils;
 using System;
@@ -25,9 +25,7 @@ namespace FasTnT.Parsers.Xml.Capture
             {
                 return new CaptureEpcisDocumentRequest
                 {
-                    Header = ParseHeader(document.Root),
-                    EventList = XmlEventsParser.ParseEvents(document.Root.XPathSelectElement("EPCISBody/EventList").Elements().ToArray()),
-                    MasterDataList = XmlMasterDataParser.ParseMasterDatas(document.Root.XPathSelectElement("EPCISHeader/extension/EPCISMasterData/VocabularyList")?.Elements()?.ToArray() ?? new XElement[0]),
+                    Request = ParseRequest(document.Root)
                 };
             }
             else if (document.Root.Name == XName.Get("EPCISQueryDocument", EpcisNamespaces.Query)) // Subscription result
@@ -38,12 +36,11 @@ namespace FasTnT.Parsers.Xml.Capture
             {
                 return new CaptureEpcisDocumentRequest
                 {
-                    Header = ParseHeader(document.Root),
-                    MasterDataList = XmlMasterDataParser.ParseMasterDatas(document.Root.Element("EPCISBody").Element("VocabularyList").Elements("Vocabulary"))
+                    Request = ParseRequest(document.Root),
                 };
             }
 
-            throw new Exception($"Document with root '{document.Root.Name.ToString()}' is not expected here.");
+            throw new Exception($"Document with root '{document.Root.Name}' is not expected here.");
         }
 
         private ICaptureRequest ParseCallback(XDocument document)
@@ -56,7 +53,7 @@ namespace FasTnT.Parsers.Xml.Capture
                 case "ImplementationException":
                     return new CaptureEpcisExceptionRequest
                     {
-                        Header = ParseHeader(document.Root),
+                        Header = ParseRequest(document.Root),
                         SubscriptionName = document.Root.Element("EPCISBody").Element(XName.Get(callbackType, EpcisNamespaces.Query)).Element("subscriptionID").Value,
                         Reason = document.Root.Element("EPCISBody").Element(XName.Get(callbackType, EpcisNamespaces.Query)).Element("reason").Value,
                         CallbackType = Enumeration.GetByDisplayNameInvariant<QueryCallbackType>(callbackType)
@@ -64,23 +61,24 @@ namespace FasTnT.Parsers.Xml.Capture
                 case "QueryResults":
                     return new CaptureEpcisQueryCallbackRequest
                     {
-                        Header = ParseHeader(document.Root),
-                        SubscriptionName = document.Root.Element("EPCISBody").Element(XName.Get("QueryResults", EpcisNamespaces.Query)).Element("subscriptionID").Value,
-                        EventList = XmlEventsParser.ParseEvents(document.Root.Element("EPCISBody").Element(XName.Get("QueryResults", EpcisNamespaces.Query)).Element("resultsBody").Element("EventList").Elements()?.ToArray())
+                        Header = ParseRequest(document.Root),
+                        SubscriptionName = document.Root.Element("EPCISBody").Element(XName.Get("QueryResults", EpcisNamespaces.Query)).Element("subscriptionID").Value
                     };
             }
 
-            throw new Exception($"Document with root '{document.Root.Name.ToString()}' is not expected here.");
+            throw new Exception($"Document with root '{document.Root.Name}' is not expected here.");
         }
 
-        private EpcisRequestHeader ParseHeader(XElement root)
+        private EpcisRequest ParseRequest(XElement root)
         {
-            return new EpcisRequestHeader
+            return new EpcisRequest
             {
                 StandardBusinessHeader = XmlHeaderParser.Parse(root.XPathSelectElement("EPCISHeader/sbdh:StandardBusinessDocumentHeader", EpcisNamespaces.Manager)),
                 DocumentTime = DateTime.Parse(root.Attribute("creationDate").Value, CultureInfo.InvariantCulture),
                 SchemaVersion = root.Attribute("schemaVersion").Value,
-                CustomFields = XmlCustomFieldParser.ParseCustomFields(root.XPathSelectElement("EPCISHeader"), FieldType.HeaderExtension)
+                CustomFields = XmlCustomFieldParser.ParseCustomFields(root.XPathSelectElement("EPCISHeader"), FieldType.HeaderExtension),
+                EventList = XmlEventsParser.ParseEvents(root.XPathSelectElement("EPCISBody/EventList")?.Elements()?.ToArray() ?? Array.Empty<XElement>()),
+                MasterdataList = XmlMasterDataParser.ParseMasterDatas(root.Element("EPCISBody")?.Element("VocabularyList")?.Elements("Vocabulary") ?? Array.Empty<XElement>())
             };
         }
     }

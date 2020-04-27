@@ -2,13 +2,11 @@
 using FasTnT.Domain;
 using FasTnT.Domain.Commands;
 using FasTnT.Domain.Data;
-using FasTnT.Domain.Data.Model;
 using FasTnT.Model;
-using FasTnT.Model.Events.Enums;
+using FasTnT.Model.Enums;
+using FasTnT.Model.Events;
 using FasTnT.Model.Exceptions;
-using FasTnT.Model.MasterDatas;
 using MediatR;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -17,9 +15,7 @@ namespace FasTnT.Commands.Requests
 {
     public class CaptureEpcisDocumentRequest : ICaptureRequest
     {
-        public EpcisRequestHeader Header { get; set; }
-        public List<EpcisEvent> EventList { get; set; } = new List<EpcisEvent>();
-        public List<EpcisMasterData> MasterDataList { get; set; } = new List<EpcisMasterData>();
+        public EpcisRequest Request { get; set; }
 
         public class CaptureEpcisDocumentHandler : IRequestHandler<CaptureEpcisDocumentRequest, IEpcisResponse>
         {
@@ -34,16 +30,9 @@ namespace FasTnT.Commands.Requests
 
             public async Task<IEpcisResponse> Handle(CaptureEpcisDocumentRequest request, CancellationToken cancellationToken)
             {
-                request.EventList.ForEach(Validate);
+                request.Request.EventList.ForEach(Validate);
 
-                var captureRequest = new CaptureDocumentRequest
-                {
-                    Header = request.Header,
-                    EventList = request.EventList,
-                    MasterdataList = request.MasterDataList
-                };
-
-                await _documentStore.Capture(captureRequest, _context, cancellationToken);
+                await _documentStore.Capture(request.Request, _context, cancellationToken);
 
                 return EmptyResponse.Value;
             }

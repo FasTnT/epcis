@@ -23,10 +23,11 @@ namespace FasTnT.PostgreSql.Capture
             _connection = connection;
         }
 
-        public async Task Capture(CaptureDocumentRequest request, RequestContext context, CancellationToken cancellationToken)
+        public async Task Capture(EpcisRequest request, RequestContext context, CancellationToken cancellationToken)
         {
-            await Commit(async tx => {
-                var headerId = await PersistHeader(request.Header, tx, context, cancellationToken);
+            await Commit(async tx => 
+            {
+                var headerId = await PersistHeader(request, tx, context, cancellationToken);
 
                 await EpcisEventStore.StoreEpcisEvents(request.EventList, tx, headerId, cancellationToken);
                 await EpcisMasterdataStore.StoreEpcisMasterdata(request.MasterdataList, tx, headerId, cancellationToken);
@@ -35,7 +36,8 @@ namespace FasTnT.PostgreSql.Capture
 
         public async Task Capture(CaptureCallbackRequest request, RequestContext context, CancellationToken cancellationToken)
         {
-            await Commit(async tx => {
+            await Commit(async tx => 
+            {
                 var headerId = await PersistHeader(request.Header, tx, context, cancellationToken);
 
                 await SubscriptionCallbackStore.Store(request, headerId, tx, cancellationToken);
@@ -52,7 +54,7 @@ namespace FasTnT.PostgreSql.Capture
             }
         }
 
-        private async Task<int> PersistHeader(EpcisRequestHeader header, IDbTransaction transaction, RequestContext context, CancellationToken cancellationToken)
+        private async Task<int> PersistHeader(EpcisRequest header, IDbTransaction transaction, RequestContext context, CancellationToken cancellationToken)
         {
             var parameters = new { header.DocumentTime, header.RecordTime, UserId = context.User.Id };
             var headerId = await transaction.Connection.ExecuteScalarAsync<int>(new CommandDefinition(CaptureEpcisDocumentCommands.PersistHeader, parameters, transaction, cancellationToken: cancellationToken));
@@ -63,7 +65,7 @@ namespace FasTnT.PostgreSql.Capture
             return headerId;
         }
 
-        private async Task StoreCustomFields(EpcisRequestHeader header, int headerId, IDbTransaction transaction, CancellationToken cancellationToken)
+        private async Task StoreCustomFields(EpcisRequest header, int headerId, IDbTransaction transaction, CancellationToken cancellationToken)
         {
             var customFields = header.CustomFields;
 
@@ -73,7 +75,7 @@ namespace FasTnT.PostgreSql.Capture
             await transaction.Connection.BulkInsertAsync(CaptureEpcisDocumentCommands.PersistHeader, customFields, transaction, cancellationToken: cancellationToken);
         }
 
-        private async Task StoreStandardBusinessHeader(EpcisRequestHeader header, int headerId, IDbTransaction transaction, CancellationToken cancellationToken)
+        private async Task StoreStandardBusinessHeader(EpcisRequest header, int headerId, IDbTransaction transaction, CancellationToken cancellationToken)
         {
             if (header.StandardBusinessHeader == null) return;
 

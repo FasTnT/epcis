@@ -1,7 +1,6 @@
-﻿using FasTnT.Model.Events.Enums;
+﻿using FasTnT.Model.Enums;
 using FasTnT.Model.Utils;
 using System;
-using System.Collections.Generic;
 using Mapping = System.Collections.Generic.Dictionary<FasTnT.Model.Utils.Enumeration, string>;
 
 namespace FasTnT.Data.PostgreSql.DataRetrieval

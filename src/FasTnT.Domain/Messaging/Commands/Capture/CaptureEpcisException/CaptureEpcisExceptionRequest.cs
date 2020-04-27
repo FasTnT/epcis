@@ -6,14 +6,14 @@ using FasTnT.Domain.Commands;
 using FasTnT.Domain.Data;
 using FasTnT.Domain.Data.Model;
 using FasTnT.Model;
-using FasTnT.Model.Events.Enums;
+using FasTnT.Model.Enums;
 using MediatR;
 
 namespace FasTnT.Commands.Requests
 {
     public class CaptureEpcisExceptionRequest : ICaptureRequest
     {
-        public EpcisRequestHeader Header { get; set; }
+        public EpcisRequest Header { get; set; }
         public QueryCallbackType CallbackType { get; set; }
         public string Severity { get; set; } = "ERROR";
         public string Reason { get; set; }
