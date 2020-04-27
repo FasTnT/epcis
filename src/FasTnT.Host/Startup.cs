@@ -47,7 +47,7 @@ namespace FasTnT.Host
                 .AddScheme<AuthenticationSchemeOptions, BasicAuthenticationHandler>("BasicAuthentication", null);
         }
 
-        public static void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public virtual void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             app.UseExceptionHandlingMiddleware(env.IsDevelopment())
                .UseHttpSynchronousIO()
