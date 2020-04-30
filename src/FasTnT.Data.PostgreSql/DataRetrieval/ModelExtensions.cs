@@ -44,7 +44,7 @@ namespace FasTnT.Data.PostgreSql.DataRetrieval
         public static string ToPgSql(this OrderDirection direction) => GetValue(direction, SortOperators) ?? throw new Exception($"Unknown simple EPCIS event field: '{direction.DisplayName}'");
         public static string ToPgSql(this EpcisField field) => GetValue(field, SimpleFields) ?? throw new Exception($"Unknown simple EPCIS event field: '{field.DisplayName}'");
         public static string ToCbvType(this EpcisField field) => GetValue(field, CbvTypes) ?? throw new Exception($"Cannot convert to CBV type: '{field.DisplayName}'");
-        public static string GetCustomFieldName(this object value) => value is DateTime ? "cf.date_value" : "cf.numeric_value";
+        public static string GetCustomFieldName(this object value) => value is DateTime ? "date_value" : "numeric_value";
 
         private static string GetValue(Enumeration value, Mapping mapping) => mapping.TryGetValue(value, out string result) ? result : null;
     }
