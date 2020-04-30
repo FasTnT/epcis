@@ -15,6 +15,7 @@ namespace FasTnT.Model
         public DateTime RecordTime { get; set; } = DateTime.UtcNow;
         public string SchemaVersion { get; set; }
         public List<CustomField> CustomFields { get; set; } = new List<CustomField>();
+        public SubscriptionCallback SubscriptionCallback { get; set; }
         public List<EpcisEvent> EventList { get; set; }
         public List<EpcisMasterData> MasterdataList { get; set; }
     }

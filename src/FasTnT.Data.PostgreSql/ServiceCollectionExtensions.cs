@@ -18,7 +18,7 @@ namespace FasTnT.Data.PostgreSql
     {
         public static IServiceCollection AddEpcisPersistence(this IServiceCollection services, string connectionString)
         {
-            services.AddScoped<IDocumentStore, DocumentStore>();
+            services.AddScoped<IEpcisRequestStore, EpcisRequestStore>();
             services.AddScoped<IDatabaseMigrator, DatabaseMigrator>();
             services.AddScoped<IEventFetcher, EventFetcher>();
             services.AddScoped<IMasterdataFetcher, MasterdataFetcher>();

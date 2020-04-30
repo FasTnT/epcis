@@ -15,7 +15,7 @@ namespace FasTnT.UnitTest.Handlers
     [TestClass]
     public class WhenHandlingACaptureEpcisDocumentRequest : TestBase
     {
-        public Mock<IDocumentStore> DocumentStore { get; set; }
+        public Mock<IEpcisRequestStore> DocumentStore { get; set; }
         public RequestContext RequestContext { get; set; }
         public CaptureEpcisDocumentHandler Handler { get; set; }
         public CancellationToken CancellationToken { get; set; }
@@ -24,7 +24,7 @@ namespace FasTnT.UnitTest.Handlers
 
         public override void Given()
         {
-            DocumentStore = new Mock<IDocumentStore>();
+            DocumentStore = new Mock<IEpcisRequestStore>();
             CancellationToken = new CancellationTokenSource().Token;
             RequestContext = new RequestContext();
             Request = new CaptureEpcisDocumentRequest { Request = new EpcisRequest { EventList = new List<EpcisEvent>() } };

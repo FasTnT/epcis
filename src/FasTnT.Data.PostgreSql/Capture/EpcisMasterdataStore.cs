@@ -12,7 +12,7 @@ namespace FasTnT.PostgreSql.Capture
 {
     public static class EpcisMasterdataStore
     {
-        public static async Task StoreEpcisMasterdata(IEnumerable<EpcisMasterData> masterdataList, IDbTransaction transaction, int headerId, CancellationToken cancellationToken)
+        public static async Task StoreEpcisMasterdata(IEnumerable<EpcisMasterData> masterdataList, IDbTransaction transaction, CancellationToken cancellationToken)
         {
             if (masterdataList == null || !masterdataList.Any()) return;
 
