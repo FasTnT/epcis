@@ -3,6 +3,7 @@ using FasTnT.Domain.Data;
 using FasTnT.Domain.Data.Model.Filters;
 using FasTnT.Model.Enums;
 using FasTnT.Model.Events;
+using MoreLinq;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
@@ -58,19 +59,16 @@ namespace FasTnT.Data.PostgreSql.DataRetrieval
                 var sourceDests = await reader.ReadAsync<SourceDestination>();
                 var correctiveEventIds = await reader.ReadAsync<CorrectiveEventId>();
 
-                foreach (var evt in events)
+                errorDeclarations.ForEach(err => err.CorrectiveEventIds = correctiveEventIds.Where(x => x.EventId == err.EventId).ToList());
+                events.ForEach(evt =>
                 {
                     evt.Epcs = epcs.Where(x => x.EventId == evt.Id).ToList();
                     evt.CustomFields = CreateHierarchy(fields.Where(x => x.EventId == evt.Id));
                     evt.BusinessTransactions = transactions.Where(x => x.EventId == evt.Id).ToList();
                     evt.SourceDestinationList = sourceDests.Where(x => x.EventId == evt.Id).ToList();
                     evt.ErrorDeclaration = errorDeclarations.FirstOrDefault(x => x.EventId == evt.Id);
+                });
 
-                    if (evt.ErrorDeclaration != null)
-                    {
-                        evt.ErrorDeclaration.CorrectiveEventIds = correctiveEventIds.Where(x => x.EventId == evt.Id).ToList();
-                    }
-                }
                 return events;
             }
         }
