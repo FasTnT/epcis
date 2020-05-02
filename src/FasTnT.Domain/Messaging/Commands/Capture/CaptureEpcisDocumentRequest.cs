@@ -20,9 +20,9 @@ namespace FasTnT.Commands.Requests
         public class CaptureEpcisDocumentHandler : IRequestHandler<CaptureEpcisDocumentRequest, IEpcisResponse>
         {
             private readonly RequestContext _context;
-            private readonly IDocumentStore _documentStore;
+            private readonly IEpcisRequestStore _documentStore;
 
-            public CaptureEpcisDocumentHandler(RequestContext context, IDocumentStore documentStore)
+            public CaptureEpcisDocumentHandler(RequestContext context, IEpcisRequestStore documentStore)
             {
                 _context = context;
                 _documentStore = documentStore;

@@ -47,9 +47,18 @@ namespace FasTnT.PostgreSql.Capture
             await transaction.Connection.BulkInsertAsync(CaptureEpcisEventCommand.StoreCustomField, fields, transaction, cancellationToken: cancellationToken);
         }
 
-        private async static Task StoreEpcs(EpcisEvent[] events, IDbTransaction transaction, CancellationToken cancellationToken) => await Store(transaction, events.SelectMany(e => { e.Epcs.ForEach(x => x.EventId = e.Id); return e.Epcs; }), CaptureEpcisEventCommand.StoreEpcs, cancellationToken);
-        private async static Task StoreSourceDestinations(EpcisEvent[] events, IDbTransaction transaction, CancellationToken cancellationToken) => await Store(transaction, events.SelectMany(e => { e.SourceDestinationList.ForEach(sd => sd.EventId = e.Id); return e.SourceDestinationList; }), CaptureEpcisEventCommand.StoreSourceDestination, cancellationToken);
-        private async static Task StoreBusinessTransactions(EpcisEvent[] events, IDbTransaction transaction, CancellationToken cancellationToken) => await Store(transaction, events.SelectMany(e => { e.BusinessTransactions.ForEach(x => x.EventId = e.Id); return e.BusinessTransactions; }), CaptureEpcisEventCommand.StoreBusinessTransaction, cancellationToken);
+        private async static Task StoreEpcs(EpcisEvent[] events, IDbTransaction transaction, CancellationToken cancellationToken)
+        {
+            await Store(transaction, events.SelectMany(e => { e.Epcs.ForEach(x => x.EventId = e.Id); return e.Epcs; }), CaptureEpcisEventCommand.StoreEpcs, cancellationToken);
+        }
+        private async static Task StoreSourceDestinations(EpcisEvent[] events, IDbTransaction transaction, CancellationToken cancellationToken)
+        { 
+            await Store(transaction, events.SelectMany(e => { e.SourceDestinationList.ForEach(sd => sd.EventId = e.Id); return e.SourceDestinationList; }), CaptureEpcisEventCommand.StoreSourceDestination, cancellationToken); 
+        }
+        private async static Task StoreBusinessTransactions(EpcisEvent[] events, IDbTransaction transaction, CancellationToken cancellationToken)
+        {
+            await Store(transaction, events.SelectMany(e => { e.BusinessTransactions.ForEach(x => x.EventId = e.Id); return e.BusinessTransactions; }), CaptureEpcisEventCommand.StoreBusinessTransaction, cancellationToken);
+        }
 
         private async static Task Store<T>(IDbTransaction transaction, IEnumerable<T> elements, string command, CancellationToken cancellationToken)
         {

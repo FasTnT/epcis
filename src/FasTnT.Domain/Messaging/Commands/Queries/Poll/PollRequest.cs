@@ -27,16 +27,10 @@ namespace FasTnT.Commands.Requests
 
             public async Task<IEpcisResponse> Handle(PollRequest request, CancellationToken cancellationToken)
             {
-                var query = _queries.SingleOrDefault(q => q.Name == request.QueryName);
-
-                if (query != null)
-                {
-                    return await query.Handle(request.Parameters, cancellationToken);
-                }
-                else
-                {
-                    throw new EpcisException(ExceptionType.NoSuchNameException, $"Query with name '{request.QueryName}' is not implemented");
-                }
+                var query = _queries.FirstOrDefault(q => q.Name == request.QueryName)
+                            ?? throw new EpcisException(ExceptionType.NoSuchNameException, $"Query with name '{request.QueryName}' is not implemented");
+                
+                return await query.Handle(request.Parameters, cancellationToken);
             }
         }
     }
