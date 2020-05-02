@@ -44,7 +44,7 @@ namespace FasTnT.Commands.Requests
 
             private void ValidateRequest(Subscription subscription)
             {
-                var query = _queries.SingleOrDefault(q => q.Name == subscription.QueryName);
+                var query = _queries.FirstOrDefault(q => q.Name == subscription.QueryName);
 
                 if (query == null)
                 {

@@ -22,17 +22,6 @@ namespace FasTnT.PostgreSql.Capture
 
             return headerId;
         }
-
-        private static async Task StoreCustomFields(EpcisRequest header, int headerId, IDbTransaction transaction, CancellationToken cancellationToken)
-        {
-            var customFields = header.CustomFields;
-
-            if (customFields == null || !customFields.Any()) return;
-            customFields.ForEach(x => x.HeaderId = headerId);
-
-            await transaction.Connection.BulkInsertAsync(CaptureEpcisDocumentCommands.PersistHeader, customFields, transaction, cancellationToken: cancellationToken);
-        }
-
         private static async Task StoreStandardBusinessHeader(EpcisRequest header, int headerId, IDbTransaction transaction, CancellationToken cancellationToken)
         {
             if (header.StandardBusinessHeader == null) return;
@@ -48,5 +37,16 @@ namespace FasTnT.PostgreSql.Capture
 
             await transaction.Connection.BulkInsertAsync(CaptureEpcisDocumentCommands.PersistContactInformations, contactInformations, transaction, cancellationToken: cancellationToken);
         }
+
+        private static async Task StoreCustomFields(EpcisRequest header, int headerId, IDbTransaction transaction, CancellationToken cancellationToken)
+        {
+            if (header.CustomFields == null || !header.CustomFields.Any()) return;
+            
+            var customFields = header.CustomFields;
+            customFields.ForEach(x => x.HeaderId = headerId);
+
+            await transaction.Connection.BulkInsertAsync(CaptureEpcisDocumentCommands.PersistHeader, customFields, transaction, cancellationToken: cancellationToken);
+        }
+
     }
 }
