@@ -7,7 +7,7 @@ namespace FasTnT.IntegrationTests.API.DatabaseEndpoints
 {
     [TestClass]
     [TestCategory("IntegrationTests")]
-    public class WhenCallingDatabaseEndpointMigrate : BaseRollbackedIntegrationTest
+    public class WhenCallingDatabaseEndpointMigrate : BaseIntegrationTest
     {
         public override void Act()
         {

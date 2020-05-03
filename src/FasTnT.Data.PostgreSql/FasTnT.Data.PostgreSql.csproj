@@ -1,28 +1,59 @@
 <Project Sdk="Microsoft.NET.Sdk">
-
+  <PropertyGroup>
+    <SSDTUnitTestPath Condition="'$(SSDTUnitTestPath)' == ''">$(VsInstallRoot)\Common7\IDE\Extensions\Microsoft\SQLDB</SSDTUnitTestPath>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SSDTPath Condition="'$(SSDTPath)' == ''">$(VsInstallRoot)\Common7\IDE\Extensions\Microsoft\SQLDB\DAC\130</SSDTPath>
+  </PropertyGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+  </PropertyGroup>
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
-	  <LangVersion>7.1</LangVersion>
+    <LangVersion>7.1</LangVersion>
   </PropertyGroup>
-
+  <ItemGroup>
+    <None Remove="Migration\M001_CreateUserSchema.sql" />
+    <None Remove="Migration\M002_CreateEpcisSchema.sql" />
+    <None Remove="Migration\M003_CreateCbvSchema.sql" />
+    <None Remove="Migration\M004_CreateSubscriptionSchema.sql" />
+    <None Remove="Migration\M005_CreateSbdhSchema.sql" />
+    <None Remove="Migration\M006_InsertDefaultData.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migration\M006_InsertDefaultData.sql">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migration\M005_CreateSbdhSchema.sql">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migration\M004_CreateSubscriptionSchema.sql">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migration\M003_CreateCbvSchema.sql">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migration\M002_CreateEpcisSchema.sql">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migration\M001_CreateUserSchema.sql" />
+  </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Dapper" Version="2.0.35" />
     <PackageReference Include="Dapper.SqlBuilder" Version="2.0.35" />
+    <PackageReference Include="dbup-postgresql" Version="4.3.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="3.1.3" />
     <PackageReference Include="morelinq" Version="3.3.2" />
     <PackageReference Include="Npgsql" Version="4.1.3.1" />
   </ItemGroup>
-
   <ItemGroup>
     <ProjectReference Include="..\FasTnT.Domain\FasTnT.Domain.csproj" />
   </ItemGroup>
-
   <ItemGroup>
     <Reference Include="Faithlife.Utility.Dapper">
       <HintPath>..\..\libs\Faithlife.Utility.Dapper.dll</HintPath>
     </Reference>
   </ItemGroup>
-
   <ItemGroup>
     <Compile Update="Capture\CaptureEpcisCallbackCommands.Designer.cs">
       <DesignTime>True</DesignTime>
@@ -54,11 +85,6 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>PgSqlMasterdataRequests.resx</DependentUpon>
     </Compile>
-    <Compile Update="Migration\DatabaseSqlRequests.Designer.cs">
-      <DependentUpon>DatabaseSqlRequests.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-    </Compile>
     <Compile Update="Subscriptions\SubscriptionRequests.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
@@ -70,7 +96,6 @@
       <DependentUpon>PgSqlUserRequests.resx</DependentUpon>
     </Compile>
   </ItemGroup>
-
   <ItemGroup>
     <EmbeddedResource Update="Capture\CaptureEpcisCallbackCommands.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -96,10 +121,6 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>PgSqlMasterdataRequests.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Update="Migration\DatabaseSqlRequests.resx">
-      <LastGenOutput>DatabaseSqlRequests.Designer.cs</LastGenOutput>
-      <Generator>PublicResXFileCodeGenerator</Generator>
-    </EmbeddedResource>
     <EmbeddedResource Update="Subscriptions\SubscriptionRequests.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>SubscriptionRequests.Designer.cs</LastGenOutput>
@@ -109,9 +130,27 @@
       <LastGenOutput>PgSqlUserRequests.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
-
   <ItemGroup>
     <Folder Include="DapperConfiguration\" />
   </ItemGroup>
-
+  <ItemGroup />
+  <ItemGroup Condition="$(VisualStudioVersion) == '16.0'">
+    <Reference Include="Microsoft.Data.Tools.Schema.Sql, Version=15.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>$(SSDTPath)\Microsoft.Data.Tools.Schema.Sql.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Data.Tools.Schema.Sql.UnitTesting, Version=16.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>$(SSDTUnitTestPath)\Microsoft.Data.Tools.Schema.Sql.UnitTesting.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Data.Tools.Schema.Sql.UnitTestingAdapter, Version=16.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>$(SSDTUnitTestPath)\Microsoft.Data.Tools.Schema.Sql.UnitTestingAdapter.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+  </ItemGroup>
+  <PropertyGroup>
+    <SsdtUnitTestVersion>3.1</SsdtUnitTestVersion>
+  </PropertyGroup>
+  <Import Project="$(SQLDBExtensionsRefPath)\Microsoft.Data.Tools.Schema.Sql.UnitTesting.targets" Condition="$(VisualStudioVersion) != '15.0' And '$(SQLDBExtensionsRefPath)' != ''" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.Sql.UnitTesting.targets" Condition="$(VisualStudioVersion) != '15.0' And '$(SQLDBExtensionsRefPath)' == ''" />
 </Project>

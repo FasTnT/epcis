@@ -7,7 +7,6 @@ using System.Collections.Generic;
 using System;
 using System.IO;
 using System.IO.Compression;
-using FasTnT.Data.PostgreSql.Migration;
 
 namespace FasTnT.IntegrationTests.Common
 {
@@ -45,34 +44,6 @@ namespace FasTnT.IntegrationTests.Common
                         yield return reader.GetString(0);
                     }
                 }
-            }
-        }
-
-        public void MigrateDatabase()
-        {
-            using (var command = Connection.CreateCommand())
-            {
-                command.CommandText = UnzipCommand(DatabaseSqlRequests.CreateZipped);
-                command.ExecuteNonQuery();
-            }
-        }
-
-        public void RollbackDatabase()
-        {
-            using (var command = Connection.CreateCommand())
-            {
-                command.CommandText = UnzipCommand(DatabaseSqlRequests.DropZipped);
-                command.ExecuteNonQuery();
-            }
-        }
-
-        private string UnzipCommand(string zippedRequest)
-        {
-            using (var msi = new MemoryStream(Convert.FromBase64String(zippedRequest)))
-            using (var gs = new GZipStream(msi, CompressionMode.Decompress))
-            using (var sr = new StreamReader(gs))
-            {
-                return sr.ReadToEnd();
             }
         }
     }

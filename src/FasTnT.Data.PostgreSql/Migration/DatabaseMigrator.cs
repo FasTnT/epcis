@@ -1,33 +1,22 @@
-﻿using Dapper;
-using FasTnT.Data.PostgreSql.Migration;
-using FasTnT.Domain.Data;
-using System;
-using System.Data;
-using System.IO;
-using System.IO.Compression;
-using System.Threading.Tasks;
+﻿using DbUp;
+using System.Reflection;
 
-namespace FasTnT.PostgreSql.Migration
+namespace FasTnT.Data.PostgreSql.Migration
 {
-    public class DatabaseMigrator : IDatabaseMigrator
+    internal static class DatabaseMigrator
     {
-        private readonly IDbConnection _connection;
-
-        public DatabaseMigrator(IDbConnection connection)
+        public static void Migrate(string connectionString)
         {
-            _connection = connection;
-        }
+            var upgrader = DeployChanges.To
+            .PostgresqlDatabase(connectionString)
+            .WithScriptsEmbeddedInAssembly(Assembly.GetExecutingAssembly())
+            .Build();
 
-        public async Task Migrate() => await Execute(DatabaseSqlRequests.CreateZipped);
-        public async Task Rollback() => await Execute(DatabaseSqlRequests.DropZipped);
+            var result = upgrader.PerformUpgrade();
 
-        private async Task Execute(string zippedCommand)
-        {
-            using (var reader = new StreamReader(new GZipStream(new MemoryStream(Convert.FromBase64String(zippedCommand)), CompressionMode.Decompress)))
+            if (!result.Successful)
             {
-                var unzippedCommand = await reader.ReadToEndAsync();
-
-                await _connection.ExecuteAsync(unzippedCommand);
+                throw new System.Exception("Unable to update database");
             }
         }
     }

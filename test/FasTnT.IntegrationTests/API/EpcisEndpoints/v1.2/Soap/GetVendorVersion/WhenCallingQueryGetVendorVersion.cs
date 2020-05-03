@@ -11,7 +11,7 @@ namespace FasTnT.IntegrationTests.API.EpcisEndpoints.v1_2.Soap.GetVendorVersion
 {
     [TestClass]
     [TestCategory("IntegrationTests")]
-    public class WhenCallingQueryGetVendorVersion : BaseMigratedIntegrationTest
+    public class WhenCallingQueryGetVendorVersion : BaseIntegrationTest
     {
         public override void Act()
         {

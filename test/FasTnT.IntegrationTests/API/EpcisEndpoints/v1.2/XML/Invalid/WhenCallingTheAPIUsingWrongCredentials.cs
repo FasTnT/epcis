@@ -9,7 +9,7 @@ namespace FasTnT.IntegrationTests.API.EpcisEndpoints.v1._2.XML.Invalid
 {
     [TestClass]
     [TestCategory("IntegrationTests")]
-    public class WhenCallingTheAPIUsingWrongCredentials : BaseMigratedIntegrationTest
+    public class WhenCallingTheAPIUsingWrongCredentials : BaseIntegrationTest
     {
         public override void Act()
         {

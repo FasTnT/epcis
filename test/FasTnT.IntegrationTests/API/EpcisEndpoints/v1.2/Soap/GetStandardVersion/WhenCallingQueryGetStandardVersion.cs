@@ -10,7 +10,7 @@ namespace FasTnT.IntegrationTests.API.EpcisEndpoints.v1_2.Soap.GetStandardVersio
 {
     [TestClass]
     [TestCategory("IntegrationTests")]
-    public class WhenCallingQueryGetStandardVersion : BaseMigratedIntegrationTest
+    public class WhenCallingQueryGetStandardVersion : BaseIntegrationTest
     {
         public override void Act()
         {
