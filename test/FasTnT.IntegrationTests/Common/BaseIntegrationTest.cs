@@ -18,9 +18,10 @@ namespace FasTnT.IntegrationTests.Common
         public virtual void Arrange()
         {
             ConnectionString = IntegrationTest.Configuration.GetConnectionString("FasTnT.Database");
-            Connection = new NpgsqlConnection(IntegrationTest.Configuration.GetConnectionString("FasTnT.Database"));
+            Connection = new NpgsqlConnection(ConnectionString);
             Connection.Open();
 
+            DatabaseMigrator.Migrate(ConnectionString);
             Client = IntegrationTest.Client;
         }
 
@@ -29,7 +30,6 @@ namespace FasTnT.IntegrationTests.Common
         [TestInitialize]
         public void Execute()
         {
-            DatabaseMigrator.Migrate(ConnectionString);
             Arrange();
             Act();
         }
@@ -41,6 +41,16 @@ namespace FasTnT.IntegrationTests.Common
             {
                 command.CommandText = @"DROP SCHEMA sbdh CASCADE; DROP SCHEMA callback CASCADE; DROP SCHEMA subscriptions CASCADE; DROP SCHEMA cbv CASCADE; DROP SCHEMA epcis CASCADE; DROP SCHEMA users CASCADE; DELETE FROM public.schemaversions;";
                 command.ExecuteNonQuery();
+            }
+
+            if (Connection != null)
+            {
+                if (Connection.State == ConnectionState.Open)
+                {
+                    Connection.Close();
+                }
+
+                Connection.Dispose();
             }
         }
 
