@@ -1,33 +1,28 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <SSDTUnitTestPath Condition="'$(SSDTUnitTestPath)' == ''">$(VsInstallRoot)\Common7\IDE\Extensions\Microsoft\SQLDB</SSDTUnitTestPath>
-  </PropertyGroup>
-  <PropertyGroup>
-    <SSDTPath Condition="'$(SSDTPath)' == ''">$(VsInstallRoot)\Common7\IDE\Extensions\Microsoft\SQLDB\DAC\130</SSDTPath>
-  </PropertyGroup>
-  <PropertyGroup>
-    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
-  </PropertyGroup>
-  <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <LangVersion>7.1</LangVersion>
   </PropertyGroup>
   <ItemGroup>
-    <None Remove="Migration\M001_CreateUserSchema.sql" />
+    <None Remove="Migration\M001_CreateUsersSchema.sql" />
     <None Remove="Migration\M002_CreateEpcisSchema.sql" />
     <None Remove="Migration\M003_CreateCbvSchema.sql" />
-    <None Remove="Migration\M004_CreateSubscriptionSchema.sql" />
-    <None Remove="Migration\M005_CreateSbdhSchema.sql" />
-    <None Remove="Migration\M006_InsertDefaultData.sql" />
+    <None Remove="Migration\M004_CreateSubscriptionsSchema.sql" />
+    <None Remove="Migration\M005_CreateCallbackSchema.sql" />
+    <None Remove="Migration\M006_CreateSbdhSchema.sql" />
+    <None Remove="Migration\M007_InsertDefaultData.sql" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migration\M006_InsertDefaultData.sql">
+    <EmbeddedResource Include="Migration\M005_CreateCallbackSchema.sql">
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migration\M005_CreateSbdhSchema.sql">
+    <EmbeddedResource Include="Migration\M007_InsertDefaultData.sql">
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migration\M004_CreateSubscriptionSchema.sql">
+    <EmbeddedResource Include="Migration\M006_CreateSbdhSchema.sql">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migration\M004_CreateSubscriptionsSchema.sql">
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Migration\M003_CreateCbvSchema.sql">
@@ -36,7 +31,7 @@
     <EmbeddedResource Include="Migration\M002_CreateEpcisSchema.sql">
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migration\M001_CreateUserSchema.sql" />
+    <EmbeddedResource Include="Migration\M001_CreateUsersSchema.sql" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Dapper" Version="2.0.35" />
@@ -134,23 +129,4 @@
     <Folder Include="DapperConfiguration\" />
   </ItemGroup>
   <ItemGroup />
-  <ItemGroup Condition="$(VisualStudioVersion) == '16.0'">
-    <Reference Include="Microsoft.Data.Tools.Schema.Sql, Version=15.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>$(SSDTPath)\Microsoft.Data.Tools.Schema.Sql.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Microsoft.Data.Tools.Schema.Sql.UnitTesting, Version=16.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>$(SSDTUnitTestPath)\Microsoft.Data.Tools.Schema.Sql.UnitTesting.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Microsoft.Data.Tools.Schema.Sql.UnitTestingAdapter, Version=16.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>$(SSDTUnitTestPath)\Microsoft.Data.Tools.Schema.Sql.UnitTestingAdapter.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-  </ItemGroup>
-  <PropertyGroup>
-    <SsdtUnitTestVersion>3.1</SsdtUnitTestVersion>
-  </PropertyGroup>
-  <Import Project="$(SQLDBExtensionsRefPath)\Microsoft.Data.Tools.Schema.Sql.UnitTesting.targets" Condition="$(VisualStudioVersion) != '15.0' And '$(SQLDBExtensionsRefPath)' != ''" />
-  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.Sql.UnitTesting.targets" Condition="$(VisualStudioVersion) != '15.0' And '$(SQLDBExtensionsRefPath)' == ''" />
 </Project>

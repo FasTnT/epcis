@@ -4,9 +4,7 @@ using Microsoft.Extensions.Configuration;
 using Npgsql;
 using System.Data;
 using System.Collections.Generic;
-using System;
-using System.IO;
-using System.IO.Compression;
+using FasTnT.Data.PostgreSql.Migration;
 
 namespace FasTnT.IntegrationTests.Common
 {
@@ -28,8 +26,19 @@ namespace FasTnT.IntegrationTests.Common
         [TestInitialize]
         public void Execute()
         {
+            DatabaseMigrator.Migrate(IntegrationTest.Configuration.GetConnectionString("FasTnT.Database"));
             Arrange();
             Act();
+        }
+
+        [TestCleanup]
+        public void Cleanup()
+        {
+            using (var command = Connection.CreateCommand())
+            {
+                command.CommandText = @"DROP SCHEMA sbdh CASCADE; DROP SCHEMA callback CASCADE; DROP SCHEMA subscriptions CASCADE; DROP SCHEMA cbv CASCADE; DROP SCHEMA epcis CASCADE; DROP SCHEMA users CASCADE; DELETE FROM public.schemaversions;";
+                command.ExecuteNonQuery();
+            }
         }
 
         public IEnumerable<string> Query(string sqlCommand)
