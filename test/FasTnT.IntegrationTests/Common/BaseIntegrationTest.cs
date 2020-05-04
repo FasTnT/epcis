@@ -4,21 +4,24 @@ using Microsoft.Extensions.Configuration;
 using Npgsql;
 using System.Data;
 using System.Collections.Generic;
-using FasTnT.Data.PostgreSql.Migration;
+using FasTnT.Data.PostgreSql.Migrations;
 
 namespace FasTnT.IntegrationTests.Common
 {
     public abstract class BaseIntegrationTest
     {
+        public string ConnectionString { get; private set; }
         public HttpClient Client { get; private set; }
         public IDbConnection Connection { get; private set; }
         public HttpResponseMessage Result { get; set; }
 
         public virtual void Arrange()
         {
-            Client = IntegrationTest.Client;
+            ConnectionString = IntegrationTest.Configuration.GetConnectionString("FasTnT.Database");
             Connection = new NpgsqlConnection(IntegrationTest.Configuration.GetConnectionString("FasTnT.Database"));
             Connection.Open();
+
+            Client = IntegrationTest.Client;
         }
 
         public abstract void Act();
@@ -26,7 +29,7 @@ namespace FasTnT.IntegrationTests.Common
         [TestInitialize]
         public void Execute()
         {
-            DatabaseMigrator.Migrate(IntegrationTest.Configuration.GetConnectionString("FasTnT.Database"));
+            DatabaseMigrator.Migrate(ConnectionString);
             Arrange();
             Act();
         }

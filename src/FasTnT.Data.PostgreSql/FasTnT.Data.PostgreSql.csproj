@@ -4,34 +4,34 @@
     <LangVersion>7.1</LangVersion>
   </PropertyGroup>
   <ItemGroup>
-    <None Remove="Migration\M001_CreateUsersSchema.sql" />
-    <None Remove="Migration\M002_CreateEpcisSchema.sql" />
-    <None Remove="Migration\M003_CreateCbvSchema.sql" />
-    <None Remove="Migration\M004_CreateSubscriptionsSchema.sql" />
-    <None Remove="Migration\M005_CreateCallbackSchema.sql" />
-    <None Remove="Migration\M006_CreateSbdhSchema.sql" />
-    <None Remove="Migration\M007_InsertDefaultData.sql" />
+    <None Remove="Migrations\M001_CreateUsersSchema.sql" />
+    <None Remove="Migrations\M002_CreateEpcisSchema.sql" />
+    <None Remove="Migrations\M003_CreateCbvSchema.sql" />
+    <None Remove="Migrations\M004_CreateSubscriptionsSchema.sql" />
+    <None Remove="Migrations\M005_CreateCallbackSchema.sql" />
+    <None Remove="Migrations\M006_CreateSbdhSchema.sql" />
+    <None Remove="Migrations\M007_InsertDefaultData.sql" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migration\M005_CreateCallbackSchema.sql">
+    <EmbeddedResource Include="Migrations\Initial\M005_CreateCallbackSchema.sql">
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migration\M007_InsertDefaultData.sql">
+    <EmbeddedResource Include="Migrations\Initial\M007_InsertDefaultData.sql">
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migration\M006_CreateSbdhSchema.sql">
+    <EmbeddedResource Include="Migrations\Initial\M006_CreateSbdhSchema.sql">
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migration\M004_CreateSubscriptionsSchema.sql">
+    <EmbeddedResource Include="Migrations\Initial\M004_CreateSubscriptionsSchema.sql">
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migration\M003_CreateCbvSchema.sql">
+    <EmbeddedResource Include="Migrations\Initial\M003_CreateCbvSchema.sql">
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migration\M002_CreateEpcisSchema.sql">
+    <EmbeddedResource Include="Migrations\Initial\M002_CreateEpcisSchema.sql">
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migration\M001_CreateUsersSchema.sql" />
+    <EmbeddedResource Include="Migrations\Initial\M001_CreateUsersSchema.sql" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Dapper" Version="2.0.35" />

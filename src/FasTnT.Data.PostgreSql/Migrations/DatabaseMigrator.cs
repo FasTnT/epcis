@@ -1,7 +1,7 @@
 ﻿using DbUp;
 using System.Reflection;
 
-namespace FasTnT.Data.PostgreSql.Migration
+namespace FasTnT.Data.PostgreSql.Migrations
 {
     public static class DatabaseMigrator
     {
