@@ -1,28 +1,54 @@
 <Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
-	  <LangVersion>7.1</LangVersion>
+    <LangVersion>7.1</LangVersion>
   </PropertyGroup>
-
+  <ItemGroup>
+    <None Remove="Migrations\M001_CreateUsersSchema.sql" />
+    <None Remove="Migrations\M002_CreateEpcisSchema.sql" />
+    <None Remove="Migrations\M003_CreateCbvSchema.sql" />
+    <None Remove="Migrations\M004_CreateSubscriptionsSchema.sql" />
+    <None Remove="Migrations\M005_CreateCallbackSchema.sql" />
+    <None Remove="Migrations\M006_CreateSbdhSchema.sql" />
+    <None Remove="Migrations\M007_InsertDefaultData.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\Initial\M005_CreateCallbackSchema.sql">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\Initial\M007_InsertDefaultData.sql">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\Initial\M006_CreateSbdhSchema.sql">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\Initial\M004_CreateSubscriptionsSchema.sql">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\Initial\M003_CreateCbvSchema.sql">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\Initial\M002_CreateEpcisSchema.sql">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\Initial\M001_CreateUsersSchema.sql" />
+  </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Dapper" Version="2.0.35" />
     <PackageReference Include="Dapper.SqlBuilder" Version="2.0.35" />
+    <PackageReference Include="dbup-postgresql" Version="4.3.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="3.1.3" />
     <PackageReference Include="morelinq" Version="3.3.2" />
     <PackageReference Include="Npgsql" Version="4.1.3.1" />
   </ItemGroup>
-
   <ItemGroup>
     <ProjectReference Include="..\FasTnT.Domain\FasTnT.Domain.csproj" />
   </ItemGroup>
-
   <ItemGroup>
     <Reference Include="Faithlife.Utility.Dapper">
       <HintPath>..\..\libs\Faithlife.Utility.Dapper.dll</HintPath>
     </Reference>
   </ItemGroup>
-
   <ItemGroup>
     <Compile Update="Capture\CaptureEpcisCallbackCommands.Designer.cs">
       <DesignTime>True</DesignTime>
@@ -54,11 +80,6 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>PgSqlMasterdataRequests.resx</DependentUpon>
     </Compile>
-    <Compile Update="Migration\DatabaseSqlRequests.Designer.cs">
-      <DependentUpon>DatabaseSqlRequests.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-    </Compile>
     <Compile Update="Subscriptions\SubscriptionRequests.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
@@ -70,7 +91,6 @@
       <DependentUpon>PgSqlUserRequests.resx</DependentUpon>
     </Compile>
   </ItemGroup>
-
   <ItemGroup>
     <EmbeddedResource Update="Capture\CaptureEpcisCallbackCommands.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -96,10 +116,6 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>PgSqlMasterdataRequests.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Update="Migration\DatabaseSqlRequests.resx">
-      <LastGenOutput>DatabaseSqlRequests.Designer.cs</LastGenOutput>
-      <Generator>PublicResXFileCodeGenerator</Generator>
-    </EmbeddedResource>
     <EmbeddedResource Update="Subscriptions\SubscriptionRequests.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>SubscriptionRequests.Designer.cs</LastGenOutput>
@@ -109,9 +125,8 @@
       <LastGenOutput>PgSqlUserRequests.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
-
   <ItemGroup>
     <Folder Include="DapperConfiguration\" />
   </ItemGroup>
-
+  <ItemGroup />
 </Project>

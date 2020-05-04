@@ -19,8 +19,7 @@ Steps:
 1. Download the source code, and create a new user/database in PostGreSQL for FasTnT ;
 2. Update the connection string: `$ dotnet user-secrets set ConnectionStrings:FasTnT.Database "{your connectionstring}" -p src\FasTnT.Host\FasTnT.Host.csproj` ;
 3. Start the repository with the command `$ dotnet run -p src\FasTnT.Host\FasTnT.Host.csproj --urls "http://localhost:5102/"` ;
-4. Create the SQL schemas and tables: `curl -X POST http://localhost:5102/Setup/Database/Migrate -d ""` ;
-5. That's it! You have a properly working EPCIS 1.2 repository.
+4. That's it! You have a properly working EPCIS 1.2 repository.
 
 ## HTTP Endpoints
 
@@ -34,16 +33,9 @@ The API is secured using HTTP Basic authentication. The default username:passwor
 
 **Capture** endpoint only supports requests with `content-type: application/xml` or `content-type: text/xml` header and XML payload.
 
-**Queries** endpoint supports XML requests on endpoint `/v1_2/Query` and SOAP requests on endpoint `/v1_2/Query.svc`. Note that it will not return the wsdl on a `GET` request..
+**Queries** endpoint supports XML requests on endpoint `/v1_2/Query` and SOAP requests on endpoint `/v1_2/Query.svc`. Note that it will not return the wsdl on a `GET` request.
 
 The file `documents\EPCIS Examples - 1.2.postman_collection.json` contains XML requests examples to be run in [PostMan](https://www.getpostman.com/), and the file `EPCglobal-epcis-query-1-2-soapui-project.xml` contains a project with SOAP example requests to be run in [SoapUI](https://www.soapui.org/open-source.html).
-
-### Others endpoints:
-
-- Database migration: `POST /Setup/Database/Migrate`
-- Database rollback: `POST /Setup/Database/Rollback`
-
-These database endpoints are only available when the EPCIS server is in Development configuration.
 
 See the [wiki](https://github.com/FasTnT/epcis/wiki) for more details.
 

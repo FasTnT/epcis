@@ -1,13 +1,13 @@
 ﻿using Dapper;
 using FasTnT.Data.PostgreSql.DapperConfiguration;
 using FasTnT.Data.PostgreSql.DataRetrieval;
+using FasTnT.Data.PostgreSql.Migrations;
 using FasTnT.Data.PostgreSql.Subscriptions;
 using FasTnT.Data.PostgreSql.Users;
 using FasTnT.Domain.Data;
 using FasTnT.Domain.Model.Subscriptions;
 using FasTnT.Model.Enums;
 using FasTnT.PostgreSql.Capture;
-using FasTnT.PostgreSql.Migration;
 using Microsoft.Extensions.DependencyInjection;
 using Npgsql;
 using System.Data;
@@ -19,7 +19,6 @@ namespace FasTnT.Data.PostgreSql
         public static IServiceCollection AddEpcisPersistence(this IServiceCollection services, string connectionString)
         {
             services.AddScoped<IEpcisRequestStore, EpcisRequestStore>();
-            services.AddScoped<IDatabaseMigrator, DatabaseMigrator>();
             services.AddScoped<IEventFetcher, EventFetcher>();
             services.AddScoped<IMasterdataFetcher, MasterdataFetcher>();
             services.AddScoped<ISubscriptionManager, SubscriptionManager>();
@@ -40,6 +39,8 @@ namespace FasTnT.Data.PostgreSql
             SqlMapper.AddTypeHandler(EnumerationHandler<QueryCallbackType>.Default);
             SqlMapper.AddTypeHandler(EnumerationHandler<SubscriptionResult>.Default);
             SqlMapper.AddTypeHandler(EnumerationHandler<ContactInformationType>.Default);
+
+            DatabaseMigrator.Migrate(connectionString);
 
             return services;
         }
