@@ -10,7 +10,7 @@ namespace FasTnT.IntegrationTests.API.EpcisEndpoints.v1_2.Soap.ListSubscriptionI
 {
     [TestClass]
     [TestCategory("IntegrationTests")]
-    public class WhenListingSubscriptionIds : BaseMigratedIntegrationTest
+    public class WhenListingSubscriptionIds : BaseIntegrationTest
     {
         public override void Act()
         {

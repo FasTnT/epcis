@@ -17,59 +17,39 @@ namespace FasTnT.Parsers.Xml.Capture
 {
     public class XmlRequestParser
     {
+        private const string QueryBodyPath = "EPCISBody/query:QueryResults/resultsBody";
+        private const string CaptureBodyPath = "EPCISBody";
+
         public async Task<ICaptureRequest> Read(Stream input, CancellationToken cancellationToken)
         {
+            EpcisRequest request;
             var document = await XmlDocumentParser.Instance.Parse(input, cancellationToken);
 
-            if (document.Root.Name == XName.Get("EPCISDocument", EpcisNamespaces.Capture))
+            if (document.Root.Name == XName.Get("EPCISQueryDocument", EpcisNamespaces.Query)) // Subscription callback result
             {
-                return new CaptureEpcisDocumentRequest
-                {
-                    Request = ParseRequest(document.Root)
-                };
+                request = ParseSubscriptionCallback(document);
             }
-            else if (document.Root.Name == XName.Get("EPCISQueryDocument", EpcisNamespaces.Query)) // Subscription result
+            else
             {
-                return ParseCallback(document);
-            }
-            else if (document.Root.Name == XName.Get("EPCISMasterDataDocument", EpcisNamespaces.MasterData))
-            {
-                return new CaptureEpcisDocumentRequest
-                {
-                    Request = ParseRequest(document.Root),
-                };
+                request = ParseRequest(document.Root, CaptureBodyPath);
             }
 
-            throw new Exception($"Document with root '{document.Root.Name}' is not expected here.");
+            return request != default 
+                    ? new CaptureEpcisDocumentRequest {  Request = request }
+                    : throw new Exception($"Document with root '{document.Root.Name}' is not expected here.");
         }
 
-        private ICaptureRequest ParseCallback(XDocument document)
+        private EpcisRequest ParseSubscriptionCallback(XDocument document)
         {
-            var callbackType = document.Root.Element("EPCISBody").Elements().First().Name.LocalName;
+            var callback = document.Root.Element("EPCISBody").Elements().First();
+            var request = ParseRequest(document.Root, QueryBodyPath);
 
-            switch (callbackType)
-            {
-                case "QueryTooLargeException":
-                case "ImplementationException":
-                    return new CaptureEpcisExceptionRequest
-                    {
-                        Header = ParseRequest(document.Root),
-                        SubscriptionName = document.Root.Element("EPCISBody").Element(XName.Get(callbackType, EpcisNamespaces.Query)).Element("subscriptionID").Value,
-                        Reason = document.Root.Element("EPCISBody").Element(XName.Get(callbackType, EpcisNamespaces.Query)).Element("reason").Value,
-                        CallbackType = Enumeration.GetByDisplayNameInvariant<QueryCallbackType>(callbackType)
-                    };
-                case "QueryResults":
-                    return new CaptureEpcisQueryCallbackRequest
-                    {
-                        Header = ParseRequest(document.Root),
-                        SubscriptionName = document.Root.Element("EPCISBody").Element(XName.Get("QueryResults", EpcisNamespaces.Query)).Element("subscriptionID").Value
-                    };
-            }
+            request.SubscriptionCallback = ParseCallback(callback);
 
-            throw new Exception($"Document with root '{document.Root.Name}' is not expected here.");
+            return request ?? throw new Exception($"Document with root '{document.Root.Name}' is not expected here.");
         }
 
-        private EpcisRequest ParseRequest(XElement root)
+        private EpcisRequest ParseRequest(XElement root, string dataRootPath)
         {
             return new EpcisRequest
             {
@@ -77,8 +57,18 @@ namespace FasTnT.Parsers.Xml.Capture
                 DocumentTime = DateTime.Parse(root.Attribute("creationDate").Value, CultureInfo.InvariantCulture),
                 SchemaVersion = root.Attribute("schemaVersion").Value,
                 CustomFields = XmlCustomFieldParser.ParseCustomFields(root.XPathSelectElement("EPCISHeader"), FieldType.HeaderExtension),
-                EventList = XmlEventsParser.ParseEvents(root.XPathSelectElement("EPCISBody/EventList")?.Elements()?.ToArray() ?? Array.Empty<XElement>()),
-                MasterdataList = XmlMasterDataParser.ParseMasterDatas(root.Element("EPCISBody")?.Element("VocabularyList")?.Elements("Vocabulary") ?? Array.Empty<XElement>())
+                EventList = XmlEventsParser.ParseEvents(root.XPathSelectElement($"{dataRootPath}/EventList", EpcisNamespaces.Manager)?.Elements()?.ToArray() ?? Array.Empty<XElement>()),
+                MasterdataList = XmlMasterDataParser.ParseMasterDatas(root.XPathSelectElement($"{dataRootPath}/VocabularyList", EpcisNamespaces.Manager)?.Elements("Vocabulary") ?? Array.Empty<XElement>())
+            };
+        }
+
+        private SubscriptionCallback ParseCallback(XElement callbackElement)
+        {
+            return new SubscriptionCallback
+            {
+                SubscriptionId = callbackElement.Element("subscriptionID").Value,
+                Reason = callbackElement.Element("reason")?.Value,
+                CallbackType = Enumeration.GetByDisplayNameInvariant<QueryCallbackType>(callbackElement.Name.LocalName),
             };
         }
     }

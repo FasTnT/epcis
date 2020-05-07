@@ -10,7 +10,7 @@ namespace FasTnT.IntegrationTests.API.EpcisEndpoints.v1_2.XML.ListSubscriptionID
 {
     [TestClass]
     [TestCategory("IntegrationTests")]
-    public class WhenPerformingAPollRequest : BaseMigratedIntegrationTest
+    public class WhenPerformingAPollRequest : BaseIntegrationTest
     {
         public override void Act()
         {

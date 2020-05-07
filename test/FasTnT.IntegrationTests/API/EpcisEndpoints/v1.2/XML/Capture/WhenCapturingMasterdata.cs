@@ -8,7 +8,7 @@ using System.Text;
 namespace FasTnT.IntegrationTests.API.EpcisEndpoints.v1._2.XML.Capture
 {
     [TestClass]
-    public class WhenCapturingMasterdata : BaseMigratedIntegrationTest
+    public class WhenCapturingMasterdata : BaseIntegrationTest
     {
         public override void Act()
         {
