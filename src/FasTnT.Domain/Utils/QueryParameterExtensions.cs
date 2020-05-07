@@ -39,6 +39,11 @@ namespace FasTnT.Domain.Utils
             return Enumeration.GetByDisplayName<FilterComparator>(parameter.Name.Substring(0, 2));
         }
 
+        public static SourceDestinationType GetSourceDestinationType(this QueryParameter parameter)
+        {
+            return parameter.Name.StartsWith("EQ_source") ? SourceDestinationType.Source : SourceDestinationType.Destination;
+        }
+
         public static CustomField GetField(this QueryParameter parameter, FieldType type, bool inner)
         {
             var parts = parameter.Name.Split('_');

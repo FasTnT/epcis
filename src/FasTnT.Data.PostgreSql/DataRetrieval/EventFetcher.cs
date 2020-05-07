@@ -31,17 +31,17 @@ namespace FasTnT.Data.PostgreSql.DataRetrieval
         public void Apply(RequestIdFilter filter) => _query = _query.Where($"request.id = ANY({_parameters.Add(filter.Values)})");
         public void Apply<T>(SimpleParameterFilter<T> filter) => _query = _query.Where($"{filter.Field.ToPgSql()} = ANY({_parameters.Add(filter.Values)})");
         public void Apply(ComparisonParameterFilter filter) => _query = _query.Where($"{filter.Field.ToPgSql()} {filter.Comparator.ToSql()} {_parameters.Add(filter.Value)}");
+        public void Apply(EqualsCorrectiveEventIdFilter filter) => _query = _query.Where($"EXISTS(SELECT edi.event_id FROM epcis.event_declaration_eventid edi WHERE edi.corrective_eventid = ANY({_parameters.Add(filter.Values)}) AND edi.event_id = event.id)");
+        public void Apply(MasterdataHierarchyFilter filter) => _query = _query.Where($"({filter.Field.ToPgSql()} = ANY({_parameters.Add(filter.Values)}) OR EXISTS(SELECT h.parent_id FROM cbv.masterdata_hierarchy h WHERE h.parent_id = ANY({_parameters.Last}) AND h.children_id = {filter.Field.ToPgSql()} AND h.type = '{filter.Field.ToCbvType()}'))");
         public void Apply(BusinessTransactionFilter filter) => _filters.AddCondition(QueryFilters.BusinessTransactions, $"transaction_type = {_parameters.Add(filter.TransactionType)} AND transaction_id = ANY({_parameters.Add(filter.Values)})");
         public void Apply(MatchEpcFilter filter) => _filters.AddCondition(QueryFilters.Epcs, $"epc LIKE ANY({_parameters.Add(filter.Values)}) AND type = ANY({_parameters.Add(filter.EpcType)})");
         public void Apply(QuantityFilter filter) => _filters.AddCondition(QueryFilters.Epcs, $"type = {EpcType.Quantity} AND quantity {filter.Operator.ToSql()} {_parameters.Add(filter.Value)}");
         public void Apply(ExistCustomFieldFilter filter) => _filters.AddCondition(QueryFilters.CustomFields, $"type = {filter.Field.Type.Id} AND namespace = {_parameters.Add(filter.Field.Namespace)} AND name = {_parameters.Add(filter.Field.Name)} AND parent_id IS {(filter.IsInner ? "NOT" : "")} NULL");
         public void Apply(ExistsErrorDeclarationFilter filter) => _filters.AddCondition(QueryFilters.ErrorDeclaration, "event_id IS NOT NULL");
         public void Apply(EqualsErrorReasonFilter filter) => _filters.AddCondition(QueryFilters.ErrorDeclaration, $"ed.reason = ANY({_parameters.Add(filter.Values)})");
-        public void Apply(EqualsCorrectiveEventIdFilter filter) => _query = _query.Where($"EXISTS(SELECT edi.event_id FROM epcis.event_declaration_eventid edi WHERE edi.corrective_eventid = ANY({_parameters.Add(filter.Values)}) AND edi.event_id = event.id)");
-        public void Apply(MasterdataHierarchyFilter filter) => _query = _query.Where($"({filter.Field.ToPgSql()} = ANY({_parameters.Add(filter.Values)}) OR EXISTS(SELECT h.parent_id FROM cbv.masterdata_hierarchy h WHERE h.parent_id = ANY({_parameters.Last}) AND h.children_id = {filter.Field.ToPgSql()} AND h.type = '{filter.Field.ToCbvType()}'))");
-        public void Apply(SourceDestinationFilter filter) => _query = _query.Where($"EXISTS(SELECT sd.event_id FROM epcis.source_destination sd WHERE sd.direction = {filter.Type.Id} AND sd.type = {_parameters.Add(filter.Name)} AND sd.source_dest_id = ANY({_parameters.Add(filter.Values)}) AND sd.event_id = event.id)");
-        public void Apply(ExistsAttributeFilter filter) => _query = _query.Where($"EXISTS(SELECT at.id FROM cbv.attribute at WHERE at.masterdata_id = {filter.Field.ToPgSql()} AND at.id = {_parameters.Add(filter.AttributeName)})");
-        public void Apply(AttributeFilter filter) => _query = _query.Where($"EXISTS(SELECT at.id FROM cbv.attribute at WHERE at.masterdata_id = {filter.Field.ToPgSql()} AND at.id = {_parameters.Add(filter.AttributeName)} AND at.value = ANY({_parameters.Add(filter.Values)}))");
+        public void Apply(SourceDestinationFilter filter) => _filters.AddCondition(QueryFilters.SourceDestination, $"direction = {filter.Type.Id} AND type = {_parameters.Add(filter.Name)} AND source_dest_id = ANY({_parameters.Add(filter.Values)})");
+        public void Apply(ExistsAttributeFilter filter) => _filters.AddCondition(QueryFilters.Cbv, $"masterdata_id = {filter.Field.ToPgSql()} AND id = {_parameters.Add(filter.AttributeName)}");
+        public void Apply(AttributeFilter filter) => _filters.AddCondition(QueryFilters.Cbv, $"masterdata_id = {filter.Field.ToPgSql()} AND id = {_parameters.Add(filter.AttributeName)} AND value = ANY({_parameters.Add(filter.Values)}))");
         public void Apply(CustomFieldFilter filter) => _filters.AddCondition(QueryFilters.CustomFields, $"type = {filter.Field.Type.Id} AND namespace = {_parameters.Add(filter.Field.Namespace)} AND name = {_parameters.Add(filter.Field.Name)} AND parent_id IS {(filter.IsInner ? "NOT" : "")} NULL AND text_value = ANY({_parameters.Add(filter.Values)})");
         public void Apply(ComparisonCustomFieldFilter filter) => _filters.AddCondition(QueryFilters.CustomFields, $"type = {filter.Field.Type.Id} AND namespace = {_parameters.Add(filter.Field.Namespace)} AND name = {_parameters.Add(filter.Field.Name)} AND parent_id IS {(filter.IsInner ? "NOT" : "")} NULL AND {filter.Value.GetCustomFieldName()} {filter.Comparator.ToSql()} {_parameters.Add(filter.Value)}");
         public void Apply(LimitFilter filter) => _limit = filter.Value;
@@ -53,26 +53,31 @@ namespace FasTnT.Data.PostgreSql.DataRetrieval
 
             using (var reader = await _connection.QueryMultipleAsync(new CommandDefinition(_sqlTemplate.RawSql, _parameters.Values, cancellationToken: cancellationToken)))
             {
-                var events = await reader.ReadAsync<EpcisEvent>();
-                var errorDeclarations = await reader.ReadAsync<ErrorDeclaration>();
-                var epcs = await reader.ReadAsync<Epc>();
-                var fields = await reader.ReadAsync<CustomField>();
-                var transactions = await reader.ReadAsync<BusinessTransaction>();
-                var sourceDests = await reader.ReadAsync<SourceDestination>();
-                var correctiveEventIds = await reader.ReadAsync<CorrectiveEventId>();
-
-                errorDeclarations.ForEach(err => err.CorrectiveEventIds = correctiveEventIds.Where(x => x.EventId == err.EventId).ToList());
-                events.ForEach(evt =>
-                {
-                    evt.Epcs = epcs.Where(x => x.EventId == evt.Id).ToList();
-                    evt.CustomFields = CreateHierarchy(fields.Where(x => x.EventId == evt.Id));
-                    evt.BusinessTransactions = transactions.Where(x => x.EventId == evt.Id).ToList();
-                    evt.SourceDestinationList = sourceDests.Where(x => x.EventId == evt.Id).ToList();
-                    evt.ErrorDeclaration = errorDeclarations.FirstOrDefault(x => x.EventId == evt.Id);
-                });
-
-                return events;
+                return await ReadEvents(reader);
             }
+        }
+
+        private async Task<IEnumerable<EpcisEvent>> ReadEvents(SqlMapper.GridReader reader)
+        {
+            var events = await reader.ReadAsync<EpcisEvent>();
+            var errorDeclarations = await reader.ReadAsync<ErrorDeclaration>();
+            var epcs = await reader.ReadAsync<Epc>();
+            var fields = await reader.ReadAsync<CustomField>();
+            var transactions = await reader.ReadAsync<BusinessTransaction>();
+            var sourceDests = await reader.ReadAsync<SourceDestination>();
+            var correctiveEventIds = await reader.ReadAsync<CorrectiveEventId>();
+
+            errorDeclarations.ForEach(err => err.CorrectiveEventIds = correctiveEventIds.Where(x => x.EventId == err.EventId).ToList());
+            events.ForEach(evt =>
+            {
+                evt.Epcs = epcs.Where(x => x.EventId == evt.Id).ToList();
+                evt.CustomFields = CreateHierarchy(fields.Where(x => x.EventId == evt.Id));
+                evt.BusinessTransactions = transactions.Where(x => x.EventId == evt.Id).ToList();
+                evt.SourceDestinationList = sourceDests.Where(x => x.EventId == evt.Id).ToList();
+                evt.ErrorDeclaration = errorDeclarations.FirstOrDefault(x => x.EventId == evt.Id);
+            });
+
+            return events;
         }
 
         private List<CustomField> CreateHierarchy(IEnumerable<CustomField> customFields, int? parentId = null)
