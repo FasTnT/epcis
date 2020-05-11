@@ -34,12 +34,14 @@ namespace FasTnT.Domain.Queries
             { "EQ_correctiveEventID",    (fetcher, param) => fetcher.Apply(new EqualsCorrectiveEventIdFilter { Values = param.Values }) },
             { "WD_readPoint",            (fetcher, param) => fetcher.Apply(new MasterdataHierarchyFilter { Field = EpcisField.ReadPoint, Values = param.Values }) },
             { "WD_bizLocation",          (fetcher, param) => fetcher.Apply(new MasterdataHierarchyFilter { Field = EpcisField.BusinessLocation, Values = param.Values }) },
-            { "EQ_requestId",            (fetcher, param) => fetcher.Apply(new SimpleParameterFilter<int> { Field = EpcisField.RequestId, Values = param.Values.Select(int.Parse).ToArray() }) }
+            { "EQ_requestId",            (fetcher, param) => fetcher.Apply(new SimpleParameterFilter<int> { Field = EpcisField.RequestId, Values = param.Values.Select(int.Parse).ToArray() }) },
+            { "orderBy",                 (fetcher, param) => fetcher.Apply(new OrderFilter { Field = Enumeration.GetByDisplayName<EpcisField>(param.GetValue<string>()) }) },
+            { "orderDirection",          (fetcher, param) => fetcher.Apply(new OrderDirectionFilter { Direction = Enumeration.GetByDisplayName<OrderDirection>(param.GetValue<string>()) }) }
         };
         private static readonly IDictionary<string, Action<IEventFetcher, QueryParameter>> RegexParameters = new Dictionary<string, Action<IEventFetcher, QueryParameter>>
         {
-            { "^EQ_(source|destination)_",  (fetcher, param) => fetcher.Apply(new SourceDestinationFilter { Name = param.Name.Split('_', 3)[2], Type = param.Name.StartsWith("EQ_source") ? SourceDestinationType.Source : SourceDestinationType.Destination, Values = param.Values }) },
-            { "^EQ_bizTransaction_",        (fetcher, param) => fetcher.Apply(new BusinessTransactionFilter { TransactionType = "", Values = param.Values }) },
+            { "^EQ_(source|destination)_",  (fetcher, param) => fetcher.Apply(new SourceDestinationFilter { Name = param.Name.Split('_', 3)[2], Type = param.GetSourceDestinationType(), Values = param.Values }) },
+            { "^EQ_bizTransaction_",        (fetcher, param) => fetcher.Apply(new BusinessTransactionFilter { TransactionType = param.Name.Split('_', 3)[2], Values = param.Values }) },
             { "^(GE|LT)_eventTime",         (fetcher, param) => fetcher.Apply(new ComparisonParameterFilter { Field = EpcisField.CaptureTime, Comparator = param.GetComparator(), Value = param.GetValue<DateTime>() }) },
             { "^(GE|LT)_recordTime",        (fetcher, param) => fetcher.Apply(new ComparisonParameterFilter { Field = EpcisField.RecordTime, Comparator = param.GetComparator(), Value = param.GetValue<DateTime>() }) },
             { "^MATCH_",                    (fetcher, param) => fetcher.Apply(new MatchEpcFilter { EpcType = param.GetMatchEpcTypes(), Values = param.Values.Select(x => x.Replace("*", "%")).ToArray() }) },
@@ -70,6 +72,8 @@ namespace FasTnT.Domain.Queries
 
         public async Task<PollResponse> Handle(QueryParameter[] parameters, CancellationToken cancellationToken)
         {
+            var maxEventCount = default(int?);
+
             foreach(var parameter in parameters)
             {
                 var action = default(Action<IEventFetcher, QueryParameter>);
@@ -77,6 +81,11 @@ namespace FasTnT.Domain.Queries
                 if (IsSimpleParameter(parameter, out action) || IsRegexParameter(parameter, out action))
                 {
                     ApplyParameter(action, parameter);
+
+                    if(parameter.Name == "maxEventCount")
+                    {
+                        maxEventCount = parameter.GetValue<int>();
+                    }
                 }
                 else
                 {
@@ -86,11 +95,18 @@ namespace FasTnT.Domain.Queries
 
             var result = await _eventFetcher.Fetch(cancellationToken);
 
-            return new PollResponse
+            if (maxEventCount.HasValue && result.Count() == maxEventCount)
             {
-                QueryName = Name,
-                EventList = result.ToArray()
-            };
+                throw new EpcisException(ExceptionType.QueryTooLargeException, $"Query returned more than the {maxEventCount} events allowed.");
+            }
+            else
+            {
+                return new PollResponse
+                {
+                    QueryName = Name,
+                    EventList = result.ToArray()
+                };
+            }
         }
 
         private void ApplyParameter(Action<IEventFetcher, QueryParameter> simpleAction, QueryParameter parameter)
@@ -105,7 +121,10 @@ namespace FasTnT.Domain.Queries
             }
         }
 
-        private bool IsSimpleParameter(QueryParameter parameter, out Action<IEventFetcher, QueryParameter> action) => SimpleParameters.TryGetValue(parameter.Name, out action);
+        private bool IsSimpleParameter(QueryParameter parameter, out Action<IEventFetcher, QueryParameter> action)
+        {
+            return SimpleParameters.TryGetValue(parameter.Name, out action);
+        }
 
         private bool IsRegexParameter(QueryParameter parameter, out Action<IEventFetcher, QueryParameter> action)
         {
