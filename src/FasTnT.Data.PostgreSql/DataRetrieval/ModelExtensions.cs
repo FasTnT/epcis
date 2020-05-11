@@ -41,7 +41,7 @@ namespace FasTnT.Data.PostgreSql.DataRetrieval
         };
 
         public static string ToSql(this FilterComparator op) => GetValue(op, FilterOperators) ?? throw new Exception($"Unknown filterOperator: '{op?.DisplayName}'");
-        public static string ToPgSql(this OrderDirection direction) => GetValue(direction, SortOperators) ?? throw new Exception($"Unknown simple EPCIS event field: '{direction.DisplayName}'");
+        public static string ToPgSql(this OrderDirection direction) => GetValue(direction, SortOperators) ?? throw new Exception($"Unknown OrderDirection: '{direction.DisplayName}'");
         public static string ToPgSql(this EpcisField field) => GetValue(field, SimpleFields) ?? throw new Exception($"Unknown simple EPCIS event field: '{field.DisplayName}'");
         public static string ToCbvType(this EpcisField field) => GetValue(field, CbvTypes) ?? throw new Exception($"Cannot convert to CBV type: '{field.DisplayName}'");
         public static string GetCustomFieldName(this object value) => value is DateTime ? "date_value" : "numeric_value";

@@ -19,6 +19,8 @@ namespace FasTnT.Data.PostgreSql.DataRetrieval
         private readonly QueryFilters _filters = new QueryFilters();
         private readonly Template _sqlTemplate;
         private SqlBuilder _query = new SqlBuilder();
+        private EpcisField _orderField = EpcisField.CaptureTime;
+        private OrderDirection _orderDirection = OrderDirection.Ascending;
         private int? _limit;
         private readonly IDbConnection _connection;
 
@@ -45,11 +47,14 @@ namespace FasTnT.Data.PostgreSql.DataRetrieval
         public void Apply(CustomFieldFilter filter) => _filters.AddCondition(QueryFilters.CustomFields, $"type = {filter.Field.Type.Id} AND namespace = {_parameters.Add(filter.Field.Namespace)} AND name = {_parameters.Add(filter.Field.Name)} AND parent_id IS {(filter.IsInner ? "NOT" : "")} NULL AND text_value = ANY({_parameters.Add(filter.Values)})");
         public void Apply(ComparisonCustomFieldFilter filter) => _filters.AddCondition(QueryFilters.CustomFields, $"type = {filter.Field.Type.Id} AND namespace = {_parameters.Add(filter.Field.Namespace)} AND name = {_parameters.Add(filter.Field.Name)} AND parent_id IS {(filter.IsInner ? "NOT" : "")} NULL AND {filter.Value.GetCustomFieldName()} {filter.Comparator.ToSql()} {_parameters.Add(filter.Value)}");
         public void Apply(LimitFilter filter) => _limit = filter.Value;
+        public void Apply(OrderFilter filter) => _orderField = filter.Field;
+        public void Apply(OrderDirectionFilter filter) => _orderDirection = filter.Direction;
 
         public async Task<IEnumerable<EpcisEvent>> Fetch(CancellationToken cancellationToken)
         {
             _parameters.SetLimit(_limit ?? int.MaxValue);
             _query = _filters.ContainsFilters ? _query.Where(_filters.GetSqlFilters()) : _query;
+            _query = _query.OrderBy($"{_orderField.ToPgSql()} {_orderDirection.ToPgSql()}");
 
             using (var reader = await _connection.QueryMultipleAsync(new CommandDefinition(_sqlTemplate.RawSql, _parameters.Values, cancellationToken: cancellationToken)))
             {

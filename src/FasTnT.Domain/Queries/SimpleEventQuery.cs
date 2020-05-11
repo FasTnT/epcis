@@ -34,7 +34,9 @@ namespace FasTnT.Domain.Queries
             { "EQ_correctiveEventID",    (fetcher, param) => fetcher.Apply(new EqualsCorrectiveEventIdFilter { Values = param.Values }) },
             { "WD_readPoint",            (fetcher, param) => fetcher.Apply(new MasterdataHierarchyFilter { Field = EpcisField.ReadPoint, Values = param.Values }) },
             { "WD_bizLocation",          (fetcher, param) => fetcher.Apply(new MasterdataHierarchyFilter { Field = EpcisField.BusinessLocation, Values = param.Values }) },
-            { "EQ_requestId",            (fetcher, param) => fetcher.Apply(new SimpleParameterFilter<int> { Field = EpcisField.RequestId, Values = param.Values.Select(int.Parse).ToArray() }) }
+            { "EQ_requestId",            (fetcher, param) => fetcher.Apply(new SimpleParameterFilter<int> { Field = EpcisField.RequestId, Values = param.Values.Select(int.Parse).ToArray() }) },
+            { "orderBy",                 (fetcher, param) => fetcher.Apply(new OrderFilter { Field = Enumeration.GetByDisplayName<EpcisField>(param.GetValue<string>()) }) },
+            { "orderDirection",          (fetcher, param) => fetcher.Apply(new OrderDirectionFilter { Direction = Enumeration.GetByDisplayName<OrderDirection>(param.GetValue<string>()) }) }
         };
         private static readonly IDictionary<string, Action<IEventFetcher, QueryParameter>> RegexParameters = new Dictionary<string, Action<IEventFetcher, QueryParameter>>
         {
