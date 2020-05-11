@@ -94,7 +94,9 @@ namespace FasTnT.Domain.Utils
 
         private static T ChangeType<T>(string value)
         {
-            if (typeof(T) == typeof(DateTime))
+            if (typeof(T) == typeof(string))
+                return (T)Convert.ChangeType(value, typeof(T));
+            else if (typeof(T) == typeof(DateTime))
                 return (T)Convert.ChangeType(DateTime.Parse(value), typeof(T));
             else if (typeof(T) == typeof(int))
                 return (T)Convert.ChangeType(int.Parse(value), typeof(T));
