@@ -1,6 +1,7 @@
 ﻿using Dapper;
 using Faithlife.Utility.Dapper;
 using FasTnT.Data.PostgreSql.Capture;
+using FasTnT.Data.PostgreSql.DTOs;
 using FasTnT.Model.MasterDatas;
 using System.Collections.Generic;
 using System.Data;
@@ -16,9 +17,7 @@ namespace FasTnT.PostgreSql.Capture
         {
             foreach (var masterData in masterdataList)
             {
-                await transaction.Connection.ExecuteAsync(new CommandDefinition(CaptureEpcisMasterdataCommands.Delete, masterData, transaction, cancellationToken: cancellationToken));
-                await transaction.Connection.ExecuteAsync(new CommandDefinition(CaptureEpcisMasterdataCommands.Insert, masterData, transaction, cancellationToken: cancellationToken));
-
+                await transaction.Connection.ExecuteAsync(new CommandDefinition(CaptureEpcisMasterdataCommands.UpsertMasterData, masterData, transaction, cancellationToken: cancellationToken));
                 await StoreMasterdataAttributes(transaction, masterData, cancellationToken);
             }
 
@@ -30,7 +29,7 @@ namespace FasTnT.PostgreSql.Capture
         {
             foreach (var attribute in masterData.Attributes)
             {
-                var output = new List<MasterDataField>();
+                var output = new List<MasterDataFieldDto>();
                 ParseFields(attribute.Fields, output);
 
                 await transaction.Connection.ExecuteAsync(new CommandDefinition(CaptureEpcisMasterdataCommands.AttributeInsert, attribute, transaction, cancellationToken: cancellationToken));
@@ -38,14 +37,11 @@ namespace FasTnT.PostgreSql.Capture
             }
         }
 
-        private static void ParseFields(IEnumerable<MasterDataField> fields, List<MasterDataField> output, int? parentId = null)
+        private static void ParseFields(IEnumerable<MasterDataField> fields, List<MasterDataFieldDto> output, int? parentId = null)
         {
             foreach (var field in fields ?? new MasterDataField[0])
             {
-                field.Id = output.Count;
-                field.InternalParentId = parentId;
-
-                output.Add(field);
+                output.Add(MasterDataFieldDto.Create(field, output.Count, parentId));
                 ParseFields(field.Children, output, output.Count - 1);
             }
         }

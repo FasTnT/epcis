@@ -1,4 +1,5 @@
-﻿using FasTnT.Data.PostgreSql.DTOs;
+﻿using FasTnT.Data.PostgreSql.DapperConfiguration;
+using FasTnT.Data.PostgreSql.DTOs;
 using FasTnT.Model.Events;
 using System.Collections.Generic;
 using System.Data;
@@ -33,11 +34,21 @@ namespace FasTnT.PostgreSql.DapperConfiguration
             Epcs.AddRange(currentEvent.Epcs.Select(x => EpcDto.Create(x, eventId, requestId)));
             SourceDests.AddRange(currentEvent.SourceDestinationList.Select(x => SourceDestDto.Create(x, eventId, requestId)));
             Transactions.AddRange(currentEvent.BusinessTransactions.Select(x => TransactionDto.Create(x, eventId, requestId)));
-            CustomFields.AddRange(currentEvent.CustomFields.Select(x => CustomFieldDto.Create(x, eventId, requestId)));
             CorrectiveIds.AddRange(currentEvent.CorrectiveEventIds?.Select(x => CorrectiveIdDto.Create(x, eventId, requestId)));
+            CustomFields.AddRange(currentEvent.CustomFields.ToFlattenedDtos(eventId, requestId));
         }
 
         internal async Task StoreEventsAsync(IDbTransaction transaction, CancellationToken cancellationToken)
+        {
+            await transaction.BulkInsertAsync(Events, cancellationToken);
+            await transaction.BulkInsertAsync(Epcs, cancellationToken);
+            await transaction.BulkInsertAsync(SourceDests, cancellationToken);
+            await transaction.BulkInsertAsync(Transactions, cancellationToken);
+            await transaction.BulkInsertAsync(CustomFields, cancellationToken);
+            await transaction.BulkInsertAsync(CorrectiveIds, cancellationToken);
+        }
+
+        internal async Task ReadEventsAsync(IDbTransaction transaction, CancellationToken cancellationToken)
         {
             await transaction.BulkInsertAsync(Events, cancellationToken);
             await transaction.BulkInsertAsync(Epcs, cancellationToken);

@@ -132,4 +132,8 @@
   <data name="Insert" xml:space="preserve">
     <value>INSERT INTO cbv.masterdata(id, type, created_on, last_update) VALUES(@id, @type, NOW(), NOW()) ON CONFLICT ON CONSTRAINT pk_cbv_masterdata DO UPDATE SET last_update = NOW();</value>
   </data>
+  <data name="UpsertMasterData" xml:space="preserve">
+    <value>DELETE FROM cbv.attribute_field WHERE masterdata_type = @type AND masterdata_id = @id; DELETE FROM cbv.hierarchy WHERE type = @type AND (parent_id = @id OR children_id = @id); DELETE FROM cbv.attribute WHERE masterdata_id = @id AND masterdata_type = @type; DELETE FROM cbv.masterdata WHERE id = @id AND type = @type;
+INSERT INTO cbv.masterdata(id, type, created_on, last_update) VALUES(@id, @type, NOW(), NOW());</value>
+  </data>
 </root>

@@ -120,36 +120,32 @@
   <data name="EventQuery" xml:space="preserve">
     <value>CREATE TEMP TABLE eventIds AS
 (
-  SELECT event.id 
+  SELECT event.id, event.request_id 
   FROM epcis.event 
-  JOIN epcis.request ON request.id = event.request_id 
-  LEFT JOIN epcis.error_declaration ed ON event.id = ed.event_id 
+  JOIN epcis.request ON request.id = event.request_id
   /**where**/ 
   /**orderby**/ 
   LIMIT @limit
 );
-SELECT request.record_time as capture_time, event.id, event_type as type, event.record_time as event_time, action, read_point, event_timezone_offset, disposition, business_location, business_step, transformation_id, event_id 
+SELECT request.record_time as capture_time, event.id, event_type as type, event.record_time as event_time, action, read_point, event_timezone_offset, disposition, business_location, business_step, transformation_id, event_id, errordeclaration_time, errordeclaration_reason
   FROM epcis.event 
   JOIN epcis.request ON request.id = event.request_id 
-  WHERE event.id = ANY(SELECT id FROM eventIds);
-SELECT event_id, declaration_time, reason 
-  FROM epcis.error_declaration 
-  WHERE event_id = ANY(SELECT id FROM eventIds);
+  WHERE EXISTS(SELECT 1 FROM eventIds e WHERE e.id = event.id AND e.request_id = event.request_id);
 SELECT event_id, epc as id, type, is_quantity, quantity, unit_of_measure 
   FROM epcis.epc 
-  WHERE event_id = ANY(SELECT id FROM eventIds);
+  WHERE EXISTS(SELECT 1 FROM eventIds e WHERE e.id = event_id AND e.request_id = request_id);
 SELECT event_id, field_id as id, parent_id, namespace, name, type, text_value, numeric_value, date_value 
   FROM epcis.custom_field 
-  WHERE event_id = ANY(SELECT id FROM eventIds);
+  WHERE EXISTS(SELECT 1 FROM eventIds e WHERE e.id = event_id AND e.request_id = request_id);
 SELECT event_id, transaction_type as type, transaction_id as id 
   FROM epcis.business_transaction 
-  WHERE event_id = ANY(SELECT id FROM eventIds);
+  WHERE EXISTS (SELECT 1 FROM eventIds e WHERE e.id = event_id AND e.request_id = request_id);
 SELECT event_id, type, source_dest_id as id, direction 
   FROM epcis.source_destination 
-  WHERE event_id = ANY(SELECT id FROM eventIds);
+  WHERE EXISTS (SELECT 1 FROM eventIds e WHERE e.id = event_id AND e.request_id = request_id);
 SELECT event_id, corrective_eventid as corrective_id 
   FROM epcis.error_declaration_eventid 
-  WHERE event_id = ANY(SELECT id FROM eventIds);
+  WHERE EXISTS(SELECT 1 FROM eventIds e WHERE e.id = event_id AND e.request_id = request_id);
 DROP TABLE eventIds;</value>
   </data>
 </root>

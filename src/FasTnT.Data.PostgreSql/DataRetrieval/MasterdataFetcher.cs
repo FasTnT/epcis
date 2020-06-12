@@ -1,4 +1,5 @@
 ﻿using Dapper;
+using FasTnT.Data.PostgreSql.DTOs;
 using FasTnT.Domain.Data;
 using FasTnT.Domain.Data.Model.Filters;
 using FasTnT.Model.MasterDatas;
@@ -52,12 +53,15 @@ namespace FasTnT.Data.PostgreSql.DataRetrieval
             return masterData;
         }
 
-        private IList<MasterDataField> CreateHierarchy(IEnumerable<MasterDataField> fields, int? parentId = null)
+        private IList<MasterDataField> CreateHierarchy(IEnumerable<MasterDataFieldDto> fields, int? parentId = null)
         {
-            var elements = fields.Where(x => x.InternalParentId == parentId);
-            elements.ForEach(x => x.Children = CreateHierarchy(fields, x.Id));
+            return fields.Where(x => x.InternalParentId == parentId).Select(x =>
+            {
+                var element = x.ToMasterDataField();
+                element.Children = CreateHierarchy(fields, x.Id);
 
-            return elements.ToList();
+                return element;
+            }).ToList();
         }
     }
 }
