@@ -86,7 +86,7 @@ namespace FasTnT.Parsers.Xml.Utils
 
             Event.CorrectiveDeclarationTime = DateTime.Parse(element.Element("declarationTime").Value, CultureInfo.InvariantCulture);
             Event.CorrectiveEventIds = correctiveEventIds;
-            Event.CorrectiveReason = element.Element("reason").Value;
+            Event.CorrectiveReason = element.Element("reason")?.Value;
         }
 
         public static void ParseCorrectiveEventIds(this XElement element, IList<string> list)

@@ -70,7 +70,7 @@ namespace FasTnT.Data.PostgreSql.DapperConfiguration {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to INSERT INTO epcis.error_declaration_eventid(request_id, event_id, corrective_eventid) VALUES(@requestid, @eventid, @correctiveid) ...;.
+        ///   Looks up a localized string similar to INSERT INTO epcis.error_declaration_eventid(request_id, event_id, corrective_eventid) VALUES(@requestid, @eventid, @id) ...;.
         /// </summary>
         public static string Store_CorrectiveIdDto {
             get {
@@ -97,7 +97,7 @@ namespace FasTnT.Data.PostgreSql.DapperConfiguration {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to INSERT INTO epcis.event(request_id, id, record_time, action, event_type, event_timezone_offset, business_location, business_step, disposition, read_point, transformation_id, event_id) VALUES(@requestid, @id, @eventtime, @action, @type, @eventtimezoneoffset, @businesslocation, @businessstep, @disposition, @readpoint, @transformationid, @eventid) ...;.
+        ///   Looks up a localized string similar to INSERT INTO epcis.event(request_id, id, record_time, action, event_type, event_timezone_offset, business_location, business_step, disposition, read_point, transformation_id, event_id, errordeclaration_time, errordeclaration_reason) VALUES(@requestid, @id, @eventtime, @action, @type, @eventtimezoneoffset, @businesslocation, @businessstep, @disposition, @readpoint, @transformationid, @eventid, @ErrorDeclarationTime, @ErrorDeclarationReason) ...;.
         /// </summary>
         public static string Store_EventDto {
             get {

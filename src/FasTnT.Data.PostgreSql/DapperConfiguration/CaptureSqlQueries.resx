@@ -121,7 +121,7 @@
     <value>INSERT INTO sbdh.contactinformation(id, header_id, type, identifier, contact, email, fax_number, phone_number, type_identifier) VALUES(@id, @headerid, @type, @identifier, @contact, @emailaddress, @faxnumber, @telephonenumber, @contacttypeidentifier) ...;</value>
   </data>
   <data name="Store_CorrectiveIdDto" xml:space="preserve">
-    <value>INSERT INTO epcis.error_declaration_eventid(request_id, event_id, corrective_eventid) VALUES(@requestid, @eventid, @correctiveid) ...;</value>
+    <value>INSERT INTO epcis.error_declaration_eventid(request_id, event_id, corrective_eventid) VALUES(@requestid, @eventid, @id) ...;</value>
   </data>
   <data name="Store_CustomFieldDto" xml:space="preserve">
     <value>INSERT INTO epcis.custom_field(request_id, event_id, field_id, parent_id, namespace, name, type, text_value, numeric_value, date_value) VALUES (@requestid, @eventid, @id, @parentid, @namespace, @name, @type, @textvalue, @numericvalue, @datevalue) ...;</value>
@@ -130,7 +130,7 @@
     <value>INSERT INTO epcis.epc(request_id, event_id, epc, type, is_quantity, quantity, unit_of_measure) VALUES (@requestid, @eventid, @id, @type, @isquantity, @quantity, @unitofmeasure) ...;</value>
   </data>
   <data name="Store_EventDto" xml:space="preserve">
-    <value>INSERT INTO epcis.event(request_id, id, record_time, action, event_type, event_timezone_offset, business_location, business_step, disposition, read_point, transformation_id, event_id) VALUES(@requestid, @id, @eventtime, @action, @type, @eventtimezoneoffset, @businesslocation, @businessstep, @disposition, @readpoint, @transformationid, @eventid) ...;</value>
+    <value>INSERT INTO epcis.event(request_id, id, record_time, action, event_type, event_timezone_offset, business_location, business_step, disposition, read_point, transformation_id, event_id, errordeclaration_time, errordeclaration_reason) VALUES(@requestid, @id, @eventtime, @action, @type, @eventtimezoneoffset, @businesslocation, @businessstep, @disposition, @readpoint, @transformationid, @eventid, @ErrorDeclarationTime, @ErrorDeclarationReason) ...;</value>
   </data>
   <data name="Store_RequestDto" xml:space="preserve">
     <value>INSERT INTO epcis.request(document_time, record_time, user_id) VALUES(@documenttime, @recordtime, @userid) RETURNING id;</value>

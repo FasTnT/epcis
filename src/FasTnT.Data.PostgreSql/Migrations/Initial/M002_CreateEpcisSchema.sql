@@ -34,6 +34,8 @@ CREATE TABLE IF NOT EXISTS epcis.event
     disposition character varying(128) COLLATE pg_catalog."default",
     read_point character varying(128) COLLATE pg_catalog."default",
     transformation_id character varying(128) COLLATE pg_catalog."default",
+    errordeclaration_time timestamp without time zone,
+    errordeclaration_reason character varying(128) COLLATE pg_catalog."default",
     CONSTRAINT "PK_event" PRIMARY KEY (id, request_id),
     CONSTRAINT "FK_EVENT_EVENTTYPE" FOREIGN KEY (event_type) REFERENCES epcis.event_type (id),
     CONSTRAINT "FK_EVENT_REQUEST" FOREIGN KEY (request_id) REFERENCES epcis.request (id)
@@ -95,23 +97,12 @@ CREATE TABLE IF NOT EXISTS epcis.source_destination
 )
 WITH (OIDS = FALSE);
 
-CREATE TABLE IF NOT EXISTS epcis.error_declaration
-(
-    event_id smallint NOT NULL,
-    request_id int NOT NULL,
-    declaration_time timestamp without time zone NOT NULL,
-    reason character varying(128) COLLATE pg_catalog."default" NOT NULL,
-    CONSTRAINT "PK_error_declaration" PRIMARY KEY (event_id, request_id),
-    CONSTRAINT "FK_error_declaration_EVENT" FOREIGN KEY (event_id, request_id) REFERENCES epcis.event (id, request_id)
-)
-WITH (OIDS = FALSE);
-
 CREATE TABLE IF NOT EXISTS epcis.error_declaration_eventid
 (
     event_id smallint NOT NULL,
     request_id int NOT NULL,
     corrective_eventid character varying(128) COLLATE pg_catalog."default" NOT NULL,
     CONSTRAINT "PK_CORRECTIVE_EVENTID" PRIMARY KEY (event_id, request_id, corrective_eventid),
-    CONSTRAINT "FK_error_declaration_eventid_error_declaration" FOREIGN KEY (event_id, request_id) REFERENCES epcis.error_declaration (event_id, request_id)
+    CONSTRAINT "FK_error_declaration_eventid_error_declaration" FOREIGN KEY (event_id, request_id) REFERENCES epcis.event (id, request_id)
 )
 WITH (OIDS = FALSE);
