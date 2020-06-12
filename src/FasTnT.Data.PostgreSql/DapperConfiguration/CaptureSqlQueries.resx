@@ -117,16 +117,34 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="PersistContactInformations" xml:space="preserve">
+  <data name="Store_ContactInformationDto" xml:space="preserve">
     <value>INSERT INTO sbdh.contactinformation(id, header_id, type, identifier, contact, email, fax_number, phone_number, type_identifier) VALUES(@id, @headerid, @type, @identifier, @contact, @emailaddress, @faxnumber, @telephonenumber, @contacttypeidentifier) ...;</value>
   </data>
-  <data name="PersistCustomFields" xml:space="preserve">
-    <value>INSERT INTO sbdh.custom_field(header_id, field_id, parent_id, namespace, name, type, text_value, numeric_value, date_value) VALUES (@eventid, @id, @parentid, @namespace, @name, @type, @textvalue, @numericvalue, @datevalue) ...;</value>
+  <data name="Store_CorrectiveIdDto" xml:space="preserve">
+    <value>INSERT INTO epcis.error_declaration_eventid(request_id, event_id, corrective_eventid) VALUES(@requestid, @eventid, @correctiveid) ...;</value>
   </data>
-  <data name="PersistHeader" xml:space="preserve">
+  <data name="Store_CustomFieldDto" xml:space="preserve">
+    <value>INSERT INTO epcis.custom_field(request_id, event_id, field_id, parent_id, namespace, name, type, text_value, numeric_value, date_value) VALUES (@requestid, @eventid, @id, @parentid, @namespace, @name, @type, @textvalue, @numericvalue, @datevalue) ...;</value>
+  </data>
+  <data name="Store_EpcDto" xml:space="preserve">
+    <value>INSERT INTO epcis.epc(request_id, event_id, epc, type, is_quantity, quantity, unit_of_measure) VALUES (@requestid, @eventid, @id, @type, @isquantity, @quantity, @unitofmeasure) ...;</value>
+  </data>
+  <data name="Store_EventDto" xml:space="preserve">
+    <value>INSERT INTO epcis.event(request_id, id, record_time, action, event_type, event_timezone_offset, business_location, business_step, disposition, read_point, transformation_id, event_id) VALUES(@requestid, @id, @eventtime, @action, @type, @eventtimezoneoffset, @businesslocation, @businessstep, @disposition, @readpoint, @transformationid, @eventid) ...;</value>
+  </data>
+  <data name="Store_RequestDto" xml:space="preserve">
     <value>INSERT INTO epcis.request(document_time, record_time, user_id) VALUES(@documenttime, @recordtime, @userid) RETURNING id;</value>
   </data>
-  <data name="PersistStandardHeader" xml:space="preserve">
+  <data name="Store_SourceDestDto" xml:space="preserve">
+    <value>INSERT INTO epcis.source_destination(request_id, event_id, type, source_dest_id, direction) VALUES (@requestid, @eventid, @type, @id, @direction) ...;</value>
+  </data>
+  <data name="Store_StandardHeaderDto" xml:space="preserve">
     <value>INSERT INTO sbdh.standardheader(id, version, standard, type_version, identifier, type, creation_datetime) VALUES(@id, @version, @standard, @typeversion, @instanceidentifier, @type, @creationdatetime);</value>
+  </data>
+  <data name="Store_SubscriptionCallbackDto" xml:space="preserve">
+    <value>INSERT INTO callback.query_callback(request_id, subscription_id, callback_type) VALUES(@requestid, @subscriptionid, @callbacktype);</value>
+  </data>
+  <data name="Store_TransactionDto" xml:space="preserve">
+    <value>INSERT INTO epcis.business_transaction(request_id, event_id, transaction_type, transaction_id) VALUES (@requestid, @eventid, @type, @id) ...;</value>
   </data>
 </root>

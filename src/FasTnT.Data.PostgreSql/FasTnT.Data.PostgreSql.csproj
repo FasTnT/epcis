@@ -37,33 +37,18 @@
     <PackageReference Include="Dapper" Version="2.0.35" />
     <PackageReference Include="Dapper.SqlBuilder" Version="2.0.35" />
     <PackageReference Include="dbup-postgresql" Version="4.3.0" />
+    <PackageReference Include="Faithlife.Utility.Dapper" Version="1.1.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="3.1.4" />
-    <PackageReference Include="morelinq" Version="3.3.2" />
     <PackageReference Include="Npgsql" Version="4.1.3.1" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\FasTnT.Domain\FasTnT.Domain.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="Faithlife.Utility.Dapper">
-      <HintPath>..\..\libs\Faithlife.Utility.Dapper.dll</HintPath>
-    </Reference>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Update="Capture\CaptureEpcisCallbackCommands.Designer.cs">
+    <Compile Update="DapperConfiguration\CaptureSqlQueries.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
-      <DependentUpon>CaptureEpcisCallbackCommands.resx</DependentUpon>
-    </Compile>
-    <Compile Update="Capture\CaptureEpcisDocumentCommands.Designer.cs">
-      <DependentUpon>CaptureEpcisDocumentCommands.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-    </Compile>
-    <Compile Update="Capture\CaptureEpcisEventCommand.Designer.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>CaptureEpcisEventCommand.resx</DependentUpon>
+      <DependentUpon>CaptureSqlQueries.resx</DependentUpon>
     </Compile>
     <Compile Update="Capture\CaptureEpcisMasterdataCommands.Designer.cs">
       <DesignTime>True</DesignTime>
@@ -92,17 +77,9 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Update="Capture\CaptureEpcisCallbackCommands.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>CaptureEpcisCallbackCommands.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Capture\CaptureEpcisDocumentCommands.resx">
-      <LastGenOutput>CaptureEpcisDocumentCommands.Designer.cs</LastGenOutput>
+    <EmbeddedResource Update="DapperConfiguration\CaptureSqlQueries.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Capture\CaptureEpcisEventCommand.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>CaptureEpcisEventCommand.Designer.cs</LastGenOutput>
+      <LastGenOutput>CaptureSqlQueries.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Update="Capture\CaptureEpcisMasterdataCommands.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -124,9 +101,6 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>PgSqlUserRequests.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="DapperConfiguration\" />
   </ItemGroup>
   <ItemGroup />
 </Project>

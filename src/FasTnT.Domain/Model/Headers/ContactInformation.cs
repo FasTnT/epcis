@@ -4,8 +4,6 @@ namespace FasTnT.Model.Headers
 {
     public class ContactInformation
     {
-        public int? Id { get; set; }
-        public int? HeaderId { get; set; }
         public ContactInformationType Type { get; set; }
         public string Identifier { get; set; }
         public string Contact { get; set; }

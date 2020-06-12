@@ -1,4 +1,5 @@
 ﻿using Dapper;
+using FasTnT.Data.PostgreSql.DTOs;
 using FasTnT.Domain.Data;
 using FasTnT.Domain.Data.Model.Filters;
 using FasTnT.Model.Enums;
@@ -40,7 +41,7 @@ namespace FasTnT.Data.PostgreSql.DataRetrieval
         public void Apply(QuantityFilter filter) => _filters.AddCondition(QueryFilters.Epcs, $"type = {EpcType.Quantity} AND quantity {filter.Operator.ToSql()} {_parameters.Add(filter.Value)}");
         public void Apply(ExistCustomFieldFilter filter) => _filters.AddCondition(QueryFilters.CustomFields, $"type = {filter.Field.Type.Id} AND namespace = {_parameters.Add(filter.Field.Namespace)} AND name = {_parameters.Add(filter.Field.Name)} AND parent_id IS {(filter.IsInner ? "NOT" : "")} NULL");
         public void Apply(ExistsErrorDeclarationFilter filter) => _filters.AddCondition(QueryFilters.ErrorDeclaration, "event_id IS NOT NULL");
-        public void Apply(EqualsErrorReasonFilter filter) => _filters.AddCondition(QueryFilters.ErrorDeclaration, $"ed.reason = ANY({_parameters.Add(filter.Values)})");
+        public void Apply(EqualsErrorReasonFilter filter) => _filters.AddCondition(QueryFilters.ErrorDeclaration, $"reason = ANY({_parameters.Add(filter.Values)})");
         public void Apply(SourceDestinationFilter filter) => _filters.AddCondition(QueryFilters.SourceDestination, $"direction = {filter.Type.Id} AND type = {_parameters.Add(filter.Name)} AND source_dest_id = ANY({_parameters.Add(filter.Values)})");
         public void Apply(ExistsAttributeFilter filter) => _filters.AddCondition(QueryFilters.Cbv, $"masterdata_id = {filter.Field.ToPgSql()} AND id = {_parameters.Add(filter.AttributeName)}");
         public void Apply(AttributeFilter filter) => _filters.AddCondition(QueryFilters.Cbv, $"masterdata_id = {filter.Field.ToPgSql()} AND id = {_parameters.Add(filter.AttributeName)} AND value = ANY({_parameters.Add(filter.Values)}))");
@@ -64,37 +65,38 @@ namespace FasTnT.Data.PostgreSql.DataRetrieval
 
         private async Task<IEnumerable<EpcisEvent>> ReadEvents(SqlMapper.GridReader reader)
         {
-            var events = await reader.ReadAsync<EpcisEvent>();
-            var errorDeclarations = await reader.ReadAsync<ErrorDeclaration>();
-            var epcs = await reader.ReadAsync<Epc>();
-            var fields = await reader.ReadAsync<CustomField>();
-            var transactions = await reader.ReadAsync<BusinessTransaction>();
-            var sourceDests = await reader.ReadAsync<SourceDestination>();
-            var correctiveEventIds = await reader.ReadAsync<CorrectiveEventId>();
+            var events = await reader.ReadAsync<EventDto>();
+            var epcs = await reader.ReadAsync<EpcDto>();
+            var fields = await reader.ReadAsync<CustomFieldDto>();
+            var transactions = await reader.ReadAsync<TransactionDto>();
+            var sourceDests = await reader.ReadAsync<SourceDestDto>();
+            var correctiveIds = await reader.ReadAsync<CorrectiveIdDto>();
 
-            errorDeclarations.ForEach(err => err.CorrectiveEventIds = correctiveEventIds.Where(x => x.EventId == err.EventId).ToList());
-            events.ForEach(evt =>
+            return events.Select(evt =>
             {
-                evt.Epcs = epcs.Where(x => x.EventId == evt.Id).ToList();
-                evt.CustomFields = CreateHierarchy(fields.Where(x => x.EventId == evt.Id));
-                evt.BusinessTransactions = transactions.Where(x => x.EventId == evt.Id).ToList();
-                evt.SourceDestinationList = sourceDests.Where(x => x.EventId == evt.Id).ToList();
-                evt.ErrorDeclaration = errorDeclarations.FirstOrDefault(x => x.EventId == evt.Id);
-            });
+                var epcisEvent = evt.ToEpcisEvent();
+                epcisEvent.Epcs = epcs.Where(x => x.Matches(evt)).Select(x => x.ToEpc()).ToList();
+                epcisEvent.CustomFields = CreateHierarchy(fields.Where(x => x.Matches(evt)));
+                epcisEvent.BusinessTransactions = transactions.Where(x => x.Matches(evt)).Select(x => x.ToBusinessTransaction()).ToList();
+                epcisEvent.SourceDestinationList = sourceDests.Where(x => x.Matches(evt)).Select(x => x.ToSourceDestination()).ToList();
+                epcisEvent.CorrectiveEventIds = correctiveIds.Where(x => x.Matches(evt)).Select(x => x.ToCorrectiveId()).ToList();
 
-            return events;
+                return epcisEvent;
+            });
         }
 
-        private List<CustomField> CreateHierarchy(IEnumerable<CustomField> customFields, int? parentId = null)
+        private List<CustomField> CreateHierarchy(IEnumerable<CustomFieldDto> fieldsDtos, short? parentId = null)
         {
-            var elements = customFields.Where(x => x.ParentId == parentId);
+            var elements = fieldsDtos.Where(x => x.ParentId == parentId);
+            var customFields = new List<CustomField>();
 
             foreach (var element in elements)
             {
-                element.Children = CreateHierarchy(customFields, element.Id);
+                var field = element.ToCustomField();
+                field.Children = CreateHierarchy(fieldsDtos, element.Id);
             }
 
-            return elements.ToList();
+            return customFields;
         }
     }
 }

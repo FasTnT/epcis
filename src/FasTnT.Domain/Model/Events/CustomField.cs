@@ -6,10 +6,6 @@ namespace FasTnT.Model.Events
 {
     public class CustomField
     {
-        public int? Id { get; set; }
-        public int? HeaderId { get; set; }
-        public int? ParentId { get; set; }
-        public int? EventId { get; set; }
         public FieldType Type { get; set; }
         public string Name { get; set; }
         public string Namespace { get; set; }

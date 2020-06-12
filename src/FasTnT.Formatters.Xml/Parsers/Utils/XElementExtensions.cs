@@ -74,21 +74,22 @@ namespace FasTnT.Parsers.Xml.Utils
             Event.BusinessLocation = element.Element("id").Value;
         }
 
-        public static ErrorDeclaration ToErrorDeclaration(this XElement element, EpcisEvent Event)
+        public static void ParseErrorDeclaration(this XElement element, EpcisEvent Event)
         {
             foreach (var innerElement in element.Elements().Where(x => !new[] { "id", "corrective", "declarationTime", "reason", "correctiveEventIDs" }.Contains(x.Name.LocalName)))
             {
                 Event.CustomFields.Add(XmlCustomFieldParser.ParseCustomField(innerElement, FieldType.ErrorDeclarationExtension));
             }
 
-            var declarationTime = DateTime.Parse(element.Element("declarationTime").Value, CultureInfo.InvariantCulture);
-            var correctiveEventIds = new List<CorrectiveEventId>();
+            var correctiveEventIds = new List<string>();
             ParseCorrectiveEventIds(element, correctiveEventIds);
 
-            return new ErrorDeclaration { DeclarationTime = declarationTime, Reason = element.Element("reason").Value, CorrectiveEventIds = correctiveEventIds.ToArray() };
+            Event.CorrectiveDeclarationTime = DateTime.Parse(element.Element("declarationTime").Value, CultureInfo.InvariantCulture);
+            Event.CorrectiveEventIds = correctiveEventIds;
+            Event.CorrectiveReason = element.Element("reason").Value;
         }
 
-        public static void ParseCorrectiveEventIds(this XElement element, IList<CorrectiveEventId> list)
+        public static void ParseCorrectiveEventIds(this XElement element, IList<string> list)
         {
             var correctiveEventIdList = element.Element("correctiveEventIDs");
 
@@ -96,10 +97,7 @@ namespace FasTnT.Parsers.Xml.Utils
             {
                 foreach (var child in correctiveEventIdList.Elements("correctiveEventID"))
                 {
-                    list.Add(new CorrectiveEventId
-                    {
-                        CorrectiveId = child.Value
-                    });
+                    list.Add(child.Value);
                 }
             }
         }

@@ -14,8 +14,6 @@ namespace FasTnT.PostgreSql.Capture
     {
         public static async Task StoreEpcisMasterdata(IEnumerable<EpcisMasterData> masterdataList, IDbTransaction transaction, CancellationToken cancellationToken)
         {
-            if (masterdataList == null || !masterdataList.Any()) return;
-
             foreach (var masterData in masterdataList)
             {
                 await transaction.Connection.ExecuteAsync(new CommandDefinition(CaptureEpcisMasterdataCommands.Delete, masterData, transaction, cancellationToken: cancellationToken));

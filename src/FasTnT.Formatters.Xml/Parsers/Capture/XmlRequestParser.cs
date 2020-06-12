@@ -56,7 +56,7 @@ namespace FasTnT.Parsers.Xml.Capture
                 StandardBusinessHeader = XmlHeaderParser.Parse(root.XPathSelectElement("EPCISHeader/sbdh:StandardBusinessDocumentHeader", EpcisNamespaces.Manager)),
                 DocumentTime = DateTime.Parse(root.Attribute("creationDate").Value, CultureInfo.InvariantCulture),
                 SchemaVersion = root.Attribute("schemaVersion").Value,
-                CustomFields = XmlCustomFieldParser.ParseCustomFields(root.XPathSelectElement("EPCISHeader"), FieldType.HeaderExtension),
+                // CustomFields = XmlCustomFieldParser.ParseCustomFields(root.XPathSelectElement("EPCISHeader"), FieldType.HeaderExtension),
                 EventList = XmlEventsParser.ParseEvents(root.XPathSelectElement($"{dataRootPath}/EventList", EpcisNamespaces.Manager)?.Elements()?.ToArray() ?? Array.Empty<XElement>()),
                 MasterdataList = XmlMasterDataParser.ParseMasterDatas(root.XPathSelectElement($"{dataRootPath}/VocabularyList", EpcisNamespaces.Manager)?.Elements("Vocabulary") ?? Array.Empty<XElement>())
             };

@@ -1,5 +1,4 @@
-﻿using FasTnT.Domain.Data.Model;
-using FasTnT.Model;
+﻿using FasTnT.Model;
 using System.Threading;
 using System.Threading.Tasks;
 
