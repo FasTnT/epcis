@@ -127,23 +127,23 @@
   /**orderby**/ 
   LIMIT @limit
 );
-SELECT request.record_time as capture_time, event.id, event_type as type, event.record_time as event_time, action, read_point, event_timezone_offset, disposition, business_location, business_step, transformation_id, event_id, errordeclaration_time, errordeclaration_reason
+SELECT request.record_time as capture_time, event.id, request_id, event_type as type, event.record_time as event_time, action, read_point, event_timezone_offset, disposition, business_location, business_step, transformation_id, errordeclaration_time, errordeclaration_reason
   FROM epcis.event 
   JOIN epcis.request ON request.id = event.request_id 
   WHERE EXISTS(SELECT 1 FROM eventIds e WHERE e.id = event.id AND e.request_id = event.request_id);
-SELECT event_id, epc as id, type, is_quantity, quantity, unit_of_measure 
+SELECT event_id, request_id, epc as id, type, is_quantity, quantity, unit_of_measure 
   FROM epcis.epc 
   WHERE EXISTS(SELECT 1 FROM eventIds e WHERE e.id = event_id AND e.request_id = request_id);
-SELECT event_id, field_id as id, parent_id, namespace, name, type, text_value, numeric_value, date_value 
+SELECT event_id, request_id, field_id as id, parent_id, namespace, name, type, text_value, numeric_value, date_value 
   FROM epcis.custom_field 
   WHERE EXISTS(SELECT 1 FROM eventIds e WHERE e.id = event_id AND e.request_id = request_id);
-SELECT event_id, transaction_type as type, transaction_id as id 
+SELECT event_id, request_id, transaction_type as type, transaction_id as id 
   FROM epcis.business_transaction 
   WHERE EXISTS (SELECT 1 FROM eventIds e WHERE e.id = event_id AND e.request_id = request_id);
-SELECT event_id, type, source_dest_id as id, direction 
+SELECT event_id, request_id, type, source_dest_id as id, direction 
   FROM epcis.source_destination 
   WHERE EXISTS (SELECT 1 FROM eventIds e WHERE e.id = event_id AND e.request_id = request_id);
-SELECT event_id, corrective_eventid as corrective_id 
+SELECT event_id, request_id, corrective_eventid as id 
   FROM epcis.error_declaration_eventid 
   WHERE EXISTS(SELECT 1 FROM eventIds e WHERE e.id = event_id AND e.request_id = request_id);
 DROP TABLE eventIds;</value>

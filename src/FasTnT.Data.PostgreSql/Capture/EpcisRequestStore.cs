@@ -74,14 +74,14 @@ namespace FasTnT.PostgreSql.Capture
 
         private static async Task StoreEpcisEvents(EpcisEvent[] events, IDbTransaction transaction, int requestId, CancellationToken cancellationToken)
         {
-            var dtoHolder = new EventDtoHolder(events.Length);
+            var eventDtoManager = new EventDtoManager();
 
             for (short eventId = 0; eventId < events.Length; eventId++)
             {
-                dtoHolder.AddEvent(requestId, eventId, events[eventId]);
+                eventDtoManager.AddEvent(requestId, eventId, events[eventId]);
             }
 
-            await dtoHolder.StoreEventsAsync(transaction, cancellationToken);
+            await eventDtoManager.PersistAsync(transaction, cancellationToken);
         }
     }
 }
