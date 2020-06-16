@@ -1,9 +1,9 @@
 ﻿using Dapper;
+using FasTnT.Data.PostgreSql.DapperConfiguration;
 using FasTnT.Data.PostgreSql.DTOs;
 using FasTnT.Domain.Data;
 using FasTnT.Domain.Data.Model.Filters;
 using FasTnT.Model.MasterDatas;
-using MoreLinq;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -12,7 +12,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using static Dapper.SqlBuilder;
 
-namespace FasTnT.Data.PostgreSql.DataRetrieval
+namespace FasTnT.Data.PostgreSql.Query
 {
     public class MasterdataFetcher : IMasterdataFetcher
     {
@@ -25,7 +25,7 @@ namespace FasTnT.Data.PostgreSql.DataRetrieval
         public MasterdataFetcher(IDbConnection connection)
         {
             _connection = connection;
-            _sqlTemplate = _query.AddTemplate(PgSqlMasterdataRequests.MasterdataQuery);
+            _sqlTemplate = _query.AddTemplate(SqlQueries.Read_Masterdata);
         }
 
         public void Apply(LimitFilter filter) => _limit = filter.Value;
@@ -37,34 +37,24 @@ namespace FasTnT.Data.PostgreSql.DataRetrieval
         public async Task<IEnumerable<EpcisMasterData>> Fetch(string[] attributes, bool includeChildren, CancellationToken cancellationToken)
         {
             _parameters.SetLimit(_limit > 0 ? _limit : int.MaxValue);
-            var masterData = await _connection.QueryAsync<EpcisMasterData>(new CommandDefinition(_sqlTemplate.RawSql, _parameters.Values, cancellationToken: cancellationToken));
+
+            var masterdataManager = new MasterdataDtoManager();
+
+            masterdataManager.MasterDataDtos.AddRange(await _connection.QueryAsync<MasterDataDto>(new CommandDefinition(_sqlTemplate.RawSql, _parameters.Values, cancellationToken: cancellationToken)));
 
             if (attributes != null)
             {
-                throw new NotImplementedException();
-                //var query = !attributes.Any() ? PgSqlMasterdataRequests.AllAttributeQuery : PgSqlMasterdataRequests.AttributeQuery;
-                //var relatedAttribute = await _connection.QueryAsync<MasterDataAttribute>(new CommandDefinition(query, new { Ids = masterData.Select(x => x.Id).ToArray(), Attributes = attributes }, cancellationToken: cancellationToken));
-                //masterData.ForEach(m => m.Attributes.AddRange(relatedAttribute.Where(a => a.ParentId == m.Id && a.ParentType == m.Type)));
+                var query = !attributes.Any() ? SqlQueries.Read_MasterdataAllAttributes : SqlQueries.Read_MasterdataAttributes;
+                var command = new CommandDefinition(query, new { Ids = masterdataManager.MasterDataDtos.Select(x => x.Id).ToArray(), Attributes = attributes }, cancellationToken: cancellationToken);
+                masterdataManager.AttributeDtos.AddRange(await _connection.QueryAsync<MasterDataAttributeDto>(command));
             }
             if (includeChildren)
             {
-                throw new NotImplementedException();
-                //var children = await _connection.QueryAsync<EpcisMasterDataHierarchy>(new CommandDefinition(PgSqlMasterdataRequests.ChildrenQuery, new { Ids = masterData.Select(x => x.Id).ToArray() }, cancellationToken: cancellationToken));
-                //masterData.ForEach(m => m.Children.AddRange(children.Where(c => c.ParentId == m.Id && c.Type == m.Type)));
+                var command = new CommandDefinition(SqlQueries.Read_MasterdataChildren, new { Ids = masterdataManager.MasterDataDtos.Select(x => x.Id).ToArray() }, cancellationToken: cancellationToken);
+                masterdataManager.HierarchyDtos.AddRange(await _connection.QueryAsync<MasterDataHierarchyDto>(command));
             }
 
-            return masterData;
-        }
-
-        private IList<MasterDataField> CreateHierarchy(IEnumerable<MasterDataFieldDto> fields, int? parentId = null)
-        {
-            return fields.Where(x => x.InternalParentId == parentId).Select(x =>
-            {
-                var element = x.ToMasterDataField();
-                element.Children = CreateHierarchy(fields, x.Id);
-
-                return element;
-            }).ToList();
+            return masterdataManager.FormatMasterdata();
         }
     }
 }

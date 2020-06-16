@@ -120,6 +120,49 @@
   <data name="Delete_MasterData" xml:space="preserve">
     <value>DELETE FROM cbv.attribute_field WHERE masterdata_type = @type AND masterdata_id = @id; DELETE FROM cbv.hierarchy WHERE type = @type AND (parent_id = @id OR children_id = @id); DELETE FROM cbv.attribute WHERE masterdata_id = @id AND masterdata_type = @type; DELETE FROM cbv.masterdata WHERE id = @id AND type = @type;</value>
   </data>
+  <data name="Read_Events" xml:space="preserve">
+    <value>CREATE TEMP TABLE eventIds AS
+(
+  SELECT event.id, event.request_id 
+  FROM epcis.event 
+  JOIN epcis.request ON request.id = event.request_id
+  /**where**/ 
+  /**orderby**/ 
+  LIMIT @limit
+);
+SELECT request.record_time as capture_time, event.id, request_id, event_type as type, event.record_time as event_time, action, read_point, event_timezone_offset, disposition, business_location, business_step, transformation_id, errordeclaration_time, errordeclaration_reason
+  FROM epcis.event 
+  JOIN epcis.request ON request.id = event.request_id 
+  WHERE EXISTS(SELECT 1 FROM eventIds e WHERE e.id = event.id AND e.request_id = event.request_id);
+SELECT event_id, request_id, epc as id, type, is_quantity, quantity, unit_of_measure 
+  FROM epcis.epc 
+  WHERE EXISTS(SELECT 1 FROM eventIds e WHERE e.id = event_id AND e.request_id = request_id);
+SELECT event_id, request_id, field_id as id, parent_id, namespace, name, type, text_value, numeric_value, date_value 
+  FROM epcis.custom_field 
+  WHERE EXISTS(SELECT 1 FROM eventIds e WHERE e.id = event_id AND e.request_id = request_id);
+SELECT event_id, request_id, transaction_type as type, transaction_id as id 
+  FROM epcis.business_transaction 
+  WHERE EXISTS (SELECT 1 FROM eventIds e WHERE e.id = event_id AND e.request_id = request_id);
+SELECT event_id, request_id, type, source_dest_id as id, direction 
+  FROM epcis.source_destination 
+  WHERE EXISTS (SELECT 1 FROM eventIds e WHERE e.id = event_id AND e.request_id = request_id);
+SELECT event_id, request_id, corrective_eventid as id 
+  FROM epcis.error_declaration_eventid 
+  WHERE EXISTS(SELECT 1 FROM eventIds e WHERE e.id = event_id AND e.request_id = request_id);
+DROP TABLE eventIds;</value>
+  </data>
+  <data name="Read_Masterdata" xml:space="preserve">
+    <value>SELECT md.type, md.id FROM cbv.masterdata md /**where**/ ORDER BY md.last_update DESC LIMIT @limit</value>
+  </data>
+  <data name="Read_MasterdataAllAttributes" xml:space="preserve">
+    <value>SELECT masterdata_type AS parent_type, masterdata_id AS parent_id, id, value FROM cbv.attribute WHERE masterdata_id = ANY(@ids)</value>
+  </data>
+  <data name="Read_MasterdataAttributes" xml:space="preserve">
+    <value>SELECT masterdata_type AS parent_type, masterdata_id AS parent_id, id, value FROM cbv.attribute WHERE masterdata_id = ANY(@ids) AND id = ANY(@attributes)</value>
+  </data>
+  <data name="Read_MasterdataChildren" xml:space="preserve">
+    <value>SELECT type, parent_id, children_id FROM cbv.hierarchy WHERE parent_id = ANY(@Ids);</value>
+  </data>
   <data name="Store_ContactInformationDto" xml:space="preserve">
     <value>INSERT INTO sbdh.contactinformation(id, header_id, type, identifier, contact, email, fax_number, phone_number, type_identifier) VALUES(@id, @headerid, @type, @identifier, @contact, @emailaddress, @faxnumber, @telephonenumber, @contacttypeidentifier) ...;</value>
   </data>

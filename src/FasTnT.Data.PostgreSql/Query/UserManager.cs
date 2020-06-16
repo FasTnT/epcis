@@ -6,7 +6,7 @@ using System.Data;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace FasTnT.Data.PostgreSql.Users
+namespace FasTnT.Data.PostgreSql.Query
 {
     public class UserManager : IUserManager
     {

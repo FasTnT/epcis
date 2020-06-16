@@ -2,6 +2,7 @@
 using FasTnT.Data.PostgreSql.DTOs;
 using FasTnT.Model.MasterDatas;
 using FasTnT.PostgreSql.DapperConfiguration;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
@@ -44,6 +45,11 @@ namespace FasTnT.Data.PostgreSql.DapperConfiguration
             await transaction.BulkInsertAsync(AttributeDtos, cancellationToken);
             await transaction.BulkInsertAsync(FieldDtos, cancellationToken);
             await transaction.BulkInsertAsync(HierarchyDtos, cancellationToken);
+        }
+
+        internal IEnumerable<EpcisMasterData> FormatMasterdata()
+        {
+            throw new NotImplementedException();
         }
     }
 }

@@ -1,9 +1,8 @@
 ﻿using Dapper;
 using FasTnT.Data.PostgreSql.DapperConfiguration;
-using FasTnT.Data.PostgreSql.DataRetrieval;
+using FasTnT.Data.PostgreSql.Query;
 using FasTnT.Data.PostgreSql.Migrations;
 using FasTnT.Data.PostgreSql.Subscriptions;
-using FasTnT.Data.PostgreSql.Users;
 using FasTnT.Domain.Data;
 using FasTnT.Domain.Model.Subscriptions;
 using FasTnT.Model.Enums;

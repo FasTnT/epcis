@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace FasTnT.Data.PostgreSql.DataRetrieval
+namespace FasTnT.Data.PostgreSql.Query
 {
     public class QueryParameters
     {

@@ -1,4 +1,5 @@
 ﻿using Dapper;
+using FasTnT.Data.PostgreSql.DapperConfiguration;
 using FasTnT.Domain.Data;
 using FasTnT.Domain.Data.Model.Filters;
 using FasTnT.Model.Enums;
@@ -10,7 +11,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using static Dapper.SqlBuilder;
 
-namespace FasTnT.Data.PostgreSql.DataRetrieval
+namespace FasTnT.Data.PostgreSql.Query
 {
     public class EventFetcher : IEventFetcher
     {
@@ -26,7 +27,7 @@ namespace FasTnT.Data.PostgreSql.DataRetrieval
         public EventFetcher(IDbConnection connection)
         {
             _connection = connection;
-            _sqlTemplate = _query.AddTemplate(PgSqlEventRequests.EventQuery);
+            _sqlTemplate = _query.AddTemplate(SqlQueries.Read_Events);
         }
 
         public void Apply(RequestIdFilter filter) => _query = _query.Where($"request.id = ANY({_parameters.Add(filter.Values)})");
