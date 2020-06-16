@@ -61,6 +61,15 @@ namespace FasTnT.Data.PostgreSql.DapperConfiguration {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to DELETE FROM cbv.attribute_field WHERE masterdata_type = @type AND masterdata_id = @id; DELETE FROM cbv.hierarchy WHERE type = @type AND (parent_id = @id OR children_id = @id); DELETE FROM cbv.attribute WHERE masterdata_id = @id AND masterdata_type = @type; DELETE FROM cbv.masterdata WHERE id = @id AND type = @type;.
+        /// </summary>
+        public static string Delete_MasterData {
+            get {
+                return ResourceManager.GetString("Delete_MasterData", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to INSERT INTO sbdh.contactinformation(id, header_id, type, identifier, contact, email, fax_number, phone_number, type_identifier) VALUES(@id, @headerid, @type, @identifier, @contact, @emailaddress, @faxnumber, @telephonenumber, @contacttypeidentifier) ...;.
         /// </summary>
         public static string Store_ContactInformationDto {
@@ -102,6 +111,42 @@ namespace FasTnT.Data.PostgreSql.DapperConfiguration {
         public static string Store_EventDto {
             get {
                 return ResourceManager.GetString("Store_EventDto", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to INSERT INTO cbv.attribute(masterdata_id, masterdata_type, id, value) VALUES(@parentid, @parenttype, @id, @value) ...;.
+        /// </summary>
+        public static string Store_MasterDataAttributeDto {
+            get {
+                return ResourceManager.GetString("Store_MasterDataAttributeDto", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to INSERT INTO cbv.masterdata(id, type, created_on, last_update) VALUES(@id, @type, NOW(), NOW()) ...;.
+        /// </summary>
+        public static string Store_MasterDataDto {
+            get {
+                return ResourceManager.GetString("Store_MasterDataDto", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to INSERT INTO cbv.attribute_field(internal_id, internal_parent_id, masterdata_id, masterdata_type, parent_id, name, namespace, value) VALUES(@id, @internalparentid, @masterdataid, @masterdatatype, @parentid, @name, @namespace, @value) ...;.
+        /// </summary>
+        public static string Store_MasterDataFieldDto {
+            get {
+                return ResourceManager.GetString("Store_MasterDataFieldDto", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to INSERT INTO cbv.hierarchy(type, parent_id, children_id) VALUES(@type, @parentid, @childrenid) ...;.
+        /// </summary>
+        public static string Store_MasterDataHierarchyDto {
+            get {
+                return ResourceManager.GetString("Store_MasterDataHierarchyDto", resourceCulture);
             }
         }
         
@@ -169,7 +214,7 @@ namespace FasTnT.Data.PostgreSql.DapperConfiguration {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to INSERT INTO epcis.business_transaction(request_id, event_id, transaction_type, transaction_id) VALUES (@requestid, @eventid, @type, @id) ...;.
+        ///   Looks up a localized string similar to INSERT INTO epcis.business_transaction(request_id, event_id, transaction_type, transaction_id) VALUES (@requestid, @eventid, @type, @id) ... ON CONFLICT ON CONSTRAINT pk_cbv_masterdata DO UPDATE SET last_update = NOW();.
         /// </summary>
         public static string Store_TransactionDto {
             get {

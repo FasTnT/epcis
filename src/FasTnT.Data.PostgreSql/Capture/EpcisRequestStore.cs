@@ -1,9 +1,11 @@
-﻿using FasTnT.Data.PostgreSql.DTOs;
+﻿using FasTnT.Data.PostgreSql.DapperConfiguration;
+using FasTnT.Data.PostgreSql.DTOs;
 using FasTnT.Domain;
 using FasTnT.Domain.Data;
 using FasTnT.Model;
 using FasTnT.Model.Events;
 using FasTnT.Model.Headers;
+using FasTnT.Model.MasterDatas;
 using FasTnT.Model.Users;
 using FasTnT.PostgreSql.DapperConfiguration;
 using System.Data;
@@ -42,7 +44,7 @@ namespace FasTnT.PostgreSql.Capture
                 }
                 if (request.MasterdataList.Any())
                 {
-                    await EpcisMasterdataStore.StoreEpcisMasterdata(request.MasterdataList.ToArray(), tx, cancellationToken);
+                    await StoreMasterData(request.MasterdataList.ToArray(), tx, requestId, cancellationToken);
                 }
 
                 tx.Commit();
@@ -82,6 +84,18 @@ namespace FasTnT.PostgreSql.Capture
             }
 
             await eventDtoManager.PersistAsync(transaction, cancellationToken);
+        }
+
+        private async Task StoreMasterData(EpcisMasterData[] epcisMasterDatas, IDbTransaction tx, int requestId, CancellationToken cancellationToken)
+        {
+            var masterDataDtoManager = new MasterdataDtoManager();
+
+            for (short masterdataId = 0; masterdataId < epcisMasterDatas.Length; masterdataId++)
+            {
+                masterDataDtoManager.AddMasterdata(epcisMasterDatas[masterdataId]);
+            }
+
+            await masterDataDtoManager.PersistAsync(tx, cancellationToken);
         }
     }
 }

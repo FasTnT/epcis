@@ -28,6 +28,11 @@ namespace FasTnT.PostgreSql.DapperConfiguration
                 { nameof(SubscriptionDto), SqlQueries.Store_SubscriptionDto },
                 { nameof(ParameterDto), SqlQueries.Store_ParameterDto },
                 { nameof(ParameterValueDto), SqlQueries.Store_ParameterValueDto },
+                // Masterdata DTOs
+                { nameof(MasterDataDto), SqlQueries.Store_MasterDataDto },
+                { nameof(MasterDataFieldDto), SqlQueries.Store_MasterDataFieldDto },
+                { nameof(MasterDataAttributeDto), SqlQueries.Store_MasterDataAttributeDto },
+                { nameof(MasterDataHierarchyDto), SqlQueries.Store_MasterDataHierarchyDto },
             };
 
         public static async Task<int> InsertAsync<T>(this IDbTransaction transaction, T entity, CancellationToken cancellationToken = default)

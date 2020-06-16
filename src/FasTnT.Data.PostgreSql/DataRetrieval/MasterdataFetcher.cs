@@ -4,6 +4,7 @@ using FasTnT.Domain.Data;
 using FasTnT.Domain.Data.Model.Filters;
 using FasTnT.Model.MasterDatas;
 using MoreLinq;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
@@ -40,14 +41,16 @@ namespace FasTnT.Data.PostgreSql.DataRetrieval
 
             if (attributes != null)
             {
-                var query = !attributes.Any() ? PgSqlMasterdataRequests.AllAttributeQuery : PgSqlMasterdataRequests.AttributeQuery;
-                var relatedAttribute = await _connection.QueryAsync<MasterDataAttribute>(new CommandDefinition(query, new { Ids = masterData.Select(x => x.Id).ToArray(), Attributes = attributes }, cancellationToken: cancellationToken));
-                masterData.ForEach(m => m.Attributes.AddRange(relatedAttribute.Where(a => a.ParentId == m.Id && a.ParentType == m.Type)));
+                throw new NotImplementedException();
+                //var query = !attributes.Any() ? PgSqlMasterdataRequests.AllAttributeQuery : PgSqlMasterdataRequests.AttributeQuery;
+                //var relatedAttribute = await _connection.QueryAsync<MasterDataAttribute>(new CommandDefinition(query, new { Ids = masterData.Select(x => x.Id).ToArray(), Attributes = attributes }, cancellationToken: cancellationToken));
+                //masterData.ForEach(m => m.Attributes.AddRange(relatedAttribute.Where(a => a.ParentId == m.Id && a.ParentType == m.Type)));
             }
             if (includeChildren)
             {
-                var children = await _connection.QueryAsync<EpcisMasterDataHierarchy>(new CommandDefinition(PgSqlMasterdataRequests.ChildrenQuery, new { Ids = masterData.Select(x => x.Id).ToArray() }, cancellationToken: cancellationToken));
-                masterData.ForEach(m => m.Children.AddRange(children.Where(c => c.ParentId == m.Id && c.Type == m.Type)));
+                throw new NotImplementedException();
+                //var children = await _connection.QueryAsync<EpcisMasterDataHierarchy>(new CommandDefinition(PgSqlMasterdataRequests.ChildrenQuery, new { Ids = masterData.Select(x => x.Id).ToArray() }, cancellationToken: cancellationToken));
+                //masterData.ForEach(m => m.Children.AddRange(children.Where(c => c.ParentId == m.Id && c.Type == m.Type)));
             }
 
             return masterData;

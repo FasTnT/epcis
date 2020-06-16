@@ -1,4 +1,5 @@
 ﻿using FasTnT.Model.MasterDatas;
+using System;
 
 namespace FasTnT.Data.PostgreSql.DTOs
 {
@@ -17,24 +18,21 @@ namespace FasTnT.Data.PostgreSql.DTOs
         {
             return new MasterDataField
             {
-                MasterdataId = MasterdataId,
-                MasterdataType = MasterdataType,
-                ParentId = ParentId,
                 Name = Name,
                 Namespace = Namespace,
                 Value = Value
             };
         }
 
-        public static MasterDataFieldDto Create(MasterDataField field, int id, int? parentId)
+        public static MasterDataFieldDto Create(MasterDataField field, MasterDataAttributeDto attribute, int id, int? parentId)
         {
             return new MasterDataFieldDto
             {
                 Id = id,
                 InternalParentId = parentId,
-                MasterdataId = field.MasterdataId,
-                MasterdataType = field.MasterdataType,
-                ParentId = field.ParentId,
+                MasterdataId = attribute.ParentId,
+                MasterdataType = attribute.ParentType,
+                ParentId = attribute.Id,
                 Name = field.Name,
                 Namespace = field.Namespace,
                 Value = field.Value

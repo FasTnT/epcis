@@ -4,9 +4,6 @@ namespace FasTnT.Model.MasterDatas
 {
     public class MasterDataField
     {
-        public string MasterdataId { get; set; }
-        public string MasterdataType { get; set; }
-        public string ParentId { get; set; }
         public string Name { get; set; }
         public string Namespace { get; set; }
         public string Value { get; set; }
