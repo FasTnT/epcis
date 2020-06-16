@@ -1,5 +1,6 @@
 ﻿using FasTnT.Model.Enums;
 using FasTnT.Model.Events;
+using FasTnT.Model.Utils;
 using System;
 
 namespace FasTnT.Data.PostgreSql.DTOs
@@ -8,7 +9,7 @@ namespace FasTnT.Data.PostgreSql.DTOs
     {
         public short Id { get; set; }
         public short? ParentId { get; set; }
-        public FieldType Type { get; set; }
+        public short Type { get; set; }
         public string Namespace { get; set; }
         public string Name { get; set; }
         public string TextValue { get; set; }
@@ -19,7 +20,7 @@ namespace FasTnT.Data.PostgreSql.DTOs
         {
             return new CustomField
             {
-                Type = Type,
+                Type = Enumeration.GetById<FieldType>(Type),
                 Name = Name,
                 Namespace = Namespace,
                 TextValue = TextValue,
@@ -36,7 +37,7 @@ namespace FasTnT.Data.PostgreSql.DTOs
                 EventId = eventId,
                 Id = fieldId,
                 ParentId = parentId,
-                Type = field.Type,
+                Type = field.Type.Id,
                 Name = field.Name,
                 Namespace = field.Namespace,
                 TextValue = field.TextValue,

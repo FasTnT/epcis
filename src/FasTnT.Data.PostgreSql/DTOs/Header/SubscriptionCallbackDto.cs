@@ -7,7 +7,7 @@ namespace FasTnT.Data.PostgreSql.DTOs
     {
         public int HeaderId { get; set; }
         public string SubscriptionId { get; set; }
-        public QueryCallbackType CallbackType { get; set; }
+        public short CallbackType { get; set; }
         public string Reason { get; set; }
 
         internal static SubscriptionCallbackDto Create(SubscriptionCallback callback, int headerId)
@@ -16,7 +16,7 @@ namespace FasTnT.Data.PostgreSql.DTOs
             {
                 HeaderId = headerId,
                 SubscriptionId = callback.SubscriptionId,
-                CallbackType = callback.CallbackType,
+                CallbackType = callback.CallbackType.Id,
                 Reason = callback.Reason
             };
         }

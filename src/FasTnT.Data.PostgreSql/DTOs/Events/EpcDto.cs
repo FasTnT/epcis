@@ -1,12 +1,13 @@
 ﻿using FasTnT.Model.Enums;
 using FasTnT.Model.Events;
+using FasTnT.Model.Utils;
 
 namespace FasTnT.Data.PostgreSql.DTOs
 {
     public class EpcDto : EventRelatedDto
     {
         public string Id { get; set; }
-        public EpcType Type { get; set; }
+        public short Type { get; set; }
         public bool IsQuantity { get; set; }
         public float? Quantity { get; set; }
         public string UnitOfMeasure { get; set; }
@@ -16,7 +17,7 @@ namespace FasTnT.Data.PostgreSql.DTOs
             return new Epc
             {
                 Id = Id,
-                Type = Type,
+                Type = Enumeration.GetById<EpcType>(Type),
                 IsQuantity = IsQuantity,
                 Quantity = Quantity,
                 UnitOfMeasure = UnitOfMeasure
@@ -30,7 +31,7 @@ namespace FasTnT.Data.PostgreSql.DTOs
                 EventId = eventId,
                 RequestId = requestId,
                 Id = epc.Id,
-                Type = epc.Type,
+                Type = epc.Type.Id,
                 IsQuantity = epc.IsQuantity,
                 Quantity = epc.Quantity,
                 UnitOfMeasure = epc.UnitOfMeasure

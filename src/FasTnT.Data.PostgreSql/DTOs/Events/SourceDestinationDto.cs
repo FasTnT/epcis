@@ -1,5 +1,6 @@
 ﻿using FasTnT.Model.Enums;
 using FasTnT.Model.Events;
+using FasTnT.Model.Utils;
 
 namespace FasTnT.Data.PostgreSql.DTOs
 {
@@ -7,7 +8,7 @@ namespace FasTnT.Data.PostgreSql.DTOs
     {
         public string Type { get; set; }
         public string Id { get; set; }
-        public SourceDestinationType Direction { get; set; }
+        public short Direction { get; set; }
 
         internal SourceDestination ToSourceDestination()
         {
@@ -15,7 +16,7 @@ namespace FasTnT.Data.PostgreSql.DTOs
             {
                 Id = Id,
                 Type = Type,
-                Direction = Direction
+                Direction = Enumeration.GetById<SourceDestinationType>(Direction)
             };
         }
 
@@ -27,7 +28,7 @@ namespace FasTnT.Data.PostgreSql.DTOs
                 RequestId = requestId,
                 Type = sd.Type,
                 Id = sd.Id,
-                Direction = sd.Direction
+                Direction = sd.Direction.Id
             };
         }
     }

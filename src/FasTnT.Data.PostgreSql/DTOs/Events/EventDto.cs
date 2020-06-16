@@ -1,5 +1,6 @@
 ﻿using FasTnT.Model.Enums;
 using FasTnT.Model.Events;
+using FasTnT.Model.Utils;
 using System;
 
 namespace FasTnT.Data.PostgreSql.DTOs
@@ -10,9 +11,9 @@ namespace FasTnT.Data.PostgreSql.DTOs
         public short Id { get; set; }
         public DateTime EventTime { get; set; }
         public DateTime CaptureTime { get; set; }
-        public EventAction Action { get; set; }
-        public EventType Type { get; set; }
-        public TimeZoneOffset EventTimeZoneOffset { get; set; }
+        public short Action { get; set; }
+        public short Type { get; set; }
+        public short EventTimeZoneOffset { get; set; }
         public string BusinessLocation { get; set; }
         public string BusinessStep { get; set; }
         public string Disposition { get; set; }
@@ -26,7 +27,7 @@ namespace FasTnT.Data.PostgreSql.DTOs
         {
             return new EpcisEvent
             {
-                Action = Action,
+                Action = Enumeration.GetById<EventAction>(Action),
                 BusinessLocation = BusinessLocation,
                 BusinessStep = BusinessStep,
                 CaptureTime = CaptureTime,
@@ -34,9 +35,9 @@ namespace FasTnT.Data.PostgreSql.DTOs
                 EventId = EventId,
                 EventTime = EventTime,
                 ReadPoint = ReadPoint,
-                EventTimeZoneOffset = EventTimeZoneOffset,
+                EventTimeZoneOffset = new TimeZoneOffset { Value = EventTimeZoneOffset },
                 TransformationId = TransformationId,
-                Type = Type,
+                Type = Enumeration.GetById<EventType>(Type),
                 CorrectiveDeclarationTime = ErrorDeclarationTime,
                 CorrectiveReason = ErrorDeclarationReason
             };
@@ -50,14 +51,14 @@ namespace FasTnT.Data.PostgreSql.DTOs
                 RequestId = requestId,
                 EventTime = epcisEvent.EventTime,
                 ReadPoint = epcisEvent.ReadPoint,
-                EventTimeZoneOffset = epcisEvent.EventTimeZoneOffset,
+                EventTimeZoneOffset = epcisEvent.EventTimeZoneOffset.Value,
                 TransformationId = epcisEvent.TransformationId,
                 BusinessLocation = epcisEvent.BusinessLocation,
                 BusinessStep = epcisEvent.BusinessStep,
                 Disposition = epcisEvent.Disposition,
                 EventId = epcisEvent.EventId,
-                Action = epcisEvent.Action,
-                Type = epcisEvent.Type,
+                Action = epcisEvent.Action.Id,
+                Type = epcisEvent.Type.Id,
                 ErrorDeclarationTime = epcisEvent.CorrectiveDeclarationTime,
                 ErrorDeclarationReason = epcisEvent.CorrectiveReason
             };

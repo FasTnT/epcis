@@ -270,7 +270,7 @@ namespace FasTnT.Data.PostgreSql.DapperConfiguration {
         }
         
         /// <summary>
-        ///   Recherche une chaîne localisée semblable à INSERT INTO epcis.business_transaction(request_id, event_id, transaction_type, transaction_id) VALUES (@requestid, @eventid, @type, @id) ... ON CONFLICT ON CONSTRAINT pk_cbv_masterdata DO UPDATE SET last_update = NOW();.
+        ///   Recherche une chaîne localisée semblable à INSERT INTO epcis.business_transaction(request_id, event_id, transaction_type, transaction_id) VALUES (@requestid, @eventid, @type, @id) ...;.
         /// </summary>
         public static string Store_TransactionDto {
             get {
