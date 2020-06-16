@@ -2,6 +2,7 @@
 using Faithlife.Utility.Dapper;
 using FasTnT.Data.PostgreSql.DapperConfiguration;
 using FasTnT.Data.PostgreSql.DTOs;
+using FasTnT.Data.PostgreSql.DTOs.Subscriptions;
 using System.Collections.Generic;
 using System.Data;
 using System.Threading;
@@ -14,16 +15,19 @@ namespace FasTnT.PostgreSql.DapperConfiguration
         private readonly static IDictionary<string, string> _insertCommands =
             new Dictionary<string, string>
             {
-                { nameof(EpcDto), CaptureSqlQueries.Store_EpcDto },
-                { nameof(EventDto), CaptureSqlQueries.Store_EventDto },
-                { nameof(RequestDto), CaptureSqlQueries.Store_RequestDto },
-                { nameof(SourceDestDto), CaptureSqlQueries.Store_SourceDestDto },
-                { nameof(TransactionDto), CaptureSqlQueries.Store_TransactionDto },
-                { nameof(CustomFieldDto), CaptureSqlQueries.Store_CustomFieldDto },
-                { nameof(CorrectiveIdDto), CaptureSqlQueries.Store_CorrectiveIdDto},
-                { nameof(StandardHeaderDto), CaptureSqlQueries.Store_StandardHeaderDto},
-                { nameof(ContactInformationDto), CaptureSqlQueries.Store_ContactInformationDto},
-                { nameof(SubscriptionCallbackDto), CaptureSqlQueries.Store_SubscriptionCallbackDto}
+                { nameof(EpcDto), SqlQueries.Store_EpcDto },
+                { nameof(EventDto), SqlQueries.Store_EventDto },
+                { nameof(RequestDto), SqlQueries.Store_RequestDto },
+                { nameof(SourceDestDto), SqlQueries.Store_SourceDestDto },
+                { nameof(TransactionDto), SqlQueries.Store_TransactionDto },
+                { nameof(CustomFieldDto), SqlQueries.Store_CustomFieldDto },
+                { nameof(CorrectiveIdDto), SqlQueries.Store_CorrectiveIdDto},
+                { nameof(StandardHeaderDto), SqlQueries.Store_StandardHeaderDto},
+                { nameof(ContactInformationDto), SqlQueries.Store_ContactInformationDto},
+                { nameof(SubscriptionCallbackDto), SqlQueries.Store_SubscriptionCallbackDto},
+                { nameof(SubscriptionDto), SqlQueries.Store_SubscriptionDto },
+                { nameof(ParameterDto), SqlQueries.Store_ParameterDto },
+                { nameof(ParameterValueDto), SqlQueries.Store_ParameterValueDto },
             };
 
         public static async Task<int> InsertAsync<T>(this IDbTransaction transaction, T entity, CancellationToken cancellationToken = default)

@@ -118,36 +118,25 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="AcknowledgePendingRequests" xml:space="preserve">
-    <value>DELETE FROM subscriptions.pendingrequest WHERE subscription_id = @SubscriptionId AND request_id = ANY(@RequestIds);</value>
+    <value>DELETE FROM subscriptions.pendingrequest WHERE subscription_id = (SELECT s.id FROM subscriptions.subscription s WHERE s.subscription_id = @SubscriptionId) AND request_id = ANY(@RequestIds);</value>
   </data>
   <data name="DeleteSubscription" xml:space="preserve">
-    <value>DELETE from subscriptions.subscription WHERE id = @SubscriptionId;</value>
+    <value>DELETE from subscriptions.subscription WHERE id = (SELECT s.id FROM subscriptions.subscription s WHERE s.subscription_id = @SubscriptionId);</value>
   </data>
   <data name="GetAllSubscriptions" xml:space="preserve">
-    <value>SELECT s.id, s.destination, s.subscription_id, s.query_name, s.active, s.trigger, s.report_if_empty, s.schedule_minutes, s.schedule_seconds, s.schedule_hours, s.schedule_month, s.schedule_day_of_month, s.schedule_day_of_week FROM subscriptions.subscription s;</value>
+    <value>SELECT s.id, s.destination, s.subscription_id, s.query_name, s.active, s.trigger, s.report_if_empty, s.schedule_minutes, s.schedule_seconds, s.schedule_hours, s.schedule_month, s.schedule_day_of_month, s.schedule_day_of_week FROM subscriptions.subscription s;
+SELECT p.id, p.subscription_id, p.name FROM subscriptions.parameter p;
+SELECT pv.parameter_id, pv.subscription_id, pv.value FROM subscriptions.parameter_value pv;</value>
   </data>
   <data name="GetSubscriptionById" xml:space="preserve">
-    <value>SELECT s.id, s.destination, s.subscription_id, s.query_name, s.active, s.trigger, s.report_if_empty, s.schedule_minutes, s.schedule_seconds, s.schedule_hours, s.schedule_month, s.schedule_day_of_month, s.schedule_day_of_week FROM subscriptions.subscription s WHERE s.subscription_id = @SubscriptionId;</value>
-  </data>
-  <data name="ListParameters" xml:space="preserve">
-    <value>SELECT p.subscription_id, p.name, pv.value FROM subscriptions.parameter p INNER JOIN subscriptions.parameter_value pv ON pv.parameter_id = p.id WHERE p.subscription_id = ANY(@SubscriptionIds);</value>
+    <value>SELECT s.id, s.destination, s.subscription_id, s.query_name, s.active, s.trigger, s.report_if_empty, s.schedule_minutes, s.schedule_seconds, s.schedule_hours, s.schedule_month, s.schedule_day_of_month, s.schedule_day_of_week FROM subscriptions.subscription s WHERE s.subscription_id = @SubscriptionId;
+SELECT p.id, p.subscription_id, p.name FROM subscriptions.parameter p JOIN subscriptions.subscription s ON s.id = p.subscription_id WHERE s.subscription_id = @SubscriptionId;
+SELECT pv.parameter_id, pv.subscription_id, pv.value FROM subscriptions.parameter_value pv JOIN subscriptions.subscription s ON s.id = pv.subscription_id WHERE s.subscription_id = @SubscriptionId;</value>
   </data>
   <data name="ListPendingRequests" xml:space="preserve">
-    <value>SELECT pr.request_id FROM subscriptions.pendingrequest pr JOIN subscriptions.subscription s ON s.id = pr.subscription_id WHERE s.id = @SubscriptionId;</value>
-  </data>
-  <data name="ListSubscriptionIds" xml:space="preserve">
-    <value>SELECT s.subscription_id FROM subscriptions.subscription s WHERE s.active = true;</value>
+    <value>SELECT pr.request_id FROM subscriptions.pendingrequest pr JOIN subscriptions.subscription s ON s.id = pr.subscription_id WHERE s.id = (SELECT s.id FROM subscriptions.subscription s WHERE s.subscription_id = @SubscriptionId);</value>
   </data>
   <data name="RegisterTrigger" xml:space="preserve">
-    <value>INSERT INTO subscriptions.trigger(subscription_id, trigger_time, status, reason) VALUES(@SubscriptionId, NOW(), @Result, @Reason);</value>
-  </data>
-  <data name="Store" xml:space="preserve">
-    <value>INSERT INTO subscriptions.subscription(subscription_id, trigger, initial_record_time, report_if_empty, destination, query_name,  active, schedule_seconds, schedule_minutes, schedule_hours, schedule_month, schedule_day_of_month, schedule_day_of_week) VALUES(@subscriptionid, @trigger, @initialrecordtime, @reportifempty, @destination, @queryname, @active, @second, @minute, @hour, @month, @dayofmonth, @dayofweek) RETURNING id;</value>
-  </data>
-  <data name="StoreParameter" xml:space="preserve">
-    <value>INSERT INTO subscriptions.parameter(subscription_id, name) VALUES(@subscriptionid, @name) ... RETURNING id;</value>
-  </data>
-  <data name="StoreParameterValue" xml:space="preserve">
-    <value>INSERT INTO subscriptions.parameter_value(parameter_id, value) VALUES(@parameterid, @value) ...;</value>
+    <value>INSERT INTO subscriptions.trigger(subscription_id, trigger_time, status, reason) VALUES((SELECT s.id FROM subscriptions.subscription s WHERE s.subscription_id = @SubscriptionId), NOW(), @Result, @Reason);</value>
   </data>
 </root>

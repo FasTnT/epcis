@@ -22,20 +22,20 @@ CREATE TABLE IF NOT EXISTS subscriptions.subscription
 WITH (OIDS = FALSE);
 CREATE TABLE IF NOT EXISTS subscriptions.parameter
 (
-    id SERIAL NOT NULL,
+    id smallint NOT NULL,
     subscription_id int NOT NULL,
     name character varying(1023) COLLATE pg_catalog."default",
-    CONSTRAINT "PK_parameter" PRIMARY KEY (id),
+    CONSTRAINT "PK_parameter" PRIMARY KEY (id, subscription_id),
     CONSTRAINT fk_subscription_parameter FOREIGN KEY (subscription_id) REFERENCES subscriptions.subscription (id) ON DELETE CASCADE
 )
 WITH (OIDS = FALSE);
 CREATE TABLE IF NOT EXISTS subscriptions.parameter_value
 (
-    id SERIAL NOT NULL,
-    parameter_id int NOT NULL,
+    subscription_id int NOT NULL,
+    parameter_id smallint NOT NULL,
     value character varying(255) COLLATE pg_catalog."default" NOT NULL,
-    CONSTRAINT "PK_parameter_value" PRIMARY KEY (id),
-    CONSTRAINT fk_value_parameter FOREIGN KEY (parameter_id) REFERENCES subscriptions.parameter (id) ON DELETE CASCADE
+    CONSTRAINT "PK_parameter_value" PRIMARY KEY (subscription_id, parameter_id, value),
+    CONSTRAINT fk_value_parameter FOREIGN KEY (parameter_id, subscription_id) REFERENCES subscriptions.parameter (id, subscription_id) ON DELETE CASCADE
 )
 WITH (OIDS = FALSE);
 CREATE TABLE IF NOT EXISTS subscriptions.pendingrequest

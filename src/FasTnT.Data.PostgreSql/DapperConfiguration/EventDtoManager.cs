@@ -62,6 +62,8 @@ namespace FasTnT.PostgreSql.DapperConfiguration
             {
                 var field = element.ToCustomField();
                 field.Children = CreateHierarchy(fieldsDtos, element.Id);
+
+                customFields.Add(field);
             }
 
             return customFields;

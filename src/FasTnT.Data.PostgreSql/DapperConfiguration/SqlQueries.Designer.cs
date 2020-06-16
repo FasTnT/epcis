@@ -22,14 +22,14 @@ namespace FasTnT.Data.PostgreSql.DapperConfiguration {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    public class CaptureSqlQueries {
+    public class SqlQueries {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal CaptureSqlQueries() {
+        internal SqlQueries() {
         }
         
         /// <summary>
@@ -39,7 +39,7 @@ namespace FasTnT.Data.PostgreSql.DapperConfiguration {
         public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("FasTnT.Data.PostgreSql.DapperConfiguration.CaptureSqlQueries", typeof(CaptureSqlQueries).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("FasTnT.Data.PostgreSql.DapperConfiguration.SqlQueries", typeof(SqlQueries).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -106,6 +106,24 @@ namespace FasTnT.Data.PostgreSql.DapperConfiguration {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to INSERT INTO subscriptions.parameter(id, subscription_id, name) VALUES(@id, @subscriptionid, @name) ...;.
+        /// </summary>
+        public static string Store_ParameterDto {
+            get {
+                return ResourceManager.GetString("Store_ParameterDto", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to INSERT INTO subscriptions.parameter_value(parameter_id, subscription_id, value) VALUES(@parameterid, @subscriptionId, @value) ...;.
+        /// </summary>
+        public static string Store_ParameterValueDto {
+            get {
+                return ResourceManager.GetString("Store_ParameterValueDto", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to INSERT INTO epcis.request(document_time, record_time, user_id) VALUES(@documenttime, @recordtime, @userid) RETURNING id;.
         /// </summary>
         public static string Store_RequestDto {
@@ -138,6 +156,15 @@ namespace FasTnT.Data.PostgreSql.DapperConfiguration {
         public static string Store_SubscriptionCallbackDto {
             get {
                 return ResourceManager.GetString("Store_SubscriptionCallbackDto", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to INSERT INTO subscriptions.subscription(subscription_id, trigger, initial_record_time, report_if_empty, destination, query_name,  active, schedule_seconds, schedule_minutes, schedule_hours, schedule_month, schedule_day_of_month, schedule_day_of_week) VALUES(@subscriptionid, @trigger, @initialrecordtime, @reportifempty, @destination, @queryname, @active, @second, @minute, @hour, @month, @dayofmonth, @dayofweek) RETURNING id;.
+        /// </summary>
+        public static string Store_SubscriptionDto {
+            get {
+                return ResourceManager.GetString("Store_SubscriptionDto", resourceCulture);
             }
         }
         

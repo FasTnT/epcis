@@ -1,4 +1,5 @@
 ﻿using Dapper;
+using FasTnT.Data.PostgreSql.DapperConfiguration;
 using FasTnT.Domain.Data;
 using FasTnT.Model.Users;
 using System.Data;
@@ -18,7 +19,7 @@ namespace FasTnT.Data.PostgreSql.Users
 
         public async Task<User> GetByUsername(string username, CancellationToken cancellationToken)
         {
-            return await _connection.QuerySingleOrDefaultAsync<User>(new CommandDefinition(PgSqlUserRequests.LoadByName, new { Username = username }, cancellationToken: cancellationToken));
+            return await _connection.QuerySingleOrDefaultAsync<User>(new CommandDefinition(SqlUserQueries.LoadByName, new { Username = username }, cancellationToken: cancellationToken));
         }
     }
 }

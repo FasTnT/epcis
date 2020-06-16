@@ -46,15 +46,20 @@
     <ProjectReference Include="..\FasTnT.Domain\FasTnT.Domain.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Update="DapperConfiguration\CaptureSqlQueries.Designer.cs">
+    <Compile Update="DapperConfiguration\SqlQueries.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
-      <DependentUpon>CaptureSqlQueries.resx</DependentUpon>
+      <DependentUpon>SqlQueries.resx</DependentUpon>
     </Compile>
     <Compile Update="Capture\CaptureEpcisMasterdataCommands.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
       <DependentUpon>CaptureEpcisMasterdataCommands.resx</DependentUpon>
+    </Compile>
+    <Compile Update="DapperConfiguration\SqlSubscriptionQueries.Designer.cs">
+      <DependentUpon>SqlSubscriptionQueries.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
     </Compile>
     <Compile Update="DataRetrieval\PgSqlEventRequests.Designer.cs">
       <DesignTime>True</DesignTime>
@@ -66,25 +71,24 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>PgSqlMasterdataRequests.resx</DependentUpon>
     </Compile>
-    <Compile Update="Subscriptions\SubscriptionRequests.Designer.cs">
+    <Compile Update="DapperConfiguration\SqlUserQueries.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
-      <DependentUpon>SubscriptionRequests.resx</DependentUpon>
-    </Compile>
-    <Compile Update="Users\PgSqlUserRequests.Designer.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>PgSqlUserRequests.resx</DependentUpon>
+      <DependentUpon>SqlUserQueries.resx</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Update="DapperConfiguration\CaptureSqlQueries.resx">
+    <EmbeddedResource Update="DapperConfiguration\SqlQueries.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>CaptureSqlQueries.Designer.cs</LastGenOutput>
+      <LastGenOutput>SqlQueries.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Update="Capture\CaptureEpcisMasterdataCommands.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>CaptureEpcisMasterdataCommands.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="DapperConfiguration\SqlSubscriptionQueries.resx">
+      <LastGenOutput>SqlSubscriptionQueries.Designer.cs</LastGenOutput>
+      <Generator>ResXFileCodeGenerator</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="DataRetrieval\PgSqlEventRequests.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -94,13 +98,9 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>PgSqlMasterdataRequests.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Update="Subscriptions\SubscriptionRequests.resx">
+    <EmbeddedResource Update="DapperConfiguration\SqlUserQueries.resx">
       <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>SubscriptionRequests.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Users\PgSqlUserRequests.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>PgSqlUserRequests.Designer.cs</LastGenOutput>
+      <LastGenOutput>SqlUserQueries.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
 </Project>

@@ -132,6 +132,12 @@
   <data name="Store_EventDto" xml:space="preserve">
     <value>INSERT INTO epcis.event(request_id, id, record_time, action, event_type, event_timezone_offset, business_location, business_step, disposition, read_point, transformation_id, event_id, errordeclaration_time, errordeclaration_reason) VALUES(@requestid, @id, @eventtime, @action, @type, @eventtimezoneoffset, @businesslocation, @businessstep, @disposition, @readpoint, @transformationid, @eventid, @ErrorDeclarationTime, @ErrorDeclarationReason) ...;</value>
   </data>
+  <data name="Store_ParameterDto" xml:space="preserve">
+    <value>INSERT INTO subscriptions.parameter(id, subscription_id, name) VALUES(@id, @subscriptionid, @name) ...;</value>
+  </data>
+  <data name="Store_ParameterValueDto" xml:space="preserve">
+    <value>INSERT INTO subscriptions.parameter_value(parameter_id, subscription_id, value) VALUES(@parameterid, @subscriptionId, @value) ...;</value>
+  </data>
   <data name="Store_RequestDto" xml:space="preserve">
     <value>INSERT INTO epcis.request(document_time, record_time, user_id) VALUES(@documenttime, @recordtime, @userid) RETURNING id;</value>
   </data>
@@ -143,6 +149,9 @@
   </data>
   <data name="Store_SubscriptionCallbackDto" xml:space="preserve">
     <value>INSERT INTO callback.query_callback(request_id, subscription_id, callback_type) VALUES(@requestid, @subscriptionid, @callbacktype);</value>
+  </data>
+  <data name="Store_SubscriptionDto" xml:space="preserve">
+    <value>INSERT INTO subscriptions.subscription(subscription_id, trigger, initial_record_time, report_if_empty, destination, query_name,  active, schedule_seconds, schedule_minutes, schedule_hours, schedule_month, schedule_day_of_month, schedule_day_of_week) VALUES(@subscriptionid, @trigger, @initialrecordtime, @reportifempty, @destination, @queryname, @active, @second, @minute, @hour, @month, @dayofmonth, @dayofweek) RETURNING id;</value>
   </data>
   <data name="Store_TransactionDto" xml:space="preserve">
     <value>INSERT INTO epcis.business_transaction(request_id, event_id, transaction_type, transaction_id) VALUES (@requestid, @eventid, @type, @id) ...;</value>
