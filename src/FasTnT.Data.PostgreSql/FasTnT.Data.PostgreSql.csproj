@@ -61,16 +61,6 @@
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
     </Compile>
-    <Compile Update="DataRetrieval\PgSqlEventRequests.Designer.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>PgSqlEventRequests.resx</DependentUpon>
-    </Compile>
-    <Compile Update="DataRetrieval\PgSqlMasterdataRequests.Designer.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>PgSqlMasterdataRequests.resx</DependentUpon>
-    </Compile>
     <Compile Update="DapperConfiguration\SqlUserQueries.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
@@ -89,14 +79,6 @@
     <EmbeddedResource Update="DapperConfiguration\SqlSubscriptionQueries.resx">
       <LastGenOutput>SqlSubscriptionQueries.Designer.cs</LastGenOutput>
       <Generator>ResXFileCodeGenerator</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Update="DataRetrieval\PgSqlEventRequests.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>PgSqlEventRequests.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Update="DataRetrieval\PgSqlMasterdataRequests.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>PgSqlMasterdataRequests.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Update="DapperConfiguration\SqlUserQueries.resx">
       <Generator>ResXFileCodeGenerator</Generator>

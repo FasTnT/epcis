@@ -3,7 +3,7 @@ using FasTnT.Model.Utils;
 using System;
 using Mapping = System.Collections.Generic.Dictionary<FasTnT.Model.Utils.Enumeration, string>;
 
-namespace FasTnT.Data.PostgreSql.DataRetrieval
+namespace FasTnT.Data.PostgreSql.DapperConfiguration
 {
     public static class ModelExtensions
     {
