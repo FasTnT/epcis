@@ -44,7 +44,7 @@ namespace FasTnT.PostgreSql.Capture
                 }
                 if (request.MasterdataList.Any())
                 {
-                    await StoreMasterData(request.MasterdataList.ToArray(), tx, requestId, cancellationToken);
+                    await StoreMasterData(request.MasterdataList.ToArray(), tx, cancellationToken);
                 }
 
                 tx.Commit();
@@ -86,7 +86,7 @@ namespace FasTnT.PostgreSql.Capture
             await eventDtoManager.PersistAsync(transaction, cancellationToken);
         }
 
-        private async Task StoreMasterData(EpcisMasterData[] epcisMasterDatas, IDbTransaction tx, int requestId, CancellationToken cancellationToken)
+        private async Task StoreMasterData(EpcisMasterData[] epcisMasterDatas, IDbTransaction tx, CancellationToken cancellationToken)
         {
             var masterDataDtoManager = new MasterdataDtoManager();
 

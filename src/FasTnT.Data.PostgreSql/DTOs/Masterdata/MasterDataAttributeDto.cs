@@ -1,4 +1,5 @@
 ﻿using FasTnT.Model.MasterDatas;
+using System;
 
 namespace FasTnT.Data.PostgreSql.DTOs
 {
@@ -17,6 +18,16 @@ namespace FasTnT.Data.PostgreSql.DTOs
                 ParentType = type,
                 Id = masterdata.Id,
                 Value = masterdata.Value
+            };
+        }
+
+        // TODO: children
+        internal MasterDataAttribute ToAttribute()
+        {
+            return new MasterDataAttribute
+            {
+                Id = Id,
+                Value = Value
             };
         }
     }

@@ -19,7 +19,8 @@ namespace FasTnT.Data.PostgreSql.Query
 
         public async Task<User> GetByUsername(string username, CancellationToken cancellationToken)
         {
-            return await _connection.QuerySingleOrDefaultAsync<User>(new CommandDefinition(SqlUserQueries.LoadByName, new { Username = username }, cancellationToken: cancellationToken));
+            var command = new CommandDefinition(SqlQueries.Read_UserByUsername, new { Username = username }, cancellationToken: cancellationToken);
+            return await _connection.QuerySingleOrDefaultAsync<User>(command);
         }
     }
 }

@@ -17,5 +17,10 @@ namespace FasTnT.Data.PostgreSql.DTOs
                 ChildrenId = children
             };
         }
+
+        internal string ToHierarchy()
+        {
+            return ChildrenId;
+        }
     }
 }

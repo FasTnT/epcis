@@ -49,7 +49,14 @@ namespace FasTnT.Data.PostgreSql.DapperConfiguration
 
         internal IEnumerable<EpcisMasterData> FormatMasterdata()
         {
-            throw new NotImplementedException();
+            return MasterDataDtos.Select(md =>
+            {
+                var masterdata = md.ToMasterData();
+                masterdata.Children.AddRange(HierarchyDtos.Where(x => x.Type == md.Type && x.ParentId == md.Id).Select(x => x.ToHierarchy()));
+                masterdata.Attributes.AddRange(AttributeDtos.Where(x => x.ParentType == md.Type && x.ParentId == md.Id).Select(x => x.ToAttribute()));
+
+                return masterdata;
+            });
         }
     }
 }

@@ -9,7 +9,6 @@ using FasTnT.Data.PostgreSql.DTOs.Subscriptions;
 using FasTnT.Domain.Data;
 using FasTnT.Domain.Model.Subscriptions;
 using FasTnT.PostgreSql.DapperConfiguration;
-using MoreLinq;
 
 namespace FasTnT.Data.PostgreSql.Subscriptions
 {

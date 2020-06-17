@@ -39,7 +39,6 @@
     <PackageReference Include="dbup-postgresql" Version="4.3.0" />
     <PackageReference Include="Faithlife.Utility.Dapper" Version="1.1.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="3.1.4" />
-    <PackageReference Include="morelinq" Version="3.3.2" />
     <PackageReference Include="Npgsql" Version="4.1.3.1" />
   </ItemGroup>
   <ItemGroup>
@@ -61,11 +60,6 @@
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
     </Compile>
-    <Compile Update="DapperConfiguration\SqlUserQueries.Designer.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>SqlUserQueries.resx</DependentUpon>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Update="DapperConfiguration\SqlQueries.resx">
@@ -79,10 +73,6 @@
     <EmbeddedResource Update="DapperConfiguration\SqlSubscriptionQueries.resx">
       <LastGenOutput>SqlSubscriptionQueries.Designer.cs</LastGenOutput>
       <Generator>ResXFileCodeGenerator</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Update="DapperConfiguration\SqlUserQueries.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>SqlUserQueries.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
 </Project>

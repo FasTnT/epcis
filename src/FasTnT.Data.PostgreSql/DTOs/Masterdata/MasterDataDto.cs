@@ -18,5 +18,14 @@ namespace FasTnT.Data.PostgreSql.DTOs
                 Id = masterdata.Id
             };
         }
+
+        internal EpcisMasterData ToMasterData()
+        {
+            return new EpcisMasterData
+            {
+                Id = Id,
+                Type = Type
+            };
+        }
     }
 }
