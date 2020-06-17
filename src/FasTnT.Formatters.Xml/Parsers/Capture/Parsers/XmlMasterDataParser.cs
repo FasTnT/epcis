@@ -19,9 +19,9 @@ namespace FasTnT.Parsers.Xml.Capture
             return parsedElements;
         }
 
-        private static IEnumerable<EpcisMasterDataHierarchy> ParseHierarchy(IEnumerable<XElement> elements)
+        private static IEnumerable<string> ParseHierarchy(IEnumerable<XElement> elements)
         {
-            return elements?.Select(x => new EpcisMasterDataHierarchy { ChildrenId = x.Value }) ?? new EpcisMasterDataHierarchy[0];
+            return elements?.Select(x => x.Value) ?? new string[0];
         }
 
         private static IEnumerable<EpcisMasterData> ParseVocabularyElements(string type, IEnumerable<XElement> elements)
@@ -29,20 +29,18 @@ namespace FasTnT.Parsers.Xml.Capture
             return elements.Select(e =>
             {
                 var masterData = new EpcisMasterData { Id = e.Attribute("id").Value, Type = type };
-                masterData.Attributes = ParseAttributes(e.Elements("attribute"), masterData).ToList();
+                masterData.Attributes = ParseAttributes(e.Elements("attribute")).ToList();
                 masterData.Children = ParseHierarchy(e.Element("children")?.Elements("id")).ToList();
                 return masterData;
             });
         }
 
-        private static IEnumerable<MasterDataAttribute> ParseAttributes(IEnumerable<XElement> elements, EpcisMasterData masterData)
+        private static IEnumerable<MasterDataAttribute> ParseAttributes(IEnumerable<XElement> elements)
         {
             return elements.Select(element =>
             {
                 var attr = new MasterDataAttribute
                 {
-                    ParentId = masterData.Id,
-                    ParentType = masterData.Type,
                     Id = element.Attribute("id").Value,
                     Value = element.Value
                 };
@@ -63,9 +61,6 @@ namespace FasTnT.Parsers.Xml.Capture
                 {
                     Name = element.Name.LocalName,
                     Namespace = element.Name.NamespaceName,
-                    ParentId = attribute.Id,
-                    MasterdataId = attribute.ParentId,
-                    MasterdataType = attribute.ParentType,
                     Value = element.HasElements ? null : element.Value
                 };
 

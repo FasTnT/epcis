@@ -52,18 +52,18 @@ namespace FasTnT.Parsers.Xml.Formatters.Implementation
             element.Add(new XElement("eventTime", @event.EventTime.ToString(DateTimeFormat, CultureInfo.InvariantCulture)));
             element.Add(new XElement("recordTime", @event.CaptureTime.ToString(DateTimeFormat)));
             element.Add(new XElement("eventTimeZoneOffset", @event.EventTimeZoneOffset.Representation));
-            if (@event.ErrorDeclaration != null || !string.IsNullOrEmpty(@event.EventId)) AddErrorDeclaration(@event, element);
+            if (@event.CorrectiveDeclarationTime.HasValue || !string.IsNullOrEmpty(@event.EventId)) AddErrorDeclaration(@event, element);
 
             return element;
         }
         private static void AddErrorDeclaration(EpcisEvent @event, XElement element)
         {
             XElement errorDeclaration = default, eventId = default;
-            
-            if (@event.ErrorDeclaration != null)
+
+            if (@event.CorrectiveDeclarationTime.HasValue)
             {
-                var correctiveEventIds = @event.ErrorDeclaration.CorrectiveEventIds.Any() ? new XElement("correctiveEventIDs", @event.ErrorDeclaration.CorrectiveEventIds.Select(x => new XElement("correctiveEventID", x.CorrectiveId))) : null;
-                errorDeclaration = new XElement("errorDeclaration", new XElement("declarationTime", @event.ErrorDeclaration.DeclarationTime), new XElement("reason", @event.ErrorDeclaration.Reason), correctiveEventIds);
+                var correctiveEventIds = @event.CorrectiveEventIds.Any() ? new XElement("correctiveEventIDs", @event.CorrectiveEventIds.Select(x => new XElement("correctiveEventID", x))) : null;
+                errorDeclaration = new XElement("errorDeclaration", new XElement("declarationTime", @event.CorrectiveDeclarationTime), new XElement("reason", @event.CorrectiveReason), correctiveEventIds);
             }
 
             if (!string.IsNullOrEmpty(@event.EventId))

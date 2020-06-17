@@ -30,7 +30,7 @@ namespace FasTnT.UnitTest.Handlers
             Request = new UnsubscribeRequest { SubscriptionId = "test-subscription" };
             Handler = new UnsubscribeHandler(SubscriptionManager.Object, Mediator.Object);
 
-            SubscriptionManager.Setup(x => x.GetById(It.IsAny<string>(), It.IsAny<CancellationToken>())).Returns(Task.FromResult(new Subscription { Id = 1 }));
+            SubscriptionManager.Setup(x => x.GetById(It.IsAny<string>(), It.IsAny<CancellationToken>())).Returns(Task.FromResult(new Subscription()));
         }
 
         public override void When()

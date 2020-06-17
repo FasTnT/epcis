@@ -39,7 +39,10 @@ namespace FasTnT.Commands.Requests
 
             internal static void Validate(EpcisEvent evt)
             {
-                evt.Epcs.ForEach(e => UriValidator.Validate(e.Id));
+                foreach(var epc in evt.Epcs)
+                {
+                    UriValidator.Validate(epc.Id);
+                }
 
                 if (IsAddOrDeleteAggregation(evt) && !evt.Epcs.Any(x => x.Type == EpcType.ParentId)) // TCR-7 parentID is Populated for ADD or DELETE Actions in Aggregation Events
                 {

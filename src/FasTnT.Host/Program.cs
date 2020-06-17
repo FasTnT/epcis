@@ -23,6 +23,7 @@ namespace FasTnT.Host
             {
                 webBuilder.UseShutdownTimeout(TimeSpan.FromSeconds(10))
                           .UseIISIntegration()
+                          .ConfigureKestrel(opt => opt.AddServerHeader = false)
                           .ConfigureLogging((config, builder) =>
                           {
                               builder.AddConsole()

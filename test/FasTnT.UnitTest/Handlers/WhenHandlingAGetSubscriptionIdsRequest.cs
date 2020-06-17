@@ -1,8 +1,10 @@
 ﻿using FasTnT.Commands.Requests;
 using FasTnT.Commands.Responses;
 using FasTnT.Domain.Data;
+using FasTnT.Domain.Model.Subscriptions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using static FasTnT.Commands.Requests.GetSubscriptionIdsRequest;
@@ -12,7 +14,7 @@ namespace FasTnT.UnitTest.Handlers
     [TestClass]
     public class WhenHandlingAGetSubscriptionIdsRequest : TestBase
     {
-        public string[] SubscriptionIds { get; set; }
+        public IEnumerable<Subscription> Subscriptions { get; set; }
         public Mock<ISubscriptionManager> SubscriptionManager { get; set; }
         public GetSubscriptionIdsHandler Handler { get; set; }
         public CancellationToken CancellationToken { get; set; }
@@ -21,13 +23,13 @@ namespace FasTnT.UnitTest.Handlers
 
         public override void Given()
         {
-            SubscriptionIds = new[] { "Sub1", "Sub2" };
+            Subscriptions = new[] { new Subscription { SubscriptionId = "Sub1" }, new Subscription { SubscriptionId = "Sub2" } };
             CancellationToken = new CancellationTokenSource().Token;
             SubscriptionManager = new Mock<ISubscriptionManager>();
             Request = new GetSubscriptionIdsRequest { QueryName = "TestQuery" };
             Handler = new GetSubscriptionIdsHandler(SubscriptionManager.Object);
 
-            SubscriptionManager.Setup(x => x.GetSubscriptionIds(It.IsAny<CancellationToken>())).Returns(() => Task.FromResult(SubscriptionIds));
+            SubscriptionManager.Setup(x => x.GetAll(It.IsAny<CancellationToken>())).Returns(() => Task.FromResult(Subscriptions));
         }
 
         public override void When()
@@ -38,7 +40,7 @@ namespace FasTnT.UnitTest.Handlers
         [TestMethod]
         public void ItShouldCallTheSubscriptionManagerGetSubscriptionIdsMethod()
         {
-            SubscriptionManager.Verify(x => x.GetSubscriptionIds(CancellationToken), Times.Once);
+            SubscriptionManager.Verify(x => x.GetAll(CancellationToken), Times.Once);
         }
 
         [TestMethod]
@@ -50,7 +52,7 @@ namespace FasTnT.UnitTest.Handlers
         [TestMethod]
         public void ItShouldReturnTheListOfSubscriptionIds()
         {
-            CollectionAssert.AreEquivalent(SubscriptionIds, ((GetSubscriptionIdsResponse)Response).SubscriptionIds);
+            CollectionAssert.AreEquivalent(new[] { "Sub1", "Sub2" }, ((GetSubscriptionIdsResponse)Response).SubscriptionIds);
         }
     }
 }

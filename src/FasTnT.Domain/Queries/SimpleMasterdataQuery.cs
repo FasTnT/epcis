@@ -16,10 +16,10 @@ namespace FasTnT.Domain.Queries
     {
         public string Name => "SimpleMasterDataQuery";
         public bool AllowSubscription => false;
-        private List<string> _attributeNames = new List<string>();
+        private readonly List<string> _attributeNames = new List<string>();
         private bool _includeAttributes, _includeChildren;
 
-        private static IDictionary<string, Action<IMasterdataFetcher, QueryParameter>> SimpleParameters = new Dictionary<string, Action<IMasterdataFetcher, QueryParameter>>
+        private static readonly IDictionary<string, Action<IMasterdataFetcher, QueryParameter>> SimpleParameters = new Dictionary<string, Action<IMasterdataFetcher, QueryParameter>>
         {
             { "vocabularyName",    (fetcher, param) => fetcher.Apply(new MasterdataTypeFilter { Values = param.Values }) },
             { "EQ_name",           (fetcher, param) => fetcher.Apply(new MasterdataNameFilter { Values = param.Values }) },

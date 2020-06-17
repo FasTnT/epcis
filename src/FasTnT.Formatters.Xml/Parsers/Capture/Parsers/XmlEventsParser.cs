@@ -28,7 +28,7 @@ namespace FasTnT.Parsers.Xml.Capture
             { "bizStep",             (evt, node) => evt.BusinessStep = node.Value },
             { "disposition",         (evt, node) => evt.Disposition = node.Value },
             { "eventID",             (evt, node) => evt.EventId = node.Value },
-            { "errorDeclaration",    (evt, node) => evt.ErrorDeclaration = node.ToErrorDeclaration(evt) },
+            { "errorDeclaration",    (evt, node) => node.ParseErrorDeclaration(evt) },
             { "transformationId",    (evt, node) => evt.TransformationId = node.Value },
             { "bizLocation",         (evt, node) => node.ParseBusinessLocation(evt) },
             { "bizTransactionList",  (evt, node) => evt.BusinessTransactions = node.ToBusinessTransactions() },

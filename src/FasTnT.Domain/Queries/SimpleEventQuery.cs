@@ -74,15 +74,14 @@ namespace FasTnT.Domain.Queries
         {
             var maxEventCount = default(int?);
 
-            foreach(var parameter in parameters)
+            foreach (var parameter in parameters)
             {
-                var action = default(Action<IEventFetcher, QueryParameter>);
 
-                if (IsSimpleParameter(parameter, out action) || IsRegexParameter(parameter, out action))
+                if (IsSimpleParameter(parameter, out Action<IEventFetcher, QueryParameter> action) || IsRegexParameter(parameter, out action))
                 {
                     ApplyParameter(action, parameter);
 
-                    if(parameter.Name == "maxEventCount")
+                    if (parameter.Name == "maxEventCount")
                     {
                         maxEventCount = parameter.GetValue<int>();
                     }
