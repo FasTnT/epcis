@@ -31,5 +31,12 @@ namespace FasTnT.Model.Utils
 
         private static Exception NameException<T>(string displayName) => new EpcisException(ExceptionType.ValidationException, $"Invalid value for {typeof(T).Name} : '{displayName}'");
         private static Exception IdException<T>(short id) => new EpcisException(ExceptionType.ValidationException, $"Invalid ID for {typeof(T).Name} : {id}");
+
+        public static bool operator ==(Enumeration left, Enumeration right) => left is null ? right is null : left.Equals(right);
+        public static bool operator !=(Enumeration left, Enumeration right) => !(left == right);
+        public static bool operator <(Enumeration left, Enumeration right) => left is null ? right is object : left.CompareTo(right) < 0;
+        public static bool operator <=(Enumeration left, Enumeration right) => left is null || left.CompareTo(right) <= 0;
+        public static bool operator >(Enumeration left, Enumeration right) => left is object && left.CompareTo(right) > 0;
+        public static bool operator >=(Enumeration left, Enumeration right) => left is null ? right is null : left.CompareTo(right) >= 0;
     }
 }

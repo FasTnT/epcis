@@ -7,6 +7,7 @@ using FasTnT.Model.Events;
 using FasTnT.PostgreSql.DapperConfiguration;
 using System.Collections.Generic;
 using System.Data;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using static Dapper.SqlBuilder;
@@ -38,8 +39,8 @@ namespace FasTnT.Data.PostgreSql.Query
         public void Apply(BusinessTransactionFilter filter) => _filters.AddCondition(QueryFilters.BusinessTransactions, $"transaction_type = {_parameters.Add(filter.TransactionType)} AND transaction_id = ANY({_parameters.Add(filter.Values)})");
         public void Apply(ExistsErrorDeclarationFilter filter) => _query = _query.Where("errordeclaration_time IS NOT NULL");
         public void Apply(EqualsErrorReasonFilter filter) => _query = _query.Where($"errordeclaration_reason = ANY({_parameters.Add(filter.Values)})");
-        public void Apply(MatchEpcFilter filter) => _filters.AddCondition(QueryFilters.Epcs, $"epc LIKE ANY({_parameters.Add(filter.Values)}) AND type = ANY({_parameters.Add(filter.EpcType)})");
-        public void Apply(QuantityFilter filter) => _filters.AddCondition(QueryFilters.Epcs, $"type = {EpcType.Quantity} AND quantity {filter.Operator.ToSql()} {_parameters.Add(filter.Value)}");
+        public void Apply(MatchEpcFilter filter) => _filters.AddCondition(QueryFilters.Epcs, $"epc LIKE ANY({_parameters.Add(filter.Values)}) AND type = ANY({_parameters.Add(filter.EpcType.Select(x => x.Id))})");
+        public void Apply(QuantityFilter filter) => _filters.AddCondition(QueryFilters.Epcs, $"type = {EpcType.Quantity.Id} AND quantity {filter.Operator.ToSql()} {_parameters.Add(filter.Value)}");
         public void Apply(ExistCustomFieldFilter filter) => _filters.AddCondition(QueryFilters.CustomFields, $"type = {filter.Field.Type.Id} AND namespace = {_parameters.Add(filter.Field.Namespace)} AND name = {_parameters.Add(filter.Field.Name)} AND parent_id IS {(filter.IsInner ? "NOT" : "")} NULL");
         public void Apply(SourceDestinationFilter filter) => _filters.AddCondition(QueryFilters.SourceDestination, $"direction = {filter.Type.Id} AND type = {_parameters.Add(filter.Name)} AND source_dest_id = ANY({_parameters.Add(filter.Values)})");
         public void Apply(ExistsAttributeFilter filter) => _filters.AddCondition(QueryFilters.Cbv, $"masterdata_id = {filter.Field.ToPgSql()} AND id = {_parameters.Add(filter.AttributeName)}");
