@@ -1,5 +1,4 @@
 ﻿using FasTnT.Commands.Responses;
-using FasTnT.Parsers.Xml.Formatters.Implementation;
 using FasTnT.Parsers.Xml.Utils;
 using System;
 using System.Collections.Generic;
@@ -58,12 +57,12 @@ namespace FasTnT.Parsers.Xml.Formatters
             if (response.EventList.Any())
             {
                 resultName = "EventList";
-                resultList = XmlEntityFormatter.FormatEvents(response.EventList);
+                resultList = XmlEventFormatter.FormatList(response.EventList);
             }
             else if (response.MasterdataList.Any())
             {
-                resultName = "VocabularyList";
-                resultList = XmlEntityFormatter.FormatMasterData(response.MasterdataList);
+                //resultName = "VocabularyList";
+                //resultList = XmlMasterdataFormatter.FormatMasterData(response.MasterdataList);
             }
 
             return new XElement(XName.Get("QueryResults", EpcisNamespaces.Query),
