@@ -11,7 +11,7 @@ namespace FasTnT.Parsers.Xml
 {
     public class SoapCommandFormatter : ICommandFormatter
     {
-        public string ContentType => "application/soap+xml";
+        public string ContentType => "application/xml";
         public Task<ICaptureRequest> ParseCapture(Stream input, CancellationToken cancellationToken) => throw new NotImplementedException();
 
         public async Task<IQueryRequest> ParseQuery(Stream input, CancellationToken cancellationToken)
