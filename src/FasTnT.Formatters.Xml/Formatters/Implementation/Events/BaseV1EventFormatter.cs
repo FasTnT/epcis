@@ -74,7 +74,7 @@ namespace FasTnT.Formatters.Xml.Formatters.Events
 
         protected virtual void AddEventExtension(EpcisEvent evt)
         {
-            var extension = new XElement("extension", XmlEventFormatter.GenerateCustomFields(evt, FieldType.EventExtension));
+            var extension = new XElement("extension", XmlEventFormatter.GenerateCustomFields(evt, FieldType.Extension));
             Extension.AddIfNotNull(extension);
         }
     }

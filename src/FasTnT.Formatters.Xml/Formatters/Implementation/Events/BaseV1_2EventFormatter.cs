@@ -9,7 +9,7 @@ namespace FasTnT.Formatters.Xml.Formatters.Events
     {
         protected override void AddEventExtension(EpcisEvent evt)
         {
-            Extension.AddIfAny(XmlEventFormatter.GenerateCustomFields(evt, FieldType.EventExtension));
+            Extension.AddIfAny(XmlEventFormatter.GenerateCustomFields(evt, FieldType.Extension));
         }
     }
 }

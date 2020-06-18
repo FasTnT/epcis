@@ -1,7 +1,9 @@
-﻿namespace FasTnT.Domain.Data.Model.Filters
+﻿using System.Collections.Generic;
+
+namespace FasTnT.Domain.Data.Model.Filters
 {
     public class EqualsErrorReasonFilter
     {
-        public object[] Values { get; set; }
+        public IEnumerable<object> Values { get; set; }
     }
 }

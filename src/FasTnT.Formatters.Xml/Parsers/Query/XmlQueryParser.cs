@@ -13,7 +13,7 @@ namespace FasTnT.Parsers.Xml.Parsers.Query
 {
     public class XmlQueryParser
     {
-        static IDictionary<string, Func<XElement, IQueryRequest>> Parsers = new Dictionary<string, Func<XElement, IQueryRequest>>
+        static readonly IDictionary<string, Func<XElement, IQueryRequest>> Parsers = new Dictionary<string, Func<XElement, IQueryRequest>>
         {
             { "GetQueryNames", element => new GetQueryNamesRequest() },
             { "GetSubscriptionIDs", element => new GetSubscriptionIdsRequest { QueryName = element.Element("queryName").Value } },

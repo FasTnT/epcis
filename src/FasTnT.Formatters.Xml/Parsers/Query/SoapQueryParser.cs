@@ -11,7 +11,7 @@ namespace FasTnT.Parsers.Xml.Parsers.Query
 {
     public class SoapQueryParser : XmlQueryParser
     {
-        static readonly string SoapEnvelopNamespace = "http://schemas.xmlsoap.org/soap/envelope/";
+        const string SoapEnvelopNamespace = "http://schemas.xmlsoap.org/soap/envelope/";
 
         public override async Task<IQueryRequest> Read(Stream input, CancellationToken cancellationToken)
         {

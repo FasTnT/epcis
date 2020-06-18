@@ -122,7 +122,7 @@ namespace FasTnT.Parsers.Xml.Formatters.Implementation
 
             if (!string.IsNullOrEmpty(evt.ReadPoint))
             {
-                readPoint = new XElement("readPoint", new XElement("id", evt.ReadPoint), GenerateCustomFields(evt, FieldType.ReadPointExtension));
+                readPoint = new XElement("readPoint", new XElement("id", evt.ReadPoint)/* TODO , GenerateCustomFields(evt, FieldType.ReadPointExtension) */);
             }
 
             return readPoint;
@@ -137,7 +137,7 @@ namespace FasTnT.Parsers.Xml.Formatters.Implementation
 
             if (!string.IsNullOrEmpty(evt.BusinessLocation))
             {
-                businessLocation = new XElement("bizLocation", new XElement("id", evt.BusinessLocation), GenerateCustomFields(evt, FieldType.BusinessLocationExtension)); ;
+                businessLocation = new XElement("bizLocation", new XElement("id", evt.BusinessLocation)/* TODO , GenerateCustomFields(evt, FieldType.BusinessLocationExtension) */); ;
             }
 
             return businessLocation;

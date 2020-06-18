@@ -1,5 +1,6 @@
 ﻿using FasTnT.Commands.Requests;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Linq;
 
 namespace FasTnT.UnitTest.Parsers.Soap
 {
@@ -22,7 +23,7 @@ namespace FasTnT.UnitTest.Parsers.Soap
         {
             var request = (PollRequest)Result;
 
-            Assert.AreEqual(1, request.Parameters.Length);
+            Assert.AreEqual(1, request.Parameters.Count());
         }
     }
 }

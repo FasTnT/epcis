@@ -14,7 +14,7 @@ namespace FasTnT.Commands.Requests
     public class PollRequest : IQueryRequest
     {
         public string QueryName { get; set; }
-        public QueryParameter[] Parameters { get; set; }
+        public IEnumerable<QueryParameter> Parameters { get; set; }
 
         public class PollHandler : IRequestHandler<PollRequest, IEpcisResponse>
         {

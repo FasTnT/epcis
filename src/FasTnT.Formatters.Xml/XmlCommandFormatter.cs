@@ -15,9 +15,7 @@ namespace FasTnT.Parsers.Xml
 
         public async Task<ICaptureRequest> ParseCapture(Stream input, CancellationToken cancellationToken)
         {
-            var requestParser = new XmlRequestParser();
-
-            return await requestParser.Read(input, cancellationToken);
+            return await XmlRequestParser.Read(input, cancellationToken);
         }
 
         public async Task<IQueryRequest> ParseQuery(Stream input, CancellationToken cancellationToken)

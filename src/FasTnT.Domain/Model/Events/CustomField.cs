@@ -12,6 +12,6 @@ namespace FasTnT.Model.Events
         public string TextValue { get; set; }
         public double? NumericValue { get; set; }
         public DateTime? DateValue { get; set; }
-        public IList<CustomField> Children { get; set; } = new List<CustomField>();
+        public List<CustomField> Children { get; set; } = new List<CustomField>();
     }
 }
