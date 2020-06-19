@@ -17,7 +17,7 @@ namespace FasTnT.Parsers.Xml.Formatters
         {
             if (children == null || !children.Any()) return;
             if (!children.Any(x => !x.IsEmpty)) return;
-            destination.Add(children);
+            destination.Add(children.Where(x => !x.IsEmpty));
         }
     }
 }

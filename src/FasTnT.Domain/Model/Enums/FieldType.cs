@@ -11,7 +11,11 @@ namespace FasTnT.Model.Enums
         public static FieldType ErrorDeclarationExtension = new FieldType(4, "ErrorDeclarationExtension");
         public static FieldType ErrorDeclarationCustomField = new FieldType(5, "ErrorDeclarationCustomField");
         public static FieldType IlmdExtension = new FieldType(6, "IlmdExtension");
-        public static FieldType Attribute = new FieldType(7, "Attribute");
+        public static FieldType BusinessLocationCustomField = new FieldType(7, "BusinessLocationCustomField");
+        public static FieldType BusinessLocationExtension = new FieldType(8, "BusinessLocationExtension");
+        public static FieldType ReadPointCustomField = new FieldType(9, "ReadPointCustomField");
+        public static FieldType ReadPointExtension = new FieldType(10, "ReadPointExtension");
+        public static FieldType Attribute = new FieldType(11, "Attribute");
 
         public FieldType() { }
         public FieldType(short id, string displayName) : base(id, displayName) { }

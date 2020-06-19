@@ -7,7 +7,7 @@ using System.Xml.Linq;
 
 namespace FasTnT.Parsers.Xml.Formatters
 {
-    internal class XmlEventFormatter
+    public class XmlEventFormatter
     {
         static readonly IDictionary<EventType, Func<EpcisEvent, XElement>> Formatters = new Dictionary<EventType, Func<EpcisEvent, XElement>>
         {
@@ -18,7 +18,7 @@ namespace FasTnT.Parsers.Xml.Formatters
             { EventType.Transformation, FormatTransformationEvent },
         };
 
-        internal static IEnumerable<XElement> FormatList(IList<EpcisEvent> eventList)
+        public static IEnumerable<XElement> FormatList(IList<EpcisEvent> eventList)
         {
             return eventList.Select(x =>
                 Formatters.TryGetValue(x.Type, out Func<EpcisEvent, XElement> formatter) 
@@ -73,7 +73,7 @@ namespace FasTnT.Parsers.Xml.Formatters
             xmlEvent.AddIfNotNull(new XElement("bizStep", evt.BusinessStep));
             xmlEvent.AddIfNotNull(new XElement("disposition", evt.Disposition));
             xmlEvent.AddIfNotNull(CreateReadPoint(evt));
-            xmlEvent.AddIfNotNull(new XElement("bizLocation", evt.BusinessLocation));
+            xmlEvent.AddIfNotNull(CreateBusinessLocation(evt));
         }
 
         private static XElement FormatAggregationEvent(EpcisEvent evt)
@@ -153,7 +153,22 @@ namespace FasTnT.Parsers.Xml.Formatters
 
         private static XElement CreateReadPoint(EpcisEvent evt)
         {
-            return string.IsNullOrEmpty(evt.ReadPoint) ? null : new XElement("readPoint", new XElement("id", evt.ReadPoint));
+            var readPointElement = new XElement("readPoint");
+            readPointElement.AddIfNotNull(new XElement("id", evt.ReadPoint));
+            readPointElement.AddIfNotNull(CreateFromCustomFields(evt, FieldType.ReadPointExtension, "extension"));
+            readPointElement.AddIfNotNull(CreateCustomFields(evt, FieldType.ReadPointCustomField));
+
+            return readPointElement;
+        }
+
+        private static XElement CreateBusinessLocation(EpcisEvent evt)
+        {
+            var locationElement = new XElement("businessLocation");
+            locationElement.AddIfNotNull(new XElement("id", evt.BusinessLocation));
+            locationElement.AddIfNotNull(CreateFromCustomFields(evt, FieldType.BusinessLocationExtension, "extension"));
+            locationElement.AddIfNotNull(CreateCustomFields(evt, FieldType.BusinessLocationCustomField));
+
+            return locationElement;
         }
 
         private static XElement CreateSourceList(EpcisEvent evt)
@@ -202,7 +217,13 @@ namespace FasTnT.Parsers.Xml.Formatters
             var epcs = evt.Epcs.Where(x => x.Type == type);
             var list = new XElement(elementName);
 
-            list.AddIfNotNull(epcs.Select(x => new XElement("epc", x.Id)));
+            list.AddIfNotNull(epcs.Select(x =>
+            {
+                var element = new XElement("quantityElement", new XElement("epcClass", x.Id));
+                element.AddIfNotNull(new[] { new XElement("quantity", x.Quantity), new XElement("uom", x.UnitOfMeasure) });
+
+                return element;
+            }));
 
             return list;
         }

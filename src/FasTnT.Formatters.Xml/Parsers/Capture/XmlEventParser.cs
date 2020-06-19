@@ -69,6 +69,7 @@ namespace FasTnT.Formatters.Xml.Parsers.Capture.Events
         {
             if (element == null || element.IsEmpty) return;
 
+            ParseEpcQuantityList(element.Element("quantityList"), epcisEvent, EpcType.Quantity);
             ParseSources(element.Element("sourceList"), epcisEvent);
             ParseDestinations(element.Element("destinationList"), epcisEvent);
             ParseIlmd(element.Element("ilmd"), epcisEvent);
@@ -164,15 +165,33 @@ namespace FasTnT.Formatters.Xml.Parsers.Capture.Events
                 EventTime = DateTime.Parse(eventRoot.Element("eventTime").Value),
                 EventTimeZoneOffset = new TimeZoneOffset { Representation = eventRoot.Element("eventTimeZoneOffset").Value },
                 BusinessStep = eventRoot.Element("bizStep")?.Value,
-                ReadPoint = eventRoot.Element("readPoint")?.Element("id")?.Value,
                 Disposition = eventRoot.Element("disposition")?.Value,
-                BusinessLocation = eventRoot.Element("bizLocation")?.Element("id")?.Value
             };
 
+            ParseReadPoint(eventRoot.Element("readPoint"), epcisEvent);
+            ParseBusinessLocation(eventRoot.Element("bizLocation"), epcisEvent);
             ParseBaseExtension(eventRoot.Element("baseExtension"), epcisEvent);
             ParseFields(eventRoot, epcisEvent, FieldType.CustomField);
 
             return epcisEvent;
+        }
+
+        private static void ParseReadPoint(XElement readPoint, EpcisEvent epcisEvent)
+        {
+            if (readPoint == null || readPoint.IsEmpty) return;
+
+            epcisEvent.ReadPoint = readPoint.Element("id")?.Value;
+            ParseExtension(readPoint.Element("extension"), epcisEvent, FieldType.ReadPointExtension);
+            ParseFields(readPoint, epcisEvent, FieldType.ReadPointCustomField);
+        }
+
+        private static void ParseBusinessLocation(XElement bizLocation, EpcisEvent epcisEvent)
+        {
+            if (bizLocation == null || bizLocation.IsEmpty) return;
+
+            epcisEvent.BusinessLocation = bizLocation.Element("id")?.Value;
+            ParseExtension(bizLocation.Element("extension"), epcisEvent, FieldType.BusinessLocationExtension);
+            ParseFields(bizLocation, epcisEvent, FieldType.BusinessLocationCustomField);
         }
 
         private static void ParseParentId(XElement element, EpcisEvent epcisEvent)
