@@ -14,7 +14,7 @@ namespace FasTnT.IntegrationTests.API.EpcisEndpoints.v1_2.XML.ListSubscriptionID
         public override void Act()
         {
             Client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Basic", "YWRtaW46UEBzc3cwcmQ=");
-            Result = Client.PostAsync("/v1_2/Query", new StringContent(File.ReadAllText("Requests/XML/Subscribe.xml"), Encoding.UTF8, "application/xml")).Result;
+            Result = Client.PostAsync("/v1_2/Query.svc", new StringContent(File.ReadAllText("Requests/Queries/Subscribe.xml"), Encoding.UTF8, "application/xml")).Result;
         }
 
         [Assert]

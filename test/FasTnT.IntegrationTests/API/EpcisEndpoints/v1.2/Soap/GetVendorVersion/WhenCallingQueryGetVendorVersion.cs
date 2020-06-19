@@ -16,7 +16,7 @@ namespace FasTnT.IntegrationTests.API.EpcisEndpoints.v1_2.Soap.GetVendorVersion
         public override void Act()
         {
             Client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Basic", "YWRtaW46UEBzc3cwcmQ=");
-            Result = Client.PostAsync("/v1_2/Query.svc", new StringContent(File.ReadAllText("Requests/Soap/GetVendorVersion.xml"), Encoding.UTF8, "application/xml")).Result;
+            Result = Client.PostAsync("/v1_2/Query.svc", new StringContent(File.ReadAllText("Requests/Queries/GetVendorVersion.xml"), Encoding.UTF8, "application/xml")).Result;
         }
 
         [Assert]

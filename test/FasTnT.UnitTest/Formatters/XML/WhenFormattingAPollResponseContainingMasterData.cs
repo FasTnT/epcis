@@ -1,6 +1,4 @@
 ﻿using FasTnT.Commands.Responses;
-using FasTnT.Model.Enums;
-using FasTnT.Model.Events;
 using FasTnT.Model.MasterDatas;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Collections.Generic;
@@ -10,13 +8,13 @@ using System.Xml.Linq;
 namespace FasTnT.IntegrationTests.Formatters.XML
 {
     [TestClass]
-    public class WhenFormattingAPollResponse : XmlFormatterTestBase
+    public class WhenFormattingAPollResponseContainingMasterData : XmlFormatterTestBase
     {
         public override void Given()
         {
             base.Given();
 
-            Response = new PollResponse { EventList = new List<EpcisEvent> { new EpcisEvent { Type = EventType.Object, Action = EventAction.Add, Epcs = new List<Epc>{ new Epc { Type = EpcType.List, Id = "123456789" } } } }, MasterdataList = new List<EpcisMasterData> { new EpcisMasterData { Id = "testMD", Type = "cbv:test:masterdata" } }, QueryName = "TestQuery", SubscriptionId = "TestSubscription" };
+            Response = new PollResponse { MasterdataList = new List<EpcisMasterData> { new EpcisMasterData { Id = "testMD", Type = "cbv:test:masterdata" } }, QueryName = "TestQuery", SubscriptionId = "TestSubscription" };
         }
 
         [TestMethod]
@@ -44,13 +42,13 @@ namespace FasTnT.IntegrationTests.Formatters.XML
         }
 
         [TestMethod]
-        public void ItShouldContainTheCorrectEvents()
+        public void ItShouldContainTheCorrectMasterData()
         {
             var element = XDocument.Parse(Formatted).Root.Element("EPCISBody").Element(XName.Get("QueryResults", "urn:epcglobal:epcis-query:xsd:1"));
-            var eventList = element.Element("resultsBody").Element("EventList");
+            var masterdataList = element.Element("resultsBody").Element("VocabularyList");
 
-            Assert.AreEqual(1, eventList.Elements().Count());
-            Assert.AreEqual("ObjectEvent", eventList.Elements().First().Name.LocalName);
+            Assert.AreEqual(1, masterdataList.Elements().Count());
+            Assert.AreEqual("Vocabulary", masterdataList.Elements().First().Name.LocalName);
         }
     }
 }

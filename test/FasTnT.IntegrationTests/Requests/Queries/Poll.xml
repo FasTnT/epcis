@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:epcglobal:epcis-query:xsd:1">
+  <soapenv:Header />
+  <soapenv:Body>
+    <urn:Poll>
+      <queryName>SimpleEventQuery</queryName>
+      <params>
+        <param>
+          <name>EQ_action</name>
+          <value>
+            <value>ADD</value>
+          </value>
+        </param>
+      </params>
+    </urn:Poll>
+  </soapenv:Body>
+</soapenv:Envelope>

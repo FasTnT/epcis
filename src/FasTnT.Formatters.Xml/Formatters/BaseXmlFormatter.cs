@@ -61,8 +61,8 @@ namespace FasTnT.Parsers.Xml.Formatters
             }
             else if (response.MasterdataList.Any())
             {
-                //resultName = "VocabularyList";
-                //resultList = XmlMasterdataFormatter.FormatMasterData(response.MasterdataList);
+                resultName = "VocabularyList";
+                resultList = XmlMasterdataFormatter.FormatMasterData(response.MasterdataList);
             }
 
             return new XElement(XName.Get("QueryResults", EpcisNamespaces.Query),

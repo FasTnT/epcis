@@ -1,7 +1,8 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<epcisq:EPCISQueryDocument xmlns:epcisq="urn:epcglobal:epcis-query:xsd:1" creationDate="2019-01-26T20:10:01.8111457Z" schemaVersion="1">
-  <EPCISBody>
-    <epcisq:Subscribe>
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:epcglobal:epcis-query:xsd:1">
+  <soapenv:Header />
+  <soapenv:Body>
+    <urn:Subscribe>
       <queryName>SimpleEventQuery</queryName>
       <params>
         <param>
@@ -19,6 +20,6 @@
         <reportIfEmpty>true</reportIfEmpty>
       </controls>
       <subscriptionID>TestSubscription</subscriptionID>
-    </epcisq:Subscribe>
-  </EPCISBody>
-</epcisq:EPCISQueryDocument>
+    </urn:Subscribe>
+  </soapenv:Body>
+</soapenv:Envelope>

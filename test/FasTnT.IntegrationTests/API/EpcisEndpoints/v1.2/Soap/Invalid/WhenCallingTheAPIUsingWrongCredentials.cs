@@ -14,7 +14,7 @@ namespace FasTnT.IntegrationTests.API.EpcisEndpoints.v1._2.XML.Invalid
         public override void Act()
         {
             Client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Basic", "YWRtaW46SW52YWxpZFB3ZA==");
-            Result = Client.PostAsync("/v1_2/Query", new StringContent(File.ReadAllText("Requests/XML/Poll.xml"), Encoding.UTF8, "application/xml")).Result;
+            Result = Client.PostAsync("/v1_2/Query.svc", new StringContent(File.ReadAllText("Requests/Queries/Poll.xml"), Encoding.UTF8, "application/xml")).Result;
         }
 
         [Assert]

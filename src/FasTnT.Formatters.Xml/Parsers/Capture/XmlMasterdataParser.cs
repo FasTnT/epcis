@@ -56,7 +56,7 @@ namespace FasTnT.Formatters.Xml.Parsers.Capture.Events
             var attribute = new MasterDataAttribute
             {
                 Id = element.Attribute("id").Value,
-                Value = element.HasElements ? null : element.Value
+                Value = element.HasElements ? string.Empty : element.Value
             };
 
             attribute.Fields.AddRange(element.Elements().Select(ParseField));

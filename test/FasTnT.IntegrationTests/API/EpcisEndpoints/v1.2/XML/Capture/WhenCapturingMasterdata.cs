@@ -13,7 +13,7 @@ namespace FasTnT.IntegrationTests.API.EpcisEndpoints.v1._2.XML.Capture
         public override void Act()
         {
             Client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Basic", "YWRtaW46UEBzc3cwcmQ=");
-            Result = Client.PostAsync("/v1_2/Capture", new StringContent(File.ReadAllText("Requests/XML/Masterdata.xml"), Encoding.UTF8, "application/xml")).Result;
+            Result = Client.PostAsync("/v1_2/Capture", new StringContent(File.ReadAllText("Requests/Capture/Masterdata.xml"), Encoding.UTF8, "application/xml")).Result;
         }
 
         [Assert]
