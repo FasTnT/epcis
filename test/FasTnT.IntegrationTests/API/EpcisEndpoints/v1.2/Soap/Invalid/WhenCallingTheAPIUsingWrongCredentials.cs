@@ -4,6 +4,7 @@ using System.IO;
 using System.Net;
 using System.Net.Http;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace FasTnT.IntegrationTests.API.EpcisEndpoints.v1._2.XML.Invalid
 {
@@ -11,10 +12,10 @@ namespace FasTnT.IntegrationTests.API.EpcisEndpoints.v1._2.XML.Invalid
     [TestCategory("IntegrationTests")]
     public class WhenCallingTheAPIUsingWrongCredentials : BaseIntegrationTest
     {
-        public override void Act()
+        public override async Task Act()
         {
             Client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Basic", "YWRtaW46SW52YWxpZFB3ZA==");
-            Result = Client.PostAsync("/v1_2/Query.svc", new StringContent(File.ReadAllText("Requests/Queries/Poll.xml"), Encoding.UTF8, "application/xml")).Result;
+            Result = await Client.PostAsync("/v1_2/Query.svc", new StringContent(File.ReadAllText("Requests/Queries/Poll.xml"), Encoding.UTF8, "application/xml"));
         }
 
         [Assert]
