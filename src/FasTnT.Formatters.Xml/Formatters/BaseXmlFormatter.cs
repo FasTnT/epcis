@@ -49,7 +49,7 @@ namespace FasTnT.Parsers.Xml.Formatters
         public abstract XDocument FormatInternal(GetSubscriptionIdsResponse response);
         public abstract XDocument FormatInternal(PollResponse response);
 
-        protected XElement FormatPollResponse(PollResponse response)
+        protected static XElement FormatPollResponse(PollResponse response)
         {
             var resultName = "EventList";
             var resultList = default(IEnumerable<XElement>);

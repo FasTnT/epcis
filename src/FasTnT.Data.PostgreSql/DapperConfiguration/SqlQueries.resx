@@ -209,7 +209,7 @@ DROP TABLE eventIds;</value>
     <value>INSERT INTO sbdh.standardheader(id, version, standard, type_version, identifier, type, creation_datetime) VALUES(@id, @version, @standard, @typeversion, @instanceidentifier, @type, @creationdatetime);</value>
   </data>
   <data name="Store_SubscriptionCallbackDto" xml:space="preserve">
-    <value>INSERT INTO callback.query_callback(request_id, subscription_id, callback_type) VALUES(@requestid, @subscriptionid, @callbacktype);</value>
+    <value>INSERT INTO callback.query_callback(request_id, subscription_id, callback_type) VALUES(@headerid, @subscriptionid, @callbacktype);</value>
   </data>
   <data name="Store_SubscriptionDto" xml:space="preserve">
     <value>INSERT INTO subscriptions.subscription(subscription_id, trigger, initial_record_time, report_if_empty, destination, query_name,  active, schedule_seconds, schedule_minutes, schedule_hours, schedule_month, schedule_day_of_month, schedule_day_of_week) VALUES(@subscriptionid, @trigger, @initialrecordtime, @reportifempty, @destination, @queryname, @active, @second, @minute, @hour, @month, @dayofmonth, @dayofweek) RETURNING id;</value>

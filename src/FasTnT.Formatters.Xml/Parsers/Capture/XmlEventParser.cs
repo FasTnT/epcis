@@ -43,9 +43,9 @@ namespace FasTnT.Formatters.Xml.Parsers.Capture.Events
         {
             var eventElement = element.Elements().First();
 
-            if (ExtensionParsers.TryGetValue(element.Name.LocalName, out Func<XElement, EpcisEvent> parser))
+            if (ExtensionParsers.TryGetValue(eventElement.Name.LocalName, out Func<XElement, EpcisEvent> parser))
             {
-                return parser(element);
+                return parser(eventElement);
             }
             else
             {
@@ -141,7 +141,7 @@ namespace FasTnT.Formatters.Xml.Parsers.Capture.Events
 
         public static EpcisEvent ParseTransformationEvent(XElement eventRoot)
         {
-            var epcisEvent = ParseBase(eventRoot, EventType.Transaction);
+            var epcisEvent = ParseBase(eventRoot, EventType.Transformation);
 
             epcisEvent.TransformationId = eventRoot.Element("transformationID")?.Value;
             ParseTransactions(eventRoot.Element("bizTransactionList"), epcisEvent);
@@ -211,11 +211,15 @@ namespace FasTnT.Formatters.Xml.Parsers.Capture.Events
 
         private static void ParseEpcList(XElement element, EpcisEvent epcisEvent, EpcType type)
         {
+            if (element == null || element.IsEmpty) return;
+
             epcisEvent.Epcs.AddRange(element.Elements("epc").Select(x => new Epc { Id = x.Value, Type = type }));
         }
 
         private static void ParseEpcQuantityList(XElement element, EpcisEvent epcisEvent, EpcType type)
         {
+            if (element == null || element.IsEmpty) return; 
+
             epcisEvent.Epcs.AddRange(element.Elements("quantityElement").Select(x => new Epc
             {
                 Id = x.Element("epcClass").Value,
