@@ -33,7 +33,7 @@ namespace FasTnT.UnitTest.Formatters.Events
         public void TheQuantityEventShouldHaveABusinessLocationField()
         {
             Assert.IsNotNull(Result.Element("bizLocation"));
-            Assert.AreEqual("test:location", Result.Element("bizLocation"));
+            Assert.AreEqual("test:location", Result.Element("bizLocation").Element("id").Value);
         }
     }
 }

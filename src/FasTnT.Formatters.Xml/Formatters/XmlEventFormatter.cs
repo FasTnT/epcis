@@ -163,7 +163,7 @@ namespace FasTnT.Parsers.Xml.Formatters
 
         private static XElement CreateBusinessLocation(EpcisEvent evt)
         {
-            var locationElement = new XElement("businessLocation");
+            var locationElement = new XElement("bizLocation");
             locationElement.AddIfNotNull(new XElement("id", evt.BusinessLocation));
             locationElement.AddIfNotNull(CreateFromCustomFields(evt, FieldType.BusinessLocationExtension, "extension"));
             locationElement.AddIfNotNull(CreateCustomFields(evt, FieldType.BusinessLocationCustomField));

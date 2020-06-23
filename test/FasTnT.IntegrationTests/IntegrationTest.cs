@@ -27,10 +27,7 @@ namespace FasTnT.IntegrationTests
 
             EnsureConnectionStringIsSpecified(context);
 
-            TestServer = new TestServer(host)
-            {
-                AllowSynchronousIO = true // XDocument.SaveAsync still uses synchronous IO operation
-            };
+            TestServer = new TestServer(host);
 
             Client = TestServer.CreateClient();
         }
