@@ -27,6 +27,9 @@ jobs:
       
     - name: Run Unit Tests with Coverage
       run: dotnet test "test\FasTnT.UnitTest\FasTnT.UnitTest.csproj" -c Debug /p:CollectCoverage=true /p:CoverletOutputFormat=opencover
+      
+    - name: Run Integration Tests with Coverage
+      run: dotnet test "test\FasTnT.IntegrationTests\FasTnT.IntegrationTests.csproj" -c Debug /p:CollectCoverage=true /p:CoverletOutputFormat=opencover
 
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v1
