@@ -8,7 +8,7 @@ using FasTnT.Domain;
 
 namespace FasTnT.Host.Infrastructure.Attributes
 {
-    public class FormatterAttribute : Attribute, IFilterFactory
+    public sealed class FormatterAttribute : Attribute, IFilterFactory
     {
         public static IDictionary<Format, ICommandFormatter> KnownFormatters = new Dictionary<Format, ICommandFormatter>
         {

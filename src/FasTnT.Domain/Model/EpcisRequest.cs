@@ -13,7 +13,7 @@ namespace FasTnT.Model
         public DateTime RecordTime { get; set; } = DateTime.UtcNow;
         public string SchemaVersion { get; set; }
         public SubscriptionCallback SubscriptionCallback { get; set; }
-        public List<EpcisEvent> EventList { get; set; }
-        public List<EpcisMasterData> MasterdataList { get; set; }
+        public List<EpcisEvent> EventList { get; set; } = new List<EpcisEvent>();
+        public List<EpcisMasterData> MasterdataList { get; set; } = new List<EpcisMasterData>();
     }
 }

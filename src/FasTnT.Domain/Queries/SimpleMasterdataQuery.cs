@@ -35,7 +35,7 @@ namespace FasTnT.Domain.Queries
             _masterdataFetcher = masterdataFetcher;
         }
 
-        public async Task<PollResponse> Handle(QueryParameter[] parameters, CancellationToken cancellationToken)
+        public async Task<PollResponse> Handle(IEnumerable<QueryParameter> parameters, CancellationToken cancellationToken)
         {
             foreach (var parameter in parameters)
             {

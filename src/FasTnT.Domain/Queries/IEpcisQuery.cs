@@ -1,5 +1,6 @@
 ﻿using FasTnT.Commands.Responses;
 using FasTnT.Model.Queries;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -10,6 +11,6 @@ namespace FasTnT.Domain.Queries
         string Name { get; }
         bool AllowSubscription { get; }
 
-        Task<PollResponse> Handle(QueryParameter[] parameters, CancellationToken cancellationToken);
+        Task<PollResponse> Handle(IEnumerable<QueryParameter> parameters, CancellationToken cancellationToken);
     }
 }

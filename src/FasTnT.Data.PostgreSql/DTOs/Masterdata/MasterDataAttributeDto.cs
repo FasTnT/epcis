@@ -1,5 +1,4 @@
 ﻿using FasTnT.Model.MasterDatas;
-using System;
 
 namespace FasTnT.Data.PostgreSql.DTOs
 {

@@ -1,5 +1,4 @@
 ﻿using FasTnT.Model;
-using FasTnT.Model.Enums;
 
 namespace FasTnT.Data.PostgreSql.DTOs
 {

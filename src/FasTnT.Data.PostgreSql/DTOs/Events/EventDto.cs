@@ -11,7 +11,7 @@ namespace FasTnT.Data.PostgreSql.DTOs
         public short Id { get; set; }
         public DateTime EventTime { get; set; }
         public DateTime CaptureTime { get; set; }
-        public short Action { get; set; }
+        public short? Action { get; set; }
         public short Type { get; set; }
         public short EventTimeZoneOffset { get; set; }
         public string BusinessLocation { get; set; }
@@ -27,7 +27,7 @@ namespace FasTnT.Data.PostgreSql.DTOs
         {
             return new EpcisEvent
             {
-                Action = Enumeration.GetById<EventAction>(Action),
+                Action = Action.HasValue ? Enumeration.GetById<EventAction>(Action.Value) : null,
                 BusinessLocation = BusinessLocation,
                 BusinessStep = BusinessStep,
                 CaptureTime = CaptureTime,
@@ -57,7 +57,7 @@ namespace FasTnT.Data.PostgreSql.DTOs
                 BusinessStep = epcisEvent.BusinessStep,
                 Disposition = epcisEvent.Disposition,
                 EventId = epcisEvent.EventId,
-                Action = epcisEvent.Action.Id,
+                Action = epcisEvent.Action?.Id,
                 Type = epcisEvent.Type.Id,
                 ErrorDeclarationTime = epcisEvent.CorrectiveDeclarationTime,
                 ErrorDeclarationReason = epcisEvent.CorrectiveReason

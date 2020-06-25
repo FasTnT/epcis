@@ -7,6 +7,6 @@ namespace FasTnT.Model.MasterDatas
         public string Name { get; set; }
         public string Namespace { get; set; }
         public string Value { get; set; }
-        public IList<MasterDataField> Children { get; set; } = new List<MasterDataField>();
+        public List<MasterDataField> Children { get; set; } = new List<MasterDataField>();
     }
 }

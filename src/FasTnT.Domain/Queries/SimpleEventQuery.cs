@@ -70,7 +70,7 @@ namespace FasTnT.Domain.Queries
         public string Name => "SimpleEventQuery";
         public bool AllowSubscription => true;
 
-        public async Task<PollResponse> Handle(QueryParameter[] parameters, CancellationToken cancellationToken)
+        public async Task<PollResponse> Handle(IEnumerable<QueryParameter> parameters, CancellationToken cancellationToken)
         {
             var maxEventCount = default(int?);
 

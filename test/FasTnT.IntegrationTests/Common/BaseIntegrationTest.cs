@@ -5,6 +5,7 @@ using Npgsql;
 using System.Data;
 using System.Collections.Generic;
 using FasTnT.Data.PostgreSql.Migrations;
+using System.Threading.Tasks;
 
 namespace FasTnT.IntegrationTests.Common
 {
@@ -25,13 +26,13 @@ namespace FasTnT.IntegrationTests.Common
             Client = IntegrationTest.Client;
         }
 
-        public abstract void Act();
+        public abstract Task Act();
 
         [TestInitialize]
-        public void Execute()
+        public async Task Execute()
         {
             Arrange();
-            Act();
+            await Act();
         }
 
         [TestCleanup]

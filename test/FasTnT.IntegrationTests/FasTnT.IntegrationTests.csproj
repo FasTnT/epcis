@@ -44,43 +44,31 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="Requests\Soap\GetQueryNames.xml">
+    <None Update="Requests\Queries\GetQueryNames.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="Requests\Soap\GetVendorVersion.xml">
+    <None Update="Requests\Queries\GetVendorVersion.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="Requests\Soap\GetStandardVersion.xml">
+    <None Update="Requests\Queries\GetStandardVersion.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="Requests\Soap\ListSubscriptionIDs.xml">
+    <None Update="Requests\Queries\ListSubscriptionIDs.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="Requests\XML\Masterdata.xml">
+    <None Update="Requests\Capture\Masterdata.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="Requests\XML\Capture.xml">
+    <None Update="Requests\Capture\Capture.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="Requests\XML\Subscribe.xml">
+    <None Update="Requests\Queries\Subscribe.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="Requests\XML\Poll_Unknown.xml">
+    <None Update="Requests\Queries\Poll_Unknown.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="Requests\XML\Poll.xml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="Requests\XML\GetQueryNames.xml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="Requests\XML\GetStandardVersion.xml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="Requests\XML\GetVendorVersion.xml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="Requests\XML\ListSubscriptionIDs.xml">
+    <None Update="Requests\Queries\Poll.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>

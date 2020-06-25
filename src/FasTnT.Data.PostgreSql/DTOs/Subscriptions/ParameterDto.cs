@@ -1,5 +1,4 @@
 ﻿using FasTnT.Model.Queries;
-using System;
 
 namespace FasTnT.Data.PostgreSql.DTOs.Subscriptions
 {

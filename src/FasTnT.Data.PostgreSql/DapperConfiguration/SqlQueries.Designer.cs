@@ -261,7 +261,7 @@ namespace FasTnT.Data.PostgreSql.DapperConfiguration {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to INSERT INTO callback.query_callback(request_id, subscription_id, callback_type) VALUES(@requestid, @subscriptionid, @callbacktype);.
+        ///   Looks up a localized string similar to INSERT INTO callback.query_callback(request_id, subscription_id, callback_type) VALUES(@headerid, @subscriptionid, @callbacktype);.
         /// </summary>
         public static string Store_SubscriptionCallbackDto {
             get {
