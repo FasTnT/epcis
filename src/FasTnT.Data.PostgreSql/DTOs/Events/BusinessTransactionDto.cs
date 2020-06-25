@@ -1,5 +1,4 @@
 ﻿using FasTnT.Model.Events;
-using System;
 
 namespace FasTnT.Data.PostgreSql.DTOs
 {

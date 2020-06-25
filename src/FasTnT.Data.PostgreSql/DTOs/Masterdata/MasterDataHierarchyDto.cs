@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace FasTnT.Data.PostgreSql.DTOs
+﻿namespace FasTnT.Data.PostgreSql.DTOs
 {
     public class MasterDataHierarchyDto
     {

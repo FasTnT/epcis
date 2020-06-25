@@ -4,7 +4,6 @@ using FasTnT.Data.PostgreSql.DTOs;
 using FasTnT.Domain.Data;
 using FasTnT.Domain.Data.Model.Filters;
 using FasTnT.Model.MasterDatas;
-using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;

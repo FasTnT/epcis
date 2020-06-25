@@ -2,7 +2,6 @@
 using FasTnT.Domain.Commands;
 using FasTnT.Parsers.Xml.Capture;
 using FasTnT.Parsers.Xml.Formatters;
-using FasTnT.Parsers.Xml.Parsers.Query;
 using System;
 using System.IO;
 using System.Threading;

@@ -1,6 +1,5 @@
 ﻿using FasTnT.Domain.Model.Subscriptions;
 using System;
-using System.Security.Cryptography;
 
 namespace FasTnT.Data.PostgreSql.DTOs.Subscriptions
 {
