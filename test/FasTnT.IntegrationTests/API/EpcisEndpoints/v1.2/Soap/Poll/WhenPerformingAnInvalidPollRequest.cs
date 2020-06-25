@@ -24,26 +24,26 @@ namespace FasTnT.IntegrationTests.API.EpcisEndpoints.v1_2.XML.ListSubscriptionID
         public void ItShouldReturnHttp400BadRequest() => Assert.AreEqual(HttpStatusCode.BadRequest, Result.StatusCode);
 
         [Assert]
-        public void ItShouldReturnANotNullContent()
+        public async Task ItShouldReturnANotNullContent()
         {
-            var content = Result.Content.ReadAsStringAsync().Result;
+            var content = await Result.Content.ReadAsStringAsync();
 
             Assert.IsNotNull(content);
         }
 
         [Assert]
-        public void ItShouldReturnAValidXmlContent()
+        public async Task ItShouldReturnAValidXmlContent()
         {
-            var content = Result.Content.ReadAsStringAsync().Result;
+            var content = await Result.Content.ReadAsStringAsync();
             var xmlDocument = XDocument.Parse(content);
 
             Assert.IsNotNull(xmlDocument);
         }
 
         [Assert]
-        public void ItShouldReturnANoSuchNameExceptionResult()
+        public async Task ItShouldReturnANoSuchNameExceptionResult()
         {
-            var content = Result.Content.ReadAsStringAsync().Result;
+            var content = await Result.Content.ReadAsStringAsync();
             var xmlDocument = XDocument.Parse(content);
             var soapBody = xmlDocument.Root.Element(XName.Get("Body", "http://schemas.xmlsoap.org/soap/envelope/"));
 

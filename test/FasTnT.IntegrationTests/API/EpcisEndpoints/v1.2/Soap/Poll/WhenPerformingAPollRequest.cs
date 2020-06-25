@@ -15,6 +15,7 @@ namespace FasTnT.IntegrationTests.API.EpcisEndpoints.v1_2.XML.ListSubscriptionID
     {
         public override async Task Act()
         {
+
             Client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Basic", "YWRtaW46UEBzc3cwcmQ=");
             Result = await Client.PostAsync("/v1_2/Query.svc", new StringContent(File.ReadAllText("Requests/Queries/Poll.xml"), Encoding.UTF8, "application/xml"));
         }
@@ -23,17 +24,17 @@ namespace FasTnT.IntegrationTests.API.EpcisEndpoints.v1_2.XML.ListSubscriptionID
         public void ItShouldReturnHttp200OK() => Assert.AreEqual(HttpStatusCode.OK, Result.StatusCode);
 
         [Assert]
-        public void ItShouldReturnANotNullContent()
+        public async Task ItShouldReturnANotNullContent()
         {
-            var content = Result.Content.ReadAsStringAsync().Result;
+            var content = await Result.Content.ReadAsStringAsync();
 
             Assert.IsNotNull(content);
         }
 
         [Assert]
-        public void ItShouldReturnAValidXmlContent()
+        public async Task ItShouldReturnAValidXmlContent()
         {
-            var content = Result.Content.ReadAsStringAsync().Result;
+            var content = await Result.Content.ReadAsStringAsync();
             var xmlDocument = XDocument.Parse(content);
 
             Assert.IsNotNull(xmlDocument);

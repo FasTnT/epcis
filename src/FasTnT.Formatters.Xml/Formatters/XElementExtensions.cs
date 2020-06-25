@@ -16,7 +16,8 @@ namespace FasTnT.Parsers.Xml.Formatters
         public static void AddIfNotNull(this XElement destination, IEnumerable<XElement> children)
         {
             if (children == null || !children.Any()) return;
-            if (!children.Any(x => !x.IsEmpty)) return;
+            if (children.All(x => x.IsEmpty)) return;
+
             destination.Add(children.Where(x => !x.IsEmpty));
         }
     }

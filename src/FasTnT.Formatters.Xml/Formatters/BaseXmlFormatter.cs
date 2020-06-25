@@ -42,12 +42,30 @@ namespace FasTnT.Parsers.Xml.Formatters
             }
         }
 
-        public abstract XDocument FormatInternal(GetStandardVersionResponse response);
-        public abstract XDocument FormatInternal(GetVendorVersionResponse response);
-        public abstract XDocument FormatInternal(ExceptionResponse response);
-        public abstract XDocument FormatInternal(GetQueryNamesResponse response);
-        public abstract XDocument FormatInternal(GetSubscriptionIdsResponse response);
-        public abstract XDocument FormatInternal(PollResponse response);
+        internal abstract XDocument WrapResponse(XElement response);
+
+        public XDocument FormatInternal(GetStandardVersionResponse response)
+            => WrapResponse(new XElement(XName.Get("GetStandardVersionResult", EpcisNamespaces.Query), response.Version));
+
+        public XDocument FormatInternal(GetVendorVersionResponse response)
+            => WrapResponse(new XElement(XName.Get("GetVendorVersionResult", EpcisNamespaces.Query), response.Version));
+
+        public XDocument FormatInternal(GetQueryNamesResponse response)
+            => WrapResponse(new XElement(XName.Get("GetQueryNamesResult", EpcisNamespaces.Query), response.QueryNames.Select(x => new XElement("string", x))));
+
+        public XDocument FormatInternal(GetSubscriptionIdsResponse response)
+            => WrapResponse(new XElement(XName.Get("GetSubscriptionIDsResult", EpcisNamespaces.Query), response.SubscriptionIds.Select(x => new XElement("string", x))));
+
+        public XDocument FormatInternal(PollResponse response)
+            => WrapResponse(FormatPollResponse(response));
+
+        public XDocument FormatInternal(ExceptionResponse response)
+        {
+            var reason = !string.IsNullOrEmpty(response.Reason) ? new XElement("reason", response.Reason) : null;
+            var severity = (response.Severity != null) ? new XElement("severity", response.Severity.DisplayName) : null;
+
+            return WrapResponse(new XElement(response.Exception, reason, severity));
+        }
 
         protected static XElement FormatPollResponse(PollResponse response)
         {
