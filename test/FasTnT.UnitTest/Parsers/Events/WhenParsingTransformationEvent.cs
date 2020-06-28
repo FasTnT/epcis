@@ -6,46 +6,39 @@ using System.Xml.Linq;
 
 namespace FasTnT.UnitTest.Parsers.Events
 {
-	[TestClass]
-    public class WhenParsingTransactionEvent : XmlEventParserTestBase
+    [TestClass]
+    public class WhenParsingTransformationEvent : XmlEventParserTestBase
     {
         public override void Given()
         {
             XmlEventList = XElement.Parse(@"<EventList>
-    <TransactionEvent>
+<extension>
+    <TransformationEvent>
 		<eventTime>2018-06-12T06:31:32Z</eventTime>
 		<eventTimeZoneOffset>-04:00</eventTimeZoneOffset>
-		<action>ADD</action>
-		<parentID>urn:epc:id:sscc:005434.40000000021</parentID>
+		<transformationID>transformationID</transformationID>
 		<bizTransactionList>
 			<bizTransaction type=""urn:epcglobal:cbv:btt:desadv"">urn:epcglobal:cbv:bt:8779891013658:H9022413</bizTransaction>
-			<bizTransaction type=""urn:epcglobal:cbv:btt:po"">urn:epcglobal:cbv:bt:8811891013778:PO654321</bizTransaction>
 		</bizTransactionList>
-		<epcList>
+		<sourceList>
+			<source type=""urn:epcglobal:cbv:sdt:owning_party"">urn:epc:id:sgln:088202.867701.0</source>
+		</sourceList>
+		<destinationList>
+			<destination type=""urn:epcglobal:cbv:sdt:owning_party"">urn:epc:id:sgln:8887777.01384.0</destination>
+		</destinationList>
+		<inputEPCList>
 			<epc>urn:epc:id:sgtin:005434.5121000.02</epc>
-		</epcList>
+		</inputEPCList>
+		<outputEPCList>
+			<epc>urn:epc:id:sgtin:005434.5121000.12</epc>
+		</outputEPCList>
 		<bizStep>urn:epcglobal:cbv:bizstep:receiving</bizStep>
 		<disposition>urn:epcglobal:cbv:disp:ready</disposition>
 		<readPoint>
 			<id>urn:epc:id:sgln:9997777.01994.1</id>
 		</readPoint>
-		<extension>
-			<quantityList>
-				<quantityElement>
-					<epcClass>urn:epc:id:lgtin:005434.5121010</epcClass>
-					<quantity>5.52</quantity>
-					<uom>KGM</uom>
-				</quantityElement>
-			</quantityList>
-			<sourceList>
-				<source type=""urn:epcglobal:cbv:sdt:owning_party"">urn:epc:id:sgln:088202.867701.0</source>
-			</sourceList>
-			<destinationList>
-				<destination type=""urn:epcglobal:cbv:sdt:owning_party"">urn:epc:id:sgln:8887777.01384.0</destination>
-			</destinationList>
-		</extension>
-		<customField xmlns=""https://fastnt.io/epcis/tx"">value</customField>
-	</TransactionEvent>
+	</TransformationEvent>
+</extension>
 </EventList>");
         }
 
@@ -59,7 +52,7 @@ namespace FasTnT.UnitTest.Parsers.Events
 		public void TheEventShouldBeCorrect()
 		{
 			var epcisEvent = Events.First();
-			Assert.AreEqual(EventType.Transaction, epcisEvent.Type);
+			Assert.AreEqual(EventType.Transformation, epcisEvent.Type);
 		}
 
 		[TestMethod]
@@ -77,21 +70,27 @@ namespace FasTnT.UnitTest.Parsers.Events
 		}
 
 		[TestMethod]
-		public void TheEpcsShouldBeParsedSuccessfully()
+		public void TheTransformationIDShouldBeParsed()
 		{
 			var epcisEvent = Events.First();
-			Assert.AreEqual(3, epcisEvent.Epcs.Count);
-
-			Assert.IsTrue(epcisEvent.Epcs.Any(x => x.Type == EpcType.ParentId && x.Id == "urn:epc:id:sscc:005434.40000000021"), "parentID field was not parsed correctly");
-			Assert.IsTrue(epcisEvent.Epcs.Any(x => x.Type == EpcType.List && x.Id == "urn:epc:id:sgtin:005434.5121000.02"), "epcList field was not parsed correctly");
-			Assert.IsTrue(epcisEvent.Epcs.Any(x => x.Type == EpcType.Quantity && x.Id == "urn:epc:id:lgtin:005434.5121010" && x.IsQuantity && x.Quantity == 5.52f && x.UnitOfMeasure == "KGM"), "quantityList field was not parsed correctly");
+			Assert.AreEqual("transformationID", epcisEvent.TransformationId);
 		}
 
 		[TestMethod]
-		public void TheActionShouldBeParsedCorrectly()
+		public void TheEpcsShouldBeParsedSuccessfully()
 		{
 			var epcisEvent = Events.First();
-			Assert.AreEqual(EventAction.Add, epcisEvent.Action);
+			Assert.AreEqual(2, epcisEvent.Epcs.Count);
+
+			Assert.IsTrue(epcisEvent.Epcs.Any(x => x.Type == EpcType.InputEpc && x.Id == "urn:epc:id:sgtin:005434.5121000.02"), "inputEPCList field was not parsed correctly");
+			Assert.IsTrue(epcisEvent.Epcs.Any(x => x.Type == EpcType.OutputEpc && x.Id == "urn:epc:id:sgtin:005434.5121000.12"), "outputEPCList field was not parsed correctly");
+		}
+
+		[TestMethod]
+		public void TheActionShouldBeNull()
+		{
+			var epcisEvent = Events.First();
+			Assert.AreEqual(null, epcisEvent.Action);
 		}
 
 		[TestMethod]
@@ -120,9 +119,8 @@ namespace FasTnT.UnitTest.Parsers.Events
 		{
 			var epcisEvent = Events.First();
 
-			Assert.AreEqual(2, epcisEvent.BusinessTransactions.Count);
+			Assert.AreEqual(1, epcisEvent.BusinessTransactions.Count);
 			Assert.IsTrue(epcisEvent.BusinessTransactions.Any(x => x.Id == "urn:epcglobal:cbv:bt:8779891013658:H9022413" && x.Type == "urn:epcglobal:cbv:btt:desadv"), "Missing bizTransaction: urn:epcglobal:cbv:btt:desadv, urn:epcglobal:cbv:bt:8779891013658:H9022413");
-			Assert.IsTrue(epcisEvent.BusinessTransactions.Any(x => x.Id == "urn:epcglobal:cbv:bt:8811891013778:PO654321" && x.Type == "urn:epcglobal:cbv:btt:po"), "Missing bizTransaction: urn:epcglobal:cbv:btt:po, urn:epcglobal:cbv:bt:8811891013778:PO654321");
 		}
 
 		[TestMethod]
@@ -134,14 +132,5 @@ namespace FasTnT.UnitTest.Parsers.Events
 			Assert.IsTrue(epcisEvent.SourceDestinationList.Any(x => x.Direction == SourceDestinationType.Source && x.Type == "urn:epcglobal:cbv:sdt:owning_party" && x.Id == "urn:epc:id:sgln:088202.867701.0"), "Missing Source: urn:epcglobal:cbv:sdt:owning_party, urn:epc:id:sgln:088202.867701.0");
 			Assert.IsTrue(epcisEvent.SourceDestinationList.Any(x => x.Direction == SourceDestinationType.Destination && x.Type == "urn:epcglobal:cbv:sdt:owning_party" && x.Id == "urn:epc:id:sgln:8887777.01384.0"), "Missing Destination: urn:epcglobal:cbv:sdt:owning_party, urn:epc:id:sgln:8887777.01384.0");
 		}
-
-		[TestMethod]
-		public void TheCustomFieldsShouldBeParsedCorrectly()
-		{
-			var epcisEvent = Events.First();
-
-			Assert.AreEqual(1, epcisEvent.CustomFields.Count);
-			Assert.IsTrue(epcisEvent.CustomFields.Any(x => x.Type == FieldType.CustomField && x.Namespace == "https://fastnt.io/epcis/tx" && x.Name == "customField"), "Missing customField: https://fastnt.io/epcis/tx#customField");
-			Assert.AreEqual("value", epcisEvent.CustomFields.First().TextValue);
-		}
-    }}
+    }
+}

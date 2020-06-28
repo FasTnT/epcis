@@ -79,7 +79,7 @@ namespace FasTnT.Formatters.Xml.Parsers.Capture.Events
 
         public static EpcisEvent ParseAggregationEvent(XElement eventRoot)
         {
-            var epcisEvent = ParseBase(eventRoot, EventType.Quantity);
+            var epcisEvent = ParseBase(eventRoot, EventType.Aggregation);
 
             epcisEvent.Action = Enumeration.GetByDisplayName<EventAction>(eventRoot.Element("action").Value);
             ParseParentId(eventRoot.Element("parentID"), epcisEvent);

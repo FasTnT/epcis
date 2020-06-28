@@ -7,36 +7,36 @@ using System.Xml.Linq;
 namespace FasTnT.UnitTest.Parsers.Events
 {
 	[TestClass]
-    public class WhenParsingTransactionEvent : XmlEventParserTestBase
+    public class WhenParsingAggregationEvent : XmlEventParserTestBase
     {
         public override void Given()
         {
             XmlEventList = XElement.Parse(@"<EventList>
-    <TransactionEvent>
+    <AggregationEvent>
 		<eventTime>2018-06-12T06:31:32Z</eventTime>
 		<eventTimeZoneOffset>-04:00</eventTimeZoneOffset>
 		<action>ADD</action>
 		<parentID>urn:epc:id:sscc:005434.40000000021</parentID>
+		<childEPCs>
+			<epc>urn:epc:id:sgtin:005434.5121000.02</epc>
+		</childEPCs>
 		<bizTransactionList>
 			<bizTransaction type=""urn:epcglobal:cbv:btt:desadv"">urn:epcglobal:cbv:bt:8779891013658:H9022413</bizTransaction>
 			<bizTransaction type=""urn:epcglobal:cbv:btt:po"">urn:epcglobal:cbv:bt:8811891013778:PO654321</bizTransaction>
 		</bizTransactionList>
-		<epcList>
-			<epc>urn:epc:id:sgtin:005434.5121000.02</epc>
-		</epcList>
 		<bizStep>urn:epcglobal:cbv:bizstep:receiving</bizStep>
 		<disposition>urn:epcglobal:cbv:disp:ready</disposition>
 		<readPoint>
 			<id>urn:epc:id:sgln:9997777.01994.1</id>
 		</readPoint>
 		<extension>
-			<quantityList>
+			<childQuantityList>
 				<quantityElement>
-					<epcClass>urn:epc:id:lgtin:005434.5121010</epcClass>
-					<quantity>5.52</quantity>
+					<epcClass>urn:epc:id:lgtin:005434.5121011</epcClass>
+					<quantity>6</quantity>
 					<uom>KGM</uom>
 				</quantityElement>
-			</quantityList>
+			</childQuantityList>
 			<sourceList>
 				<source type=""urn:epcglobal:cbv:sdt:owning_party"">urn:epc:id:sgln:088202.867701.0</source>
 			</sourceList>
@@ -44,8 +44,8 @@ namespace FasTnT.UnitTest.Parsers.Events
 				<destination type=""urn:epcglobal:cbv:sdt:owning_party"">urn:epc:id:sgln:8887777.01384.0</destination>
 			</destinationList>
 		</extension>
-		<customField xmlns=""https://fastnt.io/epcis/tx"">value</customField>
-	</TransactionEvent>
+		<customField xmlns=""https://fastnt.io/epcis"">value</customField>
+	</AggregationEvent>
 </EventList>");
         }
 
@@ -59,7 +59,7 @@ namespace FasTnT.UnitTest.Parsers.Events
 		public void TheEventShouldBeCorrect()
 		{
 			var epcisEvent = Events.First();
-			Assert.AreEqual(EventType.Transaction, epcisEvent.Type);
+			Assert.AreEqual(EventType.Aggregation, epcisEvent.Type);
 		}
 
 		[TestMethod]
@@ -83,8 +83,8 @@ namespace FasTnT.UnitTest.Parsers.Events
 			Assert.AreEqual(3, epcisEvent.Epcs.Count);
 
 			Assert.IsTrue(epcisEvent.Epcs.Any(x => x.Type == EpcType.ParentId && x.Id == "urn:epc:id:sscc:005434.40000000021"), "parentID field was not parsed correctly");
-			Assert.IsTrue(epcisEvent.Epcs.Any(x => x.Type == EpcType.List && x.Id == "urn:epc:id:sgtin:005434.5121000.02"), "epcList field was not parsed correctly");
-			Assert.IsTrue(epcisEvent.Epcs.Any(x => x.Type == EpcType.Quantity && x.Id == "urn:epc:id:lgtin:005434.5121010" && x.IsQuantity && x.Quantity == 5.52f && x.UnitOfMeasure == "KGM"), "quantityList field was not parsed correctly");
+			Assert.IsTrue(epcisEvent.Epcs.Any(x => x.Type == EpcType.ChildEpc && x.Id == "urn:epc:id:sgtin:005434.5121000.02"), "childEPCs field was not parsed correctly");
+			Assert.IsTrue(epcisEvent.Epcs.Any(x => x.Type == EpcType.ChildQuantity && x.Id == "urn:epc:id:lgtin:005434.5121011" && x.IsQuantity && x.Quantity == 6f && x.UnitOfMeasure == "KGM"), "quantityList field was not parsed correctly");
 		}
 
 		[TestMethod]
@@ -141,7 +141,7 @@ namespace FasTnT.UnitTest.Parsers.Events
 			var epcisEvent = Events.First();
 
 			Assert.AreEqual(1, epcisEvent.CustomFields.Count);
-			Assert.IsTrue(epcisEvent.CustomFields.Any(x => x.Type == FieldType.CustomField && x.Namespace == "https://fastnt.io/epcis/tx" && x.Name == "customField"), "Missing customField: https://fastnt.io/epcis/tx#customField");
+			Assert.IsTrue(epcisEvent.CustomFields.Any(x => x.Type == FieldType.CustomField && x.Namespace == "https://fastnt.io/epcis" && x.Name == "customField"), "Missing customField: https://fastnt.io/epcis#customField");
 			Assert.AreEqual("value", epcisEvent.CustomFields.First().TextValue);
 		}
     }}
