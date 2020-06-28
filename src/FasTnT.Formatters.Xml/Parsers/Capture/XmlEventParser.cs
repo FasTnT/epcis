@@ -124,7 +124,7 @@ namespace FasTnT.Formatters.Xml.Parsers.Capture.Events
 
         public static EpcisEvent ParseQuantityEvent(XElement eventRoot)
         {
-            var epcisEvent = ParseBase(eventRoot, EventType.Transaction);
+            var epcisEvent = ParseBase(eventRoot, EventType.Quantity);
             var epcQuantity = new Epc
             {
                 Id = eventRoot.Element("epcClass").Value,
