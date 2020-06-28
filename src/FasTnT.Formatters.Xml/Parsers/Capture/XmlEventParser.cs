@@ -3,6 +3,7 @@ using FasTnT.Model.Events;
 using FasTnT.Model.Utils;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Xml.Linq;
 
@@ -101,7 +102,7 @@ namespace FasTnT.Formatters.Xml.Parsers.Capture.Events
 
         public static EpcisEvent ParseTransactionEvent(XElement eventRoot)
         {
-            var epcisEvent = ParseBase(eventRoot, EventType.Quantity);
+            var epcisEvent = ParseBase(eventRoot, EventType.Transaction);
 
             epcisEvent.Action = Enumeration.GetByDisplayName<EventAction>(eventRoot.Element("action").Value);
             ParseParentId(eventRoot.Element("parentID"), epcisEvent);
@@ -128,7 +129,7 @@ namespace FasTnT.Formatters.Xml.Parsers.Capture.Events
             var epcQuantity = new Epc
             {
                 Id = eventRoot.Element("epcClass").Value,
-                Quantity = float.Parse(eventRoot.Element("quantity").Value),
+                Quantity = float.Parse(eventRoot.Element("quantity").Value, NumberStyles.AllowDecimalPoint, new CultureInfo("en-GB")),
                 IsQuantity = true,
                 Type = EpcType.Quantity
             };
@@ -224,7 +225,7 @@ namespace FasTnT.Formatters.Xml.Parsers.Capture.Events
             {
                 Id = x.Element("epcClass").Value,
                 IsQuantity = true,
-                Quantity = float.TryParse(x.Element("quantity")?.Value, out float quantity) ? quantity : default(float?),
+                Quantity = float.TryParse(x.Element("quantity")?.Value, NumberStyles.AllowDecimalPoint, new CultureInfo("en-GB"), out float quantity) ? quantity : default(float?),
                 UnitOfMeasure = x.Element("uom")?.Value,
                 Type = type
             }));
