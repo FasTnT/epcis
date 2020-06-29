@@ -6,7 +6,7 @@ using System.Xml.Linq;
 
 namespace FasTnT.UnitTest.Parsers.Events
 {
-	[TestClass]
+    [TestClass]
     public class WhenParsingObjectEvent : XmlEventParserTestBase
     {
         public override void Given()
@@ -35,6 +35,9 @@ namespace FasTnT.UnitTest.Parsers.Events
 			<destinationList>
 				<destination type=""urn:epcglobal:cbv:sdt:owning_party"">urn:epc:id:sgln:8887777.01384.0</destination>
 			</destinationList>
+			<ilmd>
+				<weight xmlns=""https://fastnt.io/cbv"">15</weight>
+			</ilmd>
 		</extension>
 		<customField xmlns=""https://fastnt.io/epcis"">Customfield value</customField>
 	</ObjectEvent>
@@ -128,9 +131,19 @@ namespace FasTnT.UnitTest.Parsers.Events
 		{
 			var epcisEvent = Events.First();
 
-			Assert.AreEqual(1, epcisEvent.CustomFields.Count);
+			Assert.AreEqual(1, epcisEvent.CustomFields.Count(x => x.Type == FieldType.CustomField));
 			Assert.IsTrue(epcisEvent.CustomFields.Any(x => x.Type == FieldType.CustomField && x.Namespace == "https://fastnt.io/epcis" && x.Name == "customField"), "Missing customField: https://fastnt.io/epcis#customField");
-			Assert.AreEqual("Customfield value", epcisEvent.CustomFields.First().TextValue);
+			Assert.AreEqual("Customfield value", epcisEvent.CustomFields.First(x => x.Type == FieldType.CustomField).TextValue);
+		}
+
+		[TestMethod]
+		public void TheIlmdShouldBeParsedCorrectly()
+		{
+			var epcisEvent = Events.First();
+
+			Assert.AreEqual(1, epcisEvent.CustomFields.Count(x => x.Type == FieldType.Ilmd));
+			Assert.IsTrue(epcisEvent.CustomFields.Any(x => x.Type == FieldType.Ilmd && x.Namespace == "https://fastnt.io/cbv" && x.Name == "weight"), "Missing customField: https://fastnt.io/cbv#weight");
+			Assert.AreEqual("15", epcisEvent.CustomFields.First(x => x.Type == FieldType.Ilmd).TextValue);
 		}
     }
 }
