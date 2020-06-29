@@ -3,6 +3,7 @@ using FasTnT.Model.Events;
 using FasTnT.Model.Utils;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Xml.Linq;
 
@@ -49,7 +50,7 @@ namespace FasTnT.Formatters.Xml.Parsers.Capture.Events
             }
             else
             {
-                throw new Exception($"Element '{element.Name.LocalName}' not expected in this context");
+                throw new Exception($"Element '{eventElement.Name.LocalName}' not expected in this context");
             }
         }
 
@@ -78,7 +79,7 @@ namespace FasTnT.Formatters.Xml.Parsers.Capture.Events
 
         public static EpcisEvent ParseAggregationEvent(XElement eventRoot)
         {
-            var epcisEvent = ParseBase(eventRoot, EventType.Quantity);
+            var epcisEvent = ParseBase(eventRoot, EventType.Aggregation);
 
             epcisEvent.Action = Enumeration.GetByDisplayName<EventAction>(eventRoot.Element("action").Value);
             ParseParentId(eventRoot.Element("parentID"), epcisEvent);
@@ -101,7 +102,7 @@ namespace FasTnT.Formatters.Xml.Parsers.Capture.Events
 
         public static EpcisEvent ParseTransactionEvent(XElement eventRoot)
         {
-            var epcisEvent = ParseBase(eventRoot, EventType.Quantity);
+            var epcisEvent = ParseBase(eventRoot, EventType.Transaction);
 
             epcisEvent.Action = Enumeration.GetByDisplayName<EventAction>(eventRoot.Element("action").Value);
             ParseParentId(eventRoot.Element("parentID"), epcisEvent);
@@ -124,11 +125,11 @@ namespace FasTnT.Formatters.Xml.Parsers.Capture.Events
 
         public static EpcisEvent ParseQuantityEvent(XElement eventRoot)
         {
-            var epcisEvent = ParseBase(eventRoot, EventType.Transaction);
+            var epcisEvent = ParseBase(eventRoot, EventType.Quantity);
             var epcQuantity = new Epc
             {
                 Id = eventRoot.Element("epcClass").Value,
-                Quantity = float.Parse(eventRoot.Element("quantity").Value),
+                Quantity = float.Parse(eventRoot.Element("quantity").Value, NumberStyles.AllowDecimalPoint, new CultureInfo("en-GB")),
                 IsQuantity = true,
                 Type = EpcType.Quantity
             };
@@ -224,7 +225,7 @@ namespace FasTnT.Formatters.Xml.Parsers.Capture.Events
             {
                 Id = x.Element("epcClass").Value,
                 IsQuantity = true,
-                Quantity = float.TryParse(x.Element("quantity")?.Value, out float quantity) ? quantity : default(float?),
+                Quantity = float.TryParse(x.Element("quantity")?.Value, NumberStyles.AllowDecimalPoint, new CultureInfo("en-GB"), out float quantity) ? quantity : default(float?),
                 UnitOfMeasure = x.Element("uom")?.Value,
                 Type = type
             }));
@@ -314,12 +315,12 @@ namespace FasTnT.Formatters.Xml.Parsers.Capture.Events
                 Name = element.Name.LocalName,
                 Namespace = element.Name.NamespaceName,
                 TextValue = element.HasElements ? default : element.Value,
-                NumericValue = element.HasElements ? default : float.TryParse(element.Value, out float floatValue) ? floatValue : default(float?),
+                NumericValue = element.HasElements ? default : float.TryParse(element.Value, NumberStyles.AllowDecimalPoint, new CultureInfo("en-GB"), out float floatValue) ? floatValue : default(float?),
                 DateValue = element.HasElements ? default : DateTime.TryParse(element.Value, out DateTime dateValue) ? dateValue : default(DateTime?)
             };
 
             field.Children.AddRange(element.Elements().Select(x => ParseCustomFields(x, fieldType)));
-            field.Children.AddRange(element.Attributes().Select(ParseAttribute));
+            field.Children.AddRange(element.Attributes().Where(x => !x.IsNamespaceDeclaration).Select(ParseAttribute));
 
             return field;
         }
@@ -332,7 +333,7 @@ namespace FasTnT.Formatters.Xml.Parsers.Capture.Events
                 Name = element.Name.LocalName,
                 Namespace = element.Name.NamespaceName,
                 TextValue = element.Value,
-                NumericValue = float.TryParse(element.Value, out float floatValue) ? floatValue : default(float?),
+                NumericValue = float.TryParse(element.Value, NumberStyles.AllowDecimalPoint, new CultureInfo("en-GB"), out float floatValue) ? floatValue : default(float?),
                 DateValue = DateTime.TryParse(element.Value, out DateTime dateValue) ? dateValue : default(DateTime?)
             };
         }
