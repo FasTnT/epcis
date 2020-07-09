@@ -13,12 +13,13 @@ namespace FasTnT.Domain.Model.Subscriptions
 
         public static bool IsValid(QuerySchedule schedule)
         {
-            return SecondRegex.IsMatch(schedule.Second)
+            return schedule == null
+                || (SecondRegex.IsMatch(schedule.Second)
                 && MinuteRegex.IsMatch(schedule.Minute)
                 && HourRegex.IsMatch(schedule.Hour)
                 && DayOfMonthRegex.IsMatch(schedule.DayOfMonth)
                 && MonthRegex.IsMatch(schedule.Month)
-                && DayOfWeekRegex.IsMatch(schedule.DayOfWeek);
+                && DayOfWeekRegex.IsMatch(schedule.DayOfWeek));
         }
 
         private readonly static Regex SecondRegex = BuildRegex("[0-9]|([0-5][0-9])");
