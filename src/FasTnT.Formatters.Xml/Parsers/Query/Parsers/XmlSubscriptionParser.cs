@@ -38,12 +38,12 @@ namespace FasTnT.Parsers.Xml.Query
         {
             return element == default ? null : new QuerySchedule
             {
-                Second = element.Element("second")?.Value,
-                Minute = element.Element("minute")?.Value,
-                Hour = element.Element("hour")?.Value,
-                Month = element.Element("month")?.Value,
-                DayOfMonth = element.Element("dayOfMonth")?.Value,
-                DayOfWeek = element.Element("dayOfWeek")?.Value
+                Second = element.Element("second")?.Value ?? string.Empty,
+                Minute = element.Element("minute")?.Value ?? string.Empty,
+                Hour = element.Element("hour")?.Value ?? string.Empty,
+                Month = element.Element("month")?.Value ?? string.Empty,
+                DayOfMonth = element.Element("dayOfMonth")?.Value ?? string.Empty,
+                DayOfWeek = element.Element("dayOfWeek")?.Value ?? string.Empty
             };
         }
     }

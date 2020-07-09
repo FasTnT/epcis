@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace FasTnT.Domain.Subscriptions
+namespace FasTnT.Subscriptions.Schedule
 {
     public class ScheduleEntry
     {
