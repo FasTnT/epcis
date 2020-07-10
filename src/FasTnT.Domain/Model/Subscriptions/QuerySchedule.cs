@@ -33,7 +33,7 @@ namespace FasTnT.Domain.Model.Subscriptions
         {
             var element = $@"(({range})|(\[({range})\-({range})\]))";
 
-            return new Regex($@"^({element}((\,{element})+)?)?$");
+            return new Regex($@"^({element}((\,{element})+)?)?$", RegexOptions.Compiled);
         }
     }
 }
