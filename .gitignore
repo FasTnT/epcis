@@ -46,7 +46,5 @@ bin
 obj
 src/*.dll
 test/*.dll
-packages
 *.suo
 *.user
-src/connectionStrings.shared.config
