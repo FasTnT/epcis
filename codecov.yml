@@ -1,2 +1,3 @@
 ignore:
   - "src/FasTnT.Data.PostgreSql"
+  - "src/FasTnT.Host"
