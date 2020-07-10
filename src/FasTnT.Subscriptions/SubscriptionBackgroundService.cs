@@ -1,6 +1,5 @@
 ﻿using FasTnT.Domain.Data;
 using FasTnT.Domain.Model.Subscriptions;
-using FasTnT.Domain.Subscriptions;
 using Microsoft.Extensions.Hosting;
 using System;
 using System.Collections.Concurrent;
@@ -10,6 +9,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using MoreLinq;
+using FasTnT.Subscriptions.Schedule;
 
 namespace FasTnT.Subscriptions
 {

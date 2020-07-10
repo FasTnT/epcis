@@ -1,5 +1,5 @@
 ﻿using FasTnT.Domain.Model.Subscriptions;
-using FasTnT.Domain.Subscriptions;
+using FasTnT.Subscriptions.Schedule;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 

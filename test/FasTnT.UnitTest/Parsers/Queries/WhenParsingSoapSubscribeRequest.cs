@@ -23,11 +23,11 @@ namespace FasTnT.UnitTest.Parsers.Soap
             var subscribe = (SubscribeRequest)Result;
 
             Assert.AreEqual("0", subscribe.Subscription.Schedule.Second);
-            Assert.IsNull(subscribe.Subscription.Schedule.DayOfMonth);
-            Assert.IsNull(subscribe.Subscription.Schedule.DayOfWeek);
-            Assert.IsNull(subscribe.Subscription.Schedule.Hour);
-            Assert.IsNull(subscribe.Subscription.Schedule.Minute);
-            Assert.IsNull(subscribe.Subscription.Schedule.Month);
+            Assert.AreEqual(string.Empty, subscribe.Subscription.Schedule.DayOfMonth);
+            Assert.AreEqual(string.Empty, subscribe.Subscription.Schedule.DayOfWeek);
+            Assert.AreEqual(string.Empty, subscribe.Subscription.Schedule.Hour);
+            Assert.AreEqual(string.Empty, subscribe.Subscription.Schedule.Minute);
+            Assert.AreEqual(string.Empty, subscribe.Subscription.Schedule.Month);
         }
 
         [TestMethod]

@@ -13,10 +13,10 @@ namespace FasTnT.Model.Events
         private static string ComputeRepresentation(int value)
         {
             var sign = value >= 0 ? "+" : "-";
-            var hours = (Math.Abs(value) / 60).ToString("D2", CultureInfo.InvariantCulture);
-            var minutes = (Math.Abs(value % 60)).ToString("D2", CultureInfo.InvariantCulture);
+            var hours = (Math.Abs(value) / 60).ToString("D2");
+            var minutes = (Math.Abs(value % 60)).ToString("D2");
 
-            return string.Format(CultureInfo.InvariantCulture, "{0}{1}:{2}", sign, hours, minutes);
+            return string.Format("{0}{1}:{2}", sign, hours, minutes);
         }
 
         private static short ComputeValue(string value)
@@ -24,7 +24,7 @@ namespace FasTnT.Model.Events
             var sign = (value[0] == '-') ? -1 : +1;
             var parts = value.Split(':');
 
-            return (short)(sign * (Math.Abs(int.Parse(parts[0], CultureInfo.InvariantCulture)) * 60 + int.Parse(parts[1], CultureInfo.InvariantCulture)));
+            return (short)(sign * (Math.Abs(int.Parse(parts[0])) * 60 + int.Parse(parts[1])));
         }
     }
 }
