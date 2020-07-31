@@ -83,7 +83,7 @@ namespace FasTnT.Domain.Queries
 
                     if (parameter.Name == "maxEventCount")
                     {
-                        maxEventCount = parameter.GetValue<int>();
+                        maxEventCount = parameter.GetValue<int>()+1;
                     }
                 }
                 else
@@ -94,7 +94,7 @@ namespace FasTnT.Domain.Queries
 
             var result = await _eventFetcher.Fetch(cancellationToken);
 
-            if (maxEventCount.HasValue && result.Count() == maxEventCount)
+            if (maxEventCount.HasValue && result.Count() >= maxEventCount)
             {
                 throw new EpcisException(ExceptionType.QueryTooLargeException, $"Query returned more than the {maxEventCount} events allowed.");
             }
