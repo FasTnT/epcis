@@ -230,8 +230,8 @@ namespace FasTnT.Parsers.Xml.Formatters
 
         private static void AddCommonEventFields(EpcisEvent evt, XElement xmlEvent)
         {
-            xmlEvent.Add(new XElement("eventTime", evt.EventTime));
-            xmlEvent.Add(new XElement("recordTime", evt.CaptureTime));
+            xmlEvent.Add(new XElement("eventTime", evt.EventTime.ToString("yyyy-MM-ddTHH:mm:ssZ")));
+            xmlEvent.Add(new XElement("recordTime", evt.CaptureTime.ToString("yyyy-MM-ddTHH:mm:ssZ")));
             xmlEvent.Add(new XElement("eventTimeZoneOffset", evt.EventTimeZoneOffset.Representation));
             xmlEvent.AddIfNotNull(CreateBaseExtension(evt));
         }
