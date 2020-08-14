@@ -7,9 +7,9 @@ using System.Xml.Linq;
 
 namespace FasTnT.Parsers.Xml.Capture
 {
-    internal static class XmlEpcisDocumentParser
+    public static class XmlEpcisDocumentParser
     {
-        internal static EpcisRequest Parse(XElement root)
+        public static EpcisRequest Parse(XElement root)
         {
             var request = new EpcisRequest
             {
