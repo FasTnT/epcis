@@ -14,60 +14,53 @@ namespace FasTnT.Parsers.Xml.Formatters
     {
         private const SaveOptions Options = SaveOptions.DisableFormatting | SaveOptions.OmitDuplicateNamespaces;
 
-        public async Task Write(IEpcisResponse entity, Stream output, CancellationToken cancellationToken)
+        public async Task Write(IEpcisResponse response, Stream output, CancellationToken cancellationToken)
         {
-            if (entity == default || entity is EmptyResponse) return;
+            if (response == default || response is EmptyResponse) return;
 
-            await Format(entity).SaveAsync(output, Options, cancellationToken);
+            var formattedResponse = Format(response);
+            var wrappedResponse = WrapResponse(formattedResponse);
+
+            await wrappedResponse.SaveAsync(output, Options, cancellationToken);
         }
 
-        private XDocument Format(IEpcisResponse entity)
+        private XElement Format(IEpcisResponse entity)
         {
-            switch (entity)
+            return entity switch
             {
-                case GetStandardVersionResponse getStandardVersionResponse:
-                    return FormatInternal(getStandardVersionResponse);
-                case GetVendorVersionResponse getVendorVersionResponse:
-                    return FormatInternal(getVendorVersionResponse);
-                case ExceptionResponse exceptionResponse:
-                    return FormatInternal(exceptionResponse);
-                case GetQueryNamesResponse getQueryNamesResponse:
-                    return FormatInternal(getQueryNamesResponse);
-                case GetSubscriptionIdsResponse getSubscriptionIdsResponse:
-                    return FormatInternal(getSubscriptionIdsResponse);
-                case PollResponse pollResponse:
-                    return FormatInternal(pollResponse);
-                default:
-                    throw new NotImplementedException($"Unable to format '{entity.GetType()}'");
-            }
+                GetStandardVersionResponse standardVersion => FormatGetStandardVersionResponse(standardVersion),
+                GetVendorVersionResponse vendorVersion => FormatGetVendorVersionResponse(vendorVersion),
+                ExceptionResponse exception => FormatInternal(exception),
+                GetQueryNamesResponse queryNames => FormatGetQueryNamesResponse(queryNames),
+                GetSubscriptionIdsResponse subscriptionIds => FormatGetSubscriptionIdsResponse(subscriptionIds),
+                PollResponse poll => FormatPollResponse(poll),
+                _ => throw new NotImplementedException($"Unable to format '{entity.GetType()}'")
+            };
         }
 
         internal abstract XDocument WrapResponse(XElement response);
 
-        public XDocument FormatInternal(GetStandardVersionResponse response)
-            => WrapResponse(new XElement(XName.Get("GetStandardVersionResult", EpcisNamespaces.Query), response.Version));
-
-        public XDocument FormatInternal(GetVendorVersionResponse response)
-            => WrapResponse(new XElement(XName.Get("GetVendorVersionResult", EpcisNamespaces.Query), response.Version));
-
-        public XDocument FormatInternal(GetQueryNamesResponse response)
-            => WrapResponse(new XElement(XName.Get("GetQueryNamesResult", EpcisNamespaces.Query), response.QueryNames.Select(x => new XElement("string", x))));
-
-        public XDocument FormatInternal(GetSubscriptionIdsResponse response)
-            => WrapResponse(new XElement(XName.Get("GetSubscriptionIDsResult", EpcisNamespaces.Query), response.SubscriptionIds.Select(x => new XElement("string", x))));
-
-        public XDocument FormatInternal(PollResponse response)
-            => WrapResponse(FormatPollResponse(response));
-
-        public XDocument FormatInternal(ExceptionResponse response)
+        private XElement FormatGetStandardVersionResponse(GetStandardVersionResponse response)
         {
-            var reason = !string.IsNullOrEmpty(response.Reason) ? new XElement("reason", response.Reason) : null;
-            var severity = (response.Severity != null) ? new XElement("severity", response.Severity.DisplayName) : null;
-
-            return WrapResponse(new XElement(response.Exception, reason, severity));
+            return new XElement(ElementName("GetStandardVersionResult"), response.Version);
         }
 
-        protected static XElement FormatPollResponse(PollResponse response)
+        private XElement FormatGetVendorVersionResponse(GetVendorVersionResponse response)
+        {
+            return new XElement(ElementName("GetVendorVersionResult"), response.Version);
+        }
+
+        private XElement FormatGetQueryNamesResponse(GetQueryNamesResponse response)
+        {
+            return new XElement(ElementName("GetQueryNamesResult"), response.QueryNames.Select(x => new XElement("string", x)));
+        }
+
+        private XElement FormatGetSubscriptionIdsResponse(GetSubscriptionIdsResponse response)
+        {
+            return new XElement(ElementName("GetSubscriptionIDsResult"), response.SubscriptionIds.Select(x => new XElement("string", x))); 
+        }
+
+        private XElement FormatPollResponse(PollResponse response)
         {
             var resultName = "EventList";
             var resultList = default(IEnumerable<XElement>);
@@ -83,11 +76,23 @@ namespace FasTnT.Parsers.Xml.Formatters
                 resultList = XmlMasterdataFormatter.FormatMasterData(response.MasterdataList);
             }
 
-            return new XElement(XName.Get("QueryResults", EpcisNamespaces.Query),
+            var unwrappedResponse = new XElement(ElementName("QueryResults"),
                 new XElement("queryName", response.QueryName),
                 !string.IsNullOrEmpty(response.SubscriptionId) ? new XElement("subscriptionID", response.SubscriptionId) : null,
                 new XElement("resultsBody", new XElement(resultName, resultList))
             );
+
+            return unwrappedResponse;
         }
+
+        private XElement FormatInternal(ExceptionResponse response)
+        {
+            var reason = !string.IsNullOrEmpty(response.Reason) ? new XElement("reason", response.Reason) : null;
+            var severity = (response.Severity != null) ? new XElement("severity", response.Severity.DisplayName) : null;
+
+            return new XElement(response.Exception, reason, severity);
+        }
+
+        private XName ElementName(string localName) => XName.Get(localName, EpcisNamespaces.Query);
     }
 }

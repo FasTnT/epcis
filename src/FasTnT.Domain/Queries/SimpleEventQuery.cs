@@ -76,7 +76,6 @@ namespace FasTnT.Domain.Queries
 
             foreach (var parameter in parameters)
             {
-
                 if (IsSimpleParameter(parameter, out Action<IEventFetcher, QueryParameter> action) || IsRegexParameter(parameter, out action))
                 {
                     ApplyParameter(action, parameter);
