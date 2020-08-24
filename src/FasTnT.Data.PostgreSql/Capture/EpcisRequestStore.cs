@@ -8,6 +8,7 @@ using FasTnT.Model.Headers;
 using FasTnT.Model.MasterDatas;
 using FasTnT.Model.Users;
 using FasTnT.PostgreSql.DapperConfiguration;
+using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Threading;
@@ -30,22 +31,10 @@ namespace FasTnT.PostgreSql.Capture
             {
                 var requestId = await StoreHeader(request, context.User, tx, cancellationToken);
 
-                if (request.StandardBusinessHeader != null)
-                {
-                    await StoreStandardBusinessHeader(request.StandardBusinessHeader, requestId, tx, cancellationToken);
-                }
-                if (request.SubscriptionCallback != null)
-                {
-                    await StoreCallbackInformation(request.SubscriptionCallback, requestId, tx, cancellationToken);
-                }
-                if (request.EventList.Any()) 
-                {
-                    await StoreEpcisEvents(request.EventList.ToArray(), tx, requestId, cancellationToken);
-                }
-                if (request.MasterdataList.Any())
-                {
-                    await StoreMasterData(request.MasterdataList.ToArray(), tx, cancellationToken);
-                }
+                await StoreStandardBusinessHeader(request.StandardBusinessHeader, requestId, tx, cancellationToken);
+                await StoreCallbackInformation(request.SubscriptionCallback, requestId, tx, cancellationToken);
+                await StoreEpcisEvents(request.EventList, tx, requestId, cancellationToken);
+                await StoreMasterData(request.MasterdataList, tx, cancellationToken);
 
                 tx.Commit();
             };
@@ -60,6 +49,8 @@ namespace FasTnT.PostgreSql.Capture
 
         private async Task StoreStandardBusinessHeader(StandardBusinessHeader header, int requestId, IDbTransaction transaction, CancellationToken cancellationToken)
         {
+            if (header == default) return;
+            
             var headerDto = StandardHeaderDto.Create(header, requestId);
             var contacts = header.ContactInformations.Select((x, i) => ContactInformationDto.Create(x, requestId, i));
 
@@ -69,16 +60,20 @@ namespace FasTnT.PostgreSql.Capture
 
         private static async Task StoreCallbackInformation(SubscriptionCallback callback, int requestId, IDbTransaction transaction, CancellationToken cancellationToken)
         {
+            if (callback == default) return;
+
             var parameters = SubscriptionCallbackDto.Create(callback, requestId);
 
             await transaction.InsertAsync(parameters, cancellationToken);
         }
 
-        private static async Task StoreEpcisEvents(EpcisEvent[] events, IDbTransaction transaction, int requestId, CancellationToken cancellationToken)
+        private static async Task StoreEpcisEvents(List<EpcisEvent> events, IDbTransaction transaction, int requestId, CancellationToken cancellationToken)
         {
+            if (events.Count == 0) return;
+
             var eventDtoManager = new EventDtoManager();
 
-            for (short eventId = 0; eventId < events.Length; eventId++)
+            for (short eventId = 0; eventId < events.Count; eventId++)
             {
                 eventDtoManager.AddEvent(requestId, eventId, events[eventId]);
             }
@@ -86,11 +81,13 @@ namespace FasTnT.PostgreSql.Capture
             await eventDtoManager.PersistAsync(transaction, cancellationToken);
         }
 
-        private async Task StoreMasterData(EpcisMasterData[] epcisMasterDatas, IDbTransaction tx, CancellationToken cancellationToken)
+        private async Task StoreMasterData(List<EpcisMasterData> epcisMasterDatas, IDbTransaction tx, CancellationToken cancellationToken)
         {
+            if (epcisMasterDatas.Count == 0) return;
+
             var masterDataDtoManager = new MasterdataDtoManager();
 
-            for (short masterdataId = 0; masterdataId < epcisMasterDatas.Length; masterdataId++)
+            for (short masterdataId = 0; masterdataId < epcisMasterDatas.Count; masterdataId++)
             {
                 masterDataDtoManager.AddMasterdata(epcisMasterDatas[masterdataId]);
             }
