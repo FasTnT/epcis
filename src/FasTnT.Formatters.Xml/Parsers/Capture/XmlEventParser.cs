@@ -120,7 +120,7 @@ namespace FasTnT.Formatters.Xml.Parsers.Capture.Events
             ParseEpcQuantityList(element.Element("quantityList"), epcisEvent, EpcType.Quantity);
             ParseSources(element.Element("sourceList"), epcisEvent);
             ParseDestinations(element.Element("destinationList"), epcisEvent);
-            ParseFields(element, epcisEvent, FieldType.Extension);
+            ParseExtension(element.Element("extension"), epcisEvent, FieldType.Extension);
         }
 
         public static EpcisEvent ParseQuantityEvent(XElement eventRoot)
