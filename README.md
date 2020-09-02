@@ -1,4 +1,5 @@
-![](https://github.com/FasTnT/epcis/workflows/.NET%20Core/badge.svg)
+![Last Commit (develop)](https://img.shields.io/github/last-commit/FasTnT/Epcis/develop.svg?logo=github)
+![Build Status](https://github.com/FasTnT/epcis/workflows/.NET%20Core/badge.svg)
 [![Maintainability](https://api.codeclimate.com/v1/badges/40672e48b92da57852d7/maintainability)](https://codeclimate.com/github/FasTnT/epcis/maintainability)
 [![codecov](https://codecov.io/gh/FasTnT/epcis/branch/develop/graph/badge.svg)](https://codecov.io/gh/FasTnT/epcis)
 
@@ -72,5 +73,3 @@ FasTnT EPCIS is primarily maintained by Louis-Axel Ambroise.
 This project is licensed under the Apache 2.0 license - see the LICENSE file for details
 
 Contact: fastnt@pm.me
-
-_Last update: August 2020_
