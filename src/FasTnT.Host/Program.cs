@@ -10,15 +10,11 @@ namespace FasTnT.Host
     {
         public static void Main(string[] args)
         {
-            var configuration = new ConfigurationBuilder()
-            .AddCommandLine(args)
-            .Build();
-
-            var host = BuildWebHost(configuration);
+            var host = BuildWebHost(args);
             host.Run();
         }
 
-        public static IHost BuildWebHost(IConfiguration configuration) =>
+        public static IHost BuildWebHost(string[] args) =>
             new HostBuilder().ConfigureWebHostDefaults(webBuilder =>
             {
                 webBuilder.UseShutdownTimeout(TimeSpan.FromSeconds(10))
@@ -29,7 +25,18 @@ namespace FasTnT.Host
                               builder.AddConsole()
                                      .SetMinimumLevel(LogLevel.Debug);
                           })
-                          .UseConfiguration(configuration)
+                          .ConfigureAppConfiguration((hostingContext, config) =>
+                          {
+                              config.AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+                                    .AddJsonFile($"appsettings.{hostingContext.HostingEnvironment.EnvironmentName}.json", optional: true, reloadOnChange: true);
+                              config.AddEnvironmentVariables();
+                              config.AddCommandLine(args);
+
+                              if (hostingContext.HostingEnvironment.IsDevelopment())
+                              {
+                                  config.AddUserSecrets<Startup>();
+                              }
+                          })
                           .UseStartup<Startup>();
             })
             .Build();

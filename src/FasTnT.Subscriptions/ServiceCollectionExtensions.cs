@@ -9,6 +9,7 @@ namespace FasTnT.Subscriptions
         public static IServiceCollection AddBackgroundSubscriptionService(this IServiceCollection services)
         {
             services.AddMediatR(SubscriptionRunner.Assembly);
+            services.AddSingleton<SubscriptionBackgroundService>();
             services.AddHostedService<SubscriptionBackgroundService>();
             services.AddScoped<SubscriptionRunner>();
             services.AddScoped<SubscriptionResultSender>();
