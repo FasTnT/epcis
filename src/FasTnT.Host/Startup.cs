@@ -44,7 +44,7 @@ namespace FasTnT.Host
                     .SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
 
             services.AddAuthentication("BasicAuthentication")
-                .AddScheme<AuthenticationSchemeOptions, BasicAuthenticationHandler>("BasicAuthentication", null);
+                    .AddScheme<AuthenticationSchemeOptions, BasicAuthenticationHandler>("BasicAuthentication", null);
         }
 
         public virtual void Configure(IApplicationBuilder app, IWebHostEnvironment env)
