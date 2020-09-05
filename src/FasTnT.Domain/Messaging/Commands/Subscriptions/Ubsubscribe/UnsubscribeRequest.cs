@@ -34,7 +34,7 @@ namespace FasTnT.Commands.Requests
                 }
                 else
                 {
-                    await _subscriptionManager.Delete(subscription.Id.Value, cancellationToken);
+                    await _subscriptionManager.Delete(subscription.SubscriptionId, cancellationToken);
                     await _mediator.Publish(new SubscriptionRemovedNotification { Subscription = subscription }, cancellationToken);
                 }
 

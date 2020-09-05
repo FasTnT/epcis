@@ -32,7 +32,7 @@ namespace FasTnT.Host.Middleware
             catch(Exception ex)
             {
                 _logger.LogError($"[{context.TraceIdentifier}] Request failed with reason '{ex.Message}'");
-                var epcisException = ex as EpcisException;
+                var epcisException = ex as EpcisException ?? EpcisException.Default;
 
                 context.Response.ContentType = context.Request.ContentType;
                 context.Response.StatusCode = (int)(ex is EpcisException ? HttpStatusCode.BadRequest : HttpStatusCode.InternalServerError);
@@ -40,8 +40,8 @@ namespace FasTnT.Host.Middleware
                 var requestContext = context.RequestServices.GetService<RequestContext>();
                 var response = new ExceptionResponse
                 {
-                    Exception = (epcisException?.ExceptionType ?? ExceptionType.ImplementationException).DisplayName,
-                    Severity = epcisException?.Severity ?? ExceptionSeverity.Error,
+                    Exception = epcisException.ExceptionType.DisplayName,
+                    Severity = epcisException.Severity,
                     Reason = GetMessage(ex)
                 };
 

@@ -1,10 +1,9 @@
-﻿using FasTnT.Model.Events.Enums;
+﻿using FasTnT.Model.Enums;
 
-namespace FasTnT.Model
+namespace FasTnT.Model.Events
 {
     public class Epc
     {
-        public int? EventId { get; set; }
         public string Id { get; set; }
         public EpcType Type { get; set; }
         public bool IsQuantity { get; set; }

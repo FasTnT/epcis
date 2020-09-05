@@ -4,33 +4,55 @@ using Microsoft.Extensions.Configuration;
 using Npgsql;
 using System.Data;
 using System.Collections.Generic;
-using System;
-using System.IO;
-using System.IO.Compression;
-using FasTnT.Data.PostgreSql.Migration;
+using FasTnT.Data.PostgreSql.Migrations;
+using System.Threading.Tasks;
 
 namespace FasTnT.IntegrationTests.Common
 {
     public abstract class BaseIntegrationTest
     {
+        public string ConnectionString { get; private set; }
         public HttpClient Client { get; private set; }
         public IDbConnection Connection { get; private set; }
         public HttpResponseMessage Result { get; set; }
 
         public virtual void Arrange()
         {
-            Client = IntegrationTest.Client;
-            Connection = new NpgsqlConnection(IntegrationTest.Configuration.GetConnectionString("FasTnT.Database"));
+            ConnectionString = IntegrationTest.Configuration.GetConnectionString("FasTnT.Database");
+            Connection = new NpgsqlConnection(ConnectionString);
             Connection.Open();
+
+            DatabaseMigrator.Migrate(ConnectionString);
+            Client = IntegrationTest.Client;
         }
 
-        public abstract void Act();
+        public abstract Task Act();
 
         [TestInitialize]
-        public void Execute()
+        public async Task Execute()
         {
             Arrange();
-            Act();
+            await Act();
+        }
+
+        [TestCleanup]
+        public void Cleanup()
+        {
+            using (var command = Connection.CreateCommand())
+            {
+                command.CommandText = @"DROP SCHEMA sbdh CASCADE; DROP SCHEMA callback CASCADE; DROP SCHEMA subscriptions CASCADE; DROP SCHEMA cbv CASCADE; DROP SCHEMA epcis CASCADE; DROP SCHEMA users CASCADE; DELETE FROM public.schemaversions;";
+                command.ExecuteNonQuery();
+            }
+
+            if (Connection != null)
+            {
+                if (Connection.State == ConnectionState.Open)
+                {
+                    Connection.Close();
+                }
+
+                Connection.Dispose();
+            }
         }
 
         public IEnumerable<string> Query(string sqlCommand)
@@ -45,34 +67,6 @@ namespace FasTnT.IntegrationTests.Common
                         yield return reader.GetString(0);
                     }
                 }
-            }
-        }
-
-        public void MigrateDatabase()
-        {
-            using (var command = Connection.CreateCommand())
-            {
-                command.CommandText = UnzipCommand(DatabaseSqlRequests.CreateZipped);
-                command.ExecuteNonQuery();
-            }
-        }
-
-        public void RollbackDatabase()
-        {
-            using (var command = Connection.CreateCommand())
-            {
-                command.CommandText = UnzipCommand(DatabaseSqlRequests.DropZipped);
-                command.ExecuteNonQuery();
-            }
-        }
-
-        private string UnzipCommand(string zippedRequest)
-        {
-            using (var msi = new MemoryStream(Convert.FromBase64String(zippedRequest)))
-            using (var gs = new GZipStream(msi, CompressionMode.Decompress))
-            using (var sr = new StreamReader(gs))
-            {
-                return sr.ReadToEnd();
             }
         }
     }

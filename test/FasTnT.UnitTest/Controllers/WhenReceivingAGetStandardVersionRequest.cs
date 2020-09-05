@@ -13,7 +13,7 @@ namespace FasTnT.UnitTest.Controllers
     [TestClass]
     public class WhenReceivingAGetStandardVersionRequest : TestBase
     {
-        public EpcisQueryController Controller { get; set; }
+        public EpcisSoapQueryController Controller { get; set; }
         public Mock<IMediator> Mediator { get; set; }
         public CancellationToken CancellationToken { get; set; }
         public IQueryRequest Request { get; set; }
@@ -26,7 +26,7 @@ namespace FasTnT.UnitTest.Controllers
             Mediator = new Mock<IMediator>();
             Request = new GetStandardVersionRequest();
             CancellationToken = new CancellationTokenSource().Token;
-            Controller = new EpcisXmlQueryController(Mediator.Object);
+            Controller = new EpcisSoapQueryController(Mediator.Object);
 
             Mediator.Setup(x => x.Send(Request, CancellationToken)).Returns(() => Task.FromResult(ExpectedResponse));
         }

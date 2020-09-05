@@ -2,8 +2,8 @@
 using FasTnT.Commands.Responses;
 using FasTnT.Domain;
 using FasTnT.Domain.Data;
-using FasTnT.Domain.Data.Model;
 using FasTnT.Model;
+using FasTnT.Model.Events;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using System.Collections.Generic;
@@ -15,7 +15,7 @@ namespace FasTnT.UnitTest.Handlers
     [TestClass]
     public class WhenHandlingACaptureEpcisDocumentRequest : TestBase
     {
-        public Mock<IDocumentStore> DocumentStore { get; set; }
+        public Mock<IEpcisRequestStore> DocumentStore { get; set; }
         public RequestContext RequestContext { get; set; }
         public CaptureEpcisDocumentHandler Handler { get; set; }
         public CancellationToken CancellationToken { get; set; }
@@ -24,10 +24,10 @@ namespace FasTnT.UnitTest.Handlers
 
         public override void Given()
         {
-            DocumentStore = new Mock<IDocumentStore>();
+            DocumentStore = new Mock<IEpcisRequestStore>();
             CancellationToken = new CancellationTokenSource().Token;
             RequestContext = new RequestContext();
-            Request = new CaptureEpcisDocumentRequest { Header = new EpcisRequestHeader(), EventList = new List<EpcisEvent>() };
+            Request = new CaptureEpcisDocumentRequest { Request = new EpcisRequest { EventList = new List<EpcisEvent>() } };
             Handler = new CaptureEpcisDocumentHandler(RequestContext, DocumentStore.Object);
         }
 
@@ -39,7 +39,7 @@ namespace FasTnT.UnitTest.Handlers
         [TestMethod]
         public void ItShouldCallTheDocumentStoreCaptureMethod()
         {
-            DocumentStore.Verify(x => x.Capture(It.IsAny<CaptureDocumentRequest>(), It.IsAny<RequestContext>(), It.IsAny<CancellationToken>()), Times.Once);
+            DocumentStore.Verify(x => x.Capture(It.IsAny<EpcisRequest>(), It.IsAny<RequestContext>(), It.IsAny<CancellationToken>()), Times.Once);
         }
 
         [TestMethod]

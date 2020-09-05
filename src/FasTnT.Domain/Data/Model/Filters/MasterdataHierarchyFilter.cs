@@ -1,4 +1,4 @@
-﻿using FasTnT.Model.Events.Enums;
+﻿using FasTnT.Model.Enums;
 
 namespace FasTnT.Domain.Data.Model.Filters
 {

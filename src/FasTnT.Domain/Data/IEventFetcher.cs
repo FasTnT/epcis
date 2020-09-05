@@ -1,5 +1,5 @@
 ﻿using FasTnT.Domain.Data.Model.Filters;
-using FasTnT.Model;
+using FasTnT.Model.Events;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -25,6 +25,8 @@ namespace FasTnT.Domain.Data
         void Apply(SourceDestinationFilter filter);
         void Apply(ExistsAttributeFilter filter);
         void Apply(AttributeFilter filter);
+        void Apply(OrderFilter filter);
+        void Apply(OrderDirectionFilter filter);
         Task<IEnumerable<EpcisEvent>> Fetch(CancellationToken cancellationToken);
     }
 }

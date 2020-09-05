@@ -1,13 +1,11 @@
-﻿using FasTnT.Model.Events.Enums;
+﻿using FasTnT.Model.Enums;
 using System;
 using System.Collections.Generic;
 
-namespace FasTnT.Model
+namespace FasTnT.Model.Events
 {
     public class EpcisEvent
     {
-        public int? Id { get; set; }
-        public int? RequestId { get; set; }
         public DateTime CaptureTime { get; set; }
         public DateTime EventTime { get; set; }
         public TimeZoneOffset EventTimeZoneOffset { get; set; } = TimeZoneOffset.Default;
@@ -19,7 +17,9 @@ namespace FasTnT.Model
         public string BusinessStep { get; set; }
         public string Disposition { get; set; }
         public string TransformationId { get; set; }
-        public ErrorDeclaration ErrorDeclaration { get; set; }
+        public DateTime? CorrectiveDeclarationTime { get; set; }
+        public string CorrectiveReason { get; set; }
+        public List<string> CorrectiveEventIds { get; set; } = new List<string>();
         public List<Epc> Epcs { get; set; } = new List<Epc>();
         public List<BusinessTransaction> BusinessTransactions { get; set; } = new List<BusinessTransaction>();
         public List<SourceDestination> SourceDestinationList { get; set; } = new List<SourceDestination>();

@@ -34,7 +34,7 @@ namespace FasTnT.Subscriptions
 
             try
             {
-                var pendingRequests = await _subscriptionManager.GetPendingRequestIds(subscription.Id.Value, cancellationToken);
+                var pendingRequests = await _subscriptionManager.GetPendingRequestIds(subscription.SubscriptionId, cancellationToken);
 
                 if (pendingRequests.Any())
                 {
@@ -46,12 +46,12 @@ namespace FasTnT.Subscriptions
                 response.SubscriptionId = subscription.SubscriptionId;
 
                 await SendSubscriptionResults(subscription, response, cancellationToken);
-                await _subscriptionManager.AcknowledgePendingRequests(subscription.Id.Value, pendingRequests, cancellationToken);
-                await _subscriptionManager.RegisterSubscriptionTrigger(subscription.Id.Value, SubscriptionResult.Success, default, cancellationToken);
+                await _subscriptionManager.AcknowledgePendingRequests(subscription.SubscriptionId, pendingRequests, cancellationToken);
+                await _subscriptionManager.RegisterSubscriptionTrigger(subscription.SubscriptionId, SubscriptionResult.Success, default, cancellationToken);
             }
             catch (Exception ex)
             {
-                await _subscriptionManager.RegisterSubscriptionTrigger(subscription.Id.Value, SubscriptionResult.Failed, ex.Message, cancellationToken);
+                await _subscriptionManager.RegisterSubscriptionTrigger(subscription.SubscriptionId, SubscriptionResult.Failed, ex.Message, cancellationToken);
             }
         }
 

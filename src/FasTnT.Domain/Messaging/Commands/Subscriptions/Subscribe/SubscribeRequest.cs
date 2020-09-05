@@ -5,7 +5,6 @@ using FasTnT.Domain.Data;
 using FasTnT.Domain.Model.Subscriptions;
 using FasTnT.Domain.Notifications;
 using FasTnT.Domain.Queries;
-using FasTnT.Domain.Subscriptions;
 using FasTnT.Model.Exceptions;
 using MediatR;
 using System.Collections.Generic;
@@ -44,7 +43,7 @@ namespace FasTnT.Commands.Requests
 
             private void ValidateRequest(Subscription subscription)
             {
-                var query = _queries.SingleOrDefault(q => q.Name == subscription.QueryName);
+                var query = _queries.FirstOrDefault(q => q.Name == subscription.QueryName);
 
                 if (query == null)
                 {
@@ -58,7 +57,7 @@ namespace FasTnT.Commands.Requests
                 {
                     throw new EpcisException(ExceptionType.SubscriptionControlsException, "Only one of the schedule and trigger must be provided");
                 }
-                else if (!SubscriptionSchedule.IsValid(subscription))
+                else if (!QuerySchedule.IsValid(subscription.Schedule))
                 {
                     throw new EpcisException(ExceptionType.SubscriptionControlsException, "Provided schedule parameters are invalid");
                 }

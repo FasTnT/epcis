@@ -1,6 +1,10 @@
-![](https://github.com/FasTnT/epcis/workflows/.NET%20Core/badge.svg)
+![Last Commit (develop)](https://img.shields.io/github/last-commit/FasTnT/Epcis/develop.svg?logo=github)
+![Build Status](https://github.com/FasTnT/epcis/workflows/.NET%20Core/badge.svg)
 [![Maintainability](https://api.codeclimate.com/v1/badges/40672e48b92da57852d7/maintainability)](https://codeclimate.com/github/FasTnT/epcis/maintainability)
 [![codecov](https://codecov.io/gh/FasTnT/epcis/branch/develop/graph/badge.svg)](https://codecov.io/gh/FasTnT/epcis)
+
+[![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FFasTnT%2Fepcis%2Fdevelop%2F.azure%2Ftemplates%2Ffastnt.template.json)
+[![Visualize in Armviz](http://armviz.io/visualizebutton.png)](http://armviz.io/#/?load=https%3A%2F%2Fraw.githubusercontent.com%2FFasTnT%2Fepcis%2Fdevelop%2F.azure%2Ftemplates%2Ffastnt.template.json)
 
 # FasTnT EPCIS
 
@@ -14,10 +18,9 @@ Prerequisites:
 
 Steps:
 1. Download the source code, and create a new user/database in PostGreSQL for FasTnT ;
-2. Update the connection string: `$ dotnet user-secrets set ConnectionStrings:FasTnT.Database "{your connectionstring}" -p src\FasTnT.Host\FasTnT.Host.csproj` ;
-3. Start the repository with the command `$ dotnet run -p src\FasTnT.Host\FasTnT.Host.csproj --urls "http://localhost:5102/"` ;
-4. Create the SQL schemas and tables: `curl -X POST http://localhost:5102/Setup/Database/Migrate -d ""` ;
-5. That's it! You have a properly working EPCIS 1.2 repository.
+2. Start the repository with the command `$ dotnet run -p src\FasTnT.Host\FasTnT.Host.csproj --urls "http://localhost:5102/" --connectionStrings:FasTnT.Database "{your connectionstring}"` ;
+
+That's it! You have a properly working EPCIS 1.2 repository.
 
 ## HTTP Endpoints
 
@@ -26,21 +29,14 @@ Steps:
 The API is secured using HTTP Basic authentication. The default username:password value is `admin:P@ssw0rd`
 
 - Capture: `POST /v1_2/Capture`
-- Queries : `POST /v1_2/Query` or `POST /v1_2/Query.svc`
+- Queries : `POST /v1_2/Query.svc`
 - Subscription trigger : `GET /v1_2/Subscription/Trigger/{triggerName}`
 
 **Capture** endpoint only supports requests with `content-type: application/xml` or `content-type: text/xml` header and XML payload.
 
-**Queries** endpoint supports XML requests on endpoint `/v1_2/Query` and SOAP requests on endpoint `/v1_2/Query.svc`. Note that it will not return the wsdl on a `GET` request..
+**Queries** endpoint supports SOAP requests on endpoint `/v1_2/Query.svc`. Note that it will not return the wsdl on a `GET` request.
 
 The file `documents\EPCIS Examples - 1.2.postman_collection.json` contains XML requests examples to be run in [PostMan](https://www.getpostman.com/), and the file `EPCglobal-epcis-query-1-2-soapui-project.xml` contains a project with SOAP example requests to be run in [SoapUI](https://www.soapui.org/open-source.html).
-
-### Others endpoints:
-
-- Database migration: `POST /Setup/Database/Migrate`
-- Database rollback: `POST /Setup/Database/Rollback`
-
-These database endpoints are only available when the EPCIS server is in Development configuration.
 
 See the [wiki](https://github.com/FasTnT/epcis/wiki) for more details.
 
@@ -77,5 +73,3 @@ FasTnT EPCIS is primarily maintained by Louis-Axel Ambroise.
 This project is licensed under the Apache 2.0 license - see the LICENSE file for details
 
 Contact: fastnt@pm.me
-
-_Last update: March 2020_

@@ -1,4 +1,4 @@
-﻿using FasTnT.Model;
+﻿using FasTnT.Model.Events;
 using FasTnT.Model.MasterDatas;
 using System.Collections.Generic;
 

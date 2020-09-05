@@ -2,6 +2,7 @@
 using FasTnT.Domain.Commands;
 using FasTnT.Domain.Data;
 using MediatR;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -22,7 +23,8 @@ namespace FasTnT.Commands.Requests
 
             public async Task<IEpcisResponse> Handle(GetSubscriptionIdsRequest request, CancellationToken cancellationToken)
             {
-                var subscriptionIds = await _subscriptionManager.GetSubscriptionIds(cancellationToken);
+                var subscriptions = await _subscriptionManager.GetAll(cancellationToken);
+                var subscriptionIds = subscriptions.Select(x => x.SubscriptionId).ToArray();
 
                 return new GetSubscriptionIdsResponse { SubscriptionIds = subscriptionIds };
             }

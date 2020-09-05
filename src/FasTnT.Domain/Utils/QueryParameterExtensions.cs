@@ -1,5 +1,5 @@
-﻿using FasTnT.Model;
-using FasTnT.Model.Events.Enums;
+﻿using FasTnT.Model.Enums;
+using FasTnT.Model.Events;
 using FasTnT.Model.Queries;
 using FasTnT.Model.Utils;
 using System;
@@ -31,12 +31,17 @@ namespace FasTnT.Domain.Utils
 
         public static T[] GetValues<T>(this QueryParameter parameter)
         {
-            return !parameter.Values.Any() ? new T[0] : parameter.Values.Select(x => ChangeType<T>(x)).ToArray();
+            return !parameter.Values.Any() ? Array.Empty<T>() : parameter.Values.Select(x => ChangeType<T>(x)).ToArray();
         }
 
         public static FilterComparator GetComparator(this QueryParameter parameter)
         {
             return Enumeration.GetByDisplayName<FilterComparator>(parameter.Name.Substring(0, 2));
+        }
+
+        public static SourceDestinationType GetSourceDestinationType(this QueryParameter parameter)
+        {
+            return parameter.Name.StartsWith("EQ_source") ? SourceDestinationType.Source : SourceDestinationType.Destination;
         }
 
         public static CustomField GetField(this QueryParameter parameter, FieldType type, bool inner)
@@ -89,7 +94,9 @@ namespace FasTnT.Domain.Utils
 
         private static T ChangeType<T>(string value)
         {
-            if (typeof(T) == typeof(DateTime))
+            if (typeof(T) == typeof(string))
+                return (T)Convert.ChangeType(value, typeof(T));
+            else if (typeof(T) == typeof(DateTime))
                 return (T)Convert.ChangeType(DateTime.Parse(value), typeof(T));
             else if (typeof(T) == typeof(int))
                 return (T)Convert.ChangeType(int.Parse(value), typeof(T));

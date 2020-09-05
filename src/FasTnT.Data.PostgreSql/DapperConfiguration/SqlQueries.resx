@@ -1,0 +1,220 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Delete_MasterData" xml:space="preserve">
+    <value>DELETE FROM cbv.attribute_field WHERE masterdata_type = @type AND masterdata_id = @id; DELETE FROM cbv.hierarchy WHERE type = @type AND (parent_id = @id OR children_id = @id); DELETE FROM cbv.attribute WHERE masterdata_id = @id AND masterdata_type = @type; DELETE FROM cbv.masterdata WHERE id = @id AND type = @type;</value>
+  </data>
+  <data name="Read_Events" xml:space="preserve">
+    <value>CREATE TEMP TABLE eventIds AS
+(
+  SELECT event.id, event.request_id 
+  FROM epcis.event 
+  JOIN epcis.request ON request.id = event.request_id
+  /**where**/ 
+  /**orderby**/ 
+  LIMIT @limit
+);
+SELECT request.record_time as capture_time, event.id, request_id, event_type as type, event.record_time as event_time, action, read_point, event_timezone_offset, disposition, business_location, business_step, transformation_id, errordeclaration_time, errordeclaration_reason
+  FROM epcis.event 
+  JOIN epcis.request ON request.id = event.request_id 
+  WHERE EXISTS(SELECT 1 FROM eventIds e WHERE e.id = event.id AND e.request_id = event.request_id);
+SELECT event_id, request_id, epc as id, type, is_quantity, quantity, unit_of_measure 
+  FROM epcis.epc 
+  WHERE EXISTS(SELECT 1 FROM eventIds e WHERE e.id = event_id AND e.request_id = request_id);
+SELECT event_id, request_id, field_id as id, parent_id, namespace, name, type, text_value, numeric_value, date_value 
+  FROM epcis.custom_field 
+  WHERE EXISTS(SELECT 1 FROM eventIds e WHERE e.id = event_id AND e.request_id = request_id);
+SELECT event_id, request_id, transaction_type as type, transaction_id as id 
+  FROM epcis.business_transaction 
+  WHERE EXISTS (SELECT 1 FROM eventIds e WHERE e.id = event_id AND e.request_id = request_id);
+SELECT event_id, request_id, type, source_dest_id as id, direction 
+  FROM epcis.source_destination 
+  WHERE EXISTS (SELECT 1 FROM eventIds e WHERE e.id = event_id AND e.request_id = request_id);
+SELECT event_id, request_id, corrective_eventid as id 
+  FROM epcis.error_declaration_eventid 
+  WHERE EXISTS(SELECT 1 FROM eventIds e WHERE e.id = event_id AND e.request_id = request_id);
+DROP TABLE eventIds;</value>
+  </data>
+  <data name="Read_Masterdata" xml:space="preserve">
+    <value>SELECT md.type, md.id FROM cbv.masterdata md /**where**/ ORDER BY md.last_update DESC LIMIT @limit</value>
+  </data>
+  <data name="Read_MasterdataAllAttributes" xml:space="preserve">
+    <value>SELECT masterdata_type AS parent_type, masterdata_id AS parent_id, id, value FROM cbv.attribute WHERE masterdata_id = ANY(@ids)</value>
+  </data>
+  <data name="Read_MasterdataAttributes" xml:space="preserve">
+    <value>SELECT masterdata_type AS parent_type, masterdata_id AS parent_id, id, value FROM cbv.attribute WHERE masterdata_id = ANY(@ids) AND id = ANY(@attributes)</value>
+  </data>
+  <data name="Read_MasterdataChildren" xml:space="preserve">
+    <value>SELECT type, parent_id, children_id FROM cbv.hierarchy WHERE parent_id = ANY(@Ids);</value>
+  </data>
+  <data name="Read_UserByUsername" xml:space="preserve">
+    <value>SELECT id, username, password FROM users.user WHERE username = @username</value>
+  </data>
+  <data name="Store_ContactInformationDto" xml:space="preserve">
+    <value>INSERT INTO sbdh.contactinformation(id, header_id, type, identifier, contact, email, fax_number, phone_number, type_identifier) VALUES(@id, @headerid, @type, @identifier, @contact, @emailaddress, @faxnumber, @telephonenumber, @contacttypeidentifier) ...;</value>
+  </data>
+  <data name="Store_CorrectiveIdDto" xml:space="preserve">
+    <value>INSERT INTO epcis.error_declaration_eventid(request_id, event_id, corrective_eventid) VALUES(@requestid, @eventid, @id) ...;</value>
+  </data>
+  <data name="Store_CustomFieldDto" xml:space="preserve">
+    <value>INSERT INTO epcis.custom_field(request_id, event_id, field_id, parent_id, namespace, name, type, text_value, numeric_value, date_value) VALUES (@requestid, @eventid, @id, @parentid, @namespace, @name, @type, @textvalue, @numericvalue, @datevalue) ...;</value>
+  </data>
+  <data name="Store_EpcDto" xml:space="preserve">
+    <value>INSERT INTO epcis.epc(request_id, event_id, epc, type, is_quantity, quantity, unit_of_measure) VALUES (@requestid, @eventid, @id, @type, @isquantity, @quantity, @unitofmeasure) ...;</value>
+  </data>
+  <data name="Store_EventDto" xml:space="preserve">
+    <value>INSERT INTO epcis.event(request_id, id, record_time, action, event_type, event_timezone_offset, business_location, business_step, disposition, read_point, transformation_id, event_id, errordeclaration_time, errordeclaration_reason) VALUES(@requestid, @id, @eventtime, @action, @type, @eventtimezoneoffset, @businesslocation, @businessstep, @disposition, @readpoint, @transformationid, @eventid, @ErrorDeclarationTime, @ErrorDeclarationReason) ...;</value>
+  </data>
+  <data name="Store_MasterDataAttributeDto" xml:space="preserve">
+    <value>INSERT INTO cbv.attribute(masterdata_id, masterdata_type, id, value) VALUES(@parentid, @parenttype, @id, @value) ...;</value>
+  </data>
+  <data name="Store_MasterDataDto" xml:space="preserve">
+    <value>INSERT INTO cbv.masterdata(id, type, created_on, last_update) VALUES(@id, @type, NOW(), NOW()) ...;</value>
+  </data>
+  <data name="Store_MasterDataFieldDto" xml:space="preserve">
+    <value>INSERT INTO cbv.attribute_field(internal_id, internal_parent_id, masterdata_id, masterdata_type, parent_id, name, namespace, value) VALUES(@id, @internalparentid, @masterdataid, @masterdatatype, @parentid, @name, @namespace, @value) ...;</value>
+  </data>
+  <data name="Store_MasterDataHierarchyDto" xml:space="preserve">
+    <value>INSERT INTO cbv.hierarchy(type, parent_id, children_id) VALUES(@type, @parentid, @childrenid) ...;</value>
+  </data>
+  <data name="Store_ParameterDto" xml:space="preserve">
+    <value>INSERT INTO subscriptions.parameter(id, subscription_id, name) VALUES(@id, @subscriptionid, @name) ...;</value>
+  </data>
+  <data name="Store_ParameterValueDto" xml:space="preserve">
+    <value>INSERT INTO subscriptions.parameter_value(parameter_id, subscription_id, value) VALUES(@parameterid, @subscriptionId, @value) ...;</value>
+  </data>
+  <data name="Store_RequestDto" xml:space="preserve">
+    <value>INSERT INTO epcis.request(document_time, record_time, user_id) VALUES(@documenttime, @recordtime, @userid) RETURNING id;</value>
+  </data>
+  <data name="Store_SourceDestDto" xml:space="preserve">
+    <value>INSERT INTO epcis.source_destination(request_id, event_id, type, source_dest_id, direction) VALUES (@requestid, @eventid, @type, @id, @direction) ...;</value>
+  </data>
+  <data name="Store_StandardHeaderDto" xml:space="preserve">
+    <value>INSERT INTO sbdh.standardheader(id, version, standard, type_version, identifier, type, creation_datetime) VALUES(@id, @version, @standard, @typeversion, @instanceidentifier, @type, @creationdatetime);</value>
+  </data>
+  <data name="Store_SubscriptionCallbackDto" xml:space="preserve">
+    <value>INSERT INTO callback.query_callback(request_id, subscription_id, callback_type) VALUES(@headerid, @subscriptionid, @callbacktype);</value>
+  </data>
+  <data name="Store_SubscriptionDto" xml:space="preserve">
+    <value>INSERT INTO subscriptions.subscription(subscription_id, trigger, initial_record_time, report_if_empty, destination, query_name,  active, schedule_seconds, schedule_minutes, schedule_hours, schedule_month, schedule_day_of_month, schedule_day_of_week) VALUES(@subscriptionid, @trigger, @initialrecordtime, @reportifempty, @destination, @queryname, @active, @second, @minute, @hour, @month, @dayofmonth, @dayofweek) RETURNING id;</value>
+  </data>
+  <data name="Store_TransactionDto" xml:space="preserve">
+    <value>INSERT INTO epcis.business_transaction(request_id, event_id, transaction_type, transaction_id) VALUES (@requestid, @eventid, @type, @id) ...;</value>
+  </data>
+</root>

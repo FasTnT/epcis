@@ -10,7 +10,7 @@ namespace FasTnT.Subscriptions
         {
             services.AddMediatR(SubscriptionRunner.Assembly);
             services.AddSingleton<SubscriptionBackgroundService>();
-            services.AddSingleton<IHostedService>(s => s.GetService<SubscriptionBackgroundService>());
+            services.AddHostedService<SubscriptionBackgroundService>();
             services.AddScoped<SubscriptionRunner>();
             services.AddScoped<SubscriptionResultSender>();
 

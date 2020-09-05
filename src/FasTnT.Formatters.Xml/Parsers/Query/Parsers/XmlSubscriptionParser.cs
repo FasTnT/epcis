@@ -19,7 +19,7 @@ namespace FasTnT.Parsers.Xml.Query
                 Trigger = element.Element("controls")?.Element("trigger")?.Value,
                 ReportIfEmpty = bool.Parse(element.Element("controls").Element("reportIfEmpty").Value),
                 InitialRecordTime = DateTime.TryParse(element.Element("controls")?.Element("initialRecordTime")?.Value ?? "", out DateTime date) ? date : default(DateTime?),
-                Parameters = XmlPollQueryParser.ParseParameters(element.Element("params")?.Elements()).ToArray()
+                Parameters = XmlPollQueryParser.ParseParameters(element.Element("params")?.Elements()).ToList()
             };
             subscription.Schedule = ParseQuerySchedule(element.Element("controls")?.Element("schedule"));
 
@@ -38,12 +38,12 @@ namespace FasTnT.Parsers.Xml.Query
         {
             return element == default ? null : new QuerySchedule
             {
-                Second = element.Element("second")?.Value,
-                Minute = element.Element("minute")?.Value,
-                Hour = element.Element("hour")?.Value,
-                Month = element.Element("month")?.Value,
-                DayOfMonth = element.Element("dayOfMonth")?.Value,
-                DayOfWeek = element.Element("dayOfWeek")?.Value
+                Second = element.Element("second")?.Value ?? string.Empty,
+                Minute = element.Element("minute")?.Value ?? string.Empty,
+                Hour = element.Element("hour")?.Value ?? string.Empty,
+                Month = element.Element("month")?.Value ?? string.Empty,
+                DayOfMonth = element.Element("dayOfMonth")?.Value ?? string.Empty,
+                DayOfWeek = element.Element("dayOfWeek")?.Value ?? string.Empty
             };
         }
     }

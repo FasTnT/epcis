@@ -1,6 +1,5 @@
 ﻿using FasTnT.Domain.Data;
 using FasTnT.Domain.Model.Subscriptions;
-using FasTnT.Domain.Subscriptions;
 using Microsoft.Extensions.Hosting;
 using System;
 using System.Collections.Concurrent;
@@ -10,6 +9,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using MoreLinq;
+using FasTnT.Subscriptions.Schedule;
 
 namespace FasTnT.Subscriptions
 {
@@ -26,32 +26,37 @@ namespace FasTnT.Subscriptions
             _services = services;
         }
 
-        protected override async Task ExecuteAsync(CancellationToken cancellationToken)
+        protected override Task ExecuteAsync(CancellationToken cancellationToken)
         {
-            await Initialize(cancellationToken);
-            cancellationToken.ThrowIfCancellationRequested();
+            return Task.Run(async () => {
+                await Initialize(cancellationToken);
+                cancellationToken.ThrowIfCancellationRequested();
 
-            while (!cancellationToken.IsCancellationRequested)
-            {
-                var triggeredSubscriptions = new List<Subscription>();
-                try
+                while (!cancellationToken.IsCancellationRequested)
                 {
-                    // Get all subscriptions where the next execution time is reached
-                    var subscriptions = _scheduledExecutions.Where(x => x.Value <= DateTime.UtcNow).ToArray();
-                    subscriptions.ForEach(x => _scheduledExecutions.TryUpdate(x.Key, new SubscriptionSchedule(x.Key.Schedule).GetNextOccurence(DateTime.UtcNow), x.Value));
+                    var triggeredSubscriptions = new List<Subscription>();
+                    try
+                    {
+                        // Get all subscriptions where the next execution time is reached
+                        var subscriptions = _scheduledExecutions.Where(x => x.Value <= DateTime.UtcNow).ToArray();
+                        subscriptions.ForEach(x => _scheduledExecutions.TryUpdate(x.Key, new SubscriptionSchedule(x.Key.Schedule).GetNextOccurence(DateTime.UtcNow), x.Value));
 
-                    triggeredSubscriptions.AddRange(subscriptions.Select(x => x.Key));
+                        triggeredSubscriptions.AddRange(subscriptions.Select(x => x.Key));
 
-                    // Get all subscriptions scheduled by a trigger
-                    while (_triggeredValues.TryDequeue(out string trigger)) triggeredSubscriptions.AddRange(_triggeredSubscriptions.TryGetValue(trigger, out IList<Subscription> sub) ? sub : new Subscription[0]);
+                        // Get all subscriptions scheduled by a trigger
+                        while (_triggeredValues.TryDequeue(out string trigger))
+                        {
+                            triggeredSubscriptions.AddRange(_triggeredSubscriptions.TryGetValue(trigger, out IList<Subscription> sub) ? sub : Array.Empty<Subscription>());
+                        }
 
-                    await Execute(triggeredSubscriptions, cancellationToken);
+                        await Execute(triggeredSubscriptions, cancellationToken);
+                    }
+                    finally
+                    {
+                        WaitTillNextExecutionOrNotification();
+                    }
                 }
-                finally
-                {
-                    WaitTillNextExecutionOrNotification();
-                }
-            }
+            });
         }
 
         private async Task Execute(IEnumerable<Subscription> subscriptions, CancellationToken cancellationToken)
