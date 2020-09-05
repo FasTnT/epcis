@@ -1,9 +1,5 @@
 ﻿using FasTnT.Domain.Data.Model.Filters;
-<<<<<<< HEAD
-using FasTnT.Model.Events.Enums;
-=======
 using FasTnT.Model.Enums;
->>>>>>> develop
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 
