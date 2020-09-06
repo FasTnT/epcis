@@ -1,11 +1,11 @@
 ﻿using FasTnT.Host;
-using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
 
 namespace FasTnT.IntegrationTests
 {
     public class TestStartup : Startup
     {
-        public TestStartup(IWebHostEnvironment env) : base(env)
+        public TestStartup(IConfiguration config) : base(config)
         {
         }
     }
