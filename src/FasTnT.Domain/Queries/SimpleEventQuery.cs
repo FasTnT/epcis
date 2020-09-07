@@ -3,6 +3,7 @@ using FasTnT.Domain.Data;
 using FasTnT.Domain.Data.Model.Filters;
 using FasTnT.Domain.Utils;
 using FasTnT.Model.Enums;
+using FasTnT.Model.Events;
 using FasTnT.Model.Exceptions;
 using FasTnT.Model.Queries;
 using FasTnT.Model.Utils;
@@ -61,6 +62,7 @@ namespace FasTnT.Domain.Queries
             { "^HASATTR_",                  (fetcher, param) => fetcher.Apply(new ExistsAttributeFilter { Field = param.GetAttributeField(), AttributeName = param.GetAttributeName()}) }
         };
         private readonly IEventFetcher _eventFetcher;
+        private int? _maxEventCount = default;
 
         public SimpleEventQuery(IEventFetcher eventFetcher)
         {
@@ -72,50 +74,43 @@ namespace FasTnT.Domain.Queries
 
         public async Task<PollResponse> Handle(IEnumerable<QueryParameter> parameters, CancellationToken cancellationToken)
         {
-            var maxEventCount = default(int?);
-
             foreach (var parameter in parameters)
             {
-                if (IsSimpleParameter(parameter, out Action<IEventFetcher, QueryParameter> action) || IsRegexParameter(parameter, out action))
-                {
-                    ApplyParameter(action, parameter);
-
-                    if (parameter.Name == "maxEventCount")
-                    {
-                        maxEventCount = parameter.GetValue<int>()+1;
-                    }
-                }
-                else
-                {
-                    throw new NotImplementedException($"Query parameter unexpected or not implemented: '{parameter.Name}'");
-                }
+                ApplyParameter(parameter);
             }
 
             var result = await _eventFetcher.Fetch(cancellationToken);
 
-            if (maxEventCount.HasValue && result.Count() >= maxEventCount)
+            CheckEventCountRestriction(result);
+
+            return new PollResponse
             {
-                throw new EpcisException(ExceptionType.QueryTooLargeException, $"Query returned more than the {maxEventCount} events allowed.");
+                QueryName = Name,
+                EventList = result.ToArray()
+            };
+        }
+
+        private void ApplyParameter(QueryParameter parameter)
+        {
+            if (IsSimpleParameter(parameter, out Action<IEventFetcher, QueryParameter> action) || IsRegexParameter(parameter, out action))
+            {
+                try
+                {
+                    action(_eventFetcher, parameter);
+                }
+                catch (Exception ex)
+                {
+                    throw new EpcisException(ExceptionType.QueryParameterException, ex.Message);
+                }
+
+                if (parameter.Name == "maxEventCount")
+                {
+                    _maxEventCount = parameter.GetValue<int>() + 1;
+                }
             }
             else
             {
-                return new PollResponse
-                {
-                    QueryName = Name,
-                    EventList = result.ToArray()
-                };
-            }
-        }
-
-        private void ApplyParameter(Action<IEventFetcher, QueryParameter> simpleAction, QueryParameter parameter)
-        {
-            try
-            {
-                simpleAction(_eventFetcher, parameter);
-            }
-            catch(Exception ex)
-            {
-                throw new EpcisException(ExceptionType.QueryParameterException, ex.Message);
+                throw new NotImplementedException($"Query parameter unexpected or not implemented: '{parameter.Name}'");
             }
         }
 
@@ -130,6 +125,14 @@ namespace FasTnT.Domain.Queries
             action = matchingRegex.Value;
 
             return matchingRegex.Key != default;
+        }
+
+        private void CheckEventCountRestriction(IEnumerable<EpcisEvent> result)
+        {
+            if (_maxEventCount.HasValue && result.Count() >= _maxEventCount)
+            {
+                throw new EpcisException(ExceptionType.QueryTooLargeException, $"Query returned more than the {_maxEventCount} events allowed.");
+            }
         }
     }
 }
