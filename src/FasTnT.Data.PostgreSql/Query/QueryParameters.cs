@@ -19,17 +19,13 @@ namespace FasTnT.Data.PostgreSql.Query
 
         private object GetSqlValue<T>(T value)
         {
-            switch (value)
+            return value switch
             {
-                case IEnumerable<Enumeration> enumList:
-                    return enumList.Select(x => x.Id).ToArray();
-                case IEnumerable<object> objList:
-                    return objList.ToArray();
-                case Enumeration enumOut:
-                    return enumOut.Id;
-                default:
-                    return value;
-            }
+                IEnumerable<Enumeration> enumList => enumList.Select(x => x.Id).ToArray(),
+                IEnumerable<object> objList => objList.Select(x => x.ToString()).ToArray(),
+                Enumeration enumOut => enumOut.Id,
+                _ => value
+            };
         }
 
         public void SetLimit(int value) => Values.Add("limit", value);
