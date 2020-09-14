@@ -31,7 +31,6 @@ namespace FasTnT.Subscriptions
             var query = _epcisQueries.Single(x => x.Name == subscription.QueryName);
             var response = new PollResponse();
 
-
             try
             {
                 var pendingRequests = await _subscriptionManager.GetPendingRequestIds(subscription.SubscriptionId, cancellationToken);

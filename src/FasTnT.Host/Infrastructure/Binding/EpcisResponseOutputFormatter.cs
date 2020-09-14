@@ -11,9 +11,7 @@ namespace FasTnT.Host.Infrastructure.Binding
     {
         public EpcisResponseOutputFormatter()
         {
-            SupportedMediaTypes.Add("application/json");
             SupportedMediaTypes.Add("application/xml");
-            SupportedMediaTypes.Add("application/soap+xml");
             SupportedMediaTypes.Add("text/xml");
         }
 
