@@ -57,7 +57,7 @@ namespace FasTnT.PostgreSql.DapperConfiguration
                 sql: _insertCommands[typeof(T).Name],
                 insertParams: entities,
                 transaction: transaction,
-                batchSize: 1000,
+                batchSize: 5,
                 cancellationToken: cancellationToken
             );
         }
