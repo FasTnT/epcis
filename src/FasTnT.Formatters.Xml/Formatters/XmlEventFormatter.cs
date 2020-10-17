@@ -3,6 +3,7 @@ using FasTnT.Model.Events;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Xml.Linq;
 
 namespace FasTnT.Parsers.Xml.Formatters
@@ -18,12 +19,15 @@ namespace FasTnT.Parsers.Xml.Formatters
             { EventType.Transformation, FormatTransformationEvent },
         };
 
-        public static IEnumerable<XElement> FormatList(IList<EpcisEvent> eventList)
+        public static IEnumerable<XElement> FormatList(IList<EpcisEvent> eventList, CancellationToken cancellationToken = default)
         {
-            return eventList.Select(x =>
-                Formatters.TryGetValue(x.Type, out Func<EpcisEvent, XElement> formatter) 
-                    ? formatter(x) 
-                    : throw new Exception($"Unknown event type to format {x?.Type?.DisplayName}"));
+            return eventList.TakeWhile(_ => !cancellationToken.IsCancellationRequested)
+                            .Select(x =>
+                                Formatters.TryGetValue(x.Type, out Func<EpcisEvent, XElement> formatter) 
+                                    ? formatter(x) 
+                                    : throw new Exception($"Unknown event type to format {x?.Type?.DisplayName}")
+                                )
+                            .ToList();
         }
 
         private static XElement FormatObjectEvent(EpcisEvent evt)
