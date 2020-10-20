@@ -19,15 +19,16 @@ namespace FasTnT.Parsers.Xml.Formatters
             { EventType.Transformation, FormatTransformationEvent },
         };
 
-        public static IEnumerable<XElement> FormatList(IList<EpcisEvent> eventList, CancellationToken cancellationToken = default)
+        public static IEnumerable<XElement> FormatList(IList<EpcisEvent> eventList, CancellationToken cancellationToken)
         {
-            return eventList.TakeWhile(_ => !cancellationToken.IsCancellationRequested)
-                            .Select(x =>
-                                Formatters.TryGetValue(x.Type, out Func<EpcisEvent, XElement> formatter) 
-                                    ? formatter(x) 
-                                    : throw new Exception($"Unknown event type to format {x?.Type?.DisplayName}")
-                                )
-                            .ToList();
+            return eventList.TakeWhile(_ => !cancellationToken.IsCancellationRequested).Select(FormatEvent);
+        }
+
+        private static XElement FormatEvent(EpcisEvent evt)
+        {
+            return Formatters.TryGetValue(evt.Type, out Func<EpcisEvent, XElement> formatter)
+                    ? formatter(evt)
+                    : throw new Exception($"Unknown event type to format {evt?.Type?.DisplayName}");
         }
 
         private static XElement FormatObjectEvent(EpcisEvent evt)

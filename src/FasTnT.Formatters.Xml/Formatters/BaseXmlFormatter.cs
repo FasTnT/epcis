@@ -73,7 +73,7 @@ namespace FasTnT.Parsers.Xml.Formatters
             else if (response.MasterdataList.Any())
             {
                 resultName = "VocabularyList";
-                resultList = XmlMasterdataFormatter.FormatMasterData(response.MasterdataList);
+                resultList = XmlMasterdataFormatter.FormatMasterData(response.MasterdataList, cancellationToken);
             }
 
             var unwrappedResponse = new XElement(ElementName("QueryResults"),
