@@ -18,13 +18,13 @@ namespace FasTnT.Parsers.Xml.Formatters
         {
             if (response == default || response is EmptyResponse) return;
 
-            var formattedResponse = Format(response);
+            var formattedResponse = Format(response, cancellationToken);
             var wrappedResponse = WrapResponse(formattedResponse);
 
             await wrappedResponse.SaveAsync(output, Options, cancellationToken);
         }
 
-        private XElement Format(IEpcisResponse entity)
+        private XElement Format(IEpcisResponse entity, CancellationToken cancellationToken)
         {
             return entity switch
             {
@@ -33,7 +33,7 @@ namespace FasTnT.Parsers.Xml.Formatters
                 ExceptionResponse exception => FormatInternal(exception),
                 GetQueryNamesResponse queryNames => FormatGetQueryNamesResponse(queryNames),
                 GetSubscriptionIdsResponse subscriptionIds => FormatGetSubscriptionIdsResponse(subscriptionIds),
-                PollResponse poll => FormatPollResponse(poll),
+                PollResponse poll => FormatPollResponse(poll, cancellationToken),
                 _ => throw new NotImplementedException($"Unable to format '{entity.GetType()}'")
             };
         }
@@ -60,7 +60,7 @@ namespace FasTnT.Parsers.Xml.Formatters
             return new XElement(ElementName("GetSubscriptionIDsResult"), response.SubscriptionIds.Select(x => new XElement("string", x))); 
         }
 
-        private XElement FormatPollResponse(PollResponse response)
+        private XElement FormatPollResponse(PollResponse response, CancellationToken cancellationToken)
         {
             var resultName = "EventList";
             var resultList = default(IEnumerable<XElement>);
@@ -68,12 +68,12 @@ namespace FasTnT.Parsers.Xml.Formatters
             if (response.EventList.Any())
             {
                 resultName = "EventList";
-                resultList = XmlEventFormatter.FormatList(response.EventList);
+                resultList = XmlEventFormatter.FormatList(response.EventList, cancellationToken);
             }
             else if (response.MasterdataList.Any())
             {
                 resultName = "VocabularyList";
-                resultList = XmlMasterdataFormatter.FormatMasterData(response.MasterdataList);
+                resultList = XmlMasterdataFormatter.FormatMasterData(response.MasterdataList, cancellationToken);
             }
 
             var unwrappedResponse = new XElement(ElementName("QueryResults"),
