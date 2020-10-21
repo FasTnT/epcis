@@ -59,7 +59,7 @@ namespace FasTnT.Data.PostgreSql.Query
 
             using (var reader = await _connection.QueryMultipleAsync(new CommandDefinition(_sqlTemplate.RawSql, _parameters.Values, cancellationToken: cancellationToken)))
             {
-                var eventDtoManager = await EventDtoManager.ReadAsync(reader);
+                var eventDtoManager = await EventDtoManager.ReadAsync(reader, cancellationToken);
 
                 return eventDtoManager.FormatEvents();
             }
