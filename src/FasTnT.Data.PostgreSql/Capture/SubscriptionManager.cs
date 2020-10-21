@@ -26,9 +26,9 @@ namespace FasTnT.Data.PostgreSql.Subscriptions
             var parameters = new List<ParameterDto>();
             var parameterValues = new List<ParameterValueDto>();
 
-            using (var tx = _connection.BeginTransaction())
+            using (var transaction = _connection.BeginTransaction())
             {
-                var subscriptionId = await tx.InsertAsync(SubscriptionDto.Create(subscription));
+                var subscriptionId = await transaction.InsertAsync(SubscriptionDto.Create(subscription));
 
                 for(short id=0; id<subscription.Parameters.Count; id++)
                 {
@@ -36,10 +36,10 @@ namespace FasTnT.Data.PostgreSql.Subscriptions
                     parameterValues.AddRange(subscription.Parameters[id].Values.Select(x => ParameterValueDto.Create(x, id, subscriptionId)));
                 }
 
-                await tx.BulkInsertAsync(parameters, cancellationToken);
-                await tx.BulkInsertAsync(parameterValues, cancellationToken);
+                await transaction.BulkInsertAsync(parameters, cancellationToken);
+                await transaction.BulkInsertAsync(parameterValues, cancellationToken);
 
-                tx.Commit();
+                transaction.Commit();
             }
         }
 
