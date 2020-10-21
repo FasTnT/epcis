@@ -2,7 +2,7 @@
   "profiles": {
     "FasTnT.Host": {
       "commandName": "Project",
-      "commandLineArgs": "--urls http://localhost:5102/",
+      "commandLineArgs": "--urls http://localhost:5102/ --connectionStrings:FasTnT.Database \"Server=localhost;Port=5434;Userid=postgres;Password=P@ssw0rd;Database=fastnt\"",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       },
