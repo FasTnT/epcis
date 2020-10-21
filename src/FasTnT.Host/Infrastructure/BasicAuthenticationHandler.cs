@@ -33,10 +33,7 @@ namespace FasTnT.Host
             try
             {
                 var authHeader = AuthenticationHeaderValue.Parse(Request.Headers[HeaderKey]);
-                var credentialBytes = Convert.FromBase64String(authHeader.Parameter);
-                var credentials = Encoding.UTF8.GetString(credentialBytes).Split(':');
-                var username = credentials[0];
-                var password = credentials[1];
+                var (username, password) = ParseAuthenticationHeader(authHeader);
 
                 return await AuthenticateUser(username, password);
             }
@@ -44,6 +41,16 @@ namespace FasTnT.Host
             {
                 return AuthenticateResult.Fail(ex.Message);
             }
+        }
+
+        private (string username, string password) ParseAuthenticationHeader(AuthenticationHeaderValue authHeader)
+        {
+            var credentialBytes = Convert.FromBase64String(authHeader.Parameter);
+            var credentials = Encoding.UTF8.GetString(credentialBytes).Split(':');
+
+            return credentials.Length == 2
+                ? (credentials[0], credentials[1])
+                : throw new FormatException($"{HeaderKey} header must contain 2 values separated by ':'");
         }
 
         private async Task<AuthenticateResult> AuthenticateUser(string username, string password)
