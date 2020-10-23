@@ -200,7 +200,7 @@ DROP TABLE eventIds;</value>
     <value>INSERT INTO subscriptions.parameter_value(parameter_id, subscription_id, value) VALUES(@parameterid, @subscriptionId, @value) ...;</value>
   </data>
   <data name="Store_RequestDto" xml:space="preserve">
-    <value>INSERT INTO epcis.request(document_time, record_time, user_id) VALUES(@documenttime, @recordtime, @userid) RETURNING id;</value>
+    <value>INSERT INTO epcis.request(document_time, record_time, subscription_id, user_id) VALUES(@documenttime, @recordtime, @subscriptionid, @userid) RETURNING id;</value>
   </data>
   <data name="Store_SourceDestDto" xml:space="preserve">
     <value>INSERT INTO epcis.source_destination(request_id, event_id, type, source_dest_id, direction) VALUES (@requestid, @eventid, @type, @id, @direction) ...;</value>
