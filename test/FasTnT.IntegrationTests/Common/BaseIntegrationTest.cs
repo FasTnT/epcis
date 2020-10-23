@@ -38,11 +38,7 @@ namespace FasTnT.IntegrationTests.Common
         [TestCleanup]
         public void Cleanup()
         {
-            using (var command = Connection.CreateCommand())
-            {
-                command.CommandText = @"DROP SCHEMA sbdh CASCADE; DROP SCHEMA callback CASCADE; DROP SCHEMA subscriptions CASCADE; DROP SCHEMA cbv CASCADE; DROP SCHEMA epcis CASCADE; DROP SCHEMA users CASCADE; DELETE FROM public.schemaversions;";
-                command.ExecuteNonQuery();
-            }
+            DropSchemas();
 
             if (Connection != null)
             {
@@ -57,17 +53,21 @@ namespace FasTnT.IntegrationTests.Common
 
         public IEnumerable<string> Query(string sqlCommand)
         {
-            using (var command = Connection.CreateCommand())
+            using var command = Connection.CreateCommand();
+            command.CommandText = sqlCommand;
+
+            using var reader = command.ExecuteReader();
+            while (reader.Read())
             {
-                command.CommandText = sqlCommand;
-                using (var reader = command.ExecuteReader())
-                {
-                    while (reader.Read())
-                    {
-                        yield return reader.GetString(0);
-                    }
-                }
+                yield return reader.GetString(0);
             }
+        }
+
+        private void DropSchemas()
+        {
+            using var command = Connection.CreateCommand();
+            command.CommandText = @"DROP SCHEMA sbdh CASCADE; DROP SCHEMA callback CASCADE; DROP SCHEMA subscriptions CASCADE; DROP SCHEMA cbv CASCADE; DROP SCHEMA epcis CASCADE; DROP SCHEMA users CASCADE; DELETE FROM public.schemaversions;";
+            command.ExecuteNonQuery();
         }
     }
 }

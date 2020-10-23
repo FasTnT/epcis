@@ -1,7 +1,6 @@
 ﻿using FasTnT.Domain.Data.Model.Filters;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using System.Collections;
 
 namespace FasTnT.UnitTest.Queries.SimpleEventQuery
 {

@@ -19,16 +19,14 @@ namespace FasTnT.IntegrationTests.Formatters.XML
 
         public override void When()
         {
-            using(var stream = new MemoryStream())
-            {
-                Task.WaitAll(Formatter.Write(Response, stream, default));
-                stream.Seek(0, SeekOrigin.Begin);
+            using var stream = new MemoryStream();
 
-                using (var reader = new StreamReader(stream))
-                {
-                    Formatted = reader.ReadToEnd();
-                }
-            }
+            Task.WaitAll(Formatter.Write(Response, stream, default));
+            stream.Seek(0, SeekOrigin.Begin);
+
+            using var reader = new StreamReader(stream);
+
+            Formatted = reader.ReadToEnd();
         }
     }
 }

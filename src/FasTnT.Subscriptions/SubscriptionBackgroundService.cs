@@ -61,14 +61,12 @@ namespace FasTnT.Subscriptions
 
         private async Task Execute(IEnumerable<Subscription> subscriptions, CancellationToken cancellationToken)
         {
-            using (var scope = _services.CreateScope())
-            {
-                var subscriptionRunner = scope.ServiceProvider.GetService<SubscriptionRunner>();
+            using var scope = _services.CreateScope();
+            var subscriptionRunner = scope.ServiceProvider.GetService<SubscriptionRunner>();
 
-                foreach (var subscription in subscriptions)
-                {
-                    await subscriptionRunner.Run(subscription, cancellationToken);
-                }
+            foreach (var subscription in subscriptions)
+            {
+                await subscriptionRunner.Run(subscription, cancellationToken);
             }
         }
 
@@ -80,14 +78,12 @@ namespace FasTnT.Subscriptions
             {
                 try
                 {
-                    using (var scope = _services.CreateScope())
-                    {
-                        var subscriptionManager = scope.ServiceProvider.GetService<ISubscriptionManager>();
-                        var subscriptions = await subscriptionManager.GetAll(cancellationToken);
+                    using var scope = _services.CreateScope();
+                    var subscriptionManager = scope.ServiceProvider.GetService<ISubscriptionManager>();
+                    var subscriptions = await subscriptionManager.GetAll(cancellationToken);
 
-                        subscriptions.ForEach(Register);
-                        initialized = true;
-                    }
+                    subscriptions.ForEach(Register);
+                    initialized = true;
                 }
                 catch
                 {
@@ -152,10 +148,9 @@ namespace FasTnT.Subscriptions
         {
             lock (_monitor)
             {
-                var nextExecution = _scheduledExecutions.Any() ? _scheduledExecutions.Values.Min() : DateTime.UtcNow.AddMilliseconds(10000);
-                var timeUntilTrigger = nextExecution - DateTime.UtcNow;
-
-                if (timeUntilTrigger > TimeSpan.Zero) Monitor.Wait(_monitor, timeUntilTrigger);
+                _ = _scheduledExecutions.Any()
+                 ? Monitor.Wait(_monitor, _scheduledExecutions.Values.Min() - DateTime.UtcNow)
+                 : Monitor.Wait(_monitor);
             }
         }
     }

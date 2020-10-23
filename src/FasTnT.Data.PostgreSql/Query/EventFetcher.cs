@@ -7,7 +7,6 @@ using FasTnT.Model.Events;
 using FasTnT.PostgreSql.DapperConfiguration;
 using System.Collections.Generic;
 using System.Data;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using static Dapper.SqlBuilder;
@@ -57,12 +56,10 @@ namespace FasTnT.Data.PostgreSql.Query
             _query = _filters.ContainsFilters ? _query.Where(_filters.GetSqlFilters()) : _query;
             _query = _query.OrderBy($"{_orderField.ToPgSql()} {_orderDirection.ToPgSql()}");
 
-            using (var reader = await _connection.QueryMultipleAsync(new CommandDefinition(_sqlTemplate.RawSql, _parameters.Values, cancellationToken: cancellationToken)))
-            {
-                var eventDtoManager = await EventDtoManager.ReadAsync(reader, cancellationToken);
+            using var reader = await _connection.QueryMultipleAsync(new CommandDefinition(_sqlTemplate.RawSql, _parameters.Values, cancellationToken: cancellationToken));
+            var eventDtoManager = await EventDtoManager.ReadAsync(reader, cancellationToken);
 
-                return eventDtoManager.FormatEvents();
-            }
+            return eventDtoManager.FormatEvents();
         }
     }
 }
