@@ -2,7 +2,6 @@
 using FasTnT.Data.PostgreSql.DapperConfiguration;
 using FasTnT.Data.PostgreSql.DTOs;
 using FasTnT.Model.Events;
-using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;

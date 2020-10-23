@@ -27,24 +27,22 @@ namespace FasTnT.PostgreSql.Capture
 
         public async Task Capture(EpcisRequest request, RequestContext context, CancellationToken cancellationToken)
         {
-            using (var tx = _connection.BeginTransaction())
-            {
-                var requestId = await StoreHeader(request, context.User, tx, cancellationToken);
+            using var transaction = _connection.BeginTransaction();
+            var requestId = await StoreHeader(request, context.User, transaction, cancellationToken);
 
-                await StoreStandardBusinessHeader(request.StandardBusinessHeader, requestId, tx, cancellationToken);
-                await StoreCallbackInformation(request.SubscriptionCallback, requestId, tx, cancellationToken);
-                await StoreEpcisEvents(request.EventList, tx, requestId, cancellationToken);
-                await StoreMasterData(request.MasterdataList, tx, cancellationToken);
+            await StoreStandardBusinessHeader(request.StandardBusinessHeader, requestId, transaction, cancellationToken);
+            await StoreCallbackInformation(request.SubscriptionCallback, requestId, transaction, cancellationToken);
+            await StoreEpcisEvents(request.EventList, requestId, transaction, cancellationToken);
+            await StoreMasterData(request.MasterdataList, transaction, cancellationToken);
 
-                tx.Commit();
-            };
+            transaction.Commit();
         }
 
-        private async Task<int> StoreHeader(EpcisRequest request, User user, IDbTransaction tx, CancellationToken cancellationToken)
+        private async Task<int> StoreHeader(EpcisRequest request, User user, IDbTransaction transaction, CancellationToken cancellationToken)
         {
             var requestDto = RequestDto.Create(request, user.Id);
 
-            return await tx.InsertAsync(requestDto, cancellationToken);
+            return await transaction.InsertAsync(requestDto, cancellationToken);
         }
 
         private async Task StoreStandardBusinessHeader(StandardBusinessHeader header, int requestId, IDbTransaction transaction, CancellationToken cancellationToken)
@@ -67,7 +65,7 @@ namespace FasTnT.PostgreSql.Capture
             await transaction.InsertAsync(parameters, cancellationToken);
         }
 
-        private static async Task StoreEpcisEvents(List<EpcisEvent> events, IDbTransaction transaction, int requestId, CancellationToken cancellationToken)
+        private static async Task StoreEpcisEvents(List<EpcisEvent> events, int requestId, IDbTransaction transaction, CancellationToken cancellationToken)
         {
             if (events.Count == 0) return;
 

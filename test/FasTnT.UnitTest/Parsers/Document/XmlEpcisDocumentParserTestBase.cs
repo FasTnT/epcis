@@ -1,6 +1,5 @@
 ﻿using FasTnT.Model;
 using FasTnT.Parsers.Xml.Capture;
-using Microsoft.AspNetCore.Mvc;
 using System.Xml.Linq;
 
 namespace FasTnT.UnitTest.Parsers.Document
