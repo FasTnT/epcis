@@ -13,25 +13,33 @@ namespace FasTnT.Subscriptions
     {
         public async Task Send(string destination, IEpcisResponse epcisResponse, CancellationToken cancellationToken)
         {
-            var formatter = new XmlCommandFormatter();
             var request = WebRequest.CreateHttp(destination);
             request.Method = "POST";
-            request.ContentType = formatter.ContentType;
             TrySetBasicAuthorization(request);
 
-            using (var stream = await request.GetRequestStreamAsync())
-            {
-                await formatter.WriteResponse(epcisResponse, stream, cancellationToken);
-            }
+            await WriteRequestPayload(request, epcisResponse, cancellationToken);
+            await EnsureResponseIsSuccessful(request, cancellationToken);
+        }
 
-            using (var response = await request.GetResponseAsync() as HttpWebResponse)
-            using (var responseMessage = new HttpResponseMessage(response.StatusCode))
+        private async Task EnsureResponseIsSuccessful(HttpWebRequest request, CancellationToken cancellationToken)
+        {
+            using var registration = cancellationToken.Register(() => request.Abort(), false);
+            using var response = await request.GetResponseAsync() as HttpWebResponse;
+            using var responseMessage = new HttpResponseMessage(response.StatusCode);
+
+            if (!responseMessage.IsSuccessStatusCode)
             {
-                if (!responseMessage.IsSuccessStatusCode)
-                {
-                    throw new Exception($"Response does not indicate success status code: {response.StatusCode} ({response.StatusDescription})");
-                }
+                throw new Exception($"Response does not indicate success status code: {response.StatusCode} ({response.StatusDescription})");
             }
+        }
+
+        private async Task WriteRequestPayload(HttpWebRequest request, IEpcisResponse epcisResponse, CancellationToken cancellationToken)
+        {
+            using var stream = await request.GetRequestStreamAsync();
+            var formatter = new XmlCommandFormatter();
+
+            request.ContentType = formatter.ContentType;
+            await formatter.WriteResponse(epcisResponse, stream, cancellationToken);
         }
 
         private void TrySetBasicAuthorization(HttpWebRequest request)

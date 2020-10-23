@@ -31,11 +31,6 @@ namespace FasTnT.Host
                                     .AddJsonFile($"appsettings.{hostingContext.HostingEnvironment.EnvironmentName}.json", optional: true, reloadOnChange: true);
                               config.AddEnvironmentVariables();
                               config.AddCommandLine(args);
-
-                              if (hostingContext.HostingEnvironment.IsDevelopment())
-                              {
-                                  config.AddUserSecrets<Startup>();
-                              }
                           })
                           .UseStartup<Startup>();
             })

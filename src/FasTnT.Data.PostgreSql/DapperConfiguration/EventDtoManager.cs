@@ -39,8 +39,10 @@ namespace FasTnT.PostgreSql.DapperConfiguration
             await transaction.BulkInsertAsync(CorrectiveIds, cancellationToken);
         }
 
-        internal static async Task<EventDtoManager> ReadAsync(SqlMapper.GridReader reader)
+        internal static async Task<EventDtoManager> ReadAsync(SqlMapper.GridReader reader, CancellationToken cancellationToken)
         {
+            cancellationToken.ThrowIfCancellationRequested();
+
             var holder = new EventDtoManager();
 
             holder.Events.AddRange(await reader.ReadAsync<EventDto>());

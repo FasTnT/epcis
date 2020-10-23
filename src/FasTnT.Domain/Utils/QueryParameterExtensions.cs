@@ -76,20 +76,19 @@ namespace FasTnT.Domain.Utils
         {
             if (!parameter.Name.StartsWith("MATCH_")) throw new Exception("A 'MATCH_*' parameter is expected here.");
 
-            switch (parameter.Name.Substring(6))
+            return parameter.Name.Substring(6) switch
             {
-                case "anyEPC": return new[] { EpcType.List, EpcType.ChildEpc, EpcType.ParentId, EpcType.InputEpc, EpcType.OutputEpc };
-                case "epc": return new[] { EpcType.List, EpcType.ChildEpc };
-                case "parentID": return new[] { EpcType.ParentId };
-                case "inputEPC": return new[] { EpcType.InputEpc };
-                case "outputEPC": return new[] { EpcType.OutputEpc };
-                case "epcClass": return new[] { EpcType.Quantity, EpcType.ChildQuantity };
-                case "inputEpcClass": return new[] { EpcType.InputQuantity };
-                case "outputEpcClass": return new[] { EpcType.OutputQuantity };
-                case "anyEpcClass": return new[] { EpcType.Quantity, EpcType.InputQuantity, EpcType.OutputQuantity };
-            }
-
-            throw new Exception($"Unknown 'MATCH_*' parameter: '{parameter.Name}'");
+                "anyEPC"         => new[] { EpcType.List, EpcType.ChildEpc, EpcType.ParentId, EpcType.InputEpc, EpcType.OutputEpc },
+                "epc"            => new[] { EpcType.List, EpcType.ChildEpc },
+                "parentID"       => new[] { EpcType.ParentId },
+                "inputEPC"       => new[] { EpcType.InputEpc },
+                "outputEPC"      => new[] { EpcType.OutputEpc },
+                "epcClass"       => new[] { EpcType.Quantity, EpcType.ChildQuantity },
+                "inputEpcClass"  => new[] { EpcType.InputQuantity },
+                "outputEpcClass" => new[] { EpcType.OutputQuantity },
+                "anyEpcClass"    => new[] { EpcType.Quantity, EpcType.InputQuantity, EpcType.OutputQuantity },
+                _                => throw new Exception($"Unknown 'MATCH_*' parameter: '{parameter.Name}'")
+            };
         }
 
         private static T ChangeType<T>(string value)

@@ -9,7 +9,7 @@ namespace FasTnT.Subscriptions.Schedule
 
         public SubscriptionSchedule(QuerySchedule schedule)
         {
-            schedule = schedule ?? new QuerySchedule();
+            schedule ??= new QuerySchedule();
 
             _seconds = ScheduleEntry.Parse(schedule.Second, 0, 59);
             _minutes = ScheduleEntry.Parse(schedule.Minute, 0, 59);

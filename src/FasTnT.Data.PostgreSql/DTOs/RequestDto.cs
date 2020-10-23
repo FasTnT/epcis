@@ -8,6 +8,7 @@ namespace FasTnT.Data.PostgreSql.DTOs
         public DateTime DocumentTime { get; set; }
         public DateTime RecordTime { get; set; }
         public string SchemaVersion { get; set; }
+        public string SubscriptionId { get; set; }
         public int UserId { get; set; }
 
         public static RequestDto Create(EpcisRequest request, int userId)
@@ -17,6 +18,7 @@ namespace FasTnT.Data.PostgreSql.DTOs
                 DocumentTime = request.DocumentTime,
                 RecordTime = request.RecordTime,
                 SchemaVersion = request.SchemaVersion,
+                SubscriptionId = request.SubscriptionCallback?.SubscriptionId,
                 UserId = userId
             };
         }

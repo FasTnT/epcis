@@ -79,7 +79,7 @@ namespace FasTnT.Data.PostgreSql.DapperConfiguration {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to SELECT s.id, s.destination, s.subscription_id, s.query_name, s.active, s.trigger, s.report_if_empty, s.schedule_minutes, s.schedule_seconds, s.schedule_hours, s.schedule_month, s.schedule_day_of_month, s.schedule_day_of_week FROM subscriptions.subscription s;
+        ///   Looks up a localized string similar to SELECT s.id, s.destination, s.subscription_id, s.query_name, s.active, s.trigger, s.report_if_empty, s.schedule_minutes as minute, s.schedule_seconds as second, s.schedule_hours as hour, s.schedule_month as month, s.schedule_day_of_month as dayofmonth, s.schedule_day_of_week as dayofweek FROM subscriptions.subscription s;
         ///SELECT p.id, p.subscription_id, p.name FROM subscriptions.parameter p;
         ///SELECT pv.parameter_id, pv.subscription_id, pv.value FROM subscriptions.parameter_value pv;.
         /// </summary>

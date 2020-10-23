@@ -1,21 +1,25 @@
 ﻿using FasTnT.Model.MasterDatas;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Xml.Linq;
 
 namespace FasTnT.Parsers.Xml.Formatters
 {
     public static class XmlMasterdataFormatter
     {
-        internal static IEnumerable<XElement> FormatMasterData(IList<EpcisMasterData> masterdataList)
+        internal static IEnumerable<XElement> FormatMasterData(IList<EpcisMasterData> masterdataList, CancellationToken cancellationToken)
         {
             var vocabularies = masterdataList.GroupBy(md => md.Type);
 
-            return vocabularies.Select(group =>
-            {
-                var elements = new XElement("VocabularyElementList", group.Select(FormatVocabulary));
-                return new XElement("Vocabulary", new XAttribute("type", group.Key), elements);
-            });
+            return vocabularies.TakeWhile(_ => !cancellationToken.IsCancellationRequested).Select(FormatGroup);
+        }
+
+        private static XElement FormatGroup(IGrouping<string, EpcisMasterData> group)
+        {
+            var elements = new XElement("VocabularyElementList", group.Select(FormatVocabulary));
+
+            return new XElement("Vocabulary", new XAttribute("type", group.Key), elements);
         }
 
         private static XElement FormatVocabulary(EpcisMasterData masterData)

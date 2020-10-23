@@ -42,20 +42,15 @@ namespace FasTnT.Parsers.Xml.Capture
             switch (element.Name.LocalName)
             {
                 case "QueryResults":
-                    ParseCallbackResult(element, request);
-                    break;
+                    ParseCallbackResult(element, request); break;
                 case "QueryTooLargeException":
-                    ParseCallbackError(element, QueryCallbackType.QueryTooLargeException, request);
-                    break;
+                    ParseCallbackError(element, QueryCallbackType.QueryTooLargeException, request); break;
                 case "ImplementationException":
-                    ParseCallbackError(element, QueryCallbackType.ImplementationException, request);
-                    break;
+                    ParseCallbackError(element, QueryCallbackType.ImplementationException, request); break;
                 case "EventList":
-                    request.EventList.AddRange(XmlEventParser.ParseEvents(element));
-                    break;
+                    request.EventList.AddRange(XmlEventParser.ParseEvents(element)); break;
                 case "VocabularyList":
-                    request.MasterdataList.AddRange(XmlMasterdataParser.ParseMasterdata(element));
-                    break;
+                    request.MasterdataList.AddRange(XmlMasterdataParser.ParseMasterdata(element)); break;
             }
         }
 

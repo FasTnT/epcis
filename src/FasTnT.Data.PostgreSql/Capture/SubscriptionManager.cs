@@ -26,21 +26,19 @@ namespace FasTnT.Data.PostgreSql.Subscriptions
             var parameters = new List<ParameterDto>();
             var parameterValues = new List<ParameterValueDto>();
 
-            using (var tx = _connection.BeginTransaction())
+            using var transaction = _connection.BeginTransaction();
+            var subscriptionId = await transaction.InsertAsync(SubscriptionDto.Create(subscription));
+
+            for(short id=0; id<subscription.Parameters.Count; id++)
             {
-                var subscriptionId = await tx.InsertAsync(SubscriptionDto.Create(subscription));
-
-                for(short id=0; id<subscription.Parameters.Count; id++)
-                {
-                    parameters.Add(ParameterDto.Create(subscription.Parameters[id], id, subscriptionId));
-                    parameterValues.AddRange(subscription.Parameters[id].Values.Select(x => ParameterValueDto.Create(x, id, subscriptionId)));
-                }
-
-                await tx.BulkInsertAsync(parameters, cancellationToken);
-                await tx.BulkInsertAsync(parameterValues, cancellationToken);
-
-                tx.Commit();
+                parameters.Add(ParameterDto.Create(subscription.Parameters[id], id, subscriptionId));
+                parameterValues.AddRange(subscription.Parameters[id].Values.Select(x => ParameterValueDto.Create(x, id, subscriptionId)));
             }
+
+            await transaction.BulkInsertAsync(parameters, cancellationToken);
+            await transaction.BulkInsertAsync(parameterValues, cancellationToken);
+
+            transaction.Commit();
         }
 
         public async Task AcknowledgePendingRequests(string subscriptionId, int[] requestIds, CancellationToken cancellationToken)
@@ -74,7 +72,7 @@ namespace FasTnT.Data.PostgreSql.Subscriptions
 
         public async Task RegisterSubscriptionTrigger(string subscriptionId, SubscriptionResult result, string reason, CancellationToken cancellationToken)
         {
-            var command = new CommandDefinition(SqlSubscriptionQueries.RegisterTrigger, new { subscriptionId, result, reason }, cancellationToken: cancellationToken);
+            var command = new CommandDefinition(SqlSubscriptionQueries.RegisterTrigger, new { subscriptionId, Result = result.Id, reason }, cancellationToken: cancellationToken);
 
             await _connection.ExecuteAsync(command);
         }

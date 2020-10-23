@@ -234,7 +234,7 @@ namespace FasTnT.Data.PostgreSql.DapperConfiguration {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to INSERT INTO epcis.request(document_time, record_time, user_id) VALUES(@documenttime, @recordtime, @userid) RETURNING id;.
+        ///   Looks up a localized string similar to INSERT INTO epcis.request(document_time, record_time, subscription_id, user_id) VALUES(@documenttime, @recordtime, @subscriptionid, @userid) RETURNING id;.
         /// </summary>
         public static string Store_RequestDto {
             get {
