@@ -74,7 +74,7 @@ namespace FasTnT.Data.PostgreSql.Subscriptions
 
         public async Task RegisterSubscriptionTrigger(string subscriptionId, SubscriptionResult result, string reason, CancellationToken cancellationToken)
         {
-            var command = new CommandDefinition(SqlSubscriptionQueries.RegisterTrigger, new { subscriptionId, result, reason }, cancellationToken: cancellationToken);
+            var command = new CommandDefinition(SqlSubscriptionQueries.RegisterTrigger, new { subscriptionId, Result = result.Id, reason }, cancellationToken: cancellationToken);
 
             await _connection.ExecuteAsync(command);
         }
