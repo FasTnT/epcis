@@ -30,14 +30,14 @@ namespace FasTnT.Subscriptions.Schedule
 
         private void ParseElement(string element)
         {
-            if (element.StartsWith("[") && element.EndsWith("]") && element.Contains("-")) ParseRange(element);
+            if (element.StartsWith("[") && element.EndsWith(']') && element.Contains('-')) ParseRange(element);
             else if (int.TryParse(element, out int value)) AddValue(value);
             else throw new ArgumentException($"Invalid value: {element}");
         }
 
         private void ParseRange(string element)
         {
-            var rangeParts = element.Substring(1, element.Length - 2).Split('-');
+            var rangeParts = element[1..^1].Split('-');
 
             if (rangeParts.Length != 2) throw new ArgumentException($"Invalid value: {element}");
             if (int.TryParse(rangeParts[0], out int min) && int.TryParse(rangeParts[1], out int max)) AddRange(min, max);
