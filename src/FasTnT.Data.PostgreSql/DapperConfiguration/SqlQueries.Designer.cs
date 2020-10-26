@@ -279,6 +279,15 @@ namespace FasTnT.Data.PostgreSql.DapperConfiguration {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to INSERT INTO subscriptions.pendingrequest(subscription_id, request_id) SELECT @subscriptionid, id FROM epcis.request WHERE record_time &gt;= @initialrecordtime;.
+        /// </summary>
+        public static string Store_SubscriptionInitialRequestDto {
+            get {
+                return ResourceManager.GetString("Store_SubscriptionInitialRequestDto", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to INSERT INTO epcis.business_transaction(request_id, event_id, transaction_type, transaction_id) VALUES (@requestid, @eventid, @type, @id) ...;.
         /// </summary>
         public static string Store_TransactionDto {
