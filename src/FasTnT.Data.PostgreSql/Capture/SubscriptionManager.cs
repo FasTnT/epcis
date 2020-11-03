@@ -28,7 +28,6 @@ namespace FasTnT.Data.PostgreSql.Subscriptions
 
             using var transaction = _connection.BeginTransaction();
             var subscriptionId = await transaction.InsertAsync(SubscriptionDto.Create(subscription));
-            await transaction.InsertAsync(SubscriptionInitialRequestDto.Create(subscription, subscriptionId));
 
             for(short id=0; id<subscription.Parameters.Count; id++)
             {

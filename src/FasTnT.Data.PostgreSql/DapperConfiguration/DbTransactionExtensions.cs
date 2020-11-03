@@ -26,7 +26,6 @@ namespace FasTnT.PostgreSql.DapperConfiguration
                 { nameof(ContactInformationDto), SqlQueries.Store_ContactInformationDto},
                 { nameof(SubscriptionCallbackDto), SqlQueries.Store_SubscriptionCallbackDto},
                 { nameof(SubscriptionDto), SqlQueries.Store_SubscriptionDto },
-                { nameof(SubscriptionInitialRequestDto), SqlQueries.Store_SubscriptionInitialRequestDto },
                 { nameof(ParameterDto), SqlQueries.Store_ParameterDto },
                 { nameof(ParameterValueDto), SqlQueries.Store_ParameterValueDto },
                 // Masterdata DTOs
