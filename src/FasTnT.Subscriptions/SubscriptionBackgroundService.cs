@@ -150,9 +150,12 @@ namespace FasTnT.Subscriptions
             lock (_monitor)
             {
                 _ = _scheduledExecutions.Any()
-                 ? Monitor.Wait(_monitor, _scheduledExecutions.Values.Min().GetDifferenceTime(DateTime.UtcNow))
+                 ? Monitor.Wait(_monitor, GetNextExecutionWaitTime(_scheduledExecutions.Values.Min()))
                  : Monitor.Wait(_monitor);
             }
         }
+
+        private TimeSpan GetNextExecutionWaitTime(DateTime executionTime)
+            => executionTime < DateTime.UtcNow ? TimeSpan.Zero : executionTime - DateTime.UtcNow;
     }
 }

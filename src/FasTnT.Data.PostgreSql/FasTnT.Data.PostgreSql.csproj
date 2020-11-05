@@ -4,6 +4,7 @@
     <LangVersion>8</LangVersion>
   </PropertyGroup>
   <ItemGroup>
+    <None Remove="Migrations\Initial\M008_SubscriptionTrigger.sql" />
     <None Remove="Migrations\M001_CreateUsersSchema.sql" />
     <None Remove="Migrations\M002_CreateEpcisSchema.sql" />
     <None Remove="Migrations\M003_CreateCbvSchema.sql" />
@@ -32,6 +33,7 @@
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\Initial\M001_CreateUsersSchema.sql" />
+    <EmbeddedResource Include="Migrations\Initial\M008_SubscriptionTrigger.sql" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Dapper" Version="2.0.35" />
