@@ -2,7 +2,6 @@
 using FasTnT.Domain.Data;
 using FasTnT.Domain.Model.Subscriptions;
 using FasTnT.Domain.Queries;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -17,9 +16,9 @@ namespace FasTnT.Subscriptions
 
         private readonly IEnumerable<IEpcisQuery> _epcisQueries;
         private readonly ISubscriptionManager _subscriptionManager;
-        private readonly SubscriptionResultSender _resultSender;
+        private readonly ISubscriptionResultSender _resultSender;
 
-        public SubscriptionRunner(IEnumerable<IEpcisQuery> epcisQueries, ISubscriptionManager subscriptionManager, SubscriptionResultSender resultSender)
+        public SubscriptionRunner(IEnumerable<IEpcisQuery> epcisQueries, ISubscriptionManager subscriptionManager, ISubscriptionResultSender resultSender)
         {
             _epcisQueries = epcisQueries;
             _subscriptionManager = subscriptionManager;

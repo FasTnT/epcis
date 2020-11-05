@@ -9,7 +9,8 @@ using System.Threading.Tasks;
 
 namespace FasTnT.Subscriptions
 {
-    public class SubscriptionResultSender
+
+    public class HttpSubscriptionResultSender : ISubscriptionResultSender
     {
         public async Task<bool> Send(string destination, IEpcisResponse epcisResponse, CancellationToken cancellationToken)
         {
