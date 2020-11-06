@@ -29,11 +29,6 @@ namespace FasTnT.Domain.Utils
             return DateTime.TryParse(parameter.Values[0], out DateTime date) ? (object) date : ChangeType<double>(parameter.Values[0]);
         }
 
-        public static T[] GetValues<T>(this QueryParameter parameter)
-        {
-            return !parameter.Values.Any() ? Array.Empty<T>() : parameter.Values.Select(x => ChangeType<T>(x)).ToArray();
-        }
-
         public static FilterComparator GetComparator(this QueryParameter parameter)
         {
             return Enumeration.GetByDisplayName<FilterComparator>(parameter.Name.Substring(0, 2));

@@ -22,7 +22,7 @@ namespace FasTnT.Domain.Queries
         {
             { "eventType",               (fetcher, param) => fetcher.Apply(new SimpleParameterFilter<EventType> { Field = EpcisField.EventType, Values = param.Values.Select(Enumeration.GetByDisplayName<EventType>).ToArray() }) },
             { "eventCountLimit",         (fetcher, param) => fetcher.Apply(new LimitFilter { Value = param.GetValue<int>() }) },
-            { "maxEventCount",           (fetcher, param) => fetcher.Apply(new LimitFilter { Value = param.GetValue<int>() +1 }) },
+            { "maxEventCount",           (fetcher, param) => fetcher.Apply(new LimitFilter { Value = param.GetValue<int>() + 1 }) },
             { "EQ_action",               (fetcher, param) => fetcher.Apply(new SimpleParameterFilter<EventAction> { Field = EpcisField.Action, Values = param.Values.Select(Enumeration.GetByDisplayName<EventAction>).ToArray() }) },
             { "EQ_bizLocation",          (fetcher, param) => fetcher.Apply(new SimpleParameterFilter<string> { Field = EpcisField.BusinessLocation, Values =  param.Values }) },
             { "EQ_bizStep",              (fetcher, param) => fetcher.Apply(new SimpleParameterFilter<string> { Field = EpcisField.BusinessStep, Values =  param.Values }) },
