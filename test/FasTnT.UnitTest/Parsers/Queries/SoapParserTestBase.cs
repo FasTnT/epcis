@@ -1,5 +1,6 @@
 ﻿using FasTnT.Domain.Commands;
 using FasTnT.Parsers.Xml.Parsers.Query;
+using System;
 using System.IO;
 
 namespace FasTnT.UnitTest.Parsers.Soap
@@ -8,10 +9,18 @@ namespace FasTnT.UnitTest.Parsers.Soap
     {
         public MemoryStream PollStream { get; set; }
         public IQueryRequest Result { get; set; }
+        public Exception Catched { get; private set; }
 
         public override void When()
         {
-            Result = new SoapQueryParser().Read(PollStream, default).Result;
+            try
+            {
+               Result = new SoapQueryParser().Read(PollStream, default).Result;
+            }
+            catch(Exception ex)
+            {
+                Catched = ex?.InnerException ?? ex;
+            }
         }
 
         public void SetRequest(string request)
