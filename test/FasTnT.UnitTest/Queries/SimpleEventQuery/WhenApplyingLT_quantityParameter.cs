@@ -1,0 +1,24 @@
+﻿using FasTnT.Domain.Data.Model.Filters;
+using FasTnT.Model.Enums;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Moq;
+
+namespace FasTnT.UnitTest.Queries.SimpleEventQuery
+{
+    [TestClass]
+    public class WhenApplyingLT_quantityParameter : SimpleEventQueryTestBase
+    {
+        public override void Given()
+        {
+            base.Given();
+
+            Parameters.Add(new Model.Queries.QueryParameter { Name = "LT_quantity", Values = new[] { "38" } });
+        }
+
+        [TestMethod]
+        public void ItShouldCallTheEventFetcherApplyMethodWithSourceDestinationFilter()
+        {
+            EventFetcher.Verify(x => x.Apply(It.Is<QuantityFilter>(f => f.Operator == FilterComparator.LessThan && f.Value == 38)), Times.Once);
+        }
+    }
+}
