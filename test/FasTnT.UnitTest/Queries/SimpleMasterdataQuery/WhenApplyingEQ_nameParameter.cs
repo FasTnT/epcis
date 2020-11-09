@@ -1,6 +1,7 @@
 ﻿using FasTnT.Domain.Data.Model.Filters;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
+using System;
 using System.Linq;
 
 namespace FasTnT.UnitTest.Queries.SimpleMasterdataQuery

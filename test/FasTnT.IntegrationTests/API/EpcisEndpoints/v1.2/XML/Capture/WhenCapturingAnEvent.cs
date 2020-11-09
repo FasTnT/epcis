@@ -28,4 +28,25 @@ namespace FasTnT.IntegrationTests.API.EpcisEndpoints.v1._2.XML.Capture
             Assert.IsTrue(string.IsNullOrEmpty(content));
         }
     }
+    
+    [TestClass]
+    public class WhenCapturingAnEventContainingInvalidUri : BaseIntegrationTest
+    {
+        public override async Task Act()
+        {
+            Client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Basic", "YWRtaW46UEBzc3cwcmQ=");
+            Result = await Client.PostAsync("/v1_2/Capture", new StringContent(File.ReadAllText("Requests/Capture/CaptureInvalidUri.xml"), Encoding.UTF8, "application/xml"));
+        }
+
+        [Assert]
+        public void ItShouldReturnHttp400BadRequestContent() => Assert.AreEqual(HttpStatusCode.BadRequest, Result.StatusCode);
+
+        [Assert]
+        public async Task ItShouldReturnANotNullContent()
+        {
+            var content = await Result.Content.ReadAsStringAsync();
+
+            Assert.IsFalse(string.IsNullOrEmpty(content));
+        }
+    }
 }
