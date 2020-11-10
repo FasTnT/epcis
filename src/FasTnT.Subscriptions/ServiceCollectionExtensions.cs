@@ -11,7 +11,7 @@ namespace FasTnT.Subscriptions
             services.AddSingleton<SubscriptionBackgroundService>();
             services.AddHostedService(s => s.GetRequiredService<SubscriptionBackgroundService>());
             services.AddScoped<SubscriptionRunner>();
-            services.AddScoped<SubscriptionResultSender>();
+            services.AddScoped<ISubscriptionResultSender, HttpSubscriptionResultSender>();
 
             return services;
         }

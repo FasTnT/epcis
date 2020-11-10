@@ -18,7 +18,7 @@ namespace FasTnT.Parsers.Xml.Query
                 Destination = element.Element("dest").Value,
                 Trigger = element.Element("controls")?.Element("trigger")?.Value,
                 ReportIfEmpty = bool.Parse(element.Element("controls").Element("reportIfEmpty").Value),
-                InitialRecordTime = DateTime.TryParse(element.Element("controls")?.Element("initialRecordTime")?.Value ?? "", out DateTime date) ? date : default(DateTime?),
+                InitialRecordTime = DateTime.TryParse(element.Element("controls")?.Element("initialRecordTime")?.Value ?? string.Empty, out DateTime date) ? date : default(DateTime?),
                 Parameters = XmlPollQueryParser.ParseParameters(element.Element("params")?.Elements()).ToList()
             };
             subscription.Schedule = ParseQuerySchedule(element.Element("controls")?.Element("schedule"));

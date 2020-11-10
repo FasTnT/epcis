@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<epcis:EPCISDocument xmlns:epcis="urn:epcglobal:epcis:xsd:1" creationDate="2017-09-19T12:57:12Z" schemaVersion="1.0">
+  <EPCISBody>
+    <EventList>
+      <AggregationEvent>
+        <eventTime>2018-06-14T12:51:17+02:00</eventTime>
+        <eventTimeZoneOffset>+02:00</eventTimeZoneOffset>
+        <parentID>urn:epc:id:sscc:4001356.5900000817</parentID>
+        <childEPCs>
+          <epc>5900000818</epc>
+        </childEPCs>
+        <action>ADD</action>
+        <bizStep>urn:fastnt:demo:bizstep:demo:packing</bizStep>
+        <disposition>urn:epcglobal:cbv:disp:loading</disposition>
+        <readPoint>
+          <id>urn:fastnt:demo:readpoint:0037000.00729.210,432</id>
+        </readPoint>
+        <bizLocation>
+          <id>urn:fastnt:demo:bizloc:0037000.00729.210</id>
+        </bizLocation>
+      </AggregationEvent>
+    </EventList>
+  </EPCISBody>
+</epcis:EPCISDocument>

@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using MoreLinq;
 using FasTnT.Subscriptions.Schedule;
+using FasTnT.Subscriptions.Utils;
 
 namespace FasTnT.Subscriptions
 {
@@ -149,9 +150,12 @@ namespace FasTnT.Subscriptions
             lock (_monitor)
             {
                 _ = _scheduledExecutions.Any()
-                 ? Monitor.Wait(_monitor, _scheduledExecutions.Values.Min() - DateTime.UtcNow)
+                 ? Monitor.Wait(_monitor, GetNextExecutionWaitTime(_scheduledExecutions.Values.Min()))
                  : Monitor.Wait(_monitor);
             }
         }
+
+        private TimeSpan GetNextExecutionWaitTime(DateTime executionTime)
+            => executionTime < DateTime.UtcNow ? TimeSpan.Zero : executionTime - DateTime.UtcNow;
     }
 }

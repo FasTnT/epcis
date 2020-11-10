@@ -3,6 +3,7 @@ using FasTnT.Model.Events;
 using FasTnT.Model.Queries;
 using FasTnT.Model.Utils;
 using System;
+using System.Globalization;
 using System.Linq;
 
 namespace FasTnT.Domain.Utils
@@ -26,12 +27,7 @@ namespace FasTnT.Domain.Utils
                 throw new Exception($"A single value is expected, but multiple were found. Parameter name '{parameter.Name}'");
             }
 
-            return DateTime.TryParse(parameter.Values[0], out DateTime date) ? (object) date : ChangeType<double>(parameter.Values[0]);
-        }
-
-        public static T[] GetValues<T>(this QueryParameter parameter)
-        {
-            return !parameter.Values.Any() ? Array.Empty<T>() : parameter.Values.Select(x => ChangeType<T>(x)).ToArray();
+            return DateTime.TryParse(parameter.Values[0], null, DateTimeStyles.AdjustToUniversal, out DateTime date) ? (object) date : ChangeType<double>(parameter.Values[0]);
         }
 
         public static FilterComparator GetComparator(this QueryParameter parameter)

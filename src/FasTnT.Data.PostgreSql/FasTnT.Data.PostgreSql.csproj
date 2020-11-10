@@ -4,6 +4,7 @@
     <LangVersion>8</LangVersion>
   </PropertyGroup>
   <ItemGroup>
+    <None Remove="Migrations\Initial\M008_SubscriptionTrigger.sql" />
     <None Remove="Migrations\M001_CreateUsersSchema.sql" />
     <None Remove="Migrations\M002_CreateEpcisSchema.sql" />
     <None Remove="Migrations\M003_CreateCbvSchema.sql" />
@@ -32,13 +33,14 @@
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\Initial\M001_CreateUsersSchema.sql" />
+    <EmbeddedResource Include="Migrations\Initial\M008_SubscriptionTrigger.sql" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Dapper" Version="2.0.35" />
     <PackageReference Include="Dapper.SqlBuilder" Version="2.0.35" />
     <PackageReference Include="dbup-postgresql" Version="4.4.0" />
     <PackageReference Include="Faithlife.Utility.Dapper" Version="1.1.0" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="3.1.9" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="5.0.0" />
     <PackageReference Include="Npgsql" Version="4.1.5" />
   </ItemGroup>
   <ItemGroup>

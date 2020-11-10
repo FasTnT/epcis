@@ -9,28 +9,38 @@ using System.Threading.Tasks;
 
 namespace FasTnT.Subscriptions
 {
-    public class SubscriptionResultSender
+
+    public class HttpSubscriptionResultSender : ISubscriptionResultSender
     {
-        public async Task Send(string destination, IEpcisResponse epcisResponse, CancellationToken cancellationToken)
+        public async Task<bool> Send(string destination, IEpcisResponse epcisResponse, CancellationToken cancellationToken)
         {
             var request = WebRequest.CreateHttp(destination);
             request.Method = "POST";
             TrySetBasicAuthorization(request);
 
             await WriteRequestPayload(request, epcisResponse, cancellationToken);
-            await EnsureResponseIsSuccessful(request, cancellationToken);
+
+            return await SendRequestAsync(request, cancellationToken);
         }
 
-        private async Task EnsureResponseIsSuccessful(HttpWebRequest request, CancellationToken cancellationToken)
+        private async Task<bool> SendRequestAsync(HttpWebRequest request, CancellationToken cancellationToken)
         {
-            using var registration = cancellationToken.Register(() => request.Abort(), false);
-            using var response = await request.GetResponseAsync() as HttpWebResponse;
-            using var responseMessage = new HttpResponseMessage(response.StatusCode);
+            var requestWasSent = default(bool);
 
-            if (!responseMessage.IsSuccessStatusCode)
+            try
             {
-                throw new Exception($"Response does not indicate success status code: {response.StatusCode} ({response.StatusDescription})");
+                using var registration = cancellationToken.Register(() => request.Abort(), false);
+                using var response = await request.GetResponseAsync() as HttpWebResponse;
+                using var responseMessage = new HttpResponseMessage(response.StatusCode);
+
+                requestWasSent = responseMessage.IsSuccessStatusCode;
             }
+            catch (WebException)
+            {
+                requestWasSent = false;
+            }
+
+            return requestWasSent;
         }
 
         private async Task WriteRequestPayload(HttpWebRequest request, IEpcisResponse epcisResponse, CancellationToken cancellationToken)
