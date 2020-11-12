@@ -10,7 +10,6 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using MoreLinq;
 using FasTnT.Subscriptions.Schedule;
-using FasTnT.Subscriptions.Utils;
 
 namespace FasTnT.Subscriptions
 {

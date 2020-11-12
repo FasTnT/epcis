@@ -4,8 +4,8 @@ namespace FasTnT.Model.Enums
 {
     public class SourceDestinationType : Enumeration
     {
-        public static SourceDestinationType Source = new SourceDestinationType(0, "source");
-        public static SourceDestinationType Destination = new SourceDestinationType(1, "destination");
+        public static readonly SourceDestinationType Source = new SourceDestinationType(0, "source");
+        public static readonly SourceDestinationType Destination = new SourceDestinationType(1, "destination");
 
         public SourceDestinationType() { }
         public SourceDestinationType(short id, string displayName) : base(id, displayName) { }

@@ -3,7 +3,6 @@ using FasTnT.Commands.Responses;
 using FasTnT.Domain;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Threading;
-using static FasTnT.Commands.Requests.GetStandardVersionRequest;
 
 namespace FasTnT.UnitTest.Handlers
 {

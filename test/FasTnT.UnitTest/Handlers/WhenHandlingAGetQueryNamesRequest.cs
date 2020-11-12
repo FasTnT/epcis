@@ -5,7 +5,6 @@ using FasTnT.Model.Queries;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using System.Threading;
-using static FasTnT.Commands.Requests.GetQueryNamesRequest;
 
 namespace FasTnT.UnitTest.Handlers
 {

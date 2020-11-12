@@ -5,9 +5,8 @@ namespace FasTnT.Domain
 {
     public static class UriValidator
     {
-        private const RegexOptions Options = RegexOptions.IgnoreCase | RegexOptions.Compiled;
-        private static readonly Regex UriRegex = new Regex(@"^\w+:(\/?\/?)[^\s]+?$", Options);
-        private static readonly Regex HttpRegex = new Regex(@"^(https?):(\/\/)[^\s]+?$", Options);
+        private static readonly Regex UriRegex = new Regex(@"^\w+:(\/?\/?)[^\s]+?$", RegexOptions.IgnoreCase | RegexOptions.Compiled);
+        private static readonly Regex HttpRegex = new Regex(@"^(https?):(\/\/)[^\s]+?$", RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
         public static void Validate(string uri, bool httpOnly = false)
         {

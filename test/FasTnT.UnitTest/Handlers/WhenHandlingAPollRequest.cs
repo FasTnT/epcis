@@ -6,7 +6,6 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using System.Threading;
 using System.Threading.Tasks;
-using static FasTnT.Commands.Requests.PollRequest;
 
 namespace FasTnT.UnitTest.Handlers
 {

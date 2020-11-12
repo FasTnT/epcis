@@ -8,7 +8,6 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using System.Collections.Generic;
 using System.Threading;
-using static FasTnT.Commands.Requests.CaptureEpcisDocumentRequest;
 
 namespace FasTnT.UnitTest.Handlers
 {
