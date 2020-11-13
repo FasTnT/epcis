@@ -24,7 +24,7 @@ namespace FasTnT.Parsers.Xml.Formatters
             await wrappedResponse.SaveAsync(output, Options, cancellationToken);
         }
 
-        private XElement Format(IEpcisResponse entity, CancellationToken cancellationToken)
+        private static XElement Format(IEpcisResponse entity, CancellationToken cancellationToken)
         {
             return entity switch
             {
