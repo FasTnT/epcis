@@ -12,7 +12,7 @@ jobs:
     - name: Setup .NET5
       uses: actions/setup-dotnet@v1.7.2
       with:
-        dotnet-version: 5.0.100
+        dotnet-version: 5.x
     - name: Build with dotnet
       run: dotnet build -c Release /nodeReuse:false 
 

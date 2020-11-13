@@ -62,6 +62,6 @@ namespace FasTnT.Commands.Requests
         }
 
         private static void EnsureDestinationHasEndSlash(Subscription request) => request.Destination = $"{request.Destination.TrimEnd('/')}/";
-        private static void EnsureDestinationIsValidURI(Subscription request) => UriValidator.Validate(request.Destination, true);
+        private static void EnsureDestinationIsValidURI(Subscription request) => UriValidator.Validate(request.Destination);
     }
 }
