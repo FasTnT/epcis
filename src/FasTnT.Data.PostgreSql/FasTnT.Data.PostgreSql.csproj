@@ -36,7 +36,7 @@
     <EmbeddedResource Include="Migrations\Initial\M008_SubscriptionTrigger.sql" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Dapper" Version="2.0.35" />
+    <PackageReference Include="Dapper" Version="2.0.78" />
     <PackageReference Include="Dapper.SqlBuilder" Version="2.0.35" />
     <PackageReference Include="dbup-postgresql" Version="4.4.0" />
     <PackageReference Include="Faithlife.Utility.Dapper" Version="1.1.0" />
