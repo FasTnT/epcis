@@ -4,7 +4,7 @@ namespace FasTnT.Model.Exceptions
 {
     public class EpcisException : Exception
     {
-        public static EpcisException Default = new EpcisException(ExceptionType.ImplementationException, string.Empty, ExceptionSeverity.Error);
+        public static readonly EpcisException Default = new EpcisException(ExceptionType.ImplementationException, string.Empty, ExceptionSeverity.Error);
 
         public ExceptionType ExceptionType { get; }
         public ExceptionSeverity Severity { get; }

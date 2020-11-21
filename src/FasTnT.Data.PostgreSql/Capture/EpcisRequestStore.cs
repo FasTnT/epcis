@@ -38,14 +38,14 @@ namespace FasTnT.PostgreSql.Capture
             transaction.Commit();
         }
 
-        private async Task<int> StoreHeader(EpcisRequest request, User user, IDbTransaction transaction, CancellationToken cancellationToken)
+        private static async Task<int> StoreHeader(EpcisRequest request, User user, IDbTransaction transaction, CancellationToken cancellationToken)
         {
             var requestDto = RequestDto.Create(request, user.Id);
 
             return await transaction.InsertAsync(requestDto, cancellationToken);
         }
 
-        private async Task StoreStandardBusinessHeader(StandardBusinessHeader header, int requestId, IDbTransaction transaction, CancellationToken cancellationToken)
+        private static async Task StoreStandardBusinessHeader(StandardBusinessHeader header, int requestId, IDbTransaction transaction, CancellationToken cancellationToken)
         {
             if (header == default) return;
             
@@ -79,7 +79,7 @@ namespace FasTnT.PostgreSql.Capture
             await eventDtoManager.PersistAsync(transaction, cancellationToken);
         }
 
-        private async Task StoreMasterData(List<EpcisMasterData> epcisMasterDatas, IDbTransaction tx, CancellationToken cancellationToken)
+        private static async Task StoreMasterData(List<EpcisMasterData> epcisMasterDatas, IDbTransaction tx, CancellationToken cancellationToken)
         {
             if (epcisMasterDatas.Count == 0) return;
 

@@ -7,7 +7,6 @@ using Moq;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using static FasTnT.Commands.Requests.GetSubscriptionIdsRequest;
 
 namespace FasTnT.UnitTest.Handlers
 {

@@ -8,9 +8,10 @@ using FasTnT.Domain;
 
 namespace FasTnT.Host.Infrastructure.Attributes
 {
+    [AttributeUsage(AttributeTargets.Class)]
     public sealed class FormatterAttribute : Attribute, IFilterFactory
     {
-        public static IDictionary<Format, ICommandFormatter> KnownFormatters = new Dictionary<Format, ICommandFormatter>
+        public static readonly IDictionary<Format, ICommandFormatter> KnownFormatters = new Dictionary<Format, ICommandFormatter>
         {
             { Format.Xml, new XmlCommandFormatter() },
             { Format.Soap, new SoapCommandFormatter() }
@@ -22,7 +23,7 @@ namespace FasTnT.Host.Infrastructure.Attributes
         public IFilterMetadata CreateInstance(IServiceProvider serviceProvider) => new FormatterResourceFilter(Formatter);
         public ICommandFormatter Formatter { get; private set; }
 
-        private ICommandFormatter GetFormatter(Format type)
+        private static ICommandFormatter GetFormatter(Format type)
         {
             if (KnownFormatters.TryGetValue(type, out ICommandFormatter formatter))
             {

@@ -6,7 +6,6 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using System.Threading;
 using System.Threading.Tasks;
-using static FasTnT.Domain.Commands.Requests.UserLogInRequest;
 
 namespace FasTnT.UnitTest.Handlers
 {

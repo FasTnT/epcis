@@ -27,7 +27,7 @@ namespace FasTnT.Data.PostgreSql.Subscriptions
             var parameterValues = new List<ParameterValueDto>();
 
             using var transaction = _connection.BeginTransaction();
-            var subscriptionId = await transaction.InsertAsync(SubscriptionDto.Create(subscription));
+            var subscriptionId = await transaction.InsertAsync(SubscriptionDto.Create(subscription), cancellationToken);
 
             for(short id=0; id<subscription.Parameters.Count; id++)
             {

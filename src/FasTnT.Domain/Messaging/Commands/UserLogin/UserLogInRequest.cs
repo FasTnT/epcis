@@ -15,36 +15,36 @@ namespace FasTnT.Domain.Commands.Requests
     {
         public string Username { get; set; }
         public string Password { get; set; }
+    }
 
-        public class UserLogInHandler : IRequestHandler<UserLogInRequest, UserLogInResponse>
+    public class UserLogInHandler : IRequestHandler<UserLogInRequest, UserLogInResponse>
+    {
+        private static readonly SHA256 Sha256 = SHA256.Create();
+        private readonly IUserManager _userManager;
+
+        public UserLogInHandler(IUserManager userManager)
         {
-            private static readonly SHA256 Sha256 = SHA256.Create();
-            private readonly IUserManager _userManager;
+            _userManager = userManager;
+        }
 
-            public UserLogInHandler(IUserManager userManager)
+        public async Task<UserLogInResponse> Handle(UserLogInRequest request, CancellationToken cancellationToken)
+        {
+            var user = await _userManager.GetByUsername(request.Username, cancellationToken);
+            var response = new UserLogInResponse { User = user };
+
+            if (user != null && VerifyPassword(user, request.Password))
             {
-                _userManager = userManager;
+                response.Authorized = true;
             }
 
-            public async Task<UserLogInResponse> Handle(UserLogInRequest request, CancellationToken cancellationToken)
-            {
-                var user = await _userManager.GetByUsername(request.Username, cancellationToken);
-                var response = new UserLogInResponse { User = user };
+            return response;
+        }
 
-                if (user != null && VerifyPassword(user, request.Password))
-                {
-                    response.Authorized = true;
-                }
+        private bool VerifyPassword(User user, string password)
+        {
+            var hashed = string.Concat(Sha256.ComputeHash(Encoding.UTF8.GetBytes($"{user.UserName}_{password}")).Select(x => x.ToString("x2")));
 
-                return response;
-            }
-
-            private bool VerifyPassword(User user, string password)
-            {
-                var hashed = string.Concat(Sha256.ComputeHash(Encoding.UTF8.GetBytes($"{user.UserName}_{password}")).Select(x => x.ToString("x2")));
-
-                return hashed.Equals(user.Password, StringComparison.OrdinalIgnoreCase);
-            }
+            return hashed.Equals(user.Password, StringComparison.OrdinalIgnoreCase);
         }
     }
 }

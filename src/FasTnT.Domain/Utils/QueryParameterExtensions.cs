@@ -72,7 +72,7 @@ namespace FasTnT.Domain.Utils
         {
             if (!parameter.Name.StartsWith("MATCH_")) throw new Exception("A 'MATCH_*' parameter is expected here.");
 
-            return parameter.Name.Substring(6) switch
+            return parameter.Name[6..] switch
             {
                 "anyEPC"         => new[] { EpcType.List, EpcType.ChildEpc, EpcType.ParentId, EpcType.InputEpc, EpcType.OutputEpc },
                 "epc"            => new[] { EpcType.List, EpcType.ChildEpc },
