@@ -1,4 +1,4 @@
-![Last Commit (develop)](https://img.shields.io/github/last-commit/FasTnT/Epcis/develop.svg?logo=github)
+[![Last Commit (develop)](https://img.shields.io/github/last-commit/FasTnT/Epcis/develop.svg?logo=github)](https://github.com/FasTnT/epcis/commits/develop)
 ![Build Status](https://github.com/FasTnT/epcis/workflows/.NET%20Core/badge.svg)
 [![Maintainability](https://api.codeclimate.com/v1/badges/40672e48b92da57852d7/maintainability)](https://codeclimate.com/github/FasTnT/epcis/maintainability)
 [![codecov](https://codecov.io/gh/FasTnT/epcis/branch/develop/graph/badge.svg)](https://codecov.io/gh/FasTnT/epcis)
