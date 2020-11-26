@@ -1,4 +1,4 @@
-![Last Commit (develop)](https://img.shields.io/github/last-commit/FasTnT/Epcis/develop.svg?logo=github)
+[![Last Commit (develop)](https://img.shields.io/github/last-commit/FasTnT/Epcis/develop.svg?logo=github)](https://github.com/FasTnT/epcis/commits/develop)
 ![Build Status](https://github.com/FasTnT/epcis/workflows/.NET%20Core/badge.svg)
 [![Maintainability](https://api.codeclimate.com/v1/badges/40672e48b92da57852d7/maintainability)](https://codeclimate.com/github/FasTnT/epcis/maintainability)
 [![codecov](https://codecov.io/gh/FasTnT/epcis/branch/develop/graph/badge.svg)](https://codecov.io/gh/FasTnT/epcis)
@@ -8,13 +8,13 @@
 
 # FasTnT EPCIS
 
-FasTnT EPCIS is a lightweight GS1 EPCIS 1.2 repository written in C# using .NET Core 3.1 and backed with PostGreSQL database.
+FasTnT EPCIS is a lightweight GS1 EPCIS 1.2 repository written in C# using .NET 5 and backed with PostGreSQL database.
 
 ## Setup
 
 Prerequisites:
 - PostGreSQL 9.5 or higher
-- .NET Core 3.1 SDK
+- .NET 5 SDK
 
 Steps:
 1. Download the source code, and create a new user/database in PostGreSQL for FasTnT ;

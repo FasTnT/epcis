@@ -17,7 +17,7 @@ namespace FasTnT.Data.PostgreSql.Query
                 : throw new Exception("Impossible to create SQL parameter.");
         }
 
-        private object GetSqlValue<T>(T value)
+        private static object GetSqlValue<T>(T value)
         {
             return value switch
             {

@@ -1,0 +1,7 @@
+<Project>
+	<PropertyGroup>
+		<Version>2.1.4</Version>
+		<AssemblyVersion>2.1.4</AssemblyVersion>
+		<Product>FasTnT EPCIS</Product>
+	</PropertyGroup>
+</Project>

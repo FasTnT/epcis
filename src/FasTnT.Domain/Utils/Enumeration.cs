@@ -8,8 +8,8 @@ namespace FasTnT.Model.Utils
 {
     public abstract class Enumeration : IComparable
     {
-        public string DisplayName { get; private set; }
-        public short Id { get; private set; }
+        public string DisplayName { get; }
+        public short Id { get; }
 
         protected Enumeration() { }
 
@@ -34,9 +34,5 @@ namespace FasTnT.Model.Utils
 
         public static bool operator ==(Enumeration left, Enumeration right) => left is null ? right is null : left.Equals(right);
         public static bool operator !=(Enumeration left, Enumeration right) => !(left == right);
-        public static bool operator <(Enumeration left, Enumeration right) => left is null ? right is object : left.CompareTo(right) < 0;
-        public static bool operator <=(Enumeration left, Enumeration right) => left is null || left.CompareTo(right) <= 0;
-        public static bool operator >(Enumeration left, Enumeration right) => left is object && left.CompareTo(right) > 0;
-        public static bool operator >=(Enumeration left, Enumeration right) => left is null ? right is null : left.CompareTo(right) >= 0;
     }
 }

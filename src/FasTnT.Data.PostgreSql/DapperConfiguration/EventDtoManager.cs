@@ -76,11 +76,11 @@ namespace FasTnT.PostgreSql.DapperConfiguration
             return Events.Select(evt =>
             {
                 var epcisEvent = evt.ToEpcisEvent();
-                epcisEvent.Epcs = Epcs.Where(x => x.Matches(evt)).Select(x => x.ToEpc()).ToList();
-                epcisEvent.CustomFields = CreateHierarchy(CustomFields.Where(x => x.Matches(evt)));
-                epcisEvent.BusinessTransactions = Transactions.Where(x => x.Matches(evt)).Select(x => x.ToBusinessTransaction()).ToList();
-                epcisEvent.SourceDestinationList = SourceDests.Where(x => x.Matches(evt)).Select(x => x.ToSourceDestination()).ToList();
-                epcisEvent.CorrectiveEventIds = CorrectiveIds.Where(x => x.Matches(evt)).Select(x => x.ToCorrectiveId()).ToList();
+                epcisEvent.Epcs.AddRange(Epcs.Where(x => x.Matches(evt)).Select(x => x.ToEpc()));
+                epcisEvent.CustomFields.AddRange(CreateHierarchy(CustomFields.Where(x => x.Matches(evt))));
+                epcisEvent.BusinessTransactions.AddRange(Transactions.Where(x => x.Matches(evt)).Select(x => x.ToBusinessTransaction()));
+                epcisEvent.SourceDestinationList.AddRange(SourceDests.Where(x => x.Matches(evt)).Select(x => x.ToSourceDestination()));
+                epcisEvent.CorrectiveEventIds.AddRange(CorrectiveIds.Where(x => x.Matches(evt)).Select(x => x.ToCorrectiveId()));
 
                 return epcisEvent;
             });

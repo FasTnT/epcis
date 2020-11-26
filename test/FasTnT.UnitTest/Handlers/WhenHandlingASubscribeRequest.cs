@@ -7,7 +7,6 @@ using MediatR;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using System.Threading;
-using static FasTnT.Commands.Requests.SubscribeRequest;
 
 namespace FasTnT.UnitTest.Handlers
 {
