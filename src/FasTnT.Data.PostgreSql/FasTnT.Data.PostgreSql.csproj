@@ -41,7 +41,7 @@
     <PackageReference Include="dbup-postgresql" Version="4.5.0" />
     <PackageReference Include="Faithlife.Utility.Dapper" Version="1.1.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="5.0.1" />
-    <PackageReference Include="Npgsql" Version="5.0.2" />
+    <PackageReference Include="Npgsql" Version="5.0.3" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\FasTnT.Domain\FasTnT.Domain.csproj" />
