@@ -1,4 +1,4 @@
-﻿using FasTnT.Domain.Commands.Requests;
+﻿using FasTnT.Domain.Notifications;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

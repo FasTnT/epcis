@@ -56,7 +56,7 @@ namespace FasTnT.Subscriptions
                         WaitTillNextExecutionOrNotification();
                     }
                 }
-            });
+            }, cancellationToken);
         }
 
         private async Task Execute(IEnumerable<Subscription> subscriptions, CancellationToken cancellationToken)
@@ -154,7 +154,7 @@ namespace FasTnT.Subscriptions
             }
         }
 
-        private TimeSpan GetNextExecutionWaitTime(DateTime executionTime)
+        private static TimeSpan GetNextExecutionWaitTime(DateTime executionTime)
             => executionTime < DateTime.UtcNow ? TimeSpan.Zero : executionTime - DateTime.UtcNow;
     }
 }

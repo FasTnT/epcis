@@ -1,4 +1,4 @@
-﻿using FasTnT.Domain.Commands.Requests;
+﻿using FasTnT.Domain.Notifications;
 using FasTnT.Host.Controllers.v1_2;
 using MediatR;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
