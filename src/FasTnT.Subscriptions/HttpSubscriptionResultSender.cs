@@ -9,7 +9,6 @@ using System.Threading.Tasks;
 
 namespace FasTnT.Subscriptions
 {
-
     public class HttpSubscriptionResultSender : ISubscriptionResultSender
     {
         public async Task<bool> Send(string destination, IEpcisResponse epcisResponse, CancellationToken cancellationToken)
@@ -23,7 +22,7 @@ namespace FasTnT.Subscriptions
             return await SendRequestAsync(request, cancellationToken);
         }
 
-        private async Task<bool> SendRequestAsync(HttpWebRequest request, CancellationToken cancellationToken)
+        private static async Task<bool> SendRequestAsync(HttpWebRequest request, CancellationToken cancellationToken)
         {
             var requestWasSent = default(bool);
 
@@ -43,7 +42,7 @@ namespace FasTnT.Subscriptions
             return requestWasSent;
         }
 
-        private async Task WriteRequestPayload(HttpWebRequest request, IEpcisResponse epcisResponse, CancellationToken cancellationToken)
+        private static async Task WriteRequestPayload(HttpWebRequest request, IEpcisResponse epcisResponse, CancellationToken cancellationToken)
         {
             using var stream = await request.GetRequestStreamAsync();
             var formatter = new XmlCommandFormatter();
@@ -52,7 +51,7 @@ namespace FasTnT.Subscriptions
             await formatter.WriteResponse(epcisResponse, stream, cancellationToken);
         }
 
-        private void TrySetBasicAuthorization(HttpWebRequest request)
+        private static void TrySetBasicAuthorization(HttpWebRequest request)
         {
             if (!string.IsNullOrEmpty(request.RequestUri.UserInfo))
             {

@@ -1,6 +1,6 @@
 ﻿using MediatR;
 
-namespace FasTnT.Domain.Commands.Requests
+namespace FasTnT.Domain.Notifications
 {
     public class TriggerSubscriptionNotification : INotification
     {
