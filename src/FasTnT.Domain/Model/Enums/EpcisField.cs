@@ -5,7 +5,7 @@ namespace FasTnT.Model.Enums
     public class EpcisField : Enumeration
     {
         public static readonly EpcisField RecordTime = new EpcisField(0, "recordTime");
-        public static readonly EpcisField CaptureTime = new EpcisField(1, "captureTime");
+        public static readonly EpcisField EventTime = new EpcisField(1, "eventTime");
         public static readonly EpcisField BusinessLocation = new EpcisField(2, "bizLocation");
         public static readonly EpcisField BusinessStep = new EpcisField(3, "bizStep");
         public static readonly EpcisField Disposition = new EpcisField(4, "disposition");
