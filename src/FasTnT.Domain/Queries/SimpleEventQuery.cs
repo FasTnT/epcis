@@ -114,12 +114,12 @@ namespace FasTnT.Domain.Queries
             }
         }
 
-        private bool IsSimpleParameter(QueryParameter parameter, out Action<IEventFetcher, QueryParameter> action)
+        private static bool IsSimpleParameter(QueryParameter parameter, out Action<IEventFetcher, QueryParameter> action)
         {
             return SimpleParameters.TryGetValue(parameter.Name, out action);
         }
 
-        private bool IsRegexParameter(QueryParameter parameter, out Action<IEventFetcher, QueryParameter> action)
+        private static bool IsRegexParameter(QueryParameter parameter, out Action<IEventFetcher, QueryParameter> action)
         {
             var matchingRegex = RegexParameters.FirstOrDefault(x => Regex.Match(parameter.Name, x.Key, RegexOptions.Singleline).Success);
             action = matchingRegex.Value;
