@@ -30,7 +30,7 @@ namespace FasTnT.Data.PostgreSql.DapperConfiguration
             { EpcisField.Action, "event.action" },
             { EpcisField.BusinessLocation, "event.business_location" },
             { EpcisField.BusinessStep, "event.business_step" },
-            { EpcisField.CaptureTime, "event.record_time" },
+            { EpcisField.EventTime, "event.record_time" },
             { EpcisField.Disposition, "event.disposition" },
             { EpcisField.EventId, "event.event_id" },
             { EpcisField.RecordTime, "request.record_time" },

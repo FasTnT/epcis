@@ -19,7 +19,7 @@ namespace FasTnT.Data.PostgreSql.Query
         private readonly QueryFilters _filters = new QueryFilters();
         private readonly Template _sqlTemplate;
         private SqlBuilder _query = new SqlBuilder();
-        private EpcisField _orderField = EpcisField.CaptureTime;
+        private EpcisField _orderField = EpcisField.EventTime;
         private OrderDirection _orderDirection = OrderDirection.Ascending;
         private int? _limit;
         private readonly IDbConnection _connection;
