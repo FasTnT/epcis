@@ -19,7 +19,7 @@ namespace FasTnT.UnitTest.Queries.SimpleEventQuery
         [TestMethod]
         public void ItShouldCallTheEventFetcherApplyMethodWithComparisonParameterFilter()
         {
-            EventFetcher.Verify(x => x.Apply(It.Is<ComparisonParameterFilter>(f => f.Comparator == FilterComparator.LessThan && f.Field == EpcisField.CaptureTime && f.Value is DateTime)), Times.Once);
+            EventFetcher.Verify(x => x.Apply(It.Is<ComparisonParameterFilter>(f => f.Comparator == FilterComparator.LessThan && f.Field == EpcisField.EventTime && f.Value is DateTime)), Times.Once);
         }
     }
 }

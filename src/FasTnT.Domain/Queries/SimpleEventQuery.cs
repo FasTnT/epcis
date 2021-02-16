@@ -43,7 +43,7 @@ namespace FasTnT.Domain.Queries
         {
             { "^EQ_(source|destination)_",  (fetcher, param) => fetcher.Apply(new SourceDestinationFilter { Name = param.Name.Split('_', 3)[2], Type = param.GetSourceDestinationType(), Values = param.Values }) },
             { "^EQ_bizTransaction_",        (fetcher, param) => fetcher.Apply(new BusinessTransactionFilter { TransactionType = param.Name.Split('_', 3)[2], Values = param.Values }) },
-            { "^(GE|LT)_eventTime",         (fetcher, param) => fetcher.Apply(new ComparisonParameterFilter { Field = EpcisField.CaptureTime, Comparator = param.GetComparator(), Value = param.GetValue<DateTime>() }) },
+            { "^(GE|LT)_eventTime",         (fetcher, param) => fetcher.Apply(new ComparisonParameterFilter { Field = EpcisField.EventTime, Comparator = param.GetComparator(), Value = param.GetValue<DateTime>() }) },
             { "^(GE|LT)_recordTime",        (fetcher, param) => fetcher.Apply(new ComparisonParameterFilter { Field = EpcisField.RecordTime, Comparator = param.GetComparator(), Value = param.GetValue<DateTime>() }) },
             { "^MATCH_",                    (fetcher, param) => fetcher.Apply(new MatchEpcFilter { EpcType = param.GetMatchEpcTypes(), Values = param.Values.Select(x => x.Replace("*", "%")).ToArray() }) },
             { "^(EQ|GT|LT|GE|LE)_quantity$",(fetcher, param) => fetcher.Apply(new QuantityFilter { Operator = param.GetComparator(), Value = param.GetValue<double>() }) },
