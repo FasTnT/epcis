@@ -24,6 +24,8 @@ namespace FasTnT.Host
                           {
                               builder.AddConsole()
                                      .SetMinimumLevel(LogLevel.Debug);
+                              builder.AddApplicationInsights()
+                                     .SetMinimumLevel(LogLevel.Trace);
                           })
                           .ConfigureAppConfiguration((hostingContext, config) =>
                           {
