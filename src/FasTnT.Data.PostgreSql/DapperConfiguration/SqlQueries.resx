@@ -133,7 +133,7 @@
 SELECT request.record_time as capture_time, event.id, request_id, event_type as type, event.record_time as event_time, action, read_point, event_timezone_offset, disposition, business_location, business_step, transformation_id, errordeclaration_time, errordeclaration_reason
   FROM epcis.event 
   JOIN epcis.request ON request.id = event.request_id 
-  WHERE EXISTS(SELECT 1 FROM eventIds e WHERE e.id = event.id AND e.request_id = event.request_id);
+  WHERE EXISTS(SELECT 1 FROM eventIds e WHERE e.id = event.id AND e.request_id = event.request_id) /**orderby**/ ;
 SELECT event_id, request_id, epc as id, type, is_quantity, quantity, unit_of_measure 
   FROM epcis.epc 
   WHERE EXISTS(SELECT 1 FROM eventIds e WHERE e.id = event_id AND e.request_id = request_id);
