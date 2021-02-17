@@ -42,8 +42,8 @@ namespace FasTnT.Host
         public virtual void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             app.UseExceptionHandlingMiddleware(env.IsDevelopment())
-               .UseRequestBodyLogger()
                .UseHttpSynchronousIO()
+               .UseRequestBodyLogger()
                .UseRouting()
                .UseOkStatusCode()
                .UseAuthentication()
