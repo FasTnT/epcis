@@ -24,6 +24,9 @@ namespace FasTnT.Host
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddLogging();
+            services.AddApplicationInsightsTelemetry();
+
             services.AddEpcisDomain()
                     .AddEpcisPersistence(Configuration.GetConnectionString("FasTnT.Database"))
                     .AddBackgroundSubscriptionService();
@@ -40,6 +43,7 @@ namespace FasTnT.Host
         {
             app.UseExceptionHandlingMiddleware(env.IsDevelopment())
                .UseHttpSynchronousIO()
+               .UseRequestBodyLogger()
                .UseRouting()
                .UseOkStatusCode()
                .UseAuthentication()

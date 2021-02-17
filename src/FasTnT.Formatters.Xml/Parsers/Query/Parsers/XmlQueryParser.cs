@@ -4,6 +4,7 @@ using System.Linq;
 using System.Collections.Generic;
 using FasTnT.Domain.Commands;
 using FasTnT.Commands.Requests;
+using System;
 
 namespace FasTnT.Parsers.Xml.Query
 {
@@ -23,10 +24,10 @@ namespace FasTnT.Parsers.Xml.Query
 
         internal static IEnumerable<QueryParameter> ParseParameters(IEnumerable<XElement> elements)
         {
-            foreach (var element in elements ?? new XElement[0])
+            foreach (var element in elements ?? Array.Empty<XElement>())
             {
                 var name = element.Element("name")?.Value?.Trim();
-                var values = element.Element("value")?.HasElements ?? false ? element.Element("value").Elements("value").Select(x => x.Value) : new[] { element.Element("value")?.Value };
+                var values = element.Element("value")?.HasElements ?? false ? element.Element("value").Elements().Select(x => x.Value) : new[] { element.Element("value")?.Value };
 
                 yield return new QueryParameter
                 {
