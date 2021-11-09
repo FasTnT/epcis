@@ -40,7 +40,7 @@
     <PackageReference Include="Dapper.SqlBuilder" Version="2.0.78" />
     <PackageReference Include="dbup-postgresql" Version="4.5.0" />
     <PackageReference Include="Faithlife.Utility.Dapper" Version="1.1.0" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="5.0.1" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.0.0" />
     <PackageReference Include="Npgsql" Version="5.0.7" />
   </ItemGroup>
   <ItemGroup>
